@@ -45,7 +45,7 @@ export interface Position {
 
 export interface Speech {
   text: string
-  mood?: string
+  mood?: Mood
   style?: string
   lip_sync?: boolean
   volume?: number
@@ -67,7 +67,7 @@ export interface Camera {
 }
 
 export interface Lighting {
-  type?: string
+  type?: LightingType
   intensity?: number
 }
 
@@ -105,6 +105,14 @@ export interface TimelineFrame {
   audio_reactive?: AudioReactive
 }
 
+export type Mood = 'joyful' | 'melancholic' | 'anxious' | 'serene' | 'curious';
+
+export type LightingType = 'dusk' | 'daylight' | 'studio' | 'tungsten' | 'ambient';
+
+export interface TimelineEvent {
+  time: number
+  frame: TimelineFrame
+}
 export interface Assets {
   characters: Character[]
   environments: Record<string, EnvironmentAsset>
@@ -121,7 +129,7 @@ export interface Config {
 export interface Model {
   project: Project
   assets: Assets
-  timeline: Record<string, TimelineFrame>
+  timeline: TimelineEvent[]
   config: Config
 }
 

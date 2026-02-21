@@ -29,53 +29,59 @@ const exampleModel: Model = {
       { id: 'sfx_01', url: 'water_ripples.mp3', label: 'Water SFX' }
     ]
   },
-  timeline: {
-    '0': {
-      actors: [
-        {
-          id: 'char_01',
-          outfit: 'casual',
-          action: 'walking slowly',
-          position: { x: 0.5, y: 0.5, scale: 1.0 },
-          speech: {
-            text: "Enfin de l'eau...",
-            mood: 'exhausted',
-            style: 'whisper',
-            lip_sync: true,
-            volume: 0.8
+  timeline: [
+    {
+      time: 0,
+      frame: {
+        actors: [
+          {
+            id: 'char_01',
+            outfit: 'casual',
+            action: 'walking slowly',
+            position: { x: 0.5, y: 0.5, scale: 1.0 },
+            speech: {
+              text: "Enfin de l'eau...",
+              mood: 'melancholic',
+              style: 'whisper',
+              lip_sync: true,
+              volume: 0.8
+            }
           }
-        }
-      ],
-      camera: { zoom: 1.0, pan: [0, 0], tilt: 0 },
-      lighting: { type: 'dusk', intensity: 0.5 },
-      fx: { bloom: 0.2, motion_blur: 0.1 },
-      controlnet: { type: 'depth', strength: 0.8 },
-      audio_tracks: [
-        { id: 'bgm_01', volume: 0.6, start_ms: 0, fade_in: 1000 },
-        { id: 'sfx_01', volume: 0.2, loop: true }
-      ],
-      audio_reactive: { target: 'fx.bloom', param: 'amplitude', strength: 1.5 }
+        ],
+        camera: { zoom: 1.0, pan: [0, 0], tilt: 0 },
+        lighting: { type: 'dusk', intensity: 0.5 },
+        fx: { bloom: 0.2, motion_blur: 0.1 },
+        controlnet: { type: 'depth', strength: 0.8 },
+        audio_tracks: [
+          { id: 'bgm_01', volume: 0.6, start_ms: 0, fade_in: 1000 },
+          { id: 'sfx_01', volume: 0.2, loop: true }
+        ],
+        audio_reactive: { target: 'fx.bloom', param: 'amplitude', strength: 1.5 }
+      }
     },
-    '120': {
-      actors: [
-        {
-          id: 'char_01',
-          speech: {
-            text: 'HA HA ! ON EST SAUVÉS !',
-            mood: 'joyful',
-            style: 'shout',
-            pitch_shift: 1.1
+    {
+      time: 120,
+      frame: {
+        actors: [
+          {
+            id: 'char_01',
+            speech: {
+              text: 'HA HA ! ON EST SAUVÉS !',
+              mood: 'joyful',
+              style: 'shout',
+              pitch_shift: 1.1
+            }
           }
-        }
-      ],
-      camera: { zoom: 2.5 },
-      fx: { bloom: 0.8 },
-      audio_tracks: [
-        { id: 'bgm_01', volume: 1.0 },
-        { id: 'sfx_01', volume: 0.8 }
-      ]
+        ],
+        camera: { zoom: 2.5 },
+        fx: { bloom: 0.8 },
+        audio_tracks: [
+          { id: 'bgm_01', volume: 1.0 },
+          { id: 'sfx_01', volume: 0.8 }
+        ]
+      }
     }
-  },
+  ],
   config: {
     checkpoint: 'flux_dev.safetensors',
     sampler: 'euler',
