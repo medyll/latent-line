@@ -1,4 +1,4 @@
-import type Model from './types'
+import type Model from './model-types'
 
 const exampleModel: Model = {
   project: {

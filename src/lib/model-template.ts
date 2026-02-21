@@ -1,132 +1,107 @@
-import type Model from "./types";
+import type Model from "./model-types";
+import { z } from "zod";
 
-export const modelTemplate = {
-  project: {
-    // original: 'LatentLine_MVP'
-    name: "text",
-    // original: 24
-    fps: "integer(range:1-240)",
-    // original: { w: 1024, h: 1024 }
-    // changed to a list of resolution objects for flexibility
-    resolution: [
-      { w: "integer", h: "integer", units: "px" }, // example original: { w: 1024, h: 1024 }
-    ],
-  },
-  assets: {
-    characters: [
-      {
-        // original: 'char_01'
-        id: "text",
-        // original: 'Mydde'
-        name: "text",
-        // original: 'v_male_deep_01'
-        voice_id: "voice_id",
-        references: [
-          // original: { url: 'face.jpg', context: 'face_id', weight: 1.0 }
-          { url: "image", context: "text", weight: "decimal" },
-          // original: { url: 'walking.jpg', context: 'walking', weight: 0.8 }
-          { url: "image", context: "text", weight: "decimal" },
+/** Minimal Zod schemas matching `src/lib/types.ts` for runtime validation */
+const positionSchema = z.object({ x: z.number(), y: z.number(), scale: z.number().optional() });
+const speechSchema = z.object({
+  text: z.string(),
+  mood: z.string().optional(),
+  style: z.string().optional(),
+  lip_sync: z.boolean().optional(),
+  volume: z.number().min(0).max(1).optional(),
+  pitch_shift: z.number().optional(),
+});
+const actorSchema = z.object({
+  id: z.string(),
+  outfit: z.string().optional(),
+  action: z.string().optional(),
+  position: positionSchema.optional(),
+  speech: speechSchema.optional(),
+});
+const cameraSchema = z.object({ zoom: z.number().optional(), pan: z.tuple([z.number(), z.number()]).optional(), tilt: z.number().optional() });
+const lightingSchema = z.object({ type: z.string().optional(), intensity: z.number().min(0).max(1).optional() });
+const fxSchema = z.object({ bloom: z.number().optional(), motion_blur: z.number().optional() });
+const controlNetSchema = z.object({ type: z.string().optional(), strength: z.number().optional() });
+const audioTrackSchema = z.object({ id: z.string(), volume: z.number().min(0).max(1).optional(), start_ms: z.number().int().nonnegative().optional(), fade_in: z.number().int().nonnegative().optional(), loop: z.boolean().optional() });
+const audioReactiveSchema = z.object({ target: z.string(), param: z.string(), strength: z.number() });
+
+const timelineFrameSchema = z.object({
+  actors: z.array(actorSchema).optional(),
+  camera: cameraSchema.optional(),
+  lighting: lightingSchema.optional(),
+  fx: fxSchema.optional(),
+  controlnet: controlNetSchema.optional(),
+  audio_tracks: z.array(audioTrackSchema).optional(),
+  audio_reactive: audioReactiveSchema.optional(),
+});
+
+const projectSchema = z.object({ name: z.string(), fps: z.number().int().min(1).max(240), resolution: z.object({ w: z.number().int().positive(), h: z.number().int().positive() }) });
+
+const referenceSchema = z.object({ url: z.string(), context: z.string(), weight: z.number() });
+const outfitSchema = z.object({ prompt: z.string(), lora: z.string().optional() });
+const characterSchema = z.object({ id: z.string(), name: z.string(), voice_id: z.string().optional(), references: z.array(referenceSchema), outfits: z.record(z.string(), outfitSchema).optional() });
+const environmentSchema = z.object({ prompt: z.string(), ref: z.string().optional() });
+const audioAssetSchema = z.object({ id: z.string(), url: z.string(), label: z.string().optional() });
+
+const assetsSchema = z.object({ characters: z.array(characterSchema), environments: z.record(z.string(), environmentSchema), audio: z.array(audioAssetSchema) });
+
+const modelSchema = z.object({ project: projectSchema, assets: assetsSchema, timeline: z.record(timelineFrameSchema), config: z.object({ checkpoint: z.string().optional(), sampler: z.string().optional(), seed: z.number().optional(), tts_engine: z.string().optional() }) });
+
+/** Build a fully-typed default Model instance (no placeholder strings). */
+export function buildDefaultModel(): Model {
+  return {
+    project: { name: "LatentLine_MVP", fps: 24, resolution: { w: 1024, h: 1024 } },
+    assets: {
+      characters: [
+        {
+          id: "char_01",
+          name: "Mydde",
+          voice_id: "v_male_deep_01",
+          references: [{ url: "face.jpg", context: "face", weight: 1.0 }],
+          outfits: { casual: { prompt: "leather jacket, jeans", lora: "cloth_v1.safetensors" } },
+        },
+      ],
+      environments: { oasis: { prompt: "bioluminescent desert oasis", ref: "env_01.png" } },
+      audio: [{ id: "bgm_01", url: "soundtrack_dark.wav", label: "Main Theme" }],
+    },
+    timeline: {
+      "0": {
+        actors: [
+          {
+            id: "char_01",
+            outfit: "casual",
+            action: "walking slowly",
+            position: { x: 0.5, y: 0.5, scale: 1.0 },
+            speech: { text: "Enfin de l'eau...", mood: "exhausted", style: "whisper", lip_sync: true, volume: 0.8 },
+          },
         ],
-        outfits: {
-          // original casual.prompt: 'leather jacket, jeans'
-          casual: { prompt: "text", lora: "file" }, // original lora: 'cloth_v1.safetensors'
-        },
+        camera: { zoom: 1.0, pan: [0, 0], tilt: 0 },
+        lighting: { type: "dusk", intensity: 0.5 },
+        fx: { bloom: 0.2, motion_blur: 0.1 },
+        controlnet: { type: "depth", strength: 0.8 },
+        audio_tracks: [{ id: "bgm_01", volume: 0.6, start_ms: 0, fade_in: 1000 }],
+        audio_reactive: { target: "fx.bloom", param: "amplitude", strength: 1.5 },
       },
-    ],
-    environments: {
-      // original oasis: { prompt: 'bioluminescent desert oasis', ref: 'env_01.png' }
-      oasis: { prompt: "text", ref: "image" },
+      "120": {
+        actors: [{ id: "char_01", speech: { text: "HA HA ! ON EST SAUVÉS !", mood: "joyful", style: "shout", pitch_shift: 0 } }],
+        camera: { zoom: 1.0 },
+        fx: { bloom: 0.3 },
+        audio_tracks: [{ id: "bgm_01", volume: 0.5 }],
+      },
     },
-    audio: [
-      // original: { id: 'bgm_01', url: 'soundtrack_dark.wav', label: 'Main Theme' }
-      { id: "text", url: "audio", label: "text" },
-      // original: { id: 'sfx_01', url: 'water_ripples.mp3', label: 'Water SFX' }
-      { id: "text", url: "audio", label: "text" },
-    ],
-  },
-  timeline: {
-    "0": {
-      actors: [
-        {
-          // original: id: 'char_01'
-          id: "actor_id",
-          // original: outfit: 'casual'
-          outfit: "text",
-          // original action: 'walking slowly'
-          action: "text",
-          // original position: { x: 0.5, y: 0.5, scale: 1.0 }
-          position: { x: "decimal", y: "decimal", scale: "decimal" },
-          speech: {
-            // original: "Enfin de l'eau..."
-            text: "text",
-            // original: 'exhausted'
-            mood: "mood",
-            // original: 'whisper'
-            style: "speech_style",
-            // original: true
-            lip_sync: "boolean",
-            // original: 0.8
-            volume: "decimal",
-          },
-        },
-      ],
-      // original: camera: { zoom: 1.0, pan: [0, 0], tilt: 0 }
-      camera: { zoom: "decimal", pan: ["decimal", "decimal"], tilt: "decimal" },
-      // original: lighting: { type: 'dusk', intensity: 0.5 }
-      lighting: { type: "lighting", intensity: "decimal" },
-      // original: fx: { bloom: 0.2, motion_blur: 0.1 }
-      fx: { bloom: "decimal", motion_blur: "decimal" },
-      // original: controlnet: { type: 'depth', strength: 0.8 }
-      controlnet: { type: "text", strength: "decimal" },
-      // original audio_tracks: [{ id: 'bgm_01', volume: 0.6, start_ms: 0, fade_in: 1000 }, ...]
-      audio_tracks: [
-        {
-          id: "text",
-          volume: "decimal",
-          start_ms: "integer",
-          fade_in: "integer",
-        },
-        { id: "text", volume: "decimal", loop: "boolean" },
-      ],
-      // original: { target: 'fx.bloom', param: 'amplitude', strength: 1.5 }
-      audio_reactive: { target: "text", param: "text", strength: "decimal" },
-    },
-    "120": {
-      actors: [
-        {
-          id: "text",
-          speech: {
-            // original: 'HA HA ! ON EST SAUVÉS !'
-            text: "text",
-            mood: "mood",
-            style: "text",
-            pitch_shift: "decimal",
-          },
-        },
-      ],
-      camera: { zoom: "decimal" },
-      fx: { bloom: "decimal" },
-      audio_tracks: [
-        { id: "text", volume: "decimal" },
-        { id: "text", volume: "decimal" },
-      ],
-    },
-  },
-  config: {
-    // original: 'flux_dev.safetensors'
-    checkpoint: "file",
-    // original: 'euler'
-    sampler: "text",
-    // original: 42
-    seed: "integer",
-    // original: 'elevenlabs_v2'
-    tts_engine: "text",
-  },
-} as unknown as Model;
+    config: { checkpoint: "flux_dev.safetensors", sampler: "euler", seed: 42, tts_engine: "elevenlabs_v2" },
+  };
+}
+
+export const modelTemplate: Model = buildDefaultModel();
 
 /** Return a deep-cloned template so callers can mutate safely. */
 export function createModelTemplate(): Model {
-  return JSON.parse(JSON.stringify(modelTemplate)) as Model;
+  const parsed = modelSchema.safeParse(modelTemplate);
+  if (!parsed.success) {
+    throw new Error("modelTemplate failed validation: " + parsed.error.message);
+  }
+  return JSON.parse(JSON.stringify(parsed.data)) as Model;
 }
 
 /**
