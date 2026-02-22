@@ -1,5 +1,10 @@
+
 <script lang="ts">
-// Timeline layout: add shared logic or styling here if needed
+	import Timeline from "$lib/components/timeline.svelte";
 </script>
 
-<slot />
+<div class="flex flex-col h-screen w-screen bg-background">
+	<div class="flex-1 flex items-center justify-center">
+		<Timeline />
+	</div>
+</div>

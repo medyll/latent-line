@@ -3,9 +3,10 @@
 import { Card } from "$lib/components/ui/card/index.js";
 import { Button } from "$lib/components/ui/button/index.js";
 import favicon from '$lib/assets/favicon.svg';
+import "$lib/styles/styles.css";
 
 const demos = [
-	{ name: "Demo Timeline", path: "/demo" },
+	{ name: "Demo Timeline", path: "/timeline" },
 	{ name: "Demo Model", path: "/demo-model" },
 	// Add more demos as needed
 ];
@@ -28,7 +29,7 @@ let { children } = $props();
 	</Card>
 	<main class="flex-1 flex items-center justify-center bg-background">
 		<Card class="w-full h-full max-w-5xl m-8 p-6 shadow-lg">
-			<button>{@render children()}</button>
+			<div>{@render children()}</div>
 		</Card>
 	</main>
 </div>
