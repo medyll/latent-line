@@ -10,6 +10,10 @@ const demos = [
 ];
 </script>
 
+{#snippet children()}
+	<slot />
+{/snippet}
+
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 <div class="flex h-screen w-screen bg-background">
