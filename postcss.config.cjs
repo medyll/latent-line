@@ -6,9 +6,11 @@ if (process.env.VITEST) {
     },
   };
 } else {
+  // Use the new PostCSS integration for Tailwind (plugin moved to @tailwindcss/postcss)
+  const tailwindPostcss = require('@tailwindcss/postcss');
   module.exports = {
     plugins: {
-      tailwindcss: {},
+      [tailwindPostcss.postcssPlugin || '@tailwindcss/postcss']: tailwindPostcss,
       autoprefixer: {},
     },
   };

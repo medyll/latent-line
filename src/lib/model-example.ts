@@ -1,4 +1,5 @@
 import type Model from './model-types'
+import type { Mood, LightingType } from './model-types'
 
 const exampleModel: Model = {
   project: {
@@ -41,7 +42,7 @@ const exampleModel: Model = {
             position: { x: 0.5, y: 0.5, scale: 1.0 },
             speech: {
               text: "Enfin de l'eau...",
-              mood: 'melancholic',
+              mood: 'melancholic' as Mood,
               style: 'whisper',
               lip_sync: true,
               volume: 0.8
@@ -49,7 +50,7 @@ const exampleModel: Model = {
           }
         ],
         camera: { zoom: 1.0, pan: [0, 0], tilt: 0 },
-        lighting: { type: 'dusk', intensity: 0.5 },
+        lighting: { type: 'dusk' as LightingType, intensity: 0.5 },
         fx: { bloom: 0.2, motion_blur: 0.1 },
         controlnet: { type: 'depth', strength: 0.8 },
         audio_tracks: [
@@ -67,7 +68,7 @@ const exampleModel: Model = {
             id: 'char_01',
             speech: {
               text: 'HA HA ! ON EST SAUVÉS !',
-              mood: 'joyful',
+              mood: 'joyful' as Mood,
               style: 'shout',
               pitch_shift: 1.1
             }
