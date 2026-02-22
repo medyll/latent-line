@@ -1,0 +1,34 @@
+/* src/styles/base.css */
+
+
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  background: var(--background, #fff);
+  color: var(--foreground, #111);
+  font-family: system-ui, sans-serif;
+  overflow: hidden !important;
+}
+
+.flex, main, .app-main, .app-content {
+  overflow-y: auto;
+  height: 100%;
+}
+
+#app, #svelte {
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  box-sizing: inherit;
+}

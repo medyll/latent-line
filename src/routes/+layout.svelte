@@ -3,7 +3,7 @@
 import { Card } from "$lib/components/ui/card/index.js";
 import { Button } from "$lib/components/ui/button/index.js";
 import favicon from '$lib/assets/favicon.svg';
-import "$lib/styles/styles.css";
+import "$lib/styles/app.css";
 
 const demos = [
 	{ name: "Demo Timeline", path: "/timeline" },
@@ -11,23 +11,28 @@ const demos = [
 	// Add more demos as needed
 ];
 
-let { children } = $props();
+let theme: 'light' | 'dark' = $state('light');
+let {	children } = $props();
 
-@state theme = 'light';
-
-function toggleTheme() {
-	theme = theme === 'light' ? 'dark' : 'light';
+function setTheme(newTheme: 'light' | 'dark') {
+	theme = newTheme;
 	if (typeof document !== 'undefined') {
 		document.documentElement.classList.toggle('dark', theme === 'dark');
+		localStorage.setItem('theme', theme);
 	}
+}
+
+function toggleTheme() {
+	setTheme(theme === 'light' ? 'dark' : 'light');
 }
 
 if (typeof document !== 'undefined') {
 	// On mount, restore theme from localStorage
 	const saved = localStorage.getItem('theme');
 	if (saved === 'dark') {
-		theme = 'dark';
-		document.documentElement.classList.add('dark');
+		setTheme('dark');
+	} else {
+		setTheme('light');
 	}
 }
 </script>
@@ -38,7 +43,7 @@ if (typeof document !== 'undefined') {
 	<Card class="w-64 h-full border-r bg-muted flex flex-col">
 		<div class="font-bold text-lg p-4 border-b flex items-center justify-between">
 			Latent Line
-			<Button variant="outline" onclick={() => { toggleTheme(); localStorage.setItem('theme', theme); }}>
+			<Button variant="outline" onclick={toggleTheme}>
 				{theme === 'dark' ? '☀️' : '🌙'}
 			</Button>
 		</div>
@@ -50,9 +55,7 @@ if (typeof document !== 'undefined') {
 			{/each}
 		</div>
 	</Card>
-	<main class="flex-1 flex items-center justify-center bg-background">
-		<Card class="w-full h-full max-w-5xl m-8 p-6 shadow-lg">
+	<main class="flex-1 flex items-center justify-center bg-background"> 
 			<div>{@render children()}</div>
-		</Card>
 	</main>
 </div>
