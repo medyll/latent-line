@@ -44,9 +44,20 @@ const addItem = () => items.push(items.length + 1); // Mutating triggers update
 
 ---
 
+
 ## 2. Component Structure
 
 Svelte 5 uses a function-like prop declaration and Snippets for templating.
+
+**To access the children snippet in a layout or component, use:**
+
+```svelte
+<script lang="ts">
+    let { children } = $props();
+</script>
+
+<button>{@render children()}</button>
+```
 
 ```svelte
 <script lang="ts">
@@ -147,7 +158,6 @@ export const actions = {
   }
 };
 
-```
 
 ---
 
@@ -158,3 +168,128 @@ export const actions = {
 * **Performance**: Use `$state.raw` for large lists that you replace entirely rather than mutating elements, as it skips deep proxying.
 
 ---
+
+# Advanced Svelte 5 Snippets & Logic
+
+### 1. Generative List with Internal Logic
+
+Snippets are not just for UI; they can accept parameters to handle scoped logic without creating a separate component file.
+
+```svelte
+<script lang="ts" generics="T extends { id: string; status: string }">
+  import { Snippet } from 'svelte';
+
+  interface Props {
+    items: T[];
+    // Typed snippet taking an item and a 'control' object
+    row: Snippet<[item: T, controls: { remove: () => void }]>;
+  }
+
+  let { items, row }: Props = $props();
+  let list = $state(items);
+</script>
+
+<ul>
+  {#each list as item (item.id)}
+    {@render row(item, {
+      remove: () => list = list.filter(i => i.id !== item.id)
+    })}
+  {/each}
+</ul>
+
+```
+
+### 2. Higher-Order Snippets (Snippet Composition)
+
+You can pass snippets to other snippets. This is the Svelte 5 way to handle complex "Render Props".
+
+```svelte
+{#snippet icon(name: string)}
+  <i class="icon-{name}"></i>
+{/snippet}
+
+{#snippet button(label: string, iconSnippet: Snippet<[string]>)}
+  <button>
+    {@render iconSnippet('check')}
+    {label}
+  </button>
+{/snippet}
+
+{@render button("Submit", icon)}
+
+```
+
+### 3. Snippets for Layout "Slots" with Typing
+
+Replacing the old named slots. This pattern is essential for complex Dashboards.
+
+```svelte
+<script lang="ts">
+  import { Snippet } from 'svelte';
+
+  interface DashboardProps {
+    sidebar: Snippet;
+    content: Snippet<[user: string]>;
+    footer?: Snippet;
+  }
+
+  let { sidebar, content, footer }: DashboardProps = $props();
+  let currentUser = $state("Mydde");
+</script>
+
+<div class="layout">
+  <aside>{@render sidebar()}</aside>
+  
+  <main>
+    {@render content(currentUser)}
+  </main>
+
+  {#if footer}
+    <footer>{@render footer()}</footer>
+  {/if}
+</div>
+
+```
+
+---
+
+## Recursive Snippets (The "Tree" Pattern)
+
+Since snippets can call themselves, they are perfect for recursive structures like file explorers or nested menus.
+
+```svelte
+<script lang="ts">
+  interface FileNode {
+    name: string;
+    children?: FileNode[];
+  }
+
+  let files = $state<FileNode[]>([
+    { name: 'src', children: [{ name: 'app.svelte' }, { name: 'lib' }] }
+  ]);
+</script>
+
+{#snippet tree(nodes: FileNode[])}
+  <ul>
+    {#each nodes as node}
+      <li>
+        {node.name}
+        {#if node.children}
+          {@render tree(node.children)}
+        {/if}
+      </li>
+    {/each}
+  </ul>
+{/snippet}
+
+{@render tree(files)}
+
+```
+
+---
+
+## 4. Performance & Constraints
+
+* **No `this` context**: Unlike functions, snippets don't have a `this` context. They are pure template blocks.
+* **Lexical Scoping**: Snippets can access variables in the scope where they are defined, but they are most powerful when data is passed explicitly via arguments.
+* **Typing**: Always use `import type { Snippet } from 'svelte'` to type your props. For multiple arguments, use a tuple: `Snippet<[string, number, boolean]>`.

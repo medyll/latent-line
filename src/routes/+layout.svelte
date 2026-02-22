@@ -1,3 +1,4 @@
+
 <script lang="ts">
 import { Card } from "$lib/components/ui/card/index.js";
 import { Button } from "$lib/components/ui/button/index.js";
@@ -8,11 +9,9 @@ const demos = [
 	{ name: "Demo Model", path: "/demo-model" },
 	// Add more demos as needed
 ];
-</script>
 
-{#snippet children()}
-	<slot />
-{/snippet}
+let { children } = $props();
+</script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
@@ -29,7 +28,7 @@ const demos = [
 	</Card>
 	<main class="flex-1 flex items-center justify-center bg-background">
 		<Card class="w-full h-full max-w-5xl m-8 p-6 shadow-lg">
-			{@render children()}
+			<button>{@render children()}</button>
 		</Card>
 	</main>
 </div>
