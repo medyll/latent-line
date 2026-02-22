@@ -19,12 +19,13 @@ describe('model-template', () => {
     expect(modelTemplate.project.name).toBe(prev);
   });
 
-  it('timeline is an array of events with numeric time', () => {
+  it('timeline is an object of events with numeric time', () => {
     const m = buildDefaultModel();
-    expect(Array.isArray(m.timeline)).toBe(true);
-    if (m.timeline.length > 0) {
-      expect(typeof m.timeline[0].time).toBe('number');
-      expect(m.timeline[0].frame).toBeTruthy();
+    expect(typeof m.timeline).toBe('object');
+    const events = Object.values(m.timeline);
+    if (events.length > 0) {
+      expect(typeof events[0].time).toBe('number');
+      expect(events[0].frame).toBeTruthy();
     }
   });
 });

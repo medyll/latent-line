@@ -62,10 +62,10 @@ const audioAssetSchema = z.object({ id: z.string(), url: z.string().refine(isUrl
 
 const assetsSchema = z.object({ characters: z.array(characterSchema), environments: z.record(z.string(), environmentSchema), audio: z.array(audioAssetSchema) });
 
-// timeline as an array of events with numeric time
+// timeline as an object keyed by event id
 const timelineEventSchema = z.object({ time: z.number().int().nonnegative(), frame: timelineFrameSchema });
 
-export const modelSchema = z.object({ project: projectSchema, assets: assetsSchema, timeline: z.array(timelineEventSchema), config: z.object({ checkpoint: z.string().optional(), sampler: z.string().optional(), seed: z.number().optional(), tts_engine: z.string().optional() }) });
+export const modelSchema = z.object({ project: projectSchema, assets: assetsSchema, timeline: z.record(z.string(), timelineEventSchema), config: z.object({ checkpoint: z.string().optional(), sampler: z.string().optional(), seed: z.number().optional(), tts_engine: z.string().optional() }) });
 
 /** Build a fully-typed default Model instance (no placeholder strings). */
 export function buildDefaultModel(): Model {
@@ -84,37 +84,37 @@ export function buildDefaultModel(): Model {
       environments: { oasis: { prompt: "bioluminescent desert oasis", ref: "env_01.png" } },
       audio: [{ id: "bgm_01", url: "soundtrack_dark.wav", label: "Main Theme" }],
     },
-    timeline: [
-      {
-        time: 0,
-        frame: {
-          actors: [
-            {
-              id: "char_01",
-              outfit: "casual",
-              action: "walking slowly",
-              position: { x: 0.5, y: 0.5, scale: 1.0 },
-              speech: { text: "Enfin de l'eau...", mood: "melancholic", style: "whisper", lip_sync: true, volume: 0.8 },
-            },
-          ],
-          camera: { zoom: 1.0, pan: [0, 0], tilt: 0 },
-          lighting: { type: "dusk", intensity: 0.5 },
-          fx: { bloom: 0.2, motion_blur: 0.1 },
-          controlnet: { type: "depth", strength: 0.8 },
-          audio_tracks: [{ id: "bgm_01", volume: 0.6, start_ms: 0, fade_in: 1000 }],
-          audio_reactive: { target: "fx.bloom", param: "amplitude", strength: 1.5 },
+      timeline: {
+        event_01: {
+          time: 0,
+          frame: {
+            actors: [
+              {
+                id: "char_01",
+                outfit: "casual",
+                action: "walking slowly",
+                position: { x: 0.5, y: 0.5, scale: 1.0 },
+                speech: { text: "Enfin de l'eau...", mood: "melancholic", style: "whisper", lip_sync: true, volume: 0.8 },
+              },
+            ],
+            camera: { zoom: 1.0, pan: [0, 0], tilt: 0 },
+            lighting: { type: "dusk", intensity: 0.5 },
+            fx: { bloom: 0.2, motion_blur: 0.1 },
+            controlnet: { type: "depth", strength: 0.8 },
+            audio_tracks: [{ id: "bgm_01", volume: 0.6, start_ms: 0, fade_in: 1000 }],
+            audio_reactive: { target: "fx.bloom", param: "amplitude", strength: 1.5 },
+          },
+        },
+        event_02: {
+          time: 120,
+          frame: {
+            actors: [{ id: "char_01", speech: { text: "HA HA ! ON EST SAUVÉS !", mood: "joyful", style: "shout", pitch_shift: 0 } }],
+            camera: { zoom: 1.0 },
+            fx: { bloom: 0.3 },
+            audio_tracks: [{ id: "bgm_01", volume: 0.5 }],
+          },
         },
       },
-      {
-        time: 120,
-        frame: {
-          actors: [{ id: "char_01", speech: { text: "HA HA ! ON EST SAUVÉS !", mood: "joyful", style: "shout", pitch_shift: 0 } }],
-          camera: { zoom: 1.0 },
-          fx: { bloom: 0.3 },
-          audio_tracks: [{ id: "bgm_01", volume: 0.5 }],
-        },
-      },
-    ],
     config: { checkpoint: "flux_dev.safetensors", sampler: "euler", seed: 42, tts_engine: "elevenlabs_v2" },
   };
 }
