@@ -133,4 +133,4 @@ export interface Model {
   config: Config
 }
 
-export default Model
+// Note: Model is exported as a named interface above. Avoid default export for types.

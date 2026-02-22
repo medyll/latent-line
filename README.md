@@ -1,28 +1,42 @@
-# latent-line
-LatentLine is a JSON-native orchestration framework for Stable Diffusion that enables structured cinematic sequencing. It replaces traditional prompting with a programmable timeline to control characters, camera vectors, and environmental states with surgical precision. It serves as a headless bridge to compile complex narrative manifests into executable generative workflows.
+# sv
 
-## Frontend scaffold
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-This repository now includes a minimal Svelte 5 + Vite + TypeScript + Tailwind scaffold and a small `shadcn-svelte`-style UI sample.
+## Creating a project
 
-Quick start:
+If you're seeing this, you've probably already done this step. Congrats!
 
-1. Install dependencies:
-
-```bash
-pnpm install
+```sh
+# create a new project
+npx sv create my-app
 ```
 
-2. Start dev server:
+To recreate this project with the same configuration:
 
-```bash
-pnpm dev
+```sh
+# recreate this project
+pnpm dlx sv create --template minimal --types ts --add prettier eslint vitest="usages:unit,component" playwright tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:auto" mcp="ide:vscode+setup:remote" --install pnpm ./
 ```
 
-To scaffold or add more `shadcn-svelte` components, run the library's generator/CLI if available, for example:
+## Developing
 
-```bash
-pnpm dlx shadcn-svelte init
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+
+```sh
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-Tailwind is configured via `tailwind.config.cjs` and `postcss.config.cjs`.
+## Building
+
+To create a production version of your app:
+
+```sh
+npm run build
+```
+
+You can preview the production build with `npm run preview`.
+
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

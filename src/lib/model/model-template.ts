@@ -1,4 +1,4 @@
-import type Model from "./model-types";
+import type { Model } from "./model-types";
 import { z } from "zod";
 
 /** Minimal Zod schemas matching `src/lib/types.ts` for runtime validation */
@@ -57,7 +57,7 @@ const projectSchema = z.object({ name: z.string(), fps: z.number().int().min(1).
 const referenceSchema = z.object({ url: z.string().refine(isUrlOrFile, { message: "must be absolute URL or local filename with allowed extension" }), context: z.string(), weight: z.number() });
 const outfitSchema = z.object({ prompt: z.string(), lora: z.string().optional() });
 const characterSchema = z.object({ id: z.string(), name: z.string(), voice_id: z.string().optional(), references: z.array(referenceSchema), outfits: z.record(z.string(), outfitSchema).optional() });
-const environmentSchema = z.object({ prompt: z.string(), ref: z.string().optional().refine((v) => !v || isUrlOrFile(v), { message: "ref must be URL or file path" }) });
+const environmentSchema = z.object({ prompt: z.string(), ref: z.string().optional().refine((v: string | undefined) => !v || isUrlOrFile(v), { message: "ref must be URL or file path" }) });
 const audioAssetSchema = z.object({ id: z.string(), url: z.string().refine(isUrlOrFile, { message: "must be URL or file path" }), label: z.string().optional() });
 
 const assetsSchema = z.object({ characters: z.array(characterSchema), environments: z.record(z.string(), environmentSchema), audio: z.array(audioAssetSchema) });

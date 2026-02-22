@@ -66,3 +66,8 @@ Questions for maintainers (add to PR description)
 - Should `modelSchema` enforce ID uniqueness across assets? If yes, I can add Zod refinements.
 
 End of instructions.
+
+> **Note: IMPORTANT**
+> This project does not use `App.svelte`; it is based on SvelteKit with Svelte 5.
+> The SPA entry point is managed via `src/routes/+layout.svelte` and pages under `src/routes/`.
+> Use SvelteKit/Svelte 5 conventions for navigation and layout.

@@ -1,5 +1,4 @@
-import type Model from './model-types'
-import type { Mood, LightingType } from './model-types'
+import type { Model, Mood, LightingType } from '$lib/model/model-types'
 
 const exampleModel: Model = {
   project: {

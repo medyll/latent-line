@@ -1,6 +1,9 @@
 <script lang="ts">
-  export let data: any
+	import '$lib/styles/layout.css';
+	import favicon from '$lib/assets/favicon.svg';
+
+	let { children } = $props();
 </script>
 
-<slot />
-vfdvf
+<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+{@render children()}

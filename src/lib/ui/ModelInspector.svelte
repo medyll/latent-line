@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Button from './Button.svelte';
-  import exampleModel from '../model-example';
-  import { modelTemplate, modelSchema } from '../model-template';
-  import type Model from '../model-types';
+  import {Button} from '$lib/components/ui/button/index.js';
+  import exampleModel from '$lib/model/model-example';
+  import { modelTemplate, modelSchema } from '$lib/model/model-template';
+  import type { Model } from '$lib/model/model-types';
 
   let selected: Model = exampleModel;
   let validation: { ok: boolean; message?: string } | null = null;
