@@ -1,3 +1,41 @@
+
+## Svelte 5 snippet and slot conventions
+
+In Svelte 4, content was passed to components using slots. In Svelte 5, slots are deprecated and replaced by snippets, which are more powerful and flexible.
+
+- Layout components should use `{@render children()}` instead of `<slot />`.
+- Snippets can be passed as props or defined inside component tags.
+- Programmatic snippets can be created with `createRawSnippet` API for advanced use cases.
+
+### Svelte 5 snippet example
+
+```svelte
+<script>
+	import Table from './Table.svelte';
+	const fruits = [
+		{ name: 'apples', qty: 5, price: 2 },
+		{ name: 'bananas', qty: 10, price: 1 },
+		{ name: 'cherries', qty: 20, price: 0.5 }
+	];
+</script>
+
+{#snippet header()}
+	<th>fruit</th>
+	<th>qty</th>
+	<th>price</th>
+	<th>total</th>
+{/snippet}
+
+{#snippet row(d)}
+	<td>{d.name}</td>
+	<td>{d.qty}</td>
+	<td>{d.price}</td>
+	<td>{d.qty * d.price}</td>
+{/snippet}
+
+<Table data={fruits} {header} {row} />
+```
+
 You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit documentation. Here's how to use the available tools effectively:
 
 ## Available MCP Tools:
