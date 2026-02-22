@@ -12,13 +12,36 @@ const demos = [
 ];
 
 let { children } = $props();
+
+@state theme = 'light';
+
+function toggleTheme() {
+	theme = theme === 'light' ? 'dark' : 'light';
+	if (typeof document !== 'undefined') {
+		document.documentElement.classList.toggle('dark', theme === 'dark');
+	}
+}
+
+if (typeof document !== 'undefined') {
+	// On mount, restore theme from localStorage
+	const saved = localStorage.getItem('theme');
+	if (saved === 'dark') {
+		theme = 'dark';
+		document.documentElement.classList.add('dark');
+	}
+}
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
 <div class="flex h-screen w-screen bg-background">
 	<Card class="w-64 h-full border-r bg-muted flex flex-col">
-		<div class="font-bold text-lg p-4 border-b">Latent Line</div>
+		<div class="font-bold text-lg p-4 border-b flex items-center justify-between">
+			Latent Line
+			<Button variant="outline" onclick={() => { toggleTheme(); localStorage.setItem('theme', theme); }}>
+				{theme === 'dark' ? '☀️' : '🌙'}
+			</Button>
+		</div>
 		<div class="flex flex-col gap-2 p-4 flex-1">
 			{#each demos as demo (demo.path)}
 				<Button variant="ghost" class="justify-start w-full" onclick={() => window.location.href = demo.path}>

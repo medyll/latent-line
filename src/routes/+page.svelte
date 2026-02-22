@@ -4,6 +4,7 @@
 
 	<ul class="list-disc pl-5 space-y-2">
 		<li><a href="/demo" class="text-sky-600 hover:underline">Demo Model (alias /demo)</a></li>
+		<li><a href="/timeline" class="text-sky-600 hover:underline">Timeline (alias /timeline)</a></li>
 		<li><a href="/demo-model" class="text-sky-600 hover:underline">Demo Model (direct /demo-model)</a></li>
 	</ul>
 </main>
