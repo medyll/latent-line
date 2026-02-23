@@ -4,8 +4,6 @@
     let { data }: PageProps = $props();
 </script>
 
-<div class="flex flex-col h-screen w-screen bg-background">
-	<div class="flex-1 flex items-center justify-center">
-		<Timeline />
-	</div>
-</div> 
+<div class="flex flex-row h-screen w-screen bg-background">
+  <Timeline />
+</div>
