@@ -64,7 +64,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           {#each assets as asset, i}
             <Card class="transition-all duration-300 ease-spring hover:-translate-y-1 hover:scale-98" style="animation-delay: calc({i} * 80ms)">
-              <Avatar asset={asset} />
+              <!-- <Avatar asset={asset} /> -->
               <div class="mt-2 font-semibold">{asset.name}</div>
             </Card>
           {/each}

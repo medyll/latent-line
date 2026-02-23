@@ -5,6 +5,7 @@ import { Button } from "$lib/components/ui/button/index.js";
 import favicon from '$lib/assets/favicon.svg';
 import "$lib/styles/app.css";
 import { goto } from '$app/navigation';
+	import { Sidebar, SidebarHeader, SidebarContent, SidebarMenuItem, SidebarProvider } from "$lib/components/ui/sidebar/index.js";
 
 const demos = [
 	{ name: "Demo App", path: "/app/" },
@@ -44,26 +45,30 @@ if (typeof document !== 'undefined') {
 <!--
 	AppLayout using shadcn-svelte Card for sidebar and main content.
 -->
-<div class="w-full min-h-[100dvh] bg-background flex flex-row">
+<div class="w-full min-h-[100dvh] bg-background flex flex-row items-start">
 	<!-- Sidebar navigation -->
-	<Card class="w-64 h-full border-r bg-muted flex flex-col">
-		<div class="font-bold text-lg p-4 border-b flex items-center justify-between">
-			Latent Line
-			<Button variant="outline" onclick={toggleTheme}>
-				{theme === 'dark' ? '☀️' : '🌙'}
-			</Button>
-		</div>
-		<div class="flex flex-col gap-2 p-4 flex-1">
-			{#each demos as demo (demo.path)}
-				<Button variant="ghost" class="justify-start w-full" onclick={() => goto(demo.path)}>
-					{demo.name}
+	<SidebarProvider>
+		<Sidebar class="h-full border-r bg-muted" style="min-width:220px;max-width:260px;width:16rem;">
+			<SidebarHeader class="font-bold text-lg p-4 border-b flex items-center justify-between">
+				Latent Line
+				<Button variant="outline" onclick={toggleTheme}>
+					{theme === 'dark' ? '☀️' : '🌙'}
 				</Button>
-			{/each}
-		</div>
-	</Card>
+			</SidebarHeader>
+			<SidebarContent class="flex flex-col gap-2 p-4 flex-1">
+				{#each demos as demo (demo.path)}
+					<SidebarMenuItem class="w-full">
+						<a href={demo.path} class="block w-full h-full px-2 py-1 rounded hover:bg-accent focus:bg-accent transition-colors">
+							{demo.name}
+						</a>
+					</SidebarMenuItem>
+				{/each}
+			</SidebarContent>
+		</Sidebar>
+	</SidebarProvider>
 
 	<!-- Main content area -->
-	<Card class="flex-1 h-full bg-white shadow-none border-none p-0 flex items-center justify-center">
+	<main class="flex-1 h-full bg-white shadow-none border-none p-0 flex flex-col items-start justify-start px-8 py-8">
 		{@render children()}
-	</Card>
+	</main>
 </div>
