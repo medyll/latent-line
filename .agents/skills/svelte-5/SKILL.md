@@ -1,3 +1,21 @@
+## ⚠️ Anti-Regression: No $variable Reactivity in Svelte 5
+
+**Do NOT use `$variable` (e.g., `$loading`, `$user`) for reactivity in Svelte 5.**
+
+- Svelte 5 does NOT use the `$`-prefix variable pattern from Svelte 3/4 for reactive values.
+- All reactivity must use runes: `$state`, `$derived`, `$props`, etc.
+- Example (correct):
+  ```ts
+  let loading = $state(false); // NOT $loading
+  ```
+- Example (incorrect):
+  ```ts
+  if ($loading) { ... } // ❌ INVALID in Svelte 5
+  ```
+
+**Always use the variable name directly (e.g., `loading`, `user`) and mutate via runes.**
+
+> This rule must be enforced in all code, documentation, and reviews to prevent Svelte 3/4 regression errors.
 
 # Svelte 5 & SvelteKit Developer Skill
 
