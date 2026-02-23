@@ -14,6 +14,8 @@
 - **UI**: Svelte components under `src/`.
 - **Tests**: Unit tests in `src/lib/*.test.ts` (Vitest).
 
+## IMPORTANT: Never modify components in `src/lib/components` — these are shadcn components and must remain untouched. If you need to customize UI, create new components elsewhere or use composition.
+
 ## Project-specific conventions
 - **Timeline**: Ordered array of `TimelineEvent[]` (see `GUIDELINES.md` for format and rules).
 - **Validation**: Use Zod (`modelSchema.safeParse(value)`).

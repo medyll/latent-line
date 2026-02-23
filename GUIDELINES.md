@@ -1,3 +1,48 @@
+## User Interface (UI) — Technical Summary
+
+The LatentLine user interface is engineered for precise, modular orchestration, optimized for professional workflows on high-resolution (4K) screens. It is built on SvelteKit/Svelte 5, with strict separation of concerns and custom UI component composition (see `taste-skill` conventions).
+
+### Main Structure
+
+- **Global Asset Manager (Left Sidebar):**
+  - Centralized management of characters, environments, and audio assets.
+  - Configuration interface for LoRA models and reference files.
+  - Asset ID validation and consistency enforced via Zod.
+
+- **Sequence Orchestrator (Central Zone):**
+  - Vertically split into two synchronized sections:
+    - **Synoptic View (Top):** State thumbnail grid (5 per row), vertical scroll, for rapid visualization of logical structure without temporal constraints.
+    - **Temporal Sequencer (Bottom):** Horizontally scrollable timeline, managing audio tracks, transitions, and keyframes. Scroll is synchronized with Synoptic View for seamless navigation.
+  - Uses CSS Grid for layout, avoiding complex flexbox math.
+
+- **Contextual Properties (Right Sidebar):**
+  - Dynamic panel linked to the selected element.
+  - Optical controls (camera), lighting, post-processing (Bloom, Blur), ControlNet configuration (Depth, Canny).
+  - Conditional property display based on element type.
+
+- **System Configuration (Footer):**
+  - Technical selectors for Model Checkpoint, Sampler, TTS Engine.
+  - Export button for final JSON output.
+
+### Technical Specifications
+
+- **Design:** 4K flat design, white background, sharp lines, no shadows/gradients (anti-skeuomorphism).
+- **Responsiveness:** Adaptive layouts, mobile collapse via `w-full`, `px-4`, `max-w-7xl mx-auto`.
+- **Performance:** Exclusive use of `min-h-[100dvh]` for full-height sections, hardware acceleration for animations, avoidance of unnecessary GPU repaints.
+- **Accessibility:** Keyboard navigation, focus management, explicit labels for all fields.
+- **Interactivity:** Complete interactive states (loading, empty, error), tactile feedback, orchestrated micro-animations per skill directives.
+- **Icons:** Standardized use of `@lucide/svelte` (single strokeWidth), package presence verified in `package.json`.
+- **Styling:** Tailwind CSS v4 (or v3 per config), strict adherence to spacing, breakpoints, and palette conventions (see skill for restrictions).
+- **Anti-patterns:** Avoid centered layouts, generic cards, AI gradients, emojis, and generic names/fake data.
+
+### Key Components
+
+- **AssetManager:** CRUD for global assets, ID validation and mapping.
+- **Timeline:** Event management, drag & drop, synchronization with Synoptic View.
+- **SynopticGrid:** Overview of states, fast navigation, scene previews.
+- **PropertiesPanel:** Contextual property display, dynamic editing.
+- **SystemFooter:** Technical configuration, export pipeline.
+
 # Model Definition Guidelines
 
 This document describes the canonical model used across the repository: its purpose, field types, validation rules, timeline format, enums, and recommended best practices for creating and mutating model instances.
@@ -69,5 +114,4 @@ Refer to `src/lib/model-types.ts` for exact TypeScript interfaces.
 - Canonical template & Zod schema: `src/lib/model-template.ts` (`buildDefaultModel`, `modelSchema`, `createModelTemplate`).
 - Example instance: `src/lib/model-example.ts`
 - Tests: `src/lib/model-template.test.ts`
-
-If you want, I can expand this into a README-style spec with JSON Schema snippets or add stricter validation rules (ID uniqueness, stricter filename/URL patterns).
+ 

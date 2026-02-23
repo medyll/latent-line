@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ModelInspector from '$lib/ui/ModelInspector.svelte';
+  import ModelInspector from '$lib/components/app/ModelInspector.svelte';
 </script>
 
 <main class="p-6">

@@ -227,10 +227,12 @@ export const actions = {
 
 ---
 
+
 ## 7. Pro Tips (2026)
 
 - `$state.snapshot()`: Get a static JS object from a reactive `$state` proxy (for non-Svelte libs).
 - **Events**: No more `createEventDispatcher`. Pass functions as props (e.g., `onclick`, `onupdate`).
+- **Do NOT use `on:click` or any `on:event` directive**: All `on:event` directives are deprecated in Svelte 5. Use event attributes like `onclick`, `onchange`, etc., directly on elements or pass them as props.
 - **Prefer runes** for all local reactivity.
 
 ---

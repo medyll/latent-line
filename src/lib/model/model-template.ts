@@ -190,7 +190,7 @@ const resolution = {
       h: "integer(720)",
       aspect_ratio: "16:9",
       units: "px",
-    },
+    },actorSchema
   },
   hd1080: {
     name: "hd1080",
