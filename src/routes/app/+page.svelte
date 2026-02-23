@@ -14,8 +14,8 @@
   let loading = false;
   let error = '';
   let assets = [
-    { id: 'asset_1', name: 'Asset One' },
-    { id: 'asset_2', name: 'Asset Two' }
+    { id: 'asset_1', name: 'Asset One', details: 'On testnet' },
+    { id: 'asset_2', name: 'Asset Two', details: 'On mainnet' }
   ];
   let sequence = [
     { time: '00:01', frame: { actors: [{ id: 'char_01' }] } },
@@ -24,15 +24,7 @@
   let selected = assets[0];
   let config = { checkpoint: 'v1.0', sampler: 'Euler' };
 
-  // Dummy Avatar component for asset rendering (replace with actual import if available)
-  // Minimal Svelte component as placeholder
-  const Avatar = class {
-    // Svelte expects a constructor; this is a no-op placeholder
-    constructor(options) {}
-    $destroy() {}
-    $on() {}
-    $set() {}
-  };
+
 </script>
 
 <!--
@@ -137,7 +129,7 @@
   <!-- Not resizable, placed outside PaneGroup -->
 </Resizable.PaneGroup>
 
-<Card as="footer" class="w-full border-t px-4 py-3 md:px-2 md:py-2">
+<Card class="w-full border-t px-4 py-3 md:px-2 md:py-2">
       {#if loading}
         <Card class="flex items-center justify-center min-h-[80px] animate-pulse bg-muted">
           <span class="text-gray-500">Loading system config…</span>
@@ -155,9 +147,4 @@
       {/if}
 </Card>
 
-<style>
-/* Ensure layout fills viewport height */
-.app-layout {
-  min-height: 100dvh;
-}
-</style>
+
