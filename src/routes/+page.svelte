@@ -1,4 +1,4 @@
-<main class="p-6">
+<main >
 	<h1 class="text-2xl font-bold mb-4">LatentLine Demo Home</h1>
 	<p class="mb-4">Explore the project demos and model inspector.</p>
 

@@ -1,8 +1,8 @@
 import adapter from '@sveltejs/adapter-auto';
-import preprocess from 'svelte-preprocess';
+import { sveltePreprocess } from 'svelte-preprocess';
 
 const config = {
-	preprocess: preprocess({ postcss: true }),
+	preprocess: sveltePreprocess({ postcss: true }),
 	kit: {
 		adapter: adapter()
 	}

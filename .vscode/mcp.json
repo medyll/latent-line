@@ -15,11 +15,5 @@
 				"https://shadcn-svelte.mastra.cloud/api/mcp/shadcn/sse"
 			]
 		},
-		"jsrepo": {
-			"command": "npx",
-			"args": [
-				"@jsrepo/mcp"
-			]
-		}
 	}
 }

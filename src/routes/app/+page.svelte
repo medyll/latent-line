@@ -35,9 +35,9 @@
 <!--
   AppPage Layout with shadcn-svelte sidebar and leftbar using Resizable.Pane
 -->
-<Resizable.PaneGroup direction="horizontal" class="w-full max-w-7xl mx-auto min-h-[100dvh] bg-white">
+<Resizable.PaneGroup direction="horizontal" class="min-h-[100dvh] bg-white">
   <!-- Leftbar: Asset Manager -->
-  <Resizable.Pane defaultSize={320} minSize={200} maxSize={480} class="h-full">
+  <Resizable.Pane defaultSize={200} minSize={200} maxSize={200} class="h-full">
     <Card class="h-full border-r px-4 py-6 md:border-none md:px-2 md:py-2">
       {#if loading}
         <Card class="flex items-center justify-center min-h-[200px] animate-pulse bg-muted">
@@ -66,7 +66,6 @@
   </Resizable.Pane>
 
   <Resizable.Handle />
-
   <!-- Central Zone: Sequence Orchestrator -->
   <Resizable.Pane defaultSize={0} minSize={0} class="flex-1 h-full">
     <Card class="h-full px-4 py-6 md:px-2 md:py-2">

@@ -38,16 +38,19 @@ if (typeof document !== 'undefined') {
 <!--
 	AppLayout using shadcn-svelte Card for sidebar and main content.
 -->
-
-<Sidebar.Provider
-	style="--sidebar-width: calc(var(--spacing) * 72); --header-height: calc(var(--spacing) * 12);"	>
-	<AppSidebar />
-	<Sidebar.Inset>
-		<header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-			<Sidebar.Trigger class="-ms-1" />
-		</header> 
-		<main class="flex-1 h-full bg-white shadow-none border-none p-0 flex flex-col items-start justify-start">
-			{@render children()}
-		</main>		 
-	</Sidebar.Inset>
-</Sidebar.Provider>
+<div class="h-screen w-screen overflow-hidden">
+	<Sidebar.Provider
+		style="--sidebar-width: calc(var(--spacing) * 72); --header-height: calc(var(--spacing) * 12);"	>
+		<AppSidebar />
+		<Sidebar.Inset>
+		<div class="h-full flex flex-col">
+			<header class="flex flex-row  items-center gap-2 border-b px-4">
+				<Sidebar.Trigger class="-ms-1" /> latent-line
+			</header> 
+			<main class="flex-1  w-full   overflow-none">
+				{@render children()}
+			</main>
+		</div>	 
+		</Sidebar.Inset>
+	</Sidebar.Provider>
+</div>

@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import './base.css';
 @import './theme.css';
+@import './sidebar.css';
 
 @custom-variant dark (&:is(.dark *));
 

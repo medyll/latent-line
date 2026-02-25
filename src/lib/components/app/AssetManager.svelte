@@ -10,7 +10,6 @@
  * @example <AssetManager />
  */
 import exampleModel from '$lib/model/model-example';
-import { Card, CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyContent } from '$lib/components/ui/empty';
 import { Avatar, AvatarImage, AvatarFallback } from '$lib/components/ui/avatar';
 
@@ -26,15 +25,11 @@ const assetStore = $state(exampleModel.assets);
   Displays and manages global assets: Characters, Environments, Audio.
   Each section shows a list or an empty state if no assets exist.
 -->
-<div class="flex flex-col gap-6" aria-label="Asset Manager">
-  <h2 class="font-bold text-lg">Assets</h2>
-
+<div class="flex flex-col gap-1 p-1" aria-label="Asset Manager">
   <!-- Characters Section -->
-  <Card>
-    <CardHeader>
-      <CardTitle>Characters</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <div class="bg-transparent p-1">
+    <div class="text-xs font-semibold mb-1">Characters</div>
+    <div>
       {#if !assetStore.characters?.length}
         <!-- Empty state for characters -->
         <Empty>
@@ -45,9 +40,9 @@ const assetStore = $state(exampleModel.assets);
         </Empty>
       {:else}
         <!-- List of characters -->
-        <ul class="flex flex-col gap-2">
+        <ul class="flex flex-col gap-0">
           {#each assetStore.characters as char (char.id)}
-            <li class="flex items-center gap-3" aria-label={`Character ${char.name}`}>
+            <li class="flex items-center gap-2 text-xs" aria-label={`Character ${char.name}`}>
               <Avatar>
                 {#if char.avatar}
                   <AvatarImage src={char.avatar} alt={char.name} />
@@ -55,21 +50,19 @@ const assetStore = $state(exampleModel.assets);
                   <AvatarFallback>{char.name?.[0] ?? '?'}</AvatarFallback>
                 {/if}
               </Avatar>
-              <span class="font-mono text-xs text-muted-foreground">{char.id}</span>
+              <span class="font-mono text-muted-foreground">{char.id}</span>
               <span>{char.name}</span>
             </li>
           {/each}
         </ul>
       {/if}
-    </CardContent>
-  </Card>
+    </div>
+  </div>
 
   <!-- Environments Section -->
-  <Card>
-    <CardHeader>
-      <CardTitle>Environments</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <div class="bg-transparent p-1">
+    <div class="text-xs font-semibold mb-1">Environments</div>
+    <div>
       {#if !assetStore.environments?.length}
         <!-- Empty state for environments -->
         <Empty>
@@ -80,24 +73,22 @@ const assetStore = $state(exampleModel.assets);
         </Empty>
       {:else}
         <!-- List of environments -->
-        <ul class="flex flex-col gap-2">
+        <ul class="flex flex-col gap-0">
           {#each assetStore.environments as env (env.id)}
-            <li class="flex items-center gap-3" aria-label={`Environment ${env.name}`}>
-              <span class="font-mono text-xs text-muted-foreground">{env.id}</span>
+            <li class="flex items-center gap-2 text-xs" aria-label={`Environment ${env.name}`}>
+              <span class="font-mono text-muted-foreground">{env.id}</span>
               <span>{env.name}</span>
             </li>
           {/each}
         </ul>
       {/if}
-    </CardContent>
-  </Card>
+    </div>
+  </div>
 
   <!-- Audio Section -->
-  <Card>
-    <CardHeader>
-      <CardTitle>Audio</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <div class="bg-transparent p-1">
+    <div class="text-xs font-semibold mb-1">Audio</div>
+    <div>
       {#if !assetStore.audio?.length}
         <!-- Empty state for audio assets -->
         <Empty>
@@ -108,15 +99,15 @@ const assetStore = $state(exampleModel.assets);
         </Empty>
       {:else}
         <!-- List of audio assets -->
-        <ul class="flex flex-col gap-2">
+        <ul class="flex flex-col gap-0">
           {#each assetStore.audio as aud (aud.id)}
-            <li class="flex items-center gap-3" aria-label={`Audio ${aud.name}`}>
-              <span class="font-mono text-xs text-muted-foreground">{aud.id}</span>
+            <li class="flex items-center gap-2 text-xs" aria-label={`Audio ${aud.name}`}>
+              <span class="font-mono text-muted-foreground">{aud.id}</span>
               <span>{aud.name}</span>
             </li>
           {/each}
         </ul>
       {/if}
-    </CardContent>
-  </Card>
+    </div>
+  </div>
 </div>
