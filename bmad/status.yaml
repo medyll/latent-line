@@ -1,0 +1,83 @@
+project: latent-line
+phase: development
+sprint: 1
+last_updated: "2026-03-01"
+
+summary: >
+  SvelteKit (Svelte 5) + Vite SPA for orchestrating AI-driven story/scene production.
+  Core data model is complete and validated. Main UI layout is in place.
+  Pending: full interactivity for the Timeline, PropertiesPanel, and AssetManager.
+
+stack:
+  framework: SvelteKit (Svelte 5)
+  language: TypeScript
+  styling: TailwindCSS
+  ui_library: shadcn-svelte
+  validation: Zod
+  testing: Vitest + Playwright
+  build: Vite
+
+routes:
+  - path: /
+    file: src/routes/+page.svelte
+    status: exists
+  - path: /app
+    file: src/routes/app/+page.svelte
+    status: exists
+  - path: /timeline
+    file: src/routes/timeline/+page.svelte
+    status: exists
+  - path: /demo
+    file: src/routes/demo/+page.svelte
+    status: exists
+  - path: /demo-model
+    file: src/routes/demo-model/+page.svelte
+    status: exists
+
+model:
+  types: src/lib/model/model-types.ts
+  template: src/lib/model/model-template.ts
+  example: src/lib/model/model-example.ts
+  story_example: src/lib/model/model-story-example.ts
+  tests: src/lib/model/model-template.test.ts
+
+app_components:
+  - name: AssetManager
+    file: src/lib/components/app/AssetManager.svelte
+    status: scaffolded
+  - name: SequenceOrchestrator
+    file: src/lib/components/app/SequenceOrchestrator.svelte
+    status: scaffolded
+  - name: Timeline
+    file: src/lib/components/app/timeline.svelte
+    status: scaffolded
+  - name: TimelineEvent
+    file: src/lib/components/app/TimelineEvent.svelte
+    status: scaffolded
+  - name: PropertiesPanel
+    file: src/lib/components/app/PropertiesPanel.svelte
+    status: scaffolded
+  - name: ModelInspector
+    file: src/lib/components/app/ModelInspector.svelte
+    status: scaffolded
+  - name: SystemFooter
+    file: src/lib/components/app/SystemFooter.svelte
+    status: scaffolded
+
+application_layout:
+  - src/lib/application/app/app.svelte
+  - src/lib/application/app/app-sidebar.svelte
+  - src/lib/application/app/app-header.svelte
+  - src/lib/application/app/app-footer.svelte
+  - src/lib/application/app/app-content.svelte
+
+git:
+  branch: main
+  last_commit: "ef9bc6b — feat: enhance UI components and structure"
+  unstaged_deletions: 31 skill/reference files (IDE skill cleanup — safe to commit)
+
+risks:
+  - type: unstaged_changes
+    description: >
+      31 deleted skill/reference files under .agents/, .claude/, .continue/, .windsurf/.
+      These are IDE-managed skill files — not app code. Safe to commit or stash.
