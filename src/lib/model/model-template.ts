@@ -2,10 +2,15 @@ import type { Model } from "./model-types";
 import { z } from "zod";
 
 /** Minimal Zod schemas matching `src/lib/types.ts` for runtime validation */
+
+// Define enums first
+const moodEnum = z.enum(["joyful", "melancholic", "anxious", "serene", "curious"]);
+const lightingTypeEnum = z.enum(["dusk", "daylight", "studio", "tungsten", "ambient"]);
+
 const positionSchema = z.object({ x: z.number(), y: z.number(), scale: z.number().optional() });
 const speechSchema = z.object({
   text: z.string(),
-  mood: z.string().optional(),
+  mood: moodEnum.optional(),
   style: z.string().optional(),
   lip_sync: z.boolean().optional(),
   volume: z.number().min(0).max(1).optional(),
@@ -34,10 +39,6 @@ const timelineFrameSchema = z.object({
   audio_tracks: z.array(audioTrackSchema).optional(),
   audio_reactive: audioReactiveSchema.optional(),
 });
-
-// helpers & enums
-const moodEnum = z.enum(["joyful", "melancholic", "anxious", "serene", "curious"]);
-const lightingTypeEnum = z.enum(["dusk", "daylight", "studio", "tungsten", "ambient"]);
 
 // Improved isUrlOrFile: rejects path traversal
 function isUrlOrFile(s: string) {
