@@ -129,7 +129,7 @@ export interface Config {
 export interface Model {
   project: Project
   assets: Assets
-  timeline: Record<string, TimelineEvent>
+  timeline: TimelineEvent[]
   config: Config
 }
 

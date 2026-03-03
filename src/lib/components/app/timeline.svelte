@@ -19,13 +19,13 @@
 	let zoom = $state(100);
 	import exampleModel from '$lib/model/model-story-example';
 
-	// Convert timeline events to array with id, label, start, end
-	const timelineEvents = Object.entries(exampleModel.timeline).map(([eventId, event], idx) => {
+	// Timeline is now already an array
+	const timelineEvents = exampleModel.timeline.map((event, idx) => {
 		// Extract main actor speech and action for MVP info
 		const actor = event.frame.actors && event.frame.actors[0];
 		return {
-			id: eventId,
-			label: eventId,
+			id: `event_${idx}`,
+			label: `Event ${idx + 1}`,
 			start: event.time,
 			end: event.time + 10,
 			speech: actor && actor.speech ? actor.speech.text : '',

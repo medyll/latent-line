@@ -45,8 +45,8 @@ const exampleStoryModel: Model = {
       { id: 'water_explosion', url: 'geyser_burst.wav', label: 'Water Release' }
     ]
   },
-  timeline: {
-    event_01: {
+  timeline: [
+    {
       time: 0,
       frame: {
         actors: [
@@ -62,7 +62,7 @@ const exampleStoryModel: Model = {
         audio_tracks: [{ id: 'heavy_thuds', volume: 0.6, loop: true }]
       }
     },
-    event_02: {
+    {
       time: 120,
       frame: {
         actors: [
@@ -83,7 +83,7 @@ const exampleStoryModel: Model = {
         audio_tracks: [{ id: 'geiger_counter', volume: 0.3, loop: true }]
       }
     },
-    event_03: {
+    {
       time: 240,
       frame: {
         actors: [
@@ -103,7 +103,7 @@ const exampleStoryModel: Model = {
         audio_tracks: [{ id: 'low_rumble', volume: 0.5, fade_in: 500 }]
       }
     },
-    event_04: {
+    {
       time: 360,
       frame: {
         actors: [
@@ -123,7 +123,7 @@ const exampleStoryModel: Model = {
         audio_tracks: [{ id: 'low_rumble', volume: 0.8 }]
       }
     },
-    event_05: {
+    {
       time: 480,
       frame: {
         actors: [
@@ -139,7 +139,7 @@ const exampleStoryModel: Model = {
         audio_tracks: [{ id: 'low_rumble', volume: 1.0 }]
       }
     },
-    event_06: {
+    {
       time: 600,
       frame: {
         actors: [
@@ -162,7 +162,7 @@ const exampleStoryModel: Model = {
         audio_reactive: { target: 'fx.bloom', param: 'intensity', strength: 3.0 }
       }
     }
-  },
+  ],
   config: {
     checkpoint: 'latent_world_v1.safetensors',
     sampler: 'dpmpp_sde',

@@ -29,8 +29,8 @@ const exampleModel: Model = {
       { id: 'sfx_01', url: 'water_ripples.mp3', label: 'Water SFX' }
     ]
   },
-  timeline: {
-    event_01: {
+  timeline: [
+    {
       time: 0,
       frame: {
         actors: [
@@ -59,7 +59,7 @@ const exampleModel: Model = {
         audio_reactive: { target: 'fx.bloom', param: 'amplitude', strength: 1.5 }
       }
     },
-    event_02: {
+    {
       time: 120,
       frame: {
         actors: [
@@ -81,7 +81,7 @@ const exampleModel: Model = {
         ]
       }
     }
-  },
+  ],
   config: {
     checkpoint: 'flux_dev.safetensors',
     sampler: 'euler',

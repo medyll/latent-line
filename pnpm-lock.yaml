@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@radix-ui/react-slot':
-        specifier: ^1.2.4
-        version: 1.2.4(react@19.2.4)
       '@tailwindcss/postcss':
         specifier: ^4.2.0
         version: 4.2.0
@@ -20,9 +17,6 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      lucide-react:
-        specifier: ^0.575.0
-        version: 0.575.0(react@19.2.4)
       shadcn-svelte:
         specifier: ^1.1.1
         version: 1.1.1
@@ -710,24 +704,6 @@ packages:
 
   '@poppinss/macroable@1.1.0':
     resolution: {integrity: sha512-y/YKzZDuG8XrpXpM7Z1RdQpiIc0MAKyva24Ux1PB4aI7RiSI/79K8JVDcdyubriTm7vJ1LhFs8CrZpmPnx/8Pw==}
-
-  '@radix-ui/react-compose-refs@1.1.2':
-    resolution: {integrity: sha512-z4eqJvfiNnFMHIIvXP3CY57y2WJs5g2v3X0zm9mEJkrkNv4rDxu+sg9Jh8EkXyeqBkB7SOcboo9dMVqhyrACIg==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  '@radix-ui/react-slot@1.2.4':
-    resolution: {integrity: sha512-Jl+bCv8HxKnlTLVrcDE8zTMJ09R9/ukw4qBs/oZClOfoQk/cOTbDn+NceXfV7j09YPVQUryJPHurafcSg6EVKA==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   '@rollup/rollup-android-arm-eabi@4.58.0':
     resolution: {integrity: sha512-mr0tmS/4FoVk1cnaeN244A/wjvGDNItZKR8hRhnmCzygyRXYtKF5jVDSIILR1U97CTzAYmbgIj/Dukg62ggG5w==}
@@ -2329,11 +2305,6 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@0.575.0:
-    resolution: {integrity: sha512-VuXgKZrk0uiDlWjGGXmKV6MSk9Yy4l10qgVvzGn2AWBx1Ylt0iBexKOAoA6I7JO3m+M9oeovJd3yYENfkUbOeg==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
     hasBin: true
@@ -2754,10 +2725,6 @@ packages:
   raw-body@3.0.2:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
-
-  react@19.2.4:
-    resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
-    engines: {node: '>=0.10.0'}
 
   readdirp@4.1.2:
     resolution: {integrity: sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg==}
@@ -3998,15 +3965,6 @@ snapshots:
 
   '@poppinss/macroable@1.1.0':
     optional: true
-
-  '@radix-ui/react-compose-refs@1.1.2(react@19.2.4)':
-    dependencies:
-      react: 19.2.4
-
-  '@radix-ui/react-slot@1.2.4(react@19.2.4)':
-    dependencies:
-      '@radix-ui/react-compose-refs': 1.1.2(react@19.2.4)
-      react: 19.2.4
 
   '@rollup/rollup-android-arm-eabi@4.58.0':
     optional: true
@@ -5569,10 +5527,6 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@0.575.0(react@19.2.4):
-    dependencies:
-      react: 19.2.4
-
   lz-string@1.5.0: {}
 
   magic-string@0.30.21:
@@ -5900,8 +5854,6 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.2
       unpipe: 1.0.0
-
-  react@19.2.4: {}
 
   readdirp@4.1.2: {}
 

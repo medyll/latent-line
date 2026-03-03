@@ -9,15 +9,15 @@
  *              Handles ID validation and displays asset lists with empty states.
  * @example <AssetManager />
  */
+import type { Assets } from '$lib/model/model-types';
 import exampleModel from '$lib/model/model-example';
 import { Empty, EmptyHeader, EmptyTitle, EmptyDescription, EmptyContent } from '$lib/components/ui/empty';
 import { Avatar, AvatarImage, AvatarFallback } from '$lib/components/ui/avatar';
 
 /**
- * Asset store state, derived from example model assets.
- * @type {import('$lib/model/model-types').Assets}
+ * Asset store state, cloned from example model assets to prevent mutations.
  */
-const assetStore = $state(exampleModel.assets);
+const assetStore = $state<Assets>(structuredClone(exampleModel.assets));
 </script>
 
 <!--

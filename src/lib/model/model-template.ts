@@ -39,8 +39,13 @@ const timelineFrameSchema = z.object({
 const moodEnum = z.enum(["joyful", "melancholic", "anxious", "serene", "curious"]);
 const lightingTypeEnum = z.enum(["dusk", "daylight", "studio", "tungsten", "ambient"]);
 
+// Improved isUrlOrFile: rejects path traversal
 function isUrlOrFile(s: string) {
   if (!s || typeof s !== "string") return false;
+  
+  // Reject path traversal attempts
+  if (s.includes('..') || s.includes('\0')) return false;
+  
   try {
     // allow absolute URLs
     // new URL will throw on relative paths
@@ -62,10 +67,10 @@ const audioAssetSchema = z.object({ id: z.string(), url: z.string().refine(isUrl
 
 const assetsSchema = z.object({ characters: z.array(characterSchema), environments: z.record(z.string(), environmentSchema), audio: z.array(audioAssetSchema) });
 
-// timeline as an object keyed by event id
+// timeline as an array
 const timelineEventSchema = z.object({ time: z.number().int().nonnegative(), frame: timelineFrameSchema });
 
-export const modelSchema = z.object({ project: projectSchema, assets: assetsSchema, timeline: z.record(z.string(), timelineEventSchema), config: z.object({ checkpoint: z.string().optional(), sampler: z.string().optional(), seed: z.number().optional(), tts_engine: z.string().optional() }) });
+export const modelSchema = z.object({ project: projectSchema, assets: assetsSchema, timeline: z.array(timelineEventSchema), config: z.object({ checkpoint: z.string().optional(), sampler: z.string().optional(), seed: z.number().optional(), tts_engine: z.string().optional() }) });
 
 /** Build a fully-typed default Model instance (no placeholder strings). */
 export function buildDefaultModel(): Model {
@@ -84,8 +89,8 @@ export function buildDefaultModel(): Model {
       environments: { oasis: { prompt: "bioluminescent desert oasis", ref: "env_01.png" } },
       audio: [{ id: "bgm_01", url: "soundtrack_dark.wav", label: "Main Theme" }],
     },
-      timeline: {
-        event_01: {
+      timeline: [
+        {
           time: 0,
           frame: {
             actors: [
@@ -105,7 +110,7 @@ export function buildDefaultModel(): Model {
             audio_reactive: { target: "fx.bloom", param: "amplitude", strength: 1.5 },
           },
         },
-        event_02: {
+        {
           time: 120,
           frame: {
             actors: [{ id: "char_01", speech: { text: "HA HA ! ON EST SAUVÉS !", mood: "joyful", style: "shout", pitch_shift: 0 } }],
@@ -114,7 +119,7 @@ export function buildDefaultModel(): Model {
             audio_tracks: [{ id: "bgm_01", volume: 0.5 }],
           },
         },
-      },
+      ],
     config: { checkpoint: "flux_dev.safetensors", sampler: "euler", seed: 42, tts_engine: "elevenlabs_v2" },
   };
 }
@@ -190,7 +195,7 @@ const resolution = {
       h: "integer(720)",
       aspect_ratio: "16:9",
       units: "px",
-    },actorSchema
+    },
   },
   hd1080: {
     name: "hd1080",

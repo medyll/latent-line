@@ -1,40 +1,39 @@
 
-<script>
+<script lang="ts">
+import type { TimelineEvent, TimelineFrame } from '$lib/model/model-types';
+
 /**
  * PropertiesPanel.svelte
  *
  * @component PropertiesPanel
- * @description Displays contextual properties for the selected element (camera, lighting, fx, controlnet).
+ * @description Displays contextual properties for the selected timeline event (camera, lighting, fx, controlnet).
  * @example <PropertiesPanel />
  */
-// import { model } from '$lib/model-example';
 
 /**
- * Selected element state.
- * @type {any}
+ * Selected timeline event state.
  */
-const selected = $state(null);
+const selected = $state<TimelineEvent | null>(null);
 
 /**
- * Extracts properties from the selected element for display.
- * @param {any} element
- * @returns {{camera: any, lighting: any, fx: any, controlnet: any}}
+ * Extracts properties from the selected event for display.
+ * @param event - The selected timeline event
+ * @returns An object containing camera, lighting, fx, and controlnet properties
  */
-function getProperties(element) {
-  if (!element) return {};
-  // Example: show camera, lighting, fx, controlnet
+function getProperties(event: TimelineEvent): Partial<TimelineFrame> {
+  if (!event) return {};
   return {
-    camera: element.frame?.camera,
-    lighting: element.frame?.lighting,
-    fx: element.frame?.fx,
-    controlnet: element.frame?.controlnet,
+    camera: event.frame?.camera,
+    lighting: event.frame?.lighting,
+    fx: event.frame?.fx,
+    controlnet: event.frame?.controlnet,
   };
 }
 </script>
 
 <!--
   PropertiesPanel Component
-  Shows contextual properties for the currently selected element.
+  Shows contextual properties for the currently selected timeline event.
 -->
 <div class="flex flex-col gap-4" aria-label="Properties Panel">
   <h2 class="font-bold text-lg">Properties</h2>
