@@ -85,6 +85,7 @@ This document explains how latent-line components communicate and how data flows
    ```typescript
    const assetStore = $state(structuredClone(exampleModel.assets));
    ```
+
    - **Deep clone** prevents mutations to original
    - **$state** makes store reactive
 
@@ -94,10 +95,10 @@ This document explains how latent-line components communicate and how data flows
 2. **Compute display format**:
    ```typescript
    const timelineEvents = exampleModel.timeline.map((event, idx) => ({
-     id: `event_${idx}`,
-     label: `Event ${idx + 1}`,
-     start: event.time,
-     // ... extract actor, speech, camera, fx, audio
+   	id: `event_${idx}`,
+   	label: `Event ${idx + 1}`,
+   	start: event.time
+   	// ... extract actor, speech, camera, fx, audio
    }));
    ```
 3. **Render cards** for each event
@@ -108,18 +109,20 @@ This document explains how latent-line components communicate and how data flows
 1. **User clicks event card**
 2. **`selected` state updates** (Svelte reactivity)
 3. **PropertiesPanel updates** (reactive dependency):
+
    ```typescript
    const selected = $state<TimelineEvent | null>(null);
-   
+
    function getProperties(event: TimelineEvent) {
-     return {
-       camera: event.frame?.camera,
-       lighting: event.frame?.lighting,
-       fx: event.frame?.fx,
-       controlnet: event.frame?.controlnet
-     };
+   	return {
+   		camera: event.frame?.camera,
+   		lighting: event.frame?.lighting,
+   		fx: event.frame?.fx,
+   		controlnet: event.frame?.controlnet
+   	};
    }
    ```
+
 4. **Display camera zoom, lighting type, FX strength**
 
 ### 4. Asset Management
@@ -145,8 +148,8 @@ This document explains how latent-line components communicate and how data flows
    ```typescript
    const result = modelSchema.safeParse(assetStore);
    if (!result.success) {
-     console.error("Validation failed:", result.error);
-     return;
+   	console.error('Validation failed:', result.error);
+   	return;
    }
    ```
 4. **Download or upload** to backend
@@ -178,7 +181,7 @@ let selected = $state(null);
     onSelect?: (item: TimelineEventDisplay) => void;
   }
   let { item, onSelect } = $props();
-  
+
   function handleClick() {
     onSelect?.(item);
   }
@@ -216,20 +219,23 @@ import { currentModel, selectedEvent } from '$lib/stores/modelStore';
 ## State Immutability & Cloning
 
 ### Problem
+
 ```typescript
 // ❌ BAD: Shared reference to original
 const assetStore = $state(exampleModel.assets);
-assetStore.characters[0].name = "Evil"; // Mutates original!
+assetStore.characters[0].name = 'Evil'; // Mutates original!
 ```
 
 ### Solution
+
 ```typescript
 // ✅ GOOD: Deep clone
 const assetStore = $state(structuredClone(exampleModel.assets));
-assetStore.characters[0].name = "Safe"; // Mutates copy only
+assetStore.characters[0].name = 'Safe'; // Mutates copy only
 ```
 
 **When to clone:**
+
 - When assigning to `$state` from external data
 - When passing mutable objects to child components
 - Before modifying nested structures
@@ -243,8 +249,8 @@ assetStore.characters[0].name = "Safe"; // Mutates copy only
 ```typescript
 const result = modelSchema.safeParse(loadedModel);
 if (!result.success) {
-  console.error("Invalid model:", result.error.flatten());
-  // Show error UI, reject import
+	console.error('Invalid model:', result.error.flatten());
+	// Show error UI, reject import
 }
 const validModel = result.data;
 ```
@@ -254,8 +260,8 @@ const validModel = result.data;
 ```typescript
 const result = modelSchema.safeParse(assetStore);
 if (!result.success) {
-  toast.error("Model has validation errors. Cannot export.");
-  return;
+	toast.error('Model has validation errors. Cannot export.');
+	return;
 }
 // Safe to export
 download(JSON.stringify(result.data));
@@ -264,6 +270,7 @@ download(JSON.stringify(result.data));
 ### 3. In Zod Refinements
 
 Security checks:
+
 - **Path traversal**: `!urlOrFile.includes('..')`
 - **File type**: `/\.(png|jpe?g|wav|mp3|...)$/i.test(s)`
 
@@ -274,6 +281,7 @@ Security checks:
 ### 1. Timeline Rendering
 
 **Current**: Map over array once
+
 ```typescript
 const timelineEvents = exampleModel.timeline.map(...);
 ```
@@ -281,6 +289,7 @@ const timelineEvents = exampleModel.timeline.map(...);
 **Issue**: Recomputes on every render if not memoized
 
 **Solution**: Use reactive declaration
+
 ```typescript
 $: timelineEvents = exampleModel.timeline.map(...);
 ```
@@ -288,15 +297,17 @@ $: timelineEvents = exampleModel.timeline.map(...);
 ### 2. Asset Search
 
 **Current**: Linear scan (O(n))
+
 ```typescript
-characters.filter(c => c.name.includes(search))
+characters.filter((c) => c.name.includes(search));
 ```
 
 **Issue**: Slow for 100+ characters
 
 **Solution**: Index with Map (O(1))
+
 ```typescript
-const charIndex = new Map(characters.map(c => [c.id, c]));
+const charIndex = new Map(characters.map((c) => [c.id, c]));
 ```
 
 ### 3. Deep Cloning
@@ -304,6 +315,7 @@ const charIndex = new Map(characters.map(c => [c.id, c]));
 **Issue**: `structuredClone()` is expensive for large models
 
 **Solution**: Lazy clone or use Immer:
+
 ```typescript
 import { produce } from 'immer';
 const assetStore = $state(produce(exampleModel.assets, () => {}));
@@ -318,15 +330,16 @@ const assetStore = $state(produce(exampleModel.assets, () => {}));
 ```typescript
 const result = modelSchema.safeParse(data);
 if (!result.success) {
-  const errors = result.error.flatten().fieldErrors;
-  // { timeline: ["Timeline must not be empty"], ... }
-  showErrorNotification(errors);
+	const errors = result.error.flatten().fieldErrors;
+	// { timeline: ["Timeline must not be empty"], ... }
+	showErrorNotification(errors);
 }
 ```
 
 ### Type Errors
 
 TypeScript catches at compile time:
+
 ```typescript
 const event: TimelineEvent = ...;
 event.invalid_field = 123; // ❌ TS2339: Property 'invalid_field' does not exist
@@ -336,10 +349,10 @@ event.invalid_field = 123; // ❌ TS2339: Property 'invalid_field' does not exis
 
 ```typescript
 function processActor(actor: any) {
-  if (!actor || typeof actor.id !== 'string') {
-    throw new Error("Invalid actor: missing id");
-  }
-  // Safe to use actor.id
+	if (!actor || typeof actor.id !== 'string') {
+		throw new Error('Invalid actor: missing id');
+	}
+	// Safe to use actor.id
 }
 ```
 
@@ -353,15 +366,15 @@ function processActor(actor: any) {
 import { modelSchema } from '$lib/model/model-template';
 
 test('should reject path traversal', () => {
-  const invalid = {
-    ...validModel,
-    assets: {
-      ...validModel.assets,
-      audio: [{ id: 'a1', url: '../../../etc/passwd.wav' }]
-    }
-  };
-  const result = modelSchema.safeParse(invalid);
-  expect(result.success).toBe(false);
+	const invalid = {
+		...validModel,
+		assets: {
+			...validModel.assets,
+			audio: [{ id: 'a1', url: '../../../etc/passwd.wav' }]
+		}
+	};
+	const result = modelSchema.safeParse(invalid);
+	expect(result.success).toBe(false);
 });
 ```
 
@@ -372,10 +385,10 @@ import { render } from 'vitest-browser-svelte';
 import Timeline from '$lib/components/app/Timeline.svelte';
 
 test('renders timeline events', () => {
-  const { getByText } = render(Timeline, {
-    props: { timeline: exampleModel.timeline }
-  });
-  expect(getByText(/event 1/i)).toBeVisible();
+	const { getByText } = render(Timeline, {
+		props: { timeline: exampleModel.timeline }
+	});
+	expect(getByText(/event 1/i)).toBeVisible();
 });
 ```
 
@@ -383,11 +396,11 @@ test('renders timeline events', () => {
 
 ```typescript
 test('user can load, edit, and export model', async ({ page }) => {
-  await page.goto('/app');
-  await page.click('text=Load Example');
-  await page.fill('[placeholder="Event name"]', 'My Event');
-  await page.click('button:has-text("Export")');
-  // Verify download
+	await page.goto('/app');
+	await page.click('text=Load Example');
+	await page.fill('[placeholder="Event name"]', 'My Event');
+	await page.click('button:has-text("Export")');
+	// Verify download
 });
 ```
 

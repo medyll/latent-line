@@ -1,14 +1,14 @@
 {
-  "version": 3,
-  "skills": {
-    "zod-v4": {
-      "source": "bjornmelin/dev-skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/bjornmelin/dev-skills.git",
-      "skillFolderHash": "",
-      "installedAt": "2026-02-21T23:36:09.038Z",
-      "updatedAt": "2026-02-21T23:36:09.038Z"
-    }
-  },
-  "dismissed": {}
+	"version": 3,
+	"skills": {
+		"zod-v4": {
+			"source": "bjornmelin/dev-skills",
+			"sourceType": "github",
+			"sourceUrl": "https://github.com/bjornmelin/dev-skills.git",
+			"skillFolderHash": "",
+			"installedAt": "2026-02-21T23:36:09.038Z",
+			"updatedAt": "2026-02-21T23:36:09.038Z"
+		}
+	},
+	"dismissed": {}
 }

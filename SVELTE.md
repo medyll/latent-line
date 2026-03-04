@@ -1,18 +1,17 @@
-
 # Svelte 5 & SvelteKit Cheat Sheet (2026 Edition)
 
 ## 1. Core Runes & TypeScript Typing
 
 Runes replace legacy reactivity with a signal-based approach. Use TypeScript interfaces for robust state management.
 
-| Rune | Purpose | Example |
-| --- | --- | --- |
-| **`$state(v)`** | Deep reactive state. | `let count = $state<number>(0);` |
-| **`$state.raw(v)`** | Shallow reactivity (performance). | `let logs = $state.raw<string[]>([]);` |
-| **`$derived(exp)`** | Computed values. | `const double = $derived(count * 2);` |
-| **`$derived.by(fn)`** | Complex logic/Async. | `const user = $derived.by(() => fetchUser(id));` |
-| **`$props()`** | Component inputs. | `let { name }: { name: string } = $props();` |
-| **`$bindable()`** | Two-way binding prop. | `let { value = $bindable() } = $props();` |
+| Rune                  | Purpose                           | Example                                          |
+| --------------------- | --------------------------------- | ------------------------------------------------ |
+| **`$state(v)`**       | Deep reactive state.              | `let count = $state<number>(0);`                 |
+| **`$state.raw(v)`**   | Shallow reactivity (performance). | `let logs = $state.raw<string[]>([]);`           |
+| **`$derived(exp)`**   | Computed values.                  | `const double = $derived(count * 2);`            |
+| **`$derived.by(fn)`** | Complex logic/Async.              | `const user = $derived.by(() => fetchUser(id));` |
+| **`$props()`**        | Component inputs.                 | `let { name }: { name: string } = $props();`     |
+| **`$bindable()`**     | Two-way binding prop.             | `let { value = $bindable() } = $props();`        |
 
 ### Detailed `$state` Examples
 
@@ -22,28 +21,26 @@ let theme = $state<'light' | 'dark'>('light');
 
 // Objects (Deeply reactive)
 interface User {
-  name: string;
-  settings: { notifications: boolean };
+	name: string;
+	settings: { notifications: boolean };
 }
 
 let user = $state<User>({
-  name: 'Mydde',
-  settings: { notifications: true }
+	name: 'Mydde',
+	settings: { notifications: true }
 });
 
 // Updating nested properties just works:
 const toggleNotify = () => {
-  user.settings.notifications = !user.settings.notifications;
+	user.settings.notifications = !user.settings.notifications;
 };
 
 // Arrays
 let items = $state<number[]>([1, 2, 3]);
 const addItem = () => items.push(items.length + 1); // Mutating triggers update
-
 ```
 
 ---
-
 
 ## 2. Component Structure
 
@@ -53,7 +50,7 @@ Svelte 5 uses a function-like prop declaration and Snippets for templating.
 
 ```svelte
 <script lang="ts">
-    let { children } = $props();
+	let { children } = $props();
 </script>
 
 <button>{@render children()}</button>
@@ -61,28 +58,27 @@ Svelte 5 uses a function-like prop declaration and Snippets for templating.
 
 ```svelte
 <script lang="ts">
-  interface Props {
-    title: string;
-    children?: import('svelte').Snippet;
-    onUpdate?: (val: number) => void;
-  }
+	interface Props {
+		title: string;
+		children?: import('svelte').Snippet;
+		onUpdate?: (val: number) => void;
+	}
 
-  // Destructuring with types and defaults
-  let { title, children, onUpdate }: Props = $props();
-  
-  let count = $state(0);
+	// Destructuring with types and defaults
+	let { title, children, onUpdate }: Props = $props();
 
-  const increment = () => {
-    count++;
-    onUpdate?.(count);
-  };
+	let count = $state(0);
+
+	const increment = () => {
+		count++;
+		onUpdate?.(count);
+	};
 </script>
 
 <h1>{title}</h1>
 <button onclick={increment}>Count: {count}</button>
 
 {@render children?.()}
-
 ```
 
 ---
@@ -93,18 +89,17 @@ SvelteKit routing is file-system based within `src/routes/`.
 
 ### UI Components
 
-* **`+layout.svelte`**: **Shared Wrapper**. Persists UI (Nav/Sidebar) across route changes.
-* *Must render* `{@render children()}`.
+- **`+layout.svelte`**: **Shared Wrapper**. Persists UI (Nav/Sidebar) across route changes.
+- _Must render_ `{@render children()}`.
 
-
-* **`+page.svelte`**: **Route View**. Unique UI for a specific URL.
-* **`+error.svelte`**: **Error Boundary**. Rendered when a route fails.
+- **`+page.svelte`**: **Route View**. Unique UI for a specific URL.
+- **`+error.svelte`**: **Error Boundary**. Rendered when a route fails.
 
 ### Logic & Data Loading
 
-* **`+page.server.ts`**: **Server-only** logic (SQL, Private APIs).
-* **`+page.ts`**: **Universal** logic (Hydration-ready data fetching).
-* **`+server.ts`**: **API Endpoint**. Handles raw HTTP methods (GET, POST).
+- **`+page.server.ts`**: **Server-only** logic (SQL, Private APIs).
+- **`+page.ts`**: **Universal** logic (Hydration-ready data fetching).
+- **`+server.ts`**: **API Endpoint**. Handles raw HTTP methods (GET, POST).
 
 ---
 
@@ -137,18 +132,17 @@ src/routes/
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  return {
-    user: locals.user // Strongly typed data passed to +page.svelte
-  };
+	return {
+		user: locals.user // Strongly typed data passed to +page.svelte
+	};
 };
-
 ```
 
 ### Server Actions
 
 Handled via standard HTML forms or `use:enhance`.
 
-```typescript
+````typescript
 // src/routes/settings/+page.server.ts
 export const actions = {
   update: async ({ request }) => {
@@ -197,7 +191,7 @@ Snippets are not just for UI; they can accept parameters to handle scoped logic 
   {/each}
 </ul>
 
-```
+````
 
 ### 2. Higher-Order Snippets (Snippet Composition)
 
@@ -225,30 +219,29 @@ Replacing the old named slots. This pattern is essential for complex Dashboards.
 
 ```svelte
 <script lang="ts">
-  import { Snippet } from 'svelte';
+	import { Snippet } from 'svelte';
 
-  interface DashboardProps {
-    sidebar: Snippet;
-    content: Snippet<[user: string]>;
-    footer?: Snippet;
-  }
+	interface DashboardProps {
+		sidebar: Snippet;
+		content: Snippet<[user: string]>;
+		footer?: Snippet;
+	}
 
-  let { sidebar, content, footer }: DashboardProps = $props();
-  let currentUser = $state("Mydde");
+	let { sidebar, content, footer }: DashboardProps = $props();
+	let currentUser = $state('Mydde');
 </script>
 
 <div class="layout">
-  <aside>{@render sidebar()}</aside>
-  
-  <main>
-    {@render content(currentUser)}
-  </main>
+	<aside>{@render sidebar()}</aside>
 
-  {#if footer}
-    <footer>{@render footer()}</footer>
-  {/if}
+	<main>
+		{@render content(currentUser)}
+	</main>
+
+	{#if footer}
+		<footer>{@render footer()}</footer>
+	{/if}
 </div>
-
 ```
 
 ---
@@ -259,37 +252,36 @@ Since snippets can call themselves, they are perfect for recursive structures li
 
 ```svelte
 <script lang="ts">
-  interface FileNode {
-    name: string;
-    children?: FileNode[];
-  }
+	interface FileNode {
+		name: string;
+		children?: FileNode[];
+	}
 
-  let files = $state<FileNode[]>([
-    { name: 'src', children: [{ name: 'app.svelte' }, { name: 'lib' }] }
-  ]);
+	let files = $state<FileNode[]>([
+		{ name: 'src', children: [{ name: 'app.svelte' }, { name: 'lib' }] }
+	]);
 </script>
 
 {#snippet tree(nodes: FileNode[])}
-  <ul>
-    {#each nodes as node}
-      <li>
-        {node.name}
-        {#if node.children}
-          {@render tree(node.children)}
-        {/if}
-      </li>
-    {/each}
-  </ul>
+	<ul>
+		{#each nodes as node}
+			<li>
+				{node.name}
+				{#if node.children}
+					{@render tree(node.children)}
+				{/if}
+			</li>
+		{/each}
+	</ul>
 {/snippet}
 
 {@render tree(files)}
-
 ```
 
 ---
 
 ## 4. Performance & Constraints
 
-* **No `this` context**: Unlike functions, snippets don't have a `this` context. They are pure template blocks.
-* **Lexical Scoping**: Snippets can access variables in the scope where they are defined, but they are most powerful when data is passed explicitly via arguments.
-* **Typing**: Always use `import type { Snippet } from 'svelte'` to type your props. For multiple arguments, use a tuple: `Snippet<[string, number, boolean]>`.
+- **No `this` context**: Unlike functions, snippets don't have a `this` context. They are pure template blocks.
+- **Lexical Scoping**: Snippets can access variables in the scope where they are defined, but they are most powerful when data is passed explicitly via arguments.
+- **Typing**: Always use `import type { Snippet } from 'svelte'` to type your props. For multiple arguments, use a tuple: `Snippet<[string, number, boolean]>`.

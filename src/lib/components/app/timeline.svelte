@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Resizable from '$lib/components/ui/resizable/index.js';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-	import { Slider } from '$lib/components/ui/slider/index.js'; 
+	import { Slider } from '$lib/components/ui/slider/index.js';
 	import { Label } from '$lib/components/ui/label';
 	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
 	import AssetManager from './AssetManager.svelte';
@@ -33,7 +33,10 @@
 			action: actor && actor.action ? actor.action : '',
 			zoom: event.frame.camera && event.frame.camera.zoom,
 			fx: event.frame.fx,
-			audio: (event.frame.audio_tracks || []).map(track => ({ id: track.id, volume: track.volume ?? 0 })),
+			audio: (event.frame.audio_tracks || []).map((track) => ({
+				id: track.id,
+				volume: track.volume ?? 0
+			}))
 		};
 	});
 </script>
@@ -106,7 +109,8 @@
 							{#each timelineEvents as item (item.id)}
 								<div
 									class="h-32 w-32 cursor-pointer border-r"
-									style="left:calc({item.start * zoom}px); width:calc(({item.end - item.start} * zoom)px);"
+									style="left:calc({item.start * zoom}px); width:calc(({item.end -
+										item.start} * zoom)px);"
 								>
 									{item.label}
 								</div>

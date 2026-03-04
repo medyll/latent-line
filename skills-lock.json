@@ -1,10 +1,10 @@
 {
-  "version": 1,
-  "skills": {
-    "tailwind-v4": {
-      "source": "existential-birds/beagle",
-      "sourceType": "github",
-      "computedHash": "e18cf0c165d60d6e3b54b6798b9365ce9150ecb73cd183ffa6ebca4897cce13d"
-    }
-  }
+	"version": 1,
+	"skills": {
+		"tailwind-v4": {
+			"source": "existential-birds/beagle",
+			"sourceType": "github",
+			"computedHash": "e18cf0c165d60d6e3b54b6798b9365ce9150ecb73cd183ffa6ebca4897cce13d"
+		}
+	}
 }

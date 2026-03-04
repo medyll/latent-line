@@ -114,4 +114,3 @@ Refer to `src/lib/model-types.ts` for exact TypeScript interfaces.
 - Canonical template & Zod schema: `src/lib/model-template.ts` (`buildDefaultModel`, `modelSchema`, `createModelTemplate`).
 - Example instance: `src/lib/model-example.ts`
 - Tests: `src/lib/model-template.test.ts`
- 

@@ -1,7 +1,7 @@
 project: latent-line
 phase: development
 sprint: 1
-last_updated: "2026-03-01"
+last_updated: '2026-03-01'
 
 summary: >
   SvelteKit (Svelte 5) + Vite SPA for orchestrating AI-driven story/scene production.
@@ -73,20 +73,20 @@ application_layout:
 
 git:
   branch: main
-  last_commit: "ef9bc6b — feat: enhance UI components and structure"
+  last_commit: 'ef9bc6b — feat: enhance UI components and structure'
   unstaged_deletions: 31 skill/reference files (IDE skill cleanup — safe to commit)
 
 audit:
-  last_run: "2026-03-03"
-  type: "full"
+  last_run: '2026-03-03'
+  type: 'full'
   baseline: true
   score: 72
-  project_type: "single-package"
+  project_type: 'single-package'
   critical: 0
   major: 11
   minor: 6
   info: 3
-  artifact: "bmad/artifacts/audit-full-2026-03-03.md"
+  artifact: 'bmad/artifacts/audit-full-2026-03-03.md'
   auto_stories_created:
     - AUDIT-001
     - AUDIT-002
@@ -100,25 +100,25 @@ audit:
     - AUDIT-014
     - AUDIT-015
     - AUDIT-016
-  
+
   implementation_status:
-    phase_1_complete: "2026-03-03"
-    phase_2_complete: "2026-03-03"
-    phase_3_partial: "In progress"
-    
+    phase_1_complete: '2026-03-03'
+    phase_2_complete: '2026-03-03'
+    phase_3_partial: 'In progress'
+
   completed_fixes:
-    - AUDIT-001: "✅ Removed React dependencies (lucide-react, @radix-ui/react-slot)"
-    - AUDIT-002: "✅ Fixed syntax error in model-template.ts line 193"
-    - AUDIT-003: "✅ Added TypeScript types to PropertiesPanel"
-    - AUDIT-004: "✅ Refactored timeline from Record to Array"
-    - AUDIT-005: "✅ Fixed AssetManager mutations with structuredClone"
-    - AUDIT-007: "✅ Added path traversal validation to Zod schema"
-    - AUDIT-008: "✅ Added mood enum validation and test coverage"
-    - AUDIT-010: "✅ Created .env.example configuration file"
-    - AUDIT-011: "✅ Added barrel exports (index.ts) for model and app layers"
-    - AUDIT-014: "✅ Expanded test coverage (12 tests, all passing)"
-    - AUDIT-015: "✅ Rewrote README with comprehensive documentation"
-    - AUDIT-016: "✅ Created model-schema.md and architecture.md"
+    - AUDIT-001: '✅ Removed React dependencies (lucide-react, @radix-ui/react-slot)'
+    - AUDIT-002: '✅ Fixed syntax error in model-template.ts line 193'
+    - AUDIT-003: '✅ Added TypeScript types to PropertiesPanel'
+    - AUDIT-004: '✅ Refactored timeline from Record to Array'
+    - AUDIT-005: '✅ Fixed AssetManager mutations with structuredClone'
+    - AUDIT-007: '✅ Added path traversal validation to Zod schema'
+    - AUDIT-008: '✅ Added mood enum validation and test coverage'
+    - AUDIT-010: '✅ Created .env.example configuration file'
+    - AUDIT-011: '✅ Added barrel exports (index.ts) for model and app layers'
+    - AUDIT-014: '✅ Expanded test coverage (12 tests, all passing)'
+    - AUDIT-015: '✅ Rewrote README with comprehensive documentation'
+    - AUDIT-016: '✅ Created model-schema.md and architecture.md'
 
 risks:
   - type: critical_resolved

@@ -1,6 +1,8 @@
 # ---
+
 name: idae-idbql-commands
 description: Exhaustive command and API reference for @medyll/idae-idbql. Use to list, autocomplete, or document all collection methods and advanced query patterns available via createIdbqlState or createIdbqDb.
+
 # ---
 
 # idae-idbql Command Reference Skill
@@ -31,6 +33,7 @@ idbql.users.method(...)
 Each collection (e.g., `idbql.users`, `idbql.tasks`) exposes the following methods:
 
 ### Reading Data
+
 - **where(query, options?)**: Advanced filtering with operator support. Returns a ResultSet or Promise<ResultSet>.
 - **get(id, pathKey?)**: Get a single item by key (default: 'id').
 - **getBy(value, pathKey?)**: Get all items matching a key/value pair.
@@ -49,20 +52,19 @@ idae-idbql fully supports the advanced query syntax and operator set from `@medy
 - `$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`, `$in`, `$nin`, `$contains`, `$startsWith`, `$endsWith`, `$btw`, `$or`, `$and` (and custom operators)
 
 #### Example:
+
 ```typescript
 idbql.users.where({
 	age: { $gt: 18 },
 	name: { $contains: 'Jo' },
-	$or: [
-		{ status: 'active' },
-		{ featured: true }
-	]
+	$or: [{ status: 'active' }, { featured: true }]
 });
 ```
 
 ### Dot-path Resolution
 
 All query and transformation methods support dot-paths for nested property access:
+
 ```typescript
 idbql.orders.where({ 'metadata.order': { $eq: 2 } });
 idbql.orders.sortBy({ 'metadata.order': 'asc' });
@@ -92,6 +94,7 @@ All methods below are chainable and type-safe, matching idae-query's API:
 - **max(field)**: Maximum numeric value
 
 #### Example:
+
 ```typescript
 const adults = idbql.users.where({ age: { $gte: 18 } });
 const sorted = adults.sortBy({ age: 'asc', name: 'desc' });
@@ -101,7 +104,7 @@ const stats = {
 	total: adults.count(),
 	averageAge: adults.avg('age'),
 	minAge: adults.min('age'),
-	maxAge: adults.max('age'),
+	maxAge: adults.max('age')
 };
 ```
 
@@ -116,17 +119,19 @@ const stats = {
 	adults: idbql.users.count({ age: { $gte: 18 } }),
 	averageAge: idbql.users.avg('age'),
 	minAge: idbql.users.min('age'),
-	maxAge: idbql.users.max('age'),
+	maxAge: idbql.users.max('age')
 };
 
 // Data transformation pipeline
-const report = idbql.users.where({ age: { $gte: 18 } })
-	.reduce((acc, item) => {
+const report = idbql.users.where({ age: { $gte: 18 } }).reduce(
+	(acc, item) => {
 		acc.total++;
 		acc.ages.push(item.age);
 		acc.names.push(item.name);
 		return acc;
-	}, { total: 0, ages: [], names: [] });
+	},
+	{ total: 0, ages: [], names: [] }
+);
 
 // Distinct with filtering
 const uniqueRoles = idbql.users.distinct('role').pluck('role');
@@ -137,6 +142,7 @@ const uniqueRoles = idbql.users.distinct('role').pluck('role');
 ## Custom Operators
 
 You can add custom operators via `idae-query`:
+
 ```typescript
 import { Operators } from '@medyll/idae-query';
 Operators.addCustomOperator('isEven', (field, value, data) => data[field] % 2 === 0);
@@ -148,6 +154,7 @@ const evenUsers = idbql.users.where({ age: { isEven: true } });
 ## Type Safety & Generics
 
 All methods are fully type-safe and support deep generics. Define your model types for maximum safety:
+
 ```typescript
 type User = { id: number; name: string; age: number; metadata: { order: number } };
 const model = { users: { keyPath: '++id', ts: {} as User } };
@@ -177,12 +184,14 @@ idae-idbql is state-agnostic. Use Svelte 5 runes (`$derived`, `$state`) or idae-
 - [idae-idbql README](README.md)
 
 ### Writing Data
+
 - **put(data)**: Insert or update an item. Returns the inserted/updated item.
 - **add(data)**: Insert a new item. Returns the inserted item.
 - **update(id, changes)**: Update an item by key.
 - **updateWhere(query, changes)**: Bulk update items matching a query.
 
 ### Deleting Data
+
 - **delete(id)**: Delete an item by key.
 - **del(id)**: Alias for `delete` (deprecated).
 - **deleteWhere(query)**: Bulk delete items matching a query.
@@ -233,6 +242,7 @@ await idbql.users.delete(123);
 ---
 
 ## Notes
+
 - All methods are type-safe and support TypeScript generics.
 - Query operators (`$gt`, `$in`, `$or`, etc.) are supported via `@medyll/idae-query`.
 - For reactivity, use Svelte 5 runes or idae-stator as described in the main documentation.
@@ -246,27 +256,26 @@ await idbql.users.delete(123);
 
 ```typescript
 // Complex filtering with object-style syntax
-const results = await idbql.posts.where({
-	status: 'published',
-	tags: { $in: ['svelte', 'idb'] },
-	views: { $gt: 100 },
-	$or: [
-		{ author: 'Mydde' },
-		{ featured: true }
-	]
-}).toArray();
+const results = await idbql.posts
+	.where({
+		status: 'published',
+		tags: { $in: ['svelte', 'idb'] },
+		views: { $gt: 100 },
+		$or: [{ author: 'Mydde' }, { featured: true }]
+	})
+	.toArray();
 ```
 
 ### Svelte 5 Runes Example
 
 ```svelte
 <script lang="ts">
-import { createIdbqDb } from '@medyll/idae-idbql';
+	import { createIdbqDb } from '@medyll/idae-idbql';
 
-const { idbql } = createIdbqDb(model, 1).create('my_app_db');
+	const { idbql } = createIdbqDb(model, 1).create('my_app_db');
 
-// Use $derived to create reactive views of your data
-let adults = $derived(idbql.users.where({ age: { $gte: 18 } }));
+	// Use $derived to create reactive views of your data
+	let adults = $derived(idbql.users.where({ age: { $gte: 18 } }));
 </script>
 
 {#each adults.value as user}
