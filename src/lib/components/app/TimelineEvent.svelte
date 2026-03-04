@@ -17,12 +17,15 @@
 		zoom?: number;
 		fx?: any;
 		audio?: Array<{ id: string; volume: number }>;
+		timelineFrame?: any;
 	};
+	export let isSelected = false;
 </script>
 
 <div
-	class="flex h-64 w-64 cursor-pointer flex-col items-start justify-start p-4 shadow-md"
+	class={`flex h-64 w-64 cursor-pointer flex-col items-start justify-start p-4 shadow-md transition-all ${isSelected ? 'border-2 border-blue-500 bg-blue-50' : 'bg-white hover:shadow-lg'}`}
 	aria-label={`Timeline event ${item.label}`}
+	aria-selected={isSelected}
 >
 	<div class="mb-2 text-lg font-bold">{item.label}</div>
 	<div class="text-xs">Début: {item.start}</div>

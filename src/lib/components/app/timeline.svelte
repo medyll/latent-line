@@ -17,6 +17,7 @@
 	let selected = $state(assets[0]);
 
 	let zoom = $state(100);
+	let selectedEventId = $state<string | null>(null);
 	import exampleModel from '$lib/model/model-story-example';
 
 	// Timeline is now already an array
@@ -36,9 +37,14 @@
 			audio: (event.frame.audio_tracks || []).map((track) => ({
 				id: track.id,
 				volume: track.volume ?? 0
-			}))
+			})),
+			timelineFrame: event.frame
 		};
 	});
+
+	function selectEvent(eventId: string) {
+		selectedEventId = selectedEventId === eventId ? null : eventId;
+	}
 </script>
 
 <!-- Timeline with sidebar layout -->
@@ -91,7 +97,15 @@
 									<!-- Timeline clips en vignettes -->
 									<div class="flex w-full flex-row flex-wrap gap-2 px-2">
 										{#each timelineEvents as item (item.id)}
-											<TimeLineEvent {item} />
+											<div
+												onclick={() => selectEvent(item.id)}
+												onkeydown={(e) => e.key === 'Enter' && selectEvent(item.id)}
+												role="button"
+												tabindex="0"
+												class={selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}
+											>
+												<TimeLineEvent {item} isSelected={selectedEventId === item.id} />
+											</div>
 										{/each}
 									</div>
 								{/if}
@@ -121,9 +135,9 @@
 			</Resizable.Pane>
 		</Resizable.PaneGroup>
 		<!-- PropertiesPanel intégré sous la timeline -->
-		<!-- <div class="mt-4">
-			<PropertiesPanel />
-		</div> -->
+		<div class="mt-4">
+			<PropertiesPanel {selectedEventId} {timelineEvents} />
+		</div>
 		<!-- SystemFooter intégré en bas -->
 		<!-- <div class="mt-2">
 			<SystemFooter />
