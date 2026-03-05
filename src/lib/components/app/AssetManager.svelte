@@ -146,12 +146,12 @@
 					</EmptyHeader>
 				</Empty>
 			{:else}
-				<ul class="flex flex-col gap-0">
+				<ul role="listbox" aria-label="Characters" class="flex flex-col gap-0">
 					{#each charactersWithAvatar as char (char.id)}
 						<li
 							onclick={() => selectAsset('char', char.id)}
 							onkeydown={(e) => e.key === 'Enter' && selectAsset('char', char.id)}
-							role="button"
+							role="option"
 							tabindex="0"
 							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 text-xs transition-colors ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 							aria-label={`Character ${char.name}`}
@@ -203,12 +203,12 @@
 					</EmptyHeader>
 				</Empty>
 			{:else}
-				<ul class="flex flex-col gap-0">
+				<ul role="listbox" aria-label="Environments" class="flex flex-col gap-0">
 					{#each Object.entries(assetStore.environments) as [id, env] (id)}
 						<li
 							onclick={() => selectAsset('env', id)}
 							onkeydown={(e) => e.key === 'Enter' && selectAsset('env', id)}
-							role="button"
+							role="option"
 							tabindex="0"
 							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 text-xs transition-colors ${selectedAssetId === `env:${id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 							aria-label={`Environment ${env.prompt}`}
@@ -251,12 +251,12 @@
 					</EmptyHeader>
 				</Empty>
 			{:else}
-				<ul class="flex flex-col gap-0">
+				<ul role="listbox" aria-label="Audio assets" class="flex flex-col gap-0">
 					{#each assetStore.audio as aud (aud.id)}
 						<li
 							onclick={() => selectAsset('audio', aud.id)}
 							onkeydown={(e) => e.key === 'Enter' && selectAsset('audio', aud.id)}
-							role="button"
+							role="option"
 							tabindex="0"
 							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 text-xs transition-colors ${selectedAssetId === `audio:${aud.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 							aria-label={`Audio ${aud.label || aud.id}`}

@@ -5,6 +5,7 @@
 	 * @component ModelInspector
 	 * @description Allows inspection, validation, and switching between example/template models.
 	 *              Shows project, assets, timeline, and raw JSON.
+	 *              Validation displays per-field Zod issues in a readable list.
 	 * @example <ModelInspector />
 	 */
 	import { Button } from '$lib/components/ui/button';
@@ -14,41 +15,35 @@
 	import { modelTemplate, modelSchema } from '$lib/model/model-template';
 	import type { Model } from '$lib/model/model-types';
 
-	/**
-	 * Selected model state (example or template).
-	 * @type {import('$lib/model/model-types').Model}
-	 */
-	let selected = $state<Model>(exampleModel);
-	/**
-	 * Validation result state.
-	 * @type {{ok: boolean, message?: string} | null}
-	 */
-	let validation = $state<{ ok: boolean; message?: string } | null>(null);
+	interface ValidationResult {
+		ok: boolean;
+		message: string;
+		issues: string[];
+	}
 
-	/**
-	 * Validate the current model using Zod schema.
-	 * @param {Model} m
-	 */
+	let selected = $state<Model>(exampleModel);
+	let validation = $state<ValidationResult | null>(null);
+
 	function validate(m: Model) {
 		const r = modelSchema.safeParse(m);
 		if (r.success) {
-			validation = { ok: true, message: 'Valid model (Zod).' };
+			validation = { ok: true, message: 'Valid model.', issues: [] };
 		} else {
-			validation = { ok: false, message: r.error.message };
+			validation = {
+				ok: false,
+				message: `${r.error.issues.length} validation error(s)`,
+				issues: r.error.issues
+					.slice(0, 10)
+					.map((issue) => `${issue.path.join('.') || '(root)'} — ${issue.message}`)
+			};
 		}
 	}
 
-	/**
-	 * Switch to example model.
-	 */
 	function useExample() {
 		selected = exampleModel;
 		validation = null;
 	}
 
-	/**
-	 * Switch to template model.
-	 */
 	function useTemplate() {
 		selected = modelTemplate;
 		validation = null;
@@ -57,10 +52,10 @@
 
 <!--
   ModelInspector Component
-  Allows switching between example/template models, validation, and inspection of project, assets, timeline, and raw JSON.
+  Switch between example/template models, validate with Zod, and inspect model structure.
 -->
 <div class="flex max-w-2xl flex-col gap-6">
-	<!-- Model Inspector Controls -->
+	<!-- Controls -->
 	<Card>
 		<CardHeader>
 			<CardTitle>Model Inspector</CardTitle>
@@ -73,14 +68,18 @@
 			</div>
 
 			{#if validation}
-				<!-- Validation result -->
 				<div
-					class="mb-4 rounded-md p-3"
-					class:success={validation && validation.ok}
-					style="background: {validation && validation.ok ? '#ecfccb' : '#fee2e2'}"
+					class={`mb-2 rounded-md p-3 text-sm ${validation.ok ? 'bg-lime-100 text-lime-800' : 'bg-red-100 text-red-800'}`}
+					aria-live="polite"
 				>
-					<strong>{validation && validation.ok ? 'OK' : 'INVALID'}</strong>: {validation &&
-						validation.message}
+					<strong>{validation.ok ? 'OK' : 'INVALID'}</strong>: {validation.message}
+					{#if !validation.ok && validation.issues.length > 0}
+						<ul class="mt-2 list-disc pl-5 text-xs">
+							{#each validation.issues as issue}
+								<li>{issue}</li>
+							{/each}
+						</ul>
+					{/if}
 				</div>
 			{/if}
 		</CardContent>
@@ -129,14 +128,12 @@
 			<div class="text-sm">
 				<div><strong>Events:</strong> {selected.timeline.length}</div>
 				{#if selected.timeline.length > 0}
-					<!-- List of timeline events -->
 					<ul class="mt-2 list-disc pl-5">
 						{#each selected.timeline as ev (ev.time)}
 							<li>time: {ev.time} — actors: {ev.frame.actors ? ev.frame.actors.length : 0}</li>
 						{/each}
 					</ul>
 				{:else}
-					<!-- Empty state for timeline -->
 					<Empty>
 						<EmptyHeader>
 							<EmptyTitle>No events</EmptyTitle>
@@ -162,10 +159,3 @@
 		</CardContent>
 	</Card>
 </div>
-
-<style>
-	/* Success background for validation result */
-	.success {
-		background: #ecfccb;
-	}
-</style>

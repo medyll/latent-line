@@ -1,14 +1,14 @@
 project: latent-line
 phase: development
-sprint: 1
+sprint: 2
 last_updated: '2026-03-05'
 
 summary: >
   SvelteKit (Svelte 5) + Vite SPA for orchestrating AI-driven story/scene production.
   Core data model is complete and validated. Main UI layout is in place.
-  Sprint 1 complete: ST-001 (AssetManager), ST-002 (Timeline), ST-003 (PropertiesPanel), ST-004 (SequenceOrchestrator).
-  All components now interactive with Svelte 5 $state/$props/$bindable patterns.
-  Pending: ST-005 ModelInspector (in progress), Sprint 2 planning.
+  Sprint 1 done (ST-001—ST-005). Sprint 2 planned: shared assetStore context,
+  PropertiesPanel full asset data + inline editing, E2E tests, bundle analysis.
+  A11y fixes applied to AssetManager (role=listbox/option). All 35 tests green.
 
 stack:
   framework: SvelteKit (Svelte 5)
