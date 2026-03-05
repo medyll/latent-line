@@ -50,10 +50,10 @@
 
 **In Progress:**
 
-- [ ] Component interactivity
-- [ ] Timeline event handling
-- [ ] Properties panel state management
-- [ ] Asset manager CRUD operations
+- [x] Component interactivity (ST-001, ST-002, ST-003, ST-004)
+- [x] Timeline event handling (ST-002)
+- [x] Properties panel state management (ST-003)
+- [x] Asset manager CRUD + selection (ST-001)
 
 **Pending:**
 
@@ -123,10 +123,10 @@ Build:       Vite
 
 | Story  | Component                  |     Status     |
 | :----- | :------------------------- | :------------: |
-| ST-001 | AssetManager interactivity | 🟡 In Progress |
-| ST-002 | Timeline event rendering   | 🔴 Not Started |
-| ST-003 | PropertiesPanel state sync | 🔴 Not Started |
-| ST-004 | SequenceOrchestrator logic | 🔴 Not Started |
+| ST-001 | AssetManager interactivity | ✅ Done        |
+| ST-002 | Timeline event rendering   | ✅ Done        |
+| ST-003 | PropertiesPanel state sync | ✅ Done        |
+| ST-004 | SequenceOrchestrator logic | ✅ Done        |
 | ST-005 | ModelInspector validation  | 🟡 In Progress |
 
 ---

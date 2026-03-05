@@ -9,26 +9,26 @@
 	import SystemFooter from './SystemFooter.svelte';
 	import TimeLineEvent from './TimelineEvent.svelte';
 
-	// Demo asset list for sidebar
-	let assets = [
-		{ id: 'asset_1', name: 'Asset One', details: 'On testnet' },
-		{ id: 'asset_2', name: 'Asset Two', details: 'On mainnet' }
-	];
-	let selected = $state(assets[0]);
-
 	let zoom = $state(100);
 	let selectedEventId = $state<string | null>(null);
+	let selectedAssetId = $state<string | null>(null);
 	import exampleModel from '$lib/model/model-story-example';
 
-	// Timeline is now already an array
+	// Base scale: 1 pixel per frame at zoom 100
+	const BASE_PX_PER_FRAME = 1;
+
+	// Timeline is already an array; compute end time as next event's start
 	const timelineEvents = exampleModel.timeline.map((event, idx) => {
-		// Extract main actor speech and action for MVP info
+		const nextTime =
+			idx < exampleModel.timeline.length - 1
+				? exampleModel.timeline[idx + 1].time
+				: event.time + 120;
 		const actor = event.frame.actors && event.frame.actors[0];
 		return {
 			id: `event_${idx}`,
 			label: `Event ${idx + 1}`,
 			start: event.time,
-			end: event.time + 10,
+			end: nextTime,
 			speech: actor && actor.speech ? actor.speech.text : '',
 			mood: actor && actor.speech ? actor.speech.mood : '',
 			action: actor && actor.action ? actor.action : '',
@@ -41,6 +41,12 @@
 			timelineFrame: event.frame
 		};
 	});
+
+	const totalDuration = $derived(
+		timelineEvents.length > 0 ? timelineEvents[timelineEvents.length - 1].end : 0
+	);
+
+	const pxPerFrame = $derived(BASE_PX_PER_FRAME * (zoom / 100));
 
 	function selectEvent(eventId: string) {
 		selectedEventId = selectedEventId === eventId ? null : eventId;
@@ -55,7 +61,7 @@
 		<div class="flex flex-1 flex-col gap-2">
 			<!-- AssetManager stylé -->
 			<div class="bg-zinc-100 p-2">
-				<AssetManager />
+				<AssetManager bind:selectedAssetId />
 			</div>
 		</div>
 	</aside>
@@ -116,15 +122,22 @@
 			</Resizable.Pane>
 			<Resizable.Handle />
 			<Resizable.Pane defaultSize={20}>
-				<div class="container">
-					<ScrollArea orientation="horizontal" class="w-full flex-1 overflow-x-auto">
-						<div class="  flex w-full max-w-full items-center p-2">
-							<!-- Timeline controls or details placeholder -->
+				<div class="h-full">
+					<ScrollArea orientation="horizontal" class="h-full w-full">
+						<!-- Temporal strip: items positioned absolutely by time -->
+						<div
+							class="relative h-full"
+							style="width: {totalDuration * pxPerFrame}px; min-width: 100%;"
+						>
 							{#each timelineEvents as item (item.id)}
 								<div
-									class="h-32 w-32 cursor-pointer border-r"
-									style="left:calc({item.start * zoom}px); width:calc(({item.end -
-										item.start} * zoom)px);"
+									onclick={() => selectEvent(item.id)}
+									onkeydown={(e) => e.key === 'Enter' && selectEvent(item.id)}
+									role="button"
+									tabindex="0"
+									class={`absolute top-2 h-10 cursor-pointer truncate rounded border px-1 text-xs leading-10 transition-colors ${selectedEventId === item.id ? 'border-blue-500 bg-blue-100 font-semibold' : 'border-gray-300 bg-white hover:bg-gray-50'}`}
+									style="left: {item.start * pxPerFrame}px; width: {(item.end - item.start) * pxPerFrame}px;"
+									title={item.label}
 								>
 									{item.label}
 								</div>
@@ -136,7 +149,7 @@
 		</Resizable.PaneGroup>
 		<!-- PropertiesPanel intégré sous la timeline -->
 		<div class="mt-4">
-			<PropertiesPanel {selectedEventId} {timelineEvents} />
+			<PropertiesPanel {selectedEventId} {timelineEvents} {selectedAssetId} />
 		</div>
 		<!-- SystemFooter intégré en bas -->
 		<!-- <div class="mt-2">

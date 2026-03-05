@@ -1,26 +1,30 @@
-<script>
+<script lang="ts">
 	/**
 	 * SequenceOrchestrator.svelte
 	 *
 	 * @component SequenceOrchestrator
 	 * @description Displays a synoptic grid (top) and a temporal sequencer (bottom) for timeline events.
-	 * @example <SequenceOrchestrator />
+	 *              Both views share a selection state exposed via $bindable selectedTime.
+	 * @example <SequenceOrchestrator bind:selectedTime />
 	 */
 	import exampleModel from '$lib/model/model-example';
 	import { Card, CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
 	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
 
-	/**
-	 * Timeline store state, as array of events.
-	 * @type {Array<any>}
-	 */
-	// Defensive: timeline is an object, not array
-	const timelineStore = $state(exampleModel.timeline ? Object.values(exampleModel.timeline) : []);
+	let {
+		selectedTime = $bindable<number | null>(null)
+	}: { selectedTime?: number | null } = $props();
+
+	const timelineStore = $state(exampleModel.timeline ?? []);
+
+	function selectEvent(time: number) {
+		selectedTime = selectedTime === time ? null : time;
+	}
 </script>
 
 <!--
   SequenceOrchestrator Component
-  Shows a synoptic grid (top) and a temporal sequencer (bottom) for timeline events.
+  Synoptic grid (top) and temporal sequencer (bottom) with shared selection state.
 -->
 <div class="flex h-full w-full flex-col gap-6" aria-label="Sequence Orchestrator">
 	<!-- Synoptic View (Top) -->
@@ -30,8 +34,7 @@
 		</CardHeader>
 		<CardContent>
 			<div class="mb-4 flex flex-row flex-wrap gap-2">
-				{#if !timelineStore || timelineStore.length === 0}
-					<!-- Empty state for synoptic view -->
+				{#if timelineStore.length === 0}
 					<Empty>
 						<EmptyHeader>
 							<EmptyTitle>No timeline events</EmptyTitle>
@@ -39,11 +42,15 @@
 						</EmptyHeader>
 					</Empty>
 				{:else}
-					<!-- List of timeline frames (synoptic) -->
 					{#each timelineStore.slice(0, 10) as event (event.time)}
 						<div
-							class="flex h-24 w-32 flex-col items-center justify-center rounded border bg-gray-50 focus:ring focus:outline"
+							onclick={() => selectEvent(event.time)}
+							onkeydown={(e) => e.key === 'Enter' && selectEvent(event.time)}
+							role="button"
+							tabindex="0"
+							class={`flex h-24 w-32 cursor-pointer flex-col items-center justify-center rounded border transition-colors ${selectedTime === event.time ? 'border-blue-500 bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'}`}
 							aria-label={`Frame ${event.time}`}
+							aria-selected={selectedTime === event.time}
 						>
 							<span class="font-semibold">Frame {event.time}</span>
 							<span class="text-xs">Actors: {event.frame.actors?.length || 0}</span>
@@ -61,8 +68,7 @@
 		</CardHeader>
 		<CardContent>
 			<div class="flex gap-2 overflow-x-auto">
-				{#if !timelineStore || timelineStore.length === 0}
-					<!-- Empty state for temporal sequencer -->
+				{#if timelineStore.length === 0}
 					<Empty>
 						<EmptyHeader>
 							<EmptyTitle>No timeline events</EmptyTitle>
@@ -70,11 +76,15 @@
 						</EmptyHeader>
 					</Empty>
 				{:else}
-					<!-- List of timeline events (temporal) -->
 					{#each timelineStore as event (event.time)}
 						<div
-							class="flex h-16 w-48 flex-col items-center justify-center rounded border bg-white focus:ring focus:outline"
+							onclick={() => selectEvent(event.time)}
+							onkeydown={(e) => e.key === 'Enter' && selectEvent(event.time)}
+							role="button"
+							tabindex="0"
+							class={`flex h-16 w-48 flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded border transition-colors ${selectedTime === event.time ? 'border-blue-500 bg-blue-50' : 'bg-white hover:bg-gray-50'}`}
 							aria-label={`Time ${event.time}`}
+							aria-selected={selectedTime === event.time}
 						>
 							<span class="font-semibold">Time {event.time}</span>
 							<span class="text-xs">Audio: {event.frame.audio_tracks?.length || 0}</span>

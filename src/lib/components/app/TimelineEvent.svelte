@@ -3,10 +3,11 @@
 	/**
 	 * TimeLineEvent.svelte
 	 * @component TimeLineEvent
-	 * @description Affiche un événement de la timeline.
-	 * @example <TimeLineEvent item={event} />
+	 * @description Displays a single timeline event card with actor speech, mood, action, camera and FX info.
+	 * @example <TimeLineEvent item={event} isSelected={false} />
 	 */
-	export let item: {
+
+	interface TimelineEventItem {
 		id: string;
 		label: string;
 		start: number;
@@ -15,11 +16,15 @@
 		mood?: string;
 		action?: string;
 		zoom?: number;
-		fx?: any;
+		fx?: { bloom?: number; motion_blur?: number };
 		audio?: Array<{ id: string; volume: number }>;
-		timelineFrame?: any;
-	};
-	export let isSelected = false;
+		timelineFrame?: unknown;
+	}
+
+	let {
+		item,
+		isSelected = false
+	}: { item: TimelineEventItem; isSelected?: boolean } = $props();
 </script>
 
 <div
@@ -28,8 +33,8 @@
 	aria-selected={isSelected}
 >
 	<div class="mb-2 text-lg font-bold">{item.label}</div>
-	<div class="text-xs">Début: {item.start}</div>
-	<div class="text-xs">Fin: {item.end}</div>
+	<div class="text-xs">Start: {item.start}</div>
+	<div class="text-xs">End: {item.end}</div>
 	{#if item.speech}
 		<div class="mt-2 flex items-center gap-2 text-sm text-gray-700 italic dark:text-gray-300">
 			<MessageCircle class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Speech" />

@@ -4,21 +4,24 @@
 	 *
 	 * @component AssetManager
 	 * @description Provides CRUD interface for global assets (characters, environments, audio).
-	 *              Handles ID validation and displays asset lists with empty states.
-	 * @example <AssetManager />
+	 *              Supports asset selection via $bindable selectedAssetId (format: "type:id").
+	 * @example <AssetManager bind:selectedAssetId />
 	 */
-	import type { Assets, Character, AudioAsset, EnvironmentAsset } from '$lib/model/model-types';
+	import type { Assets, Character } from '$lib/model/model-types';
 	import exampleModel from '$lib/model/model-example';
 	import {
 		Empty,
 		EmptyHeader,
 		EmptyTitle,
-		EmptyDescription,
-		EmptyContent
+		EmptyDescription
 	} from '$lib/components/ui/empty';
 	import { Avatar, AvatarImage, AvatarFallback } from '$lib/components/ui/avatar';
 	import { Button } from '$lib/components/ui/button';
 	import { Trash2, Plus } from '@lucide/svelte';
+
+	let {
+		selectedAssetId = $bindable<string | null>(null)
+	}: { selectedAssetId?: string | null } = $props();
 
 	/**
 	 * Asset store state, cloned from example model assets to prevent mutations.
@@ -39,25 +42,39 @@
 	);
 
 	/**
+	 * Toggles selection for an asset. Deselects if already selected.
+	 */
+	function selectAsset(type: 'char' | 'env' | 'audio', id: string) {
+		const key = `${type}:${id}`;
+		selectedAssetId = selectedAssetId === key ? null : key;
+	}
+
+	/**
 	 * Removes a character from the asset store
 	 */
-	function removeCharacter(id: string) {
+	function removeCharacter(e: MouseEvent, id: string) {
+		e.stopPropagation();
 		assetStore.characters = assetStore.characters.filter((char) => char.id !== id);
+		if (selectedAssetId === `char:${id}`) selectedAssetId = null;
 	}
 
 	/**
 	 * Removes an environment from the asset store
 	 */
-	function removeEnvironment(id: string) {
+	function removeEnvironment(e: MouseEvent, id: string) {
+		e.stopPropagation();
 		const { [id]: _, ...remaining } = assetStore.environments;
 		assetStore.environments = remaining;
+		if (selectedAssetId === `env:${id}`) selectedAssetId = null;
 	}
 
 	/**
 	 * Removes an audio asset from the store
 	 */
-	function removeAudio(id: string) {
+	function removeAudio(e: MouseEvent, id: string) {
+		e.stopPropagation();
 		assetStore.audio = (assetStore.audio || []).filter((aud) => aud.id !== id);
+		if (selectedAssetId === `audio:${id}`) selectedAssetId = null;
 	}
 
 	/**
@@ -88,7 +105,6 @@
 		assetStore.environments[newId] = {
 			prompt: `New environment ${Object.keys(assetStore.environments).length + 1}`
 		};
-		assetStore.environments = assetStore.environments;
 	}
 
 	/**
@@ -110,7 +126,7 @@
 <!--
   AssetManager Component
   Displays and manages global assets: Characters, Environments, Audio.
-  Each section shows a list or an empty state if no assets exist.
+  Each row is selectable; selectedAssetId is bindable for parent integration.
 -->
 <div class="flex flex-col gap-1 p-1" aria-label="Asset Manager">
 	<!-- Characters Section -->
@@ -123,7 +139,6 @@
 		</div>
 		<div>
 			{#if !charactersWithAvatar?.length}
-				<!-- Empty state for characters -->
 				<Empty>
 					<EmptyHeader>
 						<EmptyTitle>No characters</EmptyTitle>
@@ -131,12 +146,16 @@
 					</EmptyHeader>
 				</Empty>
 			{:else}
-				<!-- List of characters -->
 				<ul class="flex flex-col gap-0">
 					{#each charactersWithAvatar as char (char.id)}
 						<li
-							class="flex items-center justify-between gap-2 rounded px-2 py-1 text-xs hover:bg-gray-100"
+							onclick={() => selectAsset('char', char.id)}
+							onkeydown={(e) => e.key === 'Enter' && selectAsset('char', char.id)}
+							role="button"
+							tabindex="0"
+							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 text-xs transition-colors ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 							aria-label={`Character ${char.name}`}
+							aria-selected={selectedAssetId === `char:${char.id}`}
 						>
 							<div class="flex items-center gap-2">
 								<Avatar>
@@ -154,7 +173,7 @@
 							<Button
 								variant="ghost"
 								size="sm"
-								onclick={() => removeCharacter(char.id)}
+								onclick={(e) => removeCharacter(e, char.id)}
 								title={`Delete ${char.name}`}
 								class="text-red-500 hover:text-red-700"
 							>
@@ -177,7 +196,6 @@
 		</div>
 		<div>
 			{#if !Object.keys(assetStore.environments).length}
-				<!-- Empty state for environments -->
 				<Empty>
 					<EmptyHeader>
 						<EmptyTitle>No environments</EmptyTitle>
@@ -185,12 +203,16 @@
 					</EmptyHeader>
 				</Empty>
 			{:else}
-				<!-- List of environments -->
 				<ul class="flex flex-col gap-0">
 					{#each Object.entries(assetStore.environments) as [id, env] (id)}
 						<li
-							class="flex items-center justify-between gap-2 rounded px-2 py-1 text-xs hover:bg-gray-100"
+							onclick={() => selectAsset('env', id)}
+							onkeydown={(e) => e.key === 'Enter' && selectAsset('env', id)}
+							role="button"
+							tabindex="0"
+							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 text-xs transition-colors ${selectedAssetId === `env:${id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 							aria-label={`Environment ${env.prompt}`}
+							aria-selected={selectedAssetId === `env:${id}`}
 						>
 							<div>
 								<div class="font-mono text-muted-foreground">{id}</div>
@@ -199,8 +221,8 @@
 							<Button
 								variant="ghost"
 								size="sm"
-								onclick={() => removeEnvironment(id)}
-								title={`Delete environment`}
+								onclick={(e) => removeEnvironment(e, id)}
+								title="Delete environment"
 								class="text-red-500 hover:text-red-700"
 							>
 								<Trash2 class="h-3 w-3" />
@@ -222,7 +244,6 @@
 		</div>
 		<div>
 			{#if !assetStore.audio?.length}
-				<!-- Empty state for audio assets -->
 				<Empty>
 					<EmptyHeader>
 						<EmptyTitle>No audio assets</EmptyTitle>
@@ -230,12 +251,16 @@
 					</EmptyHeader>
 				</Empty>
 			{:else}
-				<!-- List of audio assets -->
 				<ul class="flex flex-col gap-0">
 					{#each assetStore.audio as aud (aud.id)}
 						<li
-							class="flex items-center justify-between gap-2 rounded px-2 py-1 text-xs hover:bg-gray-100"
+							onclick={() => selectAsset('audio', aud.id)}
+							onkeydown={(e) => e.key === 'Enter' && selectAsset('audio', aud.id)}
+							role="button"
+							tabindex="0"
+							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 text-xs transition-colors ${selectedAssetId === `audio:${aud.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 							aria-label={`Audio ${aud.label || aud.id}`}
+							aria-selected={selectedAssetId === `audio:${aud.id}`}
 						>
 							<div>
 								<div class="font-mono text-muted-foreground">{aud.id}</div>
@@ -244,8 +269,8 @@
 							<Button
 								variant="ghost"
 								size="sm"
-								onclick={() => removeAudio(aud.id)}
-								title={`Delete audio`}
+								onclick={(e) => removeAudio(e, aud.id)}
+								title="Delete audio"
 								class="text-red-500 hover:text-red-700"
 							>
 								<Trash2 class="h-3 w-3" />

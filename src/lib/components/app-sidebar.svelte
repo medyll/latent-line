@@ -12,35 +12,11 @@
 					{
 						title: 'timeline',
 						url: '/timeline'
-					},
-					{
-						title: 'Demo app',
-						url: '/app'
-					},
-					{
-						title: 'Demo model',
-						url: '/demo-model'
-					}
-				]
-			},
-			{
-				title: 'Building Your Application',
-				url: '#',
-				items: [
-					{
-						title: 'Routing',
-						url: '#'
-					},
-					{
-						title: 'Data Fetching',
-						url: '#',
-						isActive: true
 					}
 				]
 			}
 		]
 	};
-	import SearchForm from './search-form.svelte';
 	import VersionSwitcher from './version-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import type { ComponentProps } from 'svelte';
@@ -51,7 +27,6 @@
 <Sidebar.Root {...restProps} bind:ref>
 	<Sidebar.Header>
 		<VersionSwitcher versions={data.versions} defaultVersion={data.versions[0]} />
-		<SearchForm />
 	</Sidebar.Header>
 	<Sidebar.Content>
 		<!-- We create a Sidebar.Group for each parent. -->
