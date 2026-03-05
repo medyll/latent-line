@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(pnpm run:*)"
+      "Bash(pnpm run:*)",
+      "Bash(pnpm vitest:*)",
+      "Bash(sort:*)",
+      "Bash(xargs wc:*)",
+      "Bash(gzip:*)"
     ]
   }
 }

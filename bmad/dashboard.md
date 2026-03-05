@@ -2,8 +2,8 @@
 
 > **Last Updated:** 2026-03-05
 > **Phase:** Development
-> **Sprint:** 2 of ∞
-> **Audit Score:** 72/100 | **Tests:** 35/35 ✅
+> **Sprint:** 2 of ∞ ✅ Complete
+> **Audit Score:** 72/100 | **Tests:** 56 unit + 4 E2E ✅
 
 ---
 
@@ -133,11 +133,11 @@ Build:       Vite
 
 | Story  | Component                         | Points | Priority | Status         |
 | :----- | :-------------------------------- | :----: | :------- | :------------: |
-| ST-006 | Lift assetStore to Svelte context |   3    | Must     | 🔴 Not Started |
-| ST-007 | PropertiesPanel: full asset data  |   2    | Must     | 🔴 Not Started |
-| ST-008 | PropertiesPanel: inline editing   |   5    | Should   | 🔴 Not Started |
-| ST-009 | E2E tests for interactions        |   3    | Should   | 🔴 Not Started |
-| ST-010 | Bundle analysis                   |   1    | Could    | 🔴 Not Started |
+| ST-006 | Lift assetStore to Svelte context |   3    | Must     | ✅ Done        |
+| ST-007 | PropertiesPanel: full asset data  |   2    | Must     | ✅ Done        |
+| ST-008 | PropertiesPanel: inline editing   |   5    | Should   | ✅ Done        |
+| ST-009 | E2E tests for interactions        |   3    | Should   | ✅ Done        |
+| ST-010 | Bundle analysis                   |   1    | Could    | ✅ Done        |
 
 ---
 

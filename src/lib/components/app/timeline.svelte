@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { setContext } from 'svelte';
 	import * as Resizable from '$lib/components/ui/resizable/index.js';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Slider } from '$lib/components/ui/slider/index.js';
@@ -8,17 +9,22 @@
 	import PropertiesPanel from './PropertiesPanel.svelte';
 	import SystemFooter from './SystemFooter.svelte';
 	import TimeLineEvent from './TimelineEvent.svelte';
+	import exampleModel from '$lib/model/model-story-example';
+	import type { Assets } from '$lib/model/model-types';
+	import { ASSET_STORE_KEY } from '$lib/context/keys';
+
+	const assetStore = $state<Assets>(structuredClone(exampleModel.assets));
+	setContext(ASSET_STORE_KEY, assetStore);
 
 	let zoom = $state(100);
 	let selectedEventId = $state<string | null>(null);
 	let selectedAssetId = $state<string | null>(null);
-	import exampleModel from '$lib/model/model-story-example';
 
 	// Base scale: 1 pixel per frame at zoom 100
 	const BASE_PX_PER_FRAME = 1;
 
-	// Timeline is already an array; compute end time as next event's start
-	const timelineEvents = exampleModel.timeline.map((event, idx) => {
+	// Timeline events as reactive state so edits from PropertiesPanel propagate
+	let timelineEvents = $state(exampleModel.timeline.map((event, idx) => {
 		const nextTime =
 			idx < exampleModel.timeline.length - 1
 				? exampleModel.timeline[idx + 1].time
@@ -40,7 +46,7 @@
 			})),
 			timelineFrame: event.frame
 		};
-	});
+	}));
 
 	const totalDuration = $derived(
 		timelineEvents.length > 0 ? timelineEvents[timelineEvents.length - 1].end : 0
@@ -149,7 +155,7 @@
 		</Resizable.PaneGroup>
 		<!-- PropertiesPanel intégré sous la timeline -->
 		<div class="mt-4">
-			<PropertiesPanel {selectedEventId} {timelineEvents} {selectedAssetId} />
+			<PropertiesPanel {selectedEventId} bind:timelineEvents {selectedAssetId} />
 		</div>
 		<!-- SystemFooter intégré en bas -->
 		<!-- <div class="mt-2">

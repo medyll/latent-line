@@ -7,8 +7,9 @@
 	 *              Supports asset selection via $bindable selectedAssetId (format: "type:id").
 	 * @example <AssetManager bind:selectedAssetId />
 	 */
+	import { getContext } from 'svelte';
 	import type { Assets, Character } from '$lib/model/model-types';
-	import exampleModel from '$lib/model/model-example';
+	import { ASSET_STORE_KEY } from '$lib/context/keys';
 	import {
 		Empty,
 		EmptyHeader,
@@ -23,10 +24,7 @@
 		selectedAssetId = $bindable<string | null>(null)
 	}: { selectedAssetId?: string | null } = $props();
 
-	/**
-	 * Asset store state, cloned from example model assets to prevent mutations.
-	 */
-	const assetStore = $state<Assets>(structuredClone(exampleModel.assets));
+	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
 
 	// Helper types for AssetManager
 	interface CharacterAsset extends Character {
