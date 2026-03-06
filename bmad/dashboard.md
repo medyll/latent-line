@@ -1,8 +1,8 @@
-# 👑 BMAD Dashboard - unknown
+# 👑 BMAD Dashboard - latent-line
 
-- Phase: 
-- Sprint: 
-- Generated: 2026-03-06T20:47:46.0562399+01:00
+- Phase: development
+- Sprint: 3
+- Generated: 2026-03-07T00:23:18.9394136+01:00
 
 ## Stories
 - AUDIT-001.md
@@ -27,10 +27,11 @@
 - ST-008.md
 - ST-009.md
 - ST-010.md
-
-## Sprints
-- sprint-2.md
-- sprint-3.md
+- ST-011.md
+- ST-012.md
+- ST-013.md
+- ST-014.md
+- ST-015.md
 
 ## Next recommendation
-- Run: bmad next --auto to continue implementing pending stories and tasks
+- Implement styling stories ST-011..ST-015

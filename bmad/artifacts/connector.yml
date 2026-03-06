@@ -1,7 +1,7 @@
 meta:
-  generated: 2026-03-06T20:47:46.0562399+01:00
+  generated: 2026-03-07T00:23:18.9394136+01:00
   bmad_version: '3.2.0'
-  project: 'unknown'
+  project: 'latent-line'
 root: 'bmad/'
 sections:
   stories:
@@ -27,6 +27,11 @@ sections:
     - ST-008.md
     - ST-009.md
     - ST-010.md
+    - ST-011.md
+    - ST-012.md
+    - ST-013.md
+    - ST-014.md
+    - ST-015.md
   sprints:
     - sprint-2.md
     - sprint-3.md
