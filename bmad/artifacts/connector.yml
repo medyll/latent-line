@@ -1,5 +1,5 @@
 meta:
-  generated: 2026-03-06T20:02:02.9383880+01:00
+  generated: 2026-03-06T20:47:46.0562399+01:00
   bmad_version: '3.2.0'
   project: 'unknown'
 root: 'bmad/'
@@ -29,3 +29,4 @@ sections:
     - ST-010.md
   sprints:
     - sprint-2.md
+    - sprint-3.md

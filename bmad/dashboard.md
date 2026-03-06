@@ -2,7 +2,7 @@
 
 - Phase: 
 - Sprint: 
-- Generated: 2026-03-06T20:02:02.9383880+01:00
+- Generated: 2026-03-06T20:47:46.0562399+01:00
 
 ## Stories
 - AUDIT-001.md
@@ -27,6 +27,10 @@
 - ST-008.md
 - ST-009.md
 - ST-010.md
+
+## Sprints
+- sprint-2.md
+- sprint-3.md
 
 ## Next recommendation
 - Run: bmad next --auto to continue implementing pending stories and tasks
