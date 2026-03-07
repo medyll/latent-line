@@ -15,7 +15,8 @@
 		}
 	}
 
-	function toggleTheme() {
+	/* eslint-disable @typescript-eslint/no-unused-vars */
+	function _toggleTheme() {
 		setTheme(theme === 'light' ? 'dark' : 'light');
 	}
 

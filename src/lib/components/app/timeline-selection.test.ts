@@ -115,7 +115,10 @@ describe('Timeline Selection Logic', () => {
 			timelineFrame?: any;
 		}
 
-		function findEventById(events: ExtendedTimelineEvent[], id: string): ExtendedTimelineEvent | null {
+		function findEventById(
+			events: ExtendedTimelineEvent[],
+			id: string
+		): ExtendedTimelineEvent | null {
 			return events.find((e) => e.id === id) || null;
 		}
 

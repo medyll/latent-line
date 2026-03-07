@@ -5,6 +5,7 @@
 - Generated: 2026-03-07T00:23:18.9394136+01:00
 
 ## Stories
+
 - AUDIT-001.md
 - AUDIT-002.md
 - AUDIT-003.md
@@ -34,11 +35,18 @@
 - ST-015.md
 
 ## Next recommendation
-- No pending styling stories; Sprint 3 styling stories complete
+
+- Remaining audit/code-quality stories: add path traversal guard tests (AUDIT-007), and expand unit tests (AUDIT-014)
+- ✅ AUDIT-003: Fixed UI barrel exports to silence TypeScript errors (see bmad/status.yaml)
 
 ## Completed stories
+
 - ST-011
 - ST-012
 - ST-013
 - ST-014
 - ST-015
+
+## Last test run
+
+- Unit tests: 56 passing (2026-03-07T18:25:20+01:00)

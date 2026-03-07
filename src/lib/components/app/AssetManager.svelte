@@ -10,19 +10,13 @@
 	import { getContext } from 'svelte';
 	import type { Assets, Character } from '$lib/model/model-types';
 	import { ASSET_STORE_KEY } from '$lib/context/keys';
-	import {
-		Empty,
-		EmptyHeader,
-		EmptyTitle,
-		EmptyDescription
-	} from '$lib/components/ui/empty';
+	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
 	import { Avatar, AvatarImage, AvatarFallback } from '$lib/components/ui/avatar';
 	import { Button } from '$lib/components/ui/button';
 	import { Trash2, Plus } from '@lucide/svelte';
 
-	let {
-		selectedAssetId = $bindable<string | null>(null)
-	}: { selectedAssetId?: string | null } = $props();
+	let { selectedAssetId = $bindable<string | null>(null) }: { selectedAssetId?: string | null } =
+		$props();
 
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
 
@@ -126,7 +120,11 @@
   Displays and manages global assets: Characters, Environments, Audio.
   Each row is selectable; selectedAssetId is bindable for parent integration.
 -->
-<div class="flex flex-col gap-1 p-1" aria-label="Asset Manager" style="background:var(--color-popover); color:var(--color-popover-foreground)">
+<div
+	class="flex flex-col gap-1 p-1"
+	aria-label="Asset Manager"
+	style="background:var(--color-popover); color:var(--color-popover-foreground)"
+>
 	<!-- Characters Section -->
 	<div class="bg-transparent p-1">
 		<div class="mb-1 flex items-center justify-between">

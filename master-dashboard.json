@@ -1,0 +1,16 @@
+{
+  "sync": "2026-03-07",
+  "generatedAt": "2026-03-07T22:10:45.610Z",
+  "totalInstances": 1,
+  "instances": [
+    {
+      "package": "latent-line",
+      "phase": "development",
+      "progress": null,
+      "bugs": [],
+      "dashboardPath": "bmad\\artifacts\\dashboard.md"
+    }
+  ],
+  "criticalIssues": [],
+  "generatedMarkdown": "# 👑 BMAD Master Dashboard\n> **Scope:** Monorepo Root | **Total Instances:** 1 | **Sync:** 2026-03-07\n\n---\n\n## 🏗️ Project Overview\n\n| Package | Phase | Progress | Status | Action |\n| :--- | :--- | :---: | :---: | :--- |\n| **latent-line** | development | N/A | ⚪ | [Open Dash](bmad/artifacts/dashboard.md) |\n\n---\n\n## ⚠️ Critical Issues (QA/Bugs)\n- None recorded\n\n---\n\n## 🛠️ Global Actions\n- [🔄 Full Rescan](command:bmad.run?%5B%22dashboard%22%5D)\n- [➕ New Package](command:bmad.run?%5B%22init%22%5D)\n"
+}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 if (process.env.VITEST) {
 	// when running tests, skip loading Tailwind (may not be installed in test env)
 	module.exports = {

@@ -1,37 +1,149 @@
+# BMAD Auto-Discovery Connector
+# Generated: 2026-03-07T22:11:15.797Z
+# Do not edit manually — regenerate with: node bmad.mjs connector
 meta:
-  generated: 2026-03-07T00:23:18.9394136+01:00
-  bmad_version: '3.2.0'
-  project: 'latent-line'
-root: 'bmad/'
-sections:
-  stories:
-    - AUDIT-001.md
-    - AUDIT-002.md
-    - AUDIT-003.md
-    - AUDIT-004.md
-    - AUDIT-005.md
-    - AUDIT-007.md
-    - AUDIT-008.md
-    - AUDIT-010.md
-    - AUDIT-011.md
-    - AUDIT-014.md
-    - AUDIT-015.md
-    - AUDIT-016.md
-    - ST-001.md
-    - ST-002.md
-    - ST-003.md
-    - ST-004.md
-    - ST-005.md
-    - ST-006.md
-    - ST-007.md
-    - ST-008.md
-    - ST-009.md
-    - ST-010.md
-    - ST-011.md
-    - ST-012.md
-    - ST-013.md
-    - ST-014.md
-    - ST-015.md
-  sprints:
-    - sprint-2.md
-    - sprint-3.md
+  generated: '2026-03-07T22:11:15.797Z'
+  bmad_version: 3.2.0
+  project: latent-line
+  root: bmad/
+dictionary:
+  keywords:
+    story: 'Atomic dev task. ID pattern: S{sprint}-{seq:02d}. Role: developer.'
+    sprint: 'Time-boxed work batch. ID pattern: sprint-{N}. Role: scrum-master.'
+    prd: 'Product Requirements Document. Role: pm.'
+    arch: 'Architecture document. Role: architect.'
+    audit: 'Codebase analysis report. Role: analyst.'
+    dashboard: 'Live project status view. Auto-generated. Role: orchestrator.'
+    connector: 'This file. Machine-readable project manifest. Role: orchestrator.'
+  rules:
+    - All file writes must be followed by a dashboard update.
+    - Story IDs follow pattern S{sprint_number}-{sequence:02d} (e.g. S1-03).
+    - Sprint files are named sprint-{N}.md (e.g. sprint-2.md).
+    - Audit baselines are named audit-baseline-{YYYY-MM-DD}.md.
+    - All text artifacts are written in English.
+    - status.yaml is the single source of truth for project phase state.
+    - connector.yml is regenerated automatically on every dashboard update.
+  naming:
+    story: S{sprint}-{seq:02d}
+    sprint: sprint-{N}
+    audit: audit-baseline-{YYYY-MM-DD}
+    campaign: '{slug}'
+    history: status-{YYYYMMDDTHHmmss}
+architecture:
+  - path: bmad/
+    role: orchestrator
+    description: BMAD project root
+    children:
+      - path: config.yaml
+        type: file
+        description: Project metadata (name, stack, team)
+      - path: status.yaml
+        type: file
+        description: Current phase, artifacts state, sprint/backlog progress
+      - path: dashboard.md
+        type: file
+        description: Interactive project dashboard (auto-generated)
+      - path: artifacts/
+        type: dir
+        description: All generated project artifacts
+        children:
+          - path: connector.yml
+            type: file
+            role: orchestrator
+            description: Auto-discovery manifest
+          - path: product-brief.md
+            type: file
+            role: analyst
+            status: unknown
+          - path: prd.md
+            type: file
+            role: pm
+            status: unknown
+          - path: tech-spec.md
+            type: file
+            role: pm
+            status: unknown
+          - path: architecture.md
+            type: file
+            role: architect
+            status: unknown
+          - path: positioning.md
+            type: file
+            role: marketing
+            status: unknown
+          - path: marketing-strategy.md
+            type: file
+            role: marketing
+            status: unknown
+          - path: launch-plan.md
+            type: file
+            role: marketing
+            status: unknown
+          - path: sprints/
+            type: dir
+            role: scrum-master
+            pattern: sprint-{N}.md
+            entries:
+              - sprint-2.md
+              - sprint-3.md
+          - path: stories/
+            type: dir
+            role: developer
+            pattern: S{sprint}-{seq}.md
+            entries:
+              - AUDIT-001.md
+              - AUDIT-002.md
+              - AUDIT-003.md
+              - AUDIT-004.md
+              - AUDIT-005.md
+              - AUDIT-007.md
+              - AUDIT-008.md
+              - AUDIT-010.md
+              - AUDIT-011.md
+              - AUDIT-014.md
+              - AUDIT-015.md
+              - AUDIT-016.md
+              - ST-001.md
+              - ST-002.md
+              - ST-003.md
+              - ST-004.md
+              - ST-005.md
+              - ST-006.md
+              - ST-007.md
+              - ST-008.md
+              - ST-009.md
+              - ST-010.md
+              - ST-011.md
+              - ST-012.md
+              - ST-013.md
+              - ST-014.md
+              - ST-015.md
+          - path: tests/
+            type: dir
+            role: tester
+            pattern: '{story-id}-test-plan.md'
+            entries: []
+          - path: campaigns/
+            type: dir
+            role: marketing
+            pattern: '{slug}.md'
+            entries: []
+          - path: discussions/
+            type: dir
+            role: orchestrator
+            pattern: '{topic}-{YYYY-MM-DD}.md'
+            entries: []
+          - path: history/
+            type: dir
+            role: orchestrator
+            pattern: status-{YYYYMMDDTHHmmss}.md
+            entries:
+              - status-2026-03-07-012832.md
+              - status-2026-03-07-013127.md
+              - status-2026-03-07-013315.md
+              - status-2026-03-07-013539.md
+              - status-2026-03-07-013648.md
+              - status-2026-03-07-182806.md
+              - status-2026-03-07-185046.md
+              - status-2026-03-07-192549.md
+              - status-2026-03-07-193259.md

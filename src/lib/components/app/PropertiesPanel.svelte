@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import type { TimelineFrame, Assets, Character, EnvironmentAsset, AudioAsset, LightingType } from '$lib/model/model-types';
+	import type {
+		TimelineFrame,
+		Assets,
+		Character,
+		EnvironmentAsset,
+		AudioAsset,
+		LightingType
+	} from '$lib/model/model-types';
 	import { ASSET_STORE_KEY } from '$lib/context/keys';
 
 	const LIGHTING_TYPES: LightingType[] = ['dusk', 'daylight', 'studio', 'tungsten', 'ambient'];
@@ -106,12 +113,12 @@
   Supports inline editing of camera/lighting (ST-008).
 -->
 <div class="flex flex-col gap-3 p-2" aria-label="Properties Panel">
-	<h2 class="text-sm font-bold uppercase tracking-wide text-gray-500">Properties</h2>
+	<h2 class="text-sm font-bold tracking-wide text-gray-500 uppercase">Properties</h2>
 
 	{#if selectedCharacter}
 		<!-- Character asset selected -->
 		<div class="rounded border border-blue-200 bg-blue-50 p-3">
-			<div class="mb-2 text-xs font-semibold uppercase text-blue-600">Character</div>
+			<div class="mb-2 text-xs font-semibold text-blue-600 uppercase">Character</div>
 			<dl class="flex flex-col gap-1 text-xs">
 				<div class="flex gap-2">
 					<dt class="w-20 shrink-0 text-gray-400">ID</dt>
@@ -132,7 +139,8 @@
 						<dt class="w-20 shrink-0 text-gray-400">Outfits</dt>
 						<dd class="flex flex-wrap gap-1">
 							{#each Object.keys(selectedCharacter.outfits) as outfit}
-								<span class="rounded bg-blue-100 px-1 py-0.5 font-mono text-blue-700">{outfit}</span>
+								<span class="rounded bg-blue-100 px-1 py-0.5 font-mono text-blue-700">{outfit}</span
+								>
 							{/each}
 						</dd>
 					</div>
@@ -140,16 +148,19 @@
 				{#if selectedCharacter.references?.length}
 					<div class="flex gap-2">
 						<dt class="w-20 shrink-0 text-gray-400">References</dt>
-						<dd>{selectedCharacter.references.length} ref{selectedCharacter.references.length > 1 ? 's' : ''}</dd>
+						<dd>
+							{selectedCharacter.references.length} ref{selectedCharacter.references.length > 1
+								? 's'
+								: ''}
+						</dd>
 					</div>
 				{/if}
 			</dl>
 		</div>
-
 	{:else if selectedEnvironment}
 		<!-- Environment asset selected -->
 		<div class="rounded border border-green-200 bg-green-50 p-3">
-			<div class="mb-2 text-xs font-semibold uppercase text-green-600">Environment</div>
+			<div class="mb-2 text-xs font-semibold text-green-600 uppercase">Environment</div>
 			<dl class="flex flex-col gap-1 text-xs">
 				<div class="flex gap-2">
 					<dt class="w-20 shrink-0 text-gray-400">ID</dt>
@@ -167,11 +178,10 @@
 				{/if}
 			</dl>
 		</div>
-
 	{:else if selectedAudio}
 		<!-- Audio asset selected -->
 		<div class="rounded border border-purple-200 bg-purple-50 p-3">
-			<div class="mb-2 text-xs font-semibold uppercase text-purple-600">Audio</div>
+			<div class="mb-2 text-xs font-semibold text-purple-600 uppercase">Audio</div>
 			<dl class="flex flex-col gap-1 text-xs">
 				<div class="flex gap-2">
 					<dt class="w-20 shrink-0 text-gray-400">ID</dt>
@@ -189,7 +199,6 @@
 				</div>
 			</dl>
 		</div>
-
 	{:else if selectedEvent}
 		<!-- Timeline event selected — show editable frame properties -->
 		<div>
@@ -197,9 +206,11 @@
 
 			{#if selectedEvent.timelineFrame?.camera}
 				<section class="mb-3">
-					<h3 class="mb-1 text-xs font-semibold uppercase text-gray-400">Camera</h3>
+					<h3 class="mb-1 text-xs font-semibold text-gray-400 uppercase">Camera</h3>
 					<div class="flex items-center gap-2 rounded bg-gray-50 p-2">
-						<label for="zoom-{selectedEvent.id}" class="w-12 shrink-0 text-xs text-gray-400">Zoom</label>
+						<label for="zoom-{selectedEvent.id}" class="w-12 shrink-0 text-xs text-gray-400"
+							>Zoom</label
+						>
 						<input
 							id="zoom-{selectedEvent.id}"
 							type="range"
@@ -207,7 +218,11 @@
 							max="5.0"
 							step="0.1"
 							value={selectedEvent.timelineFrame.camera.zoom ?? 1}
-							oninput={(e) => updateEventCamera(selectedEvent!.id, parseFloat((e.target as HTMLInputElement).value))}
+							oninput={(e) =>
+								updateEventCamera(
+									selectedEvent!.id,
+									parseFloat((e.target as HTMLInputElement).value)
+								)}
 							class="flex-1"
 							aria-label="Camera zoom"
 						/>
@@ -220,13 +235,19 @@
 
 			{#if selectedEvent.timelineFrame?.lighting}
 				<section class="mb-3">
-					<h3 class="mb-1 text-xs font-semibold uppercase text-gray-400">Lighting</h3>
+					<h3 class="mb-1 text-xs font-semibold text-gray-400 uppercase">Lighting</h3>
 					<div class="flex items-center gap-2 rounded bg-gray-50 p-2">
-						<label for="lighting-{selectedEvent.id}" class="w-12 shrink-0 text-xs text-gray-400">Type</label>
+						<label for="lighting-{selectedEvent.id}" class="w-12 shrink-0 text-xs text-gray-400"
+							>Type</label
+						>
 						<select
 							id="lighting-{selectedEvent.id}"
 							value={selectedEvent.timelineFrame.lighting.type ?? ''}
-							onchange={(e) => updateEventLighting(selectedEvent!.id, (e.target as HTMLSelectElement).value as LightingType)}
+							onchange={(e) =>
+								updateEventLighting(
+									selectedEvent!.id,
+									(e.target as HTMLSelectElement).value as LightingType
+								)}
 							class="flex-1 rounded border border-gray-200 bg-white px-1 py-0.5 text-xs"
 							aria-label="Lighting type"
 						>
@@ -241,32 +262,43 @@
 
 			{#if selectedEvent.timelineFrame?.fx}
 				<section class="mb-3">
-					<h3 class="mb-1 text-xs font-semibold uppercase text-gray-400">FX</h3>
+					<h3 class="mb-1 text-xs font-semibold text-gray-400 uppercase">FX</h3>
 					<pre
 						aria-label="FX properties"
-						class="overflow-auto rounded bg-gray-100 p-2 text-xs">{JSON.stringify(selectedEvent.timelineFrame.fx, null, 2)}</pre>
+						class="overflow-auto rounded bg-gray-100 p-2 text-xs">{JSON.stringify(
+							selectedEvent.timelineFrame.fx,
+							null,
+							2
+						)}</pre>
 				</section>
 			{/if}
 
 			{#if selectedEvent.timelineFrame?.controlnet}
 				<section class="mb-3">
-					<h3 class="mb-1 text-xs font-semibold uppercase text-gray-400">ControlNet</h3>
+					<h3 class="mb-1 text-xs font-semibold text-gray-400 uppercase">ControlNet</h3>
 					<pre
 						aria-label="ControlNet properties"
-						class="overflow-auto rounded bg-gray-100 p-2 text-xs">{JSON.stringify(selectedEvent.timelineFrame.controlnet, null, 2)}</pre>
+						class="overflow-auto rounded bg-gray-100 p-2 text-xs">{JSON.stringify(
+							selectedEvent.timelineFrame.controlnet,
+							null,
+							2
+						)}</pre>
 				</section>
 			{/if}
 
 			{#if selectedEvent.timelineFrame?.audio_tracks?.length}
 				<section class="mb-3">
-					<h3 class="mb-1 text-xs font-semibold uppercase text-gray-400">Audio Tracks</h3>
+					<h3 class="mb-1 text-xs font-semibold text-gray-400 uppercase">Audio Tracks</h3>
 					<pre
 						aria-label="Audio tracks"
-						class="overflow-auto rounded bg-gray-100 p-2 text-xs">{JSON.stringify(selectedEvent.timelineFrame.audio_tracks, null, 2)}</pre>
+						class="overflow-auto rounded bg-gray-100 p-2 text-xs">{JSON.stringify(
+							selectedEvent.timelineFrame.audio_tracks,
+							null,
+							2
+						)}</pre>
 				</section>
 			{/if}
 		</div>
-
 	{:else}
 		<!-- Nothing selected -->
 		<div class="text-xs text-gray-400" aria-label="No selection">

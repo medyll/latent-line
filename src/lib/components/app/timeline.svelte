@@ -14,6 +14,7 @@
 	import { ASSET_STORE_KEY } from '$lib/context/keys';
 
 	const assetStore = $state<Assets>(structuredClone(exampleModel.assets));
+	import { toTimelineArray } from '$lib/model/timeline-utils';
 	setContext(ASSET_STORE_KEY, assetStore);
 
 	let zoom = $state(100);
@@ -24,29 +25,31 @@
 	const BASE_PX_PER_FRAME = 1;
 
 	// Timeline events as reactive state so edits from PropertiesPanel propagate
-	let timelineEvents = $state(exampleModel.timeline.map((event, idx) => {
-		const nextTime =
-			idx < exampleModel.timeline.length - 1
-				? exampleModel.timeline[idx + 1].time
-				: event.time + 120;
-		const actor = event.frame.actors && event.frame.actors[0];
-		return {
-			id: `event_${idx}`,
-			label: `Event ${idx + 1}`,
-			start: event.time,
-			end: nextTime,
-			speech: actor && actor.speech ? actor.speech.text : '',
-			mood: actor && actor.speech ? actor.speech.mood : '',
-			action: actor && actor.action ? actor.action : '',
-			zoom: event.frame.camera && event.frame.camera.zoom,
-			fx: event.frame.fx,
-			audio: (event.frame.audio_tracks || []).map((track) => ({
-				id: track.id,
-				volume: track.volume ?? 0
-			})),
-			timelineFrame: event.frame
-		};
-	}));
+	let timelineEvents = $state(
+		toTimelineArray(exampleModel.timeline).map((event, idx) => {
+			const nextTime =
+				idx < exampleModel.timeline.length - 1
+					? exampleModel.timeline[idx + 1].time
+					: event.time + 120;
+			const actor = event.frame.actors && event.frame.actors[0];
+			return {
+				id: `event_${idx}`,
+				label: `Event ${idx + 1}`,
+				start: event.time,
+				end: nextTime,
+				speech: actor && actor.speech ? actor.speech.text : '',
+				mood: actor && actor.speech ? actor.speech.mood : '',
+				action: actor && actor.action ? actor.action : '',
+				zoom: event.frame.camera && event.frame.camera.zoom,
+				fx: event.frame.fx,
+				audio: (event.frame.audio_tracks || []).map((track) => ({
+					id: track.id,
+					volume: track.volume ?? 0
+				})),
+				timelineFrame: event.frame
+			};
+		})
+	);
 
 	const totalDuration = $derived(
 		timelineEvents.length > 0 ? timelineEvents[timelineEvents.length - 1].end : 0
@@ -62,11 +65,17 @@
 <!-- Timeline with sidebar layout -->
 <div class="conteiner flex h-full flex-row">
 	<!-- Sidebar -->
-	<aside class="flex h-full min-h-0 w-64 max-w-48 min-w-48 flex-col border-r" style="background:var(--color-sidebar); color:var(--color-sidebar-foreground);">
+	<aside
+		class="flex h-full min-h-0 w-64 max-w-48 min-w-48 flex-col border-r"
+		style="background:var(--color-sidebar); color:var(--color-sidebar-foreground);"
+	>
 		<div class="mb-4 text-lg font-bold">Assets</div>
 		<div class="flex flex-1 flex-col gap-2">
 			<!-- AssetManager stylé -->
-			<div class="p-2" style="background:var(--color-popover); color:var(--color-popover-foreground);">
+			<div
+				class="p-2"
+				style="background:var(--color-popover); color:var(--color-popover-foreground);"
+			>
 				<AssetManager bind:selectedAssetId />
 			</div>
 		</div>
@@ -142,7 +151,8 @@
 									role="button"
 									tabindex="0"
 									class={`absolute top-2 h-10 cursor-pointer truncate rounded border px-1 text-xs leading-10 transition-colors ${selectedEventId === item.id ? 'border-blue-500 bg-blue-100 font-semibold' : 'border-gray-300 bg-white hover:bg-gray-50'}`}
-									style="left: {item.start * pxPerFrame}px; width: {(item.end - item.start) * pxPerFrame}px;"
+									style="left: {item.start * pxPerFrame}px; width: {(item.end - item.start) *
+										pxPerFrame}px;"
 									title={item.label}
 								>
 									{item.label}
