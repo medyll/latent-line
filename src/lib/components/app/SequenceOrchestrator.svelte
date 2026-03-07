@@ -15,7 +15,9 @@
 		selectedTime = $bindable<number | null>(null)
 	}: { selectedTime?: number | null } = $props();
 
-	const timelineStore = $state(exampleModel.timeline ?? []);
+	import { toTimelineArray } from '$lib/model/timeline-utils';
+
+const timelineStore = $state(toTimelineArray(exampleModel.timeline));
 
 	function selectEvent(time: number) {
 		selectedTime = selectedTime === time ? null : time;

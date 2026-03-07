@@ -14,6 +14,7 @@
 	import { ASSET_STORE_KEY } from '$lib/context/keys';
 
 	const assetStore = $state<Assets>(structuredClone(exampleModel.assets));
+	import { toTimelineArray } from '$lib/model/timeline-utils';
 	setContext(ASSET_STORE_KEY, assetStore);
 
 	let zoom = $state(100);
@@ -24,7 +25,7 @@
 	const BASE_PX_PER_FRAME = 1;
 
 	// Timeline events as reactive state so edits from PropertiesPanel propagate
-	let timelineEvents = $state(exampleModel.timeline.map((event, idx) => {
+	let timelineEvents = $state(toTimelineArray(exampleModel.timeline).map((event, idx) => {
 		const nextTime =
 			idx < exampleModel.timeline.length - 1
 				? exampleModel.timeline[idx + 1].time
