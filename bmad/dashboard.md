@@ -34,9 +34,10 @@
 - ST-015.md
 
 ## Next recommendation
-- Implement styling stories ST-014..ST-015
+- Implement styling stories ST-015
 
 ## Completed stories
 - ST-011
 - ST-012
 - ST-013
+- ST-014
