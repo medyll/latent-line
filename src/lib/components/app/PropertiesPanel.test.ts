@@ -29,7 +29,13 @@ function lookupAsset(
 
 const testStore: Assets = {
 	characters: [
-		{ id: 'char_01', name: 'Alice', references: [], voice_id: 'v_alice', outfits: { default: { prompt: 'dress' } } },
+		{
+			id: 'char_01',
+			name: 'Alice',
+			references: [],
+			voice_id: 'v_alice',
+			outfits: { default: { prompt: 'dress' } }
+		},
 		{ id: 'char_02', name: 'Bob', references: [] }
 	],
 	environments: {

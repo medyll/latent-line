@@ -11,13 +11,12 @@
 	import { Card, CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
 	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
 
-	let {
-		selectedTime = $bindable<number | null>(null)
-	}: { selectedTime?: number | null } = $props();
+	let { selectedTime = $bindable<number | null>(null) }: { selectedTime?: number | null } =
+		$props();
 
 	import { toTimelineArray } from '$lib/model/timeline-utils';
 
-const timelineStore = $state(toTimelineArray(exampleModel.timeline));
+	const timelineStore = $state(toTimelineArray(exampleModel.timeline));
 
 	function selectEvent(time: number) {
 		selectedTime = selectedTime === time ? null : time;

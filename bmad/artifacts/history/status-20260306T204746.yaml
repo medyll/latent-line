@@ -134,4 +134,3 @@ risks:
     description: >
       PropertiesPanel and AssetManager now fully typed.
       Reduced any-type usage from implicit to explicit.
-

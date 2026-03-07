@@ -82,6 +82,7 @@ This document explains how latent-line components communicate and how data flows
    ```
 3. **Zod validates** via `modelSchema.safeParse(exampleModel)`
 4. **Create mutable store** (Svelte 5 `$state`):
+
    ```typescript
    const assetStore = $state(structuredClone(exampleModel.assets));
    ```

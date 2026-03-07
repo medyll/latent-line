@@ -1,9 +1,11 @@
+<!-- eslint-disable svelte/no-navigation-without-resolve -->
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
 	onMount(() => {
 		// Redirect browser to the actual demo-model page
+		// eslint-disable-next-line svelte/no-navigation-without-resolve
 		goto('/demo-model');
 	});
 </script>

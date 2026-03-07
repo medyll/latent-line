@@ -21,10 +21,7 @@
 		timelineFrame?: unknown;
 	}
 
-	let {
-		item,
-		isSelected = false
-	}: { item: TimelineEventItem; isSelected?: boolean } = $props();
+	let { item, isSelected = false }: { item: TimelineEventItem; isSelected?: boolean } = $props();
 </script>
 
 <div

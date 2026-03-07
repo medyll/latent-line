@@ -12,7 +12,9 @@ export function toTimelineArray(input: unknown): TimelineEvent[] {
 	if (typeof input === 'object') {
 		const obj = input as Record<string, TimelineEvent>;
 		try {
-			return Object.values(obj).slice().sort((a, b) => (a.time ?? 0) - (b.time ?? 0));
+			return Object.values(obj)
+				.slice()
+				.sort((a, b) => (a.time ?? 0) - (b.time ?? 0));
 		} catch {
 			return [];
 		}

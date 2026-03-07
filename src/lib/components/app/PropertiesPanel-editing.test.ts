@@ -11,7 +11,11 @@ interface TimelineEventWithFrame {
 }
 
 // Mirrors the helpers in PropertiesPanel.svelte
-function updateEventCamera(events: TimelineEventWithFrame[], eventId: string, zoom: number): TimelineEventWithFrame[] {
+function updateEventCamera(
+	events: TimelineEventWithFrame[],
+	eventId: string,
+	zoom: number
+): TimelineEventWithFrame[] {
 	const idx = events.findIndex((e) => e.id === eventId);
 	if (idx === -1) return events;
 	const ev = events[idx];
@@ -26,7 +30,11 @@ function updateEventCamera(events: TimelineEventWithFrame[], eventId: string, zo
 	return updated;
 }
 
-function updateEventLighting(events: TimelineEventWithFrame[], eventId: string, type: LightingType): TimelineEventWithFrame[] {
+function updateEventLighting(
+	events: TimelineEventWithFrame[],
+	eventId: string,
+	type: LightingType
+): TimelineEventWithFrame[] {
 	const idx = events.findIndex((e) => e.id === eventId);
 	if (idx === -1) return events;
 	const ev = events[idx];

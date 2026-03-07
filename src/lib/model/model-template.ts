@@ -5,7 +5,9 @@ import { z } from 'zod';
 
 // Define enums first
 const moodEnum = z.enum(['joyful', 'melancholic', 'anxious', 'serene', 'curious']);
-const lightingTypeEnum = z.enum(['dusk', 'daylight', 'studio', 'tungsten', 'ambient']);
+/* eslint-disable @typescript-eslint/no-unused-vars */
+const _lightingTypeEnum = z.enum(['dusk', 'daylight', 'studio', 'tungsten', 'ambient']);
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 const positionSchema = z.object({ x: z.number(), y: z.number(), scale: z.number().optional() });
 const speechSchema = z.object({
@@ -82,11 +84,9 @@ const projectSchema = z.object({
 });
 
 const referenceSchema = z.object({
-	url: z
-		.string()
-		.refine(isUrlOrFile, {
-			message: 'must be absolute URL or local filename with allowed extension'
-		}),
+	url: z.string().refine(isUrlOrFile, {
+		message: 'must be absolute URL or local filename with allowed extension'
+	}),
 	context: z.string(),
 	weight: z.number()
 });

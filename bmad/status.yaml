@@ -143,7 +143,6 @@ risks:
       PropertiesPanel and AssetManager now fully typed.
       Reduced any-type usage from implicit to explicit.
 
-
 # BMAD auto-created styling stories
 prd_stories_added:
   - ST-011
@@ -158,4 +157,3 @@ completed_stories:
   - ST-013
   - ST-014
   - ST-015
-

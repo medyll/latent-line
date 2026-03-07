@@ -9,13 +9,13 @@ Enable full asset data visibility in PropertiesPanel via a shared Svelte context
 
 ## Stories
 
-| ID     | Epic             | Title                                  | Points | Priority |
-| :----- | :--------------- | :------------------------------------- | :----: | :------- |
-| ST-006 | Shared State     | Lift assetStore to Svelte context      |   3    | Must     |
-| ST-007 | Shared State     | PropertiesPanel: full asset data       |   2    | Must     |
-| ST-008 | Editing          | PropertiesPanel: inline frame editing  |   5    | Should   |
-| ST-009 | Quality          | E2E tests for component interactions   |   3    | Should   |
-| ST-010 | Performance      | Bundle analysis and size optimization  |   1    | Could    |
+| ID     | Epic         | Title                                 | Points | Priority |
+| :----- | :----------- | :------------------------------------ | :----: | :------- |
+| ST-006 | Shared State | Lift assetStore to Svelte context     |   3    | Must     |
+| ST-007 | Shared State | PropertiesPanel: full asset data      |   2    | Must     |
+| ST-008 | Editing      | PropertiesPanel: inline frame editing |   5    | Should   |
+| ST-009 | Quality      | E2E tests for component interactions  |   3    | Should   |
+| ST-010 | Performance  | Bundle analysis and size optimization |   1    | Could    |
 
 **Total:** 14 points
 
