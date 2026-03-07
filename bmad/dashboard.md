@@ -36,8 +36,9 @@
 
 ## Next recommendation
 
-- Remaining audit/code-quality stories: add path traversal guard tests (AUDIT-007), and expand unit tests (AUDIT-014)
+- Remaining audit/code-quality story: expand unit tests (AUDIT-014)
 - ✅ AUDIT-003: Fixed UI barrel exports to silence TypeScript errors (see bmad/status.yaml)
+- ✅ AUDIT-007: Path traversal validation implemented and tests added (see bmad/artifacts/stories/AUDIT-007.md)
 
 ## Completed stories
 

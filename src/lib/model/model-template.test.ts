@@ -83,6 +83,32 @@ describe('model-template', () => {
 			const result = modelSchema.safeParse(valid);
 			expect(result.success).toBe(true);
 		});
+
+		it('should reject path traversal in environment.ref', () => {
+			const invalid = {
+				...buildDefaultModel(),
+				assets: {
+					...buildDefaultModel().assets,
+					environments: { bad: { prompt: 'bad', ref: '../secrets/flag.png' } },
+					audio: buildDefaultModel().assets.audio
+				}
+			};
+			const result = modelSchema.safeParse(invalid);
+			expect(result.success).toBe(false);
+		});
+
+		it('should reject disallowed extensions for audio assets', () => {
+			const invalid = {
+				...buildDefaultModel(),
+				assets: {
+					...buildDefaultModel().assets,
+					audio: [{ id: 'a1', url: 'malicious.exe' }]
+				}
+			};
+			const result = modelSchema.safeParse(invalid);
+			expect(result.success).toBe(false);
+		});
+
 	});
 
 	// AUDIT-014: Test character validation

@@ -5,4 +5,13 @@
 
 ## Description
 
-TODO: Implement fix described in audit artifact bmad/artifacts/audit-full-2026-03-03.md for AUDIT-007.
+Implemented the path traversal guard described in the audit (isUrlOrFile refinement) to reject relative paths (".."), null bytes, and ensure allowed local asset prefixes. Changes made:
+
+- src/lib/model/model-template.ts: isUrlOrFile now rejects `..` and `\0` and prefers explicit allowed extensions and path prefixes for local assets.
+- src/lib/model/model-template.test.ts: added tests verifying path traversal is rejected and null bytes are rejected (see test cases in the existing test suite).
+
+## Status
+
+- ✅ Implemented and tested (unit tests present in src/lib/model/model-template.test.ts)
+- Completed: 2026-03-07
+
