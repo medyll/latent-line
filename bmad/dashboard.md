@@ -34,7 +34,7 @@
 - ST-015.md
 
 ## Next recommendation
-- No pending styling stories; Sprint 3 styling stories complete
+- Run full test suite and address any failing tests; then tackle remaining audit/code quality stories (if any)
 
 ## Completed stories
 - ST-011
@@ -42,3 +42,6 @@
 - ST-013
 - ST-014
 - ST-015
+
+## Last test run
+- Unit tests: 56 passing (2026-03-07T18:25:20+01:00)
