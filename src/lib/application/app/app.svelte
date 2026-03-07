@@ -23,7 +23,7 @@
 >
 	{@render children?.sidebar?.()}
 	<Sidebar.Inset>
-		<header class="flex h-16 shrink-0 items-center gap-2 border-b px-4" style="background:var(--color-card); color:var(--color-card-foreground);">
+		<header aria-label="Application header" class="flex h-16 shrink-0 items-center gap-2 border-b px-4" style="background:var(--color-card); color:var(--color-card-foreground);">
 			<div>
 				<div><Sidebar.Trigger class="-ms-1" /></div>
 				<div></div>
