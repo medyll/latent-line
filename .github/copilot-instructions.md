@@ -1,97 +1,50 @@
-# Copilot / AI agent instructions for latent-line
+# Copilot Instructions for Latent-line
 
-## Quick summary
+## Build, Test, and Lint Commands
 
-- **Repo type**: SvelteKit (Svelte 5) + Vite SPA, TypeScript. UI: `src/`. Model logic and schemas: `src/lib/`.
-- **Key workflows**:
-  - Dev: `pnpm run dev`
-  - Type-check: `pnpm exec tsc --noEmit`
-  - Test: `pnpm test` (Vitest)
+- **Install dependencies:** `pnpm install`
+- **Development server:** `pnpm run dev` (http://localhost:5173)
+- **Type checking:** `pnpm exec tsc --noEmit`
+- **Lint:** `pnpm run lint` (ESLint + Prettier)
+- **Format:** `pnpm run format`
+- **Build:** `pnpm run build`
+- **Preview:** `pnpm run preview`
+- **Unit tests:** `pnpm run test:unit` (Vitest)
+- **Single test file:** `pnpm run test:unit -- path/to/test.test.ts`
+- **E2E tests:** `pnpm run test:e2e` (Playwright)
 
-## Architecture & intent
+## High-Level Architecture
 
-- **Data model**: See `src/lib/model-types.ts`, `src/lib/model-template.ts`, and `src/lib/model-example.ts`.
-- **UI**: Svelte components under `src/`.
-- **Tests**: Unit tests in `src/lib/*.test.ts` (Vitest).
+- **TypeScript + SvelteKit (Svelte 5) + Vite SPA**
+- **UI:** Svelte components in `src/` (app-specific in `src/lib/components/app/`, primitives in `src/lib/components/ui/`)
+- **Data Model:** Defined in `src/lib/model-types.ts`, validated with Zod in `src/lib/model-template.ts`, example in `src/lib/model-example.ts`
+- **Timeline:** Ordered array of `TimelineEvent[]` (see `GUIDELINES.md` for format and rules)
+- **Assets:** Characters, environments, audio managed via AssetManager
+- **Tests:** Unit tests in `src/lib/model/*.test.ts`, E2E in `e2e/`
+- **MCP Integration:** Svelte MCP server for Svelte 5/SvelteKit docs and code analysis; shadcn-svelte for UI primitives
 
-## IMPORTANT: Never modify components in `src/lib/components` — these are shadcn components and must remain untouched. If you need to customize UI, create new components elsewhere or use composition.
+## Key Conventions
 
-## Project-specific conventions
+- **Never modify components in `src/lib/components`** (shadcn-svelte primitives; use composition for custom UI)
+- **Timeline events:** Must be ordered by ascending `time`; only include fields that change at each event
+- **IDs:** Use short, stable IDs (e.g., `char_01`); asset references must match IDs in `assets.characters[]`
+- **Validation:** Always validate models with `modelSchema.safeParse(value)`; use `createModelTemplate()` for deep cloning
+- **Svelte 5:** Use runes (`$state`, `$props`, `$effect`), snippets instead of slots, and `{@render children()}` for layout
+- **Styling:** Tailwind CSS v4, strict adherence to spacing, breakpoints, palette; avoid centered layouts, gradients, and generic cards
+- **Security:** Asset URLs validated with `isUrlOrFile()` (rejects `..`), no hardcoded secrets, use `.env.local` for environment variables
+- **Accessibility:** Keyboard navigation, explicit labels, complete interactive states
 
-- **Timeline**: Ordered array of `TimelineEvent[]` (see `GUIDELINES.md` for format and rules).
-- **Validation**: Use Zod (`modelSchema.safeParse(value)`).
-- **IDs**: Short, stable (e.g., `char_01`). Asset references must match IDs in `assets.characters[]`.
-- **Model structure**: See `GUIDELINES.md` for canonical fields, enums, and validation details.
+## Reference Documents
 
-## Developer commands
-
-- Dev: `pnpm run dev`
-- Type-check: `pnpm exec tsc --noEmit`
-- Test: `pnpm test`
-- Build: `pnpm run build`
-- Preview: `pnpm run preview`
-
-## Integration points & dependencies
-
-- **Zod**: Runtime validation for models.
-- **Vitest**: Unit testing.
-- **TailwindCSS/PostCSS**: Styling.
-- **shadcn-svelte**: Optional UI primitives.
-- **MCP**: Svelte MCP server for documentation and code analysis. shadcn-svelte as MCP tool for UI components.
-
-## SvelteKit/Svelte 5 conventions
-
-For detailed Svelte usage, conventions, and migration tips, see SVELTE.md in the project root.
+- `README.md`: Project overview, architecture, and commands
+- `GUIDELINES.md`: Canonical model structure, enums, validation rules
+- `SVELTE.md`: Svelte 5 conventions, runes, snippets
+- `AGENTS.md`: MCP tool usage for documentation and code analysis
 
 ---
 
-## Svelte MCP integration
+For SvelteKit/Svelte 5, always use the Svelte MCP server for documentation, code analysis, and validation. See `AGENTS.md` for workflow details.
 
-Always use the Svelte MCP server for Svelte 5 and SvelteKit documentation, code analysis, and code validation.
+---
 
-- Use the MCP tools as follows:
-  - **list-sections**: Run first for any Svelte/SvelteKit question to discover relevant documentation sections.
-  - **get-documentation**: Fetch full documentation for all relevant sections after analyzing use_cases.
-  - **svelte-autofixer**: Analyze and validate Svelte code before sending to the user. Repeat until no issues remain.
-  - **playground-link**: Offer a Svelte Playground link after user confirmation (only if code is not written to files).
-
-Refer to AGENTS.md for detailed MCP tool usage and workflow.
-
-## Svelte 5 snippet and slot conventions
-
-In Svelte 4, content was passed to components using slots. In Svelte 5, slots are deprecated and replaced by snippets, which are more powerful and flexible.
-
-- Layout components should use `{@render children()}` instead of `<slot />`.
-- Snippets can be passed as props or defined inside component tags.
-- Programmatic snippets can be created with `createRawSnippet` API for advanced use cases.
-
-### Svelte 5 snippet example
-
-```svelte
-<script>
-	import Table from './Table.svelte';
-	const fruits = [
-		{ name: 'apples', qty: 5, price: 2 },
-		{ name: 'bananas', qty: 10, price: 1 },
-		{ name: 'cherries', qty: 20, price: 0.5 }
-	];
-</script>
-
-{#snippet header()}
-	<th>fruit</th>
-	<th>qty</th>
-	<th>price</th>
-	<th>total</th>
-{/snippet}
-
-{#snippet row(d)}
-	<td>{d.name}</td>
-	<td>{d.qty}</td>
-	<td>{d.price}</td>
-	<td>{d.qty * d.price}</td>
-{/snippet}
-
-<Table data={fruits} {header} {row} />
-```
-
-Merci de me signaler toute section qui manque de clarté ou d’exemples spécifiques pour que je puisse l’améliorer.
+_Last updated: 2026-03-06_
