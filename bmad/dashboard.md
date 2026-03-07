@@ -34,7 +34,7 @@
 - ST-015.md
 
 ## Next recommendation
-- Run full test suite and address any failing tests; then tackle remaining audit/code quality stories (if any)
+- Address remaining audit/code-quality stories: type PropertiesPanel and AssetManager (AUDIT-003), add path traversal guard tests (AUDIT-007), and expand unit tests (AUDIT-014)
 
 ## Completed stories
 - ST-011
