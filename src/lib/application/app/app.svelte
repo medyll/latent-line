@@ -23,15 +23,15 @@
 >
 	{@render children?.sidebar?.()}
 	<Sidebar.Inset>
-		<header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+		<header class="flex h-16 shrink-0 items-center gap-2 border-b px-4" style="background:var(--color-card); color:var(--color-card-foreground);">
 			<div>
 				<div><Sidebar.Trigger class="-ms-1" /></div>
 				<div></div>
 			</div>
 		</header>
 		<main
-			class="flex h-full flex-1 flex-col items-start justify-start border-none bg-white p-0 shadow-none"
-		>
+			class="flex h-full flex-1 flex-col items-start justify-start border-none p-0 shadow-none"
+			style="background:var(--color-background); color:var(--color-foreground)">
 			{@render children?.()}
 		</main>
 	</Sidebar.Inset>
