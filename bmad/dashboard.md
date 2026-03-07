@@ -36,9 +36,12 @@
 
 ## Next recommendation
 
-- Remaining audit/code-quality story: expand unit tests (AUDIT-014)
+- Short-term remaining: none — all Phase 2 short-term items implemented (see artifacts for details)
 - ✅ AUDIT-003: Fixed UI barrel exports to silence TypeScript errors (see bmad/status.yaml)
+- ✅ AUDIT-001: Removed React dependencies and verified imports (see bmad/artifacts/stories/AUDIT-001.md)
 - ✅ AUDIT-007: Path traversal validation implemented and tests added (see bmad/artifacts/stories/AUDIT-007.md)
+- ✅ AUDIT-004: Timeline shape standardized; components updated (see bmad/artifacts/stories/AUDIT-004.md)
+- ✅ AUDIT-005: Asset immutability guards added (see bmad/artifacts/stories/AUDIT-005.md)
 
 ## Completed stories
 
