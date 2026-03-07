@@ -54,7 +54,7 @@
   ModelInspector Component
   Switch between example/template models, validate with Zod, and inspect model structure.
 -->
-<div class="flex max-w-2xl flex-col gap-6">
+<div class="flex max-w-2xl flex-col gap-6" style="color:var(--color-foreground)">
 	<!-- Controls -->
 	<Card>
 		<CardHeader>

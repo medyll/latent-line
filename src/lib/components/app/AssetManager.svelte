@@ -126,7 +126,7 @@
   Displays and manages global assets: Characters, Environments, Audio.
   Each row is selectable; selectedAssetId is bindable for parent integration.
 -->
-<div class="flex flex-col gap-1 p-1" aria-label="Asset Manager">
+<div class="flex flex-col gap-1 p-1" aria-label="Asset Manager" style="background:var(--color-popover); color:var(--color-popover-foreground)">
 	<!-- Characters Section -->
 	<div class="bg-transparent p-1">
 		<div class="mb-1 flex items-center justify-between">

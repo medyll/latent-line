@@ -62,11 +62,11 @@
 <!-- Timeline with sidebar layout -->
 <div class="conteiner flex h-full flex-row">
 	<!-- Sidebar -->
-	<aside class="flex h-full min-h-0 w-64 max-w-48 min-w-48 flex-col border-r bg-zinc-50">
+	<aside class="flex h-full min-h-0 w-64 max-w-48 min-w-48 flex-col border-r" style="background:var(--color-sidebar); color:var(--color-sidebar-foreground);">
 		<div class="mb-4 text-lg font-bold">Assets</div>
 		<div class="flex flex-1 flex-col gap-2">
 			<!-- AssetManager stylé -->
-			<div class="bg-zinc-100 p-2">
+			<div class="p-2" style="background:var(--color-popover); color:var(--color-popover-foreground);">
 				<AssetManager bind:selectedAssetId />
 			</div>
 		</div>
