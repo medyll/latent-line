@@ -34,7 +34,8 @@
 - ST-015.md
 
 ## Next recommendation
-- Address remaining audit/code-quality stories: type PropertiesPanel and AssetManager (AUDIT-003), add path traversal guard tests (AUDIT-007), and expand unit tests (AUDIT-014)
+- Remaining audit/code-quality stories: add path traversal guard tests (AUDIT-007), and expand unit tests (AUDIT-014)
+- ✅ AUDIT-003: Fixed UI barrel exports to silence TypeScript errors (see bmad/status.yaml)
 
 ## Completed stories
 - ST-011
