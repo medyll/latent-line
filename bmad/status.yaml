@@ -10,6 +10,8 @@ sprint:
   completed_stories:
     - ST-022
     - ST-023
-recommendation: bmad dev story ST-024
+    - ST-024
+  status: complete
+recommendation: bmad status
 created_by: bmad-master (auto)
-last_updated: 2026-03-08T23:52:00Z
+last_updated: 2026-03-09T00:02:00Z
