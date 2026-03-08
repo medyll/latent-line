@@ -1,2 +1,3 @@
 export const ASSET_STORE_KEY = Symbol('assetStore');
 export const MODEL_STORE_KEY = Symbol('modelStore');
+export const SCROLL_SYNC_STORE_KEY = Symbol('scrollSyncStore');

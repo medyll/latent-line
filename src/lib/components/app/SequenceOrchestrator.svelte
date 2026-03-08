@@ -8,20 +8,71 @@
 	 *              - ST-017: Add / Delete (confirm) / Duplicate events.
 	 *              - ST-021: Temporal Sequencer with absolute positioning,
 	 *                drag-to-change-time (TS-03), zoom slider (TS-04), playhead (TS-05).
+	 *              - ST-022: Scroll sync between Synoptic View ↔ Temporal Sequencer.
 	 * @example <SequenceOrchestrator bind:selectedTime />
 	 */
 	import { getContext } from 'svelte';
+	import { writable } from 'svelte/store';
 	import type { Model } from '$lib/model/model-types';
-	import { MODEL_STORE_KEY } from '$lib/context/keys';
+	import { MODEL_STORE_KEY, SCROLL_SYNC_STORE_KEY } from '$lib/context/keys';
 	import { Card, CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
 	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
 	import { Button } from '$lib/components/ui/button';
 	import { Plus, Trash2, Copy } from '@lucide/svelte';
+	import { throttle } from '$lib/utils/throttle';
 
 	let { selectedTime = $bindable<number | null>(null) }: { selectedTime?: number | null } =
 		$props();
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
+
+	// ST-022: Scroll sync store
+	interface ScrollSyncState {
+		scrollLeft: number;
+		scrollTop: number;
+	}
+
+	const scrollSyncStore = writable<ScrollSyncState>({ scrollLeft: 0, scrollTop: 0 });
+	const syncedScrollState = $derived.by(() => {
+		let state = { scrollLeft: 0, scrollTop: 0 };
+		const unsub = scrollSyncStore.subscribe((s) => {
+			state = s;
+		});
+		unsub();
+		return state;
+	});
+
+	// Refs for scroll containers
+	let synopticScrollContainer: HTMLElement;
+	let temporalScrollContainer: HTMLElement;
+
+	// Throttled scroll handlers (100ms debounce)
+	const handleSynopticScroll = throttle((e: Event) => {
+		const target = e.target as HTMLElement;
+		scrollSyncStore.set({
+			scrollLeft: target.scrollLeft,
+			scrollTop: target.scrollTop
+		});
+	}, 100);
+
+	const handleTemporalScroll = throttle((e: Event) => {
+		const target = e.target as HTMLElement;
+		scrollSyncStore.set({
+			scrollLeft: target.scrollLeft,
+			scrollTop: target.scrollTop
+		});
+	}, 100);
+
+	// Apply synced scroll position from store
+	$effect(() => {
+		const state = syncedScrollState;
+		if (synopticScrollContainer) {
+			synopticScrollContainer.scrollLeft = state.scrollLeft;
+		}
+		if (temporalScrollContainer) {
+			temporalScrollContainer.scrollLeft = state.scrollLeft;
+		}
+	});
 
 	const timeline = $derived([...model.timeline].sort((a, b) => a.time - b.time));
 
@@ -132,22 +183,29 @@
 				</Button>
 			</CardTitle>
 		</CardHeader>
-		<CardContent>
-			<div class="flex flex-row flex-wrap gap-2">
-				{#if timeline.length === 0}
-					<Empty>
-						<EmptyHeader>
-							<EmptyTitle>No timeline events</EmptyTitle>
-							<EmptyDescription>Click + to add your first event.</EmptyDescription>
-						</EmptyHeader>
-					</Empty>
-				{:else}
-					{#each timeline as event (event.time)}
-						{@const moodActor = event.frame.actors?.find((a) => a.speech?.mood)}
-						<div
-							onclick={() => selectEvent(event.time)}
-							onkeydown={(e) => e.key === 'Enter' && selectEvent(event.time)}
-							role="button"
+		<CardContent class="p-0">
+			<!-- ST-022: Scrollable container with scroll sync -->
+			<div
+				bind:this={synopticScrollContainer}
+				class="overflow-x-auto"
+				onscroll={handleSynopticScroll}
+				aria-label="Synoptic view scroll container"
+			>
+				<div class="flex flex-row flex-wrap gap-2 p-4">
+					{#if timeline.length === 0}
+						<Empty>
+							<EmptyHeader>
+								<EmptyTitle>No timeline events</EmptyTitle>
+								<EmptyDescription>Click + to add your first event.</EmptyDescription>
+							</EmptyHeader>
+						</Empty>
+					{:else}
+						{#each timeline as event (event.time)}
+							{@const moodActor = event.frame.actors?.find((a) => a.speech?.mood)}
+							<div
+								onclick={() => selectEvent(event.time)}
+								onkeydown={(e) => e.key === 'Enter' && selectEvent(event.time)}
+								role="button"
 							tabindex="0"
 							class={`group relative flex h-24 w-32 cursor-pointer flex-col items-center justify-center gap-1 rounded border transition-colors ${selectedTime === event.time ? 'border-blue-500 bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'}`}
 							aria-label={`Frame ${event.time}`}
@@ -171,6 +229,7 @@
 						</div>
 					{/each}
 				{/if}
+				</div>
 			</div>
 		</CardContent>
 	</Card>
@@ -207,11 +266,13 @@
 					</Empty>
 				</div>
 			{:else}
-				<!-- Scrollable track (TS-05 playhead click) -->
+				<!-- ST-022: Scrollable track with scroll sync (TS-05 playhead click) -->
 				<div
+					bind:this={temporalScrollContainer}
 					class="relative overflow-x-auto"
 					style="height: 72px;"
 					onclick={handleTimelineClick}
+					onscroll={handleTemporalScroll}
 					aria-label="Timeline track"
 					role="presentation"
 				>

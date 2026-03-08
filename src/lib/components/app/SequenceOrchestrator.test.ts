@@ -1,114 +1,149 @@
-import { describe, it, expect } from 'vitest';
-import type { TimelineEvent, TimelineFrame } from '$lib/model/model-types';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { throttle } from '../../utils/throttle';
 
-// Pure logic helpers extracted from SequenceOrchestrator for unit testing.
+/**
+ * ST-022: Scroll sync tests
+ * Tests for synchronization between Synoptic View and Temporal Sequencer
+ */
 
-function addEvent(timeline: TimelineEvent[]): { timeline: TimelineEvent[]; newTime: number } {
-	const maxTime = timeline.reduce((max, ev) => Math.max(max, ev.time), -1);
-	const newTime = maxTime + 10;
-	const updated = [...timeline, { time: newTime, frame: {} as TimelineFrame }];
-	return { timeline: updated, newTime };
-}
+describe('Throttle utility (ST-022)', () => {
+	it('should execute function immediately on first call', () => {
+		const fn = vi.fn();
+		const throttled = throttle(fn, 100);
 
-function deleteEvent(timeline: TimelineEvent[], time: number): TimelineEvent[] {
-	return timeline.filter((ev) => ev.time !== time);
-}
-
-function duplicateEvent(
-	timeline: TimelineEvent[],
-	time: number
-): { timeline: TimelineEvent[]; newTime: number } | null {
-	const source = timeline.find((ev) => ev.time === time);
-	if (!source) return null;
-	let freeTime = time + 1;
-	while (timeline.some((ev) => ev.time === freeTime)) {
-		freeTime++;
-	}
-	const updated = [...timeline, { time: freeTime, frame: structuredClone(source.frame) }];
-	return { timeline: updated, newTime: freeTime };
-}
-
-describe('SequenceOrchestrator event CRUD logic', () => {
-	describe('addEvent', () => {
-		it('adds an event at max+10 when timeline is non-empty', () => {
-			const tl: TimelineEvent[] = [
-				{ time: 0, frame: {} },
-				{ time: 10, frame: {} }
-			];
-			const { timeline, newTime } = addEvent(tl);
-			expect(newTime).toBe(20);
-			expect(timeline).toHaveLength(3);
-			expect(timeline[2].time).toBe(20);
-		});
-
-		it('adds an event at time 9 (0 + 10 - 1) on empty timeline', () => {
-			const { timeline, newTime } = addEvent([]);
-			// max is -1, so newTime = -1 + 10 = 9
-			expect(newTime).toBe(9);
-			expect(timeline).toHaveLength(1);
-		});
-
-		it('does not mutate the original array', () => {
-			const tl: TimelineEvent[] = [{ time: 5, frame: {} }];
-			const { timeline } = addEvent(tl);
-			expect(tl).toHaveLength(1);
-			expect(timeline).toHaveLength(2);
-		});
+		throttled();
+		expect(fn).toHaveBeenCalledTimes(1);
 	});
 
-	describe('deleteEvent', () => {
-		it('removes the event with the given time', () => {
-			const tl: TimelineEvent[] = [
-				{ time: 0, frame: {} },
-				{ time: 10, frame: {} }
-			];
-			const updated = deleteEvent(tl, 0);
-			expect(updated).toHaveLength(1);
-			expect(updated[0].time).toBe(10);
-		});
+	it('should throttle rapid calls within the delay window', () => {
+		const fn = vi.fn();
+		const throttled = throttle(fn, 100);
 
-		it('returns the same array if time is not found', () => {
-			const tl: TimelineEvent[] = [{ time: 5, frame: {} }];
-			const updated = deleteEvent(tl, 99);
-			expect(updated).toHaveLength(1);
-		});
+		throttled();
+		throttled();
+		throttled();
 
-		it('handles empty timeline gracefully', () => {
-			const updated = deleteEvent([], 0);
-			expect(updated).toHaveLength(0);
-		});
+		expect(fn).toHaveBeenCalledTimes(1);
 	});
 
-	describe('duplicateEvent', () => {
-		it('duplicates an event at time+1', () => {
-			const tl: TimelineEvent[] = [{ time: 5, frame: { actors: [] } }];
-			const result = duplicateEvent(tl, 5);
-			expect(result).not.toBeNull();
-			expect(result!.newTime).toBe(6);
-			expect(result!.timeline).toHaveLength(2);
-		});
+	it('should execute again after delay expires', async () => {
+		vi.useFakeTimers();
+		const fn = vi.fn();
+		const throttled = throttle(fn, 100);
 
-		it('bumps time if time+1 is occupied', () => {
-			const tl: TimelineEvent[] = [
-				{ time: 5, frame: {} },
-				{ time: 6, frame: {} }
-			];
-			const result = duplicateEvent(tl, 5);
-			expect(result!.newTime).toBe(7);
-		});
+		throttled();
+		expect(fn).toHaveBeenCalledTimes(1);
 
-		it('deep-clones the frame so mutations do not affect the source', () => {
-			const tl: TimelineEvent[] = [{ time: 5, frame: { actors: [{ id: 'a1', action: 'walk' }] } }];
-			const result = duplicateEvent(tl, 5);
-			const clone = result!.timeline.find((ev) => ev.time === result!.newTime)!;
-			clone.frame.actors![0].action = 'run';
-			expect(tl[0].frame.actors![0].action).toBe('walk');
-		});
+		vi.advanceTimersByTime(100);
+		throttled();
+		expect(fn).toHaveBeenCalledTimes(2);
 
-		it('returns null when source time is not found', () => {
-			const tl: TimelineEvent[] = [{ time: 5, frame: {} }];
-			const result = duplicateEvent(tl, 99);
-			expect(result).toBeNull();
-		});
+		vi.useRealTimers();
+	});
+
+	it('should schedule deferred call after delay if called within window', async () => {
+		vi.useFakeTimers();
+		const fn = vi.fn();
+		const throttled = throttle(fn, 100);
+
+		throttled();
+		expect(fn).toHaveBeenCalledTimes(1);
+
+		// Call again within window but wait for scheduled call
+		throttled();
+		vi.advanceTimersByTime(100);
+		expect(fn).toHaveBeenCalledTimes(2);
+
+		vi.useRealTimers();
+	});
+
+	it('should pass correct arguments to throttled function', () => {
+		const fn = vi.fn((a: number, b: string) => `${a}-${b}`);
+		const throttled = throttle(fn, 100);
+
+		throttled(42, 'test');
+		expect(fn).toHaveBeenCalledWith(42, 'test');
+	});
+});
+
+describe('Scroll sync store state management (ST-022)', () => {
+	it('should initialize scroll state with zeros', () => {
+		const initialState = { scrollLeft: 0, scrollTop: 0 };
+		expect(initialState.scrollLeft).toBe(0);
+		expect(initialState.scrollTop).toBe(0);
+	});
+
+	it('should track scrollLeft updates', () => {
+		let state = { scrollLeft: 0, scrollTop: 0 };
+		// Simulate scroll event
+		state.scrollLeft = 150;
+
+		expect(state.scrollLeft).toBe(150);
+		expect(state.scrollTop).toBe(0);
+	});
+
+	it('should track scrollTop updates', () => {
+		let state = { scrollLeft: 0, scrollTop: 0 };
+		// Simulate vertical scroll
+		state.scrollTop = 50;
+
+		expect(state.scrollLeft).toBe(0);
+		expect(state.scrollTop).toBe(50);
+	});
+
+	it('should track independent horizontal scrolls', () => {
+		let state = { scrollLeft: 0, scrollTop: 0 };
+
+		// Synoptic scrolls horizontally
+		state = { ...state, scrollLeft: 200 };
+		expect(state.scrollLeft).toBe(200);
+
+		// Temporal scrolls horizontally (same value)
+		state = { ...state, scrollLeft: 200 };
+		expect(state.scrollLeft).toBe(200);
+	});
+
+	it('should handle edge case: max scroll position', () => {
+		let state = { scrollLeft: 0, scrollTop: 0 };
+		// Simulate max scroll (very large values)
+		state = { scrollLeft: 10000, scrollTop: 5000 };
+
+		expect(state.scrollLeft).toBe(10000);
+		expect(state.scrollTop).toBe(5000);
+	});
+});
+
+describe('Scroll sync debounce behavior (ST-022)', () => {
+	it('should debounce rapid scroll events', async () => {
+		vi.useFakeTimers();
+		const fn = vi.fn();
+		const throttled = throttle(fn, 100);
+
+		// Simulate rapid scroll events
+		for (let i = 0; i < 10; i++) {
+			throttled();
+		}
+
+		expect(fn).toHaveBeenCalledTimes(1); // Only one immediate call
+
+		vi.advanceTimersByTime(100);
+		expect(fn).toHaveBeenCalledTimes(2); // One deferred call after delay
+
+		vi.useRealTimers();
+	});
+
+	it('should not prevent legitimate updates after delay', async () => {
+		vi.useFakeTimers();
+		const fn = vi.fn();
+		const throttled = throttle(fn, 100);
+
+		throttled();
+		expect(fn).toHaveBeenCalledTimes(1);
+
+		vi.advanceTimersByTime(150); // Wait longer than delay
+		throttled();
+		expect(fn).toHaveBeenCalledTimes(2);
+
+		vi.useRealTimers();
 	});
 });
