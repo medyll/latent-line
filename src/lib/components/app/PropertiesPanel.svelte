@@ -203,14 +203,48 @@
 	function getCharacterName(actorId: string): string {
 		return assetStore?.characters.find((c) => c.id === actorId)?.name ?? actorId;
 	}
+
+// Forward clicks through non-interactive areas of the properties panel to underlying timeline elements
+function forwardClick(e: MouseEvent) {
+	if (typeof document === 'undefined') return;
+	const target = e.target as HTMLElement | null;
+	if (!target) return;
+	// If the click landed on an interactive control, let it handle the event
+	if (target.closest('input, textarea, select, button, [role="button"], [contenteditable]')) {
+		return;
+	}
+	const panel = e.currentTarget as HTMLElement | null;
+	if (!panel) return;
+	const prev = panel.style.pointerEvents;
+	// Temporarily hide the panel from hit-testing to find the underlying element
+	panel.style.pointerEvents = 'none';
+	const under = document.elementFromPoint((e as MouseEvent).clientX, (e as MouseEvent).clientY) as HTMLElement | null;
+	panel.style.pointerEvents = prev;
+	if (!under) return;
+	const timelineEl = under.closest('[aria-label^="Timeline event"]') as HTMLElement | null;
+	if (timelineEl) {
+		timelineEl.click();
+		e.preventDefault();
+		e.stopPropagation();
+	}
+}
 </script>
+
+<style>
+.properties-panel { pointer-events: auto; }
+.properties-panel input,
+.properties-panel textarea,
+.properties-panel select,
+.properties-panel button,
+.properties-panel [role="button"] { pointer-events: auto; }
+</style>
 
 <!--
   PropertiesPanel Component
   Shows and edits the selected timeline event's frame properties.
   Asset selection shows read-only display.
 -->
-<div class="flex flex-col gap-3 p-2" aria-label="Properties Panel">
+<div class="flex flex-col gap-3 p-2 properties-panel" aria-label="Properties Panel" onclick={forwardClick}>
 	<h2 class="text-sm font-bold tracking-wide text-gray-500 uppercase">Properties</h2>
 
 	{#if selectedCharacter}
@@ -298,7 +332,7 @@
 	{:else if selectedEvent}
 		<!-- Timeline event selected — full editing -->
 		<div>
-			<div class="mb-3 text-sm font-semibold text-blue-600">Frame {selectedEvent.time}</div>
+			<div class="mb-3 text-sm font-semibold text-blue-600">Event {selectedEventIndex + 1} — Frame {selectedEvent.time}</div>
 
 			<!-- Camera -->
 			<section class="mb-3">

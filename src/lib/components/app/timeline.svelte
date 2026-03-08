@@ -11,11 +11,13 @@
 	import TimeLineEvent from './TimelineEvent.svelte';
 	import exampleModel from '$lib/model/model-story-example';
 	import type { Assets } from '$lib/model/model-types';
-	import { ASSET_STORE_KEY } from '$lib/context/keys';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
 
 	const assetStore = $state<Assets>(structuredClone(exampleModel.assets));
+	const model = $state(structuredClone(exampleModel));
 	import { toTimelineArray } from '$lib/model/timeline-utils';
 	setContext(ASSET_STORE_KEY, assetStore);
+	setContext(MODEL_STORE_KEY, model);
 
 	let zoom = $state(100);
 	let selectedEventId = $state<string | null>(null);
@@ -58,7 +60,8 @@
 	const pxPerFrame = $derived(BASE_PX_PER_FRAME * (zoom / 100));
 
 	function selectEvent(eventId: string) {
-		selectedEventId = selectedEventId === eventId ? null : eventId;
+		const id = String(eventId);
+		selectedEventId = selectedEventId === id ? null : id;
 	}
 </script>
 
@@ -77,6 +80,10 @@
 				style="background:var(--color-popover); color:var(--color-popover-foreground);"
 			>
 				<AssetManager bind:selectedAssetId />
+			</div>
+			<!-- Properties panel moved into sidebar to avoid overlapping timeline clickable area -->
+			<div class="p-2 mt-4">
+				<PropertiesPanel selectedEventId={selectedEventId ? String(timelineEvents.find((it) => it.id === selectedEventId)?.start) : null} bind:timelineEvents {selectedAssetId} />
 			</div>
 		</div>
 	</aside>
@@ -123,7 +130,7 @@
 												onkeydown={(e) => e.key === 'Enter' && selectEvent(item.id)}
 												role="button"
 												tabindex="0"
-												class={selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}
+												class={`relative z-50 ${selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}`}
 											>
 												<TimeLineEvent {item} isSelected={selectedEventId === item.id} />
 											</div>
@@ -150,7 +157,7 @@
 									onkeydown={(e) => e.key === 'Enter' && selectEvent(item.id)}
 									role="button"
 									tabindex="0"
-									class={`absolute top-2 h-10 cursor-pointer truncate rounded border px-1 text-xs leading-10 transition-colors ${selectedEventId === item.id ? 'border-blue-500 bg-blue-100 font-semibold' : 'border-gray-300 bg-white hover:bg-gray-50'}`}
+									class={`absolute z-50 top-2 h-10 cursor-pointer truncate rounded border px-1 text-xs leading-10 transition-colors ${selectedEventId === item.id ? 'border-blue-500 bg-blue-100 font-semibold' : 'border-gray-300 bg-white hover:bg-gray-50'}`}
 									style="left: {item.start * pxPerFrame}px; width: {(item.end - item.start) *
 										pxPerFrame}px;"
 									title={item.label}
@@ -163,10 +170,7 @@
 				</div>
 			</Resizable.Pane>
 		</Resizable.PaneGroup>
-		<!-- PropertiesPanel intégré sous la timeline -->
-		<div class="mt-4">
-			<PropertiesPanel {selectedEventId} bind:timelineEvents {selectedAssetId} />
-		</div>
+
 		<!-- SystemFooter intégré en bas -->
 		<!-- <div class="mt-2">
 			<SystemFooter />
