@@ -118,6 +118,14 @@ architecture:
               - ST-013.md
               - ST-014.md
               - ST-015.md
+              - S3-01.md
+              - S3-02.md
+              - S3-03.md
+              - S3-04.md
+              - S3-05.md
+              - S3-06.md
+              - S3-07.md
+              - S3-08.md
           - path: tests/
             type: dir
             role: tester

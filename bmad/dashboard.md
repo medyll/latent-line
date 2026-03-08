@@ -33,12 +33,25 @@
 - ST-013.md
 - ST-014.md
 - ST-015.md
+- S3-01.md
+- S3-02.md
+- S3-03.md
+- S3-04.md
+- S3-05.md
+- S3-06.md
+- S3-07.md
+- S3-08.md
 
 ## Next recommendation
 
-- Remaining audit/code-quality story: expand unit tests (AUDIT-014)
+- Short-term remaining: none — all Phase 2 short-term items implemented (see artifacts for details)
+- ❗ Unit tests failed to start due to a Vitest custom reporter error during `pnpm run test:unit` — fix test runner configuration (vitest.config.ts or package.json reporter entry).
+- Suggested action: create dev story S3-01a to fix Vitest reporter/startup (or run `pnpm run test:unit` locally to reproduce and patch the reporter config).
 - ✅ AUDIT-003: Fixed UI barrel exports to silence TypeScript errors (see bmad/status.yaml)
+- ✅ AUDIT-001: Removed React dependencies and verified imports (see bmad/artifacts/stories/AUDIT-001.md)
 - ✅ AUDIT-007: Path traversal validation implemented and tests added (see bmad/artifacts/stories/AUDIT-007.md)
+- ✅ AUDIT-004: Timeline shape standardized; components updated (see bmad/artifacts/stories/AUDIT-004.md)
+- ✅ AUDIT-005: Asset immutability guards added (see bmad/artifacts/stories/AUDIT-005.md)
 
 ## Completed stories
 

@@ -11,7 +11,7 @@ const _lightingTypeEnum = z.enum(['dusk', 'daylight', 'studio', 'tungsten', 'amb
 
 const positionSchema = z.object({ x: z.number(), y: z.number(), scale: z.number().optional() });
 const speechSchema = z.object({
-	text: z.string(),
+	text: z.string().transform(sanitizeText),
 	mood: moodEnum.optional(),
 	style: z.string().optional(),
 	lip_sync: z.boolean().optional(),
@@ -77,6 +77,17 @@ function isUrlOrFile(s: string) {
 	}
 }
 
+// Simple sanitizer for user-provided text fields to reduce XSS risk.
+// This is intentionally conservative: strip HTML tags and null bytes.
+function sanitizeText(input: string) {
+	if (typeof input !== 'string') return input;
+	// remove null bytes
+	let s = input.replace(/\0/g, '');
+	// strip HTML tags
+	s = s.replace(/<[^>]*>/g, '');
+	return s;
+}
+
 const projectSchema = z.object({
 	name: z.string(),
 	fps: z.number().int().min(1).max(240),
@@ -90,7 +101,7 @@ const referenceSchema = z.object({
 	context: z.string(),
 	weight: z.number()
 });
-const outfitSchema = z.object({ prompt: z.string(), lora: z.string().optional() });
+const outfitSchema = z.object({ prompt: z.string().transform(sanitizeText), lora: z.string().optional() });
 const characterSchema = z.object({
 	id: z.string(),
 	name: z.string(),
@@ -99,7 +110,7 @@ const characterSchema = z.object({
 	outfits: z.record(z.string(), outfitSchema).optional()
 });
 const environmentSchema = z.object({
-	prompt: z.string(),
+	prompt: z.string().transform(sanitizeText),
 	ref: z
 		.string()
 		.optional()
