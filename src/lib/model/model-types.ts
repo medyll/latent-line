@@ -103,6 +103,7 @@ export interface TimelineFrame {
 	controlnet?: ControlNet;
 	audio_tracks?: AudioTrack[];
 	audio_reactive?: AudioReactive;
+	character?: string; // ST-023: Primary character for this event (references Character.id)
 }
 
 export type Mood = 'joyful' | 'melancholic' | 'anxious' | 'serene' | 'curious';

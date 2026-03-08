@@ -20,6 +20,7 @@
 		Mood
 	} from '$lib/model/model-types';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
+	import CharacterField from './CharacterField.svelte';
 
 	const LIGHTING_TYPES: LightingType[] = ['dusk', 'daylight', 'studio', 'tungsten', 'ambient'];
 	const MOODS: Mood[] = ['joyful', 'melancholic', 'anxious', 'serene', 'curious'];
@@ -200,6 +201,11 @@
 		model.timeline[selectedEventIndex].frame.actors![actorIdx].speech!.pitch_shift = pitch_shift;
 	}
 
+	function updateEventCharacter(characterId: string | null) {
+		if (selectedEventIndex < 0) return;
+		model.timeline[selectedEventIndex].frame.character = characterId ?? undefined;
+	}
+
 	function getCharacterName(actorId: string): string {
 		return assetStore?.characters.find((c) => c.id === actorId)?.name ?? actorId;
 	}
@@ -333,6 +339,15 @@ function forwardClick(e: MouseEvent) {
 		<!-- Timeline event selected — full editing -->
 		<div>
 			<div class="mb-3 text-sm font-semibold text-blue-600">Event {selectedEventIndex + 1} — Frame {selectedEvent.time}</div>
+
+			<!-- ST-023: Character field -->
+			<section class="mb-3">
+				<CharacterField
+					character={selectedEvent.frame.character}
+					characters={assetStore?.characters ?? []}
+					onchange={(e) => updateEventCharacter(e.detail)}
+				/>
+			</section>
 
 			<!-- Camera -->
 			<section class="mb-3">
