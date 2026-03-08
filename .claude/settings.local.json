@@ -1,11 +1,13 @@
 {
-	"permissions": {
-		"allow": [
-			"Bash(pnpm run:*)",
-			"Bash(pnpm vitest:*)",
-			"Bash(sort:*)",
-			"Bash(xargs wc:*)",
-			"Bash(gzip:*)"
-		]
-	}
+  "permissions": {
+    "allow": [
+      "Bash(pnpm run:*)",
+      "Bash(pnpm vitest:*)",
+      "Bash(sort:*)",
+      "Bash(xargs wc:*)",
+      "Bash(gzip:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run:*)"
+    ]
+  }
 }
