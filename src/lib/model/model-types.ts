@@ -120,11 +120,19 @@ export interface Assets {
 	audio: AudioAsset[];
 }
 
+export interface AudioLaneConfig {
+	id: string;
+	name: string;
+	muted: boolean;
+	soloed: boolean;
+}
+
 export interface Config {
 	checkpoint?: string;
 	sampler?: string;
 	seed?: number;
 	tts_engine?: string;
+	audioLanes?: AudioLaneConfig[]; // ST-024: Audio lane mute/solo state
 }
 
 export interface Model {

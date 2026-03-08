@@ -3,12 +3,13 @@
 	 * SequenceOrchestrator.svelte
 	 *
 	 * @component SequenceOrchestrator
-	 * @description Synoptic grid (top) + Temporal Sequencer (bottom).
+	 * @description Synoptic grid (top) + Temporal Sequencer (middle) + Audio Timeline (bottom).
 	 *              - ST-016: reads timeline from MODEL_STORE_KEY context.
 	 *              - ST-017: Add / Delete (confirm) / Duplicate events.
 	 *              - ST-021: Temporal Sequencer with absolute positioning,
 	 *                drag-to-change-time (TS-03), zoom slider (TS-04), playhead (TS-05).
 	 *              - ST-022: Scroll sync between Synoptic View ↔ Temporal Sequencer.
+	 *              - ST-024: Audio Timeline with multi-track lanes and mute/solo controls.
 	 * @example <SequenceOrchestrator bind:selectedTime />
 	 */
 	import { getContext } from 'svelte';
@@ -20,6 +21,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Plus, Trash2, Copy } from '@lucide/svelte';
 	import { throttle } from '$lib/utils/throttle';
+	import AudioTimeline from './AudioTimeline.svelte';
 
 	let { selectedTime = $bindable<number | null>(null) }: { selectedTime?: number | null } =
 		$props();
@@ -326,6 +328,16 @@
 					</div>
 				</div>
 			{/if}
+		</CardContent>
+	</Card>
+
+	<!-- ST-024: Audio Timeline -->
+	<Card>
+		<CardHeader>
+			<CardTitle>Audio Timeline</CardTitle>
+		</CardHeader>
+		<CardContent>
+			<AudioTimeline audioAssets={model.assets.audio} />
 		</CardContent>
 	</Card>
 </div>

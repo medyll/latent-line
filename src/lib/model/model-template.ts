@@ -144,7 +144,13 @@ export const modelSchema = z.object({
 		checkpoint: z.string().optional(),
 		sampler: z.string().optional(),
 		seed: z.number().optional(),
-		tts_engine: z.string().optional()
+		tts_engine: z.string().optional(),
+		audioLanes: z.array(z.object({
+			id: z.string(),
+			name: z.string(),
+			muted: z.boolean(),
+			soloed: z.boolean()
+		})).optional()
 	})
 });
 
@@ -216,7 +222,8 @@ export function buildDefaultModel(): Model {
 			checkpoint: 'flux_dev.safetensors',
 			sampler: 'euler',
 			seed: 42,
-			tts_engine: 'elevenlabs_v2'
+			tts_engine: 'elevenlabs_v2',
+			audioLanes: [] // ST-024: Audio lanes (initially empty)
 		}
 	};
 }
