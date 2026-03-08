@@ -4,39 +4,52 @@
 	import { Card } from '$lib/components/ui/card';
 	import AssetManager from '$lib/components/app/AssetManager.svelte';
 	import PropertiesPanel from '$lib/components/app/PropertiesPanel.svelte';
-	import type { Assets } from '$lib/model/model-types';
+	import SequenceOrchestrator from '$lib/components/app/SequenceOrchestrator.svelte';
+	import SystemFooter from '$lib/components/app/SystemFooter.svelte';
+	import type { Model } from '$lib/model/model-types';
 	import exampleModel from '$lib/model/model-example';
-	import { ASSET_STORE_KEY } from '$lib/context/keys';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
 
-	const assetStore = $state<Assets>(structuredClone(exampleModel.assets));
-	setContext(ASSET_STORE_KEY, assetStore);
+	// Single source of truth for the full model
+	const model = $state<Model>(structuredClone(exampleModel));
 
+	// Expose assets and full model via context
+	setContext(ASSET_STORE_KEY, model.assets);
+	setContext(MODEL_STORE_KEY, model);
+
+	let selectedTime = $state<number | null>(null);
 	let selectedAssetId = $state<string | null>(null);
+
+	// Derive selectedEventId (string form) for PropertiesPanel
+	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
 </script>
 
-<Resizable.PaneGroup direction="horizontal" class="min-h-[100dvh] bg-white">
-	<!-- Left: Asset Manager -->
-	<Resizable.Pane defaultSize={20} minSize={15} maxSize={30} class="h-full">
-		<Card class="h-full overflow-auto border-r px-2 py-2">
-			<AssetManager bind:selectedAssetId />
-		</Card>
-	</Resizable.Pane>
+<div class="flex h-[100dvh] flex-col bg-white">
+	<Resizable.PaneGroup direction="horizontal" class="min-h-0 flex-1">
+		<!-- Left: Asset Manager -->
+		<Resizable.Pane defaultSize={20} minSize={15} maxSize={30} class="h-full">
+			<Card class="h-full overflow-auto border-r px-2 py-2">
+				<AssetManager bind:selectedAssetId />
+			</Card>
+		</Resizable.Pane>
 
-	<Resizable.Handle />
+		<Resizable.Handle />
 
-	<!-- Central: Sequence / Timeline (placeholder) -->
-	<Resizable.Pane defaultSize={60} minSize={30} class="h-full flex-1">
-		<Card class="h-full px-2 py-2">
-			<div class="text-sm text-gray-400">Sequence Orchestrator — coming in ST-011+</div>
-		</Card>
-	</Resizable.Pane>
+		<!-- Central: Sequence Orchestrator -->
+		<Resizable.Pane defaultSize={60} minSize={30} class="h-full">
+			<Card class="h-full overflow-auto px-2 py-2">
+				<SequenceOrchestrator bind:selectedTime />
+			</Card>
+		</Resizable.Pane>
 
-	<Resizable.Handle />
+		<Resizable.Handle />
 
-	<!-- Right: Properties Panel -->
-	<Resizable.Pane defaultSize={20} minSize={15} maxSize={35} class="h-full">
-		<Card class="h-full overflow-auto border-l px-2 py-2">
-			<PropertiesPanel {selectedAssetId} timelineEvents={[]} />
-		</Card>
-	</Resizable.Pane>
-</Resizable.PaneGroup>
+		<!-- Right: Properties Panel -->
+		<Resizable.Pane defaultSize={20} minSize={15} maxSize={35} class="h-full">
+			<Card class="h-full overflow-auto border-l px-2 py-2">
+				<PropertiesPanel {selectedEventId} {selectedAssetId} />
+			</Card>
+		</Resizable.Pane>
+	</Resizable.PaneGroup>
+	<SystemFooter />
+</div>

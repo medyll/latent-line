@@ -1,66 +1,75 @@
-# 👑 BMAD Dashboard - latent-line
+# BMAD Dashboard - latent-line
 
 - Phase: development
-- Sprint: 3
-- Generated: 2026-03-07T00:23:18.9394136+01:00
+- Sprint: 5 (complete)
+- Generated: 2026-03-08T20:00:00Z
 
-## Stories
+## Sprint 5 — Completed ✅
 
-- AUDIT-001.md
-- AUDIT-002.md
-- AUDIT-003.md
-- AUDIT-004.md
-- AUDIT-005.md
-- AUDIT-007.md
-- AUDIT-008.md
-- AUDIT-010.md
-- AUDIT-011.md
-- AUDIT-014.md
-- AUDIT-015.md
-- AUDIT-016.md
-- ST-001.md
-- ST-002.md
-- ST-003.md
-- ST-004.md
-- ST-005.md
-- ST-006.md
-- ST-007.md
-- ST-008.md
-- ST-009.md
-- ST-010.md
-- ST-011.md
-- ST-012.md
-- ST-013.md
-- ST-014.md
-- ST-015.md
-- S3-01.md
-- S3-02.md
-- S3-03.md
-- S3-04.md
-- S3-05.md
-- S3-06.md
-- S3-07.md
-- S3-08.md
+| Story | Title | Status | Points |
+|-------|-------|--------|--------|
+| ST-020 | AssetManager inline editing + orphan detection | ✅ done | 5 |
+| ST-021 | Temporal Sequencer: drag, zoom, playhead | ✅ done | 5 |
 
-## Next recommendation
+**Sprint 5 velocity: 10 points**
 
-- Short-term remaining: none — all Phase 2 short-term items implemented (see artifacts for details)
-- ❗ Unit tests failed to start due to a Vitest custom reporter error during `pnpm run test:unit` — fix test runner configuration (vitest.config.ts or package.json reporter entry).
-- Suggested action: create dev story S3-01a to fix Vitest reporter/startup (or run `pnpm run test:unit` locally to reproduce and patch the reporter config).
-- ✅ AUDIT-003: Fixed UI barrel exports to silence TypeScript errors (see bmad/status.yaml)
-- ✅ AUDIT-001: Removed React dependencies and verified imports (see bmad/artifacts/stories/AUDIT-001.md)
-- ✅ AUDIT-007: Path traversal validation implemented and tests added (see bmad/artifacts/stories/AUDIT-007.md)
-- ✅ AUDIT-004: Timeline shape standardized; components updated (see bmad/artifacts/stories/AUDIT-004.md)
-- ✅ AUDIT-005: Asset immutability guards added (see bmad/artifacts/stories/AUDIT-005.md)
+## Sprint 4 — Completed ✅
 
-## Completed stories
+| Story | Title | Status | Points |
+|-------|-------|--------|--------|
+| ST-016 | Model context + SequenceOrchestrator integration | ✅ done | 3 |
+| ST-017 | Event CRUD (Add / Delete / Duplicate) | ✅ done | 3 |
+| ST-018 | SystemFooter: seed, import, Zod export | ✅ done | 3 |
+| ST-019 | PropertiesPanel full event editing | ✅ done | 5 |
 
-- ST-011
-- ST-012
-- ST-013
-- ST-014
-- ST-015
+**Sprint 4 velocity: 14 points**
 
-## Last test run
+## Sprint 3 — Completed ✅
 
-- Unit tests: 56 passing (2026-03-07T18:25:20+01:00)
+All S3-01 → S3-08 audit fixes complete. All AUDIT stories resolved.
+
+## Test Status
+
+- Unit tests: **116 passing** (2026-03-08T20:00:00Z)
+- 12 test files, 116 tests
+- E2E: 4 passing (last run Sprint 3)
+
+## Architecture State
+
+```
+app/+page.svelte
+  ├── $state<Model>             ← single source of truth
+  ├── setContext(ASSET_STORE_KEY, model.assets)
+  ├── setContext(MODEL_STORE_KEY, model)
+  ├── AssetManager              ← inline editing, orphan badges (ASSET_STORE_KEY + MODEL_STORE_KEY)
+  ├── SequenceOrchestrator      ← synoptic view + temporal sequencer (MODEL_STORE_KEY)
+  │     ├── Synoptic grid (event cards with CRUD)
+  │     └── Temporal sequencer (absolute positioning, drag TS-03, zoom TS-04, playhead TS-05)
+  ├── PropertiesPanel           ← reads both contexts, mutates model.timeline directly
+  └── SystemFooter              ← reads/mutates model.config; export/import model
+```
+
+## PRD Coverage
+
+| Section | Requirements | Implemented |
+|---------|-------------|-------------|
+| AM (Asset Manager) | AM-01–09 | AM-01/02/03/04/05/06/07/08/09 ✅ |
+| SO (Sequence Orchestrator) | SO-01–07 | SO-01/02/03/04/05/06 ✅ SO-07 ⏳ |
+| TS (Temporal Sequencer) | TS-01–06 | TS-01/02/03/04/05 ✅ TS-06 ⏳ |
+| PP (Properties Panel) | PP-01–10 | PP-01/02/06/07/08/09/10 ✅ PP-03/04/05 ⏳ |
+| SF (System Footer) | SF-01–06 | SF-01/02/03/04/05/06 ✅ |
+| MI (Model Inspector) | MI-01–03 | MI-01/02/03 ✅ |
+
+## Next Recommendations
+
+- **Sprint 6**: Scroll sync between Synoptic View and Temporal Sequencer (SO-07/TS-06)
+- **Sprint 6**: PropertiesPanel character asset inline editing (PP-03/04/05)
+- **Sprint 6**: Audio timeline lanes / multi-track view
+
+## All Stories
+
+Sprint 1–2: ST-001 → ST-010 ✅
+Styling: ST-011 → ST-015 ✅
+Sprint 3 (audit): S3-01 → S3-08, AUDIT-001/002/003/004/005/007/008/010/011/014/015/016 ✅
+Sprint 4: ST-016 → ST-019 ✅
+Sprint 5: ST-020 → ST-021 ✅

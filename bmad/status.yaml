@@ -1,14 +1,17 @@
 project: latent-line
 phase: development
-sprint: 3
-last_updated: '2026-03-07T18:39:53Z'
+sprint: 5
+last_updated: '2026-03-08T20:00:00Z'
 sprint_2_complete: '2026-03-05'
+sprint_3_complete: '2026-03-08'
+sprint_4_complete: '2026-03-08'
+sprint_5_complete: '2026-03-08'
 
 summary: >
   SvelteKit (Svelte 5) + Vite SPA for orchestrating AI-driven story/scene production.
-  Sprint 1 and Sprint 2 complete (ST-001—ST-010). Shared assetStore context, full asset
-  display in PropertiesPanel, inline camera/lighting editing, 3 E2E tests, bundle ~142 KB gz.
-  56 unit tests + 4 E2E tests all green.
+  Sprint 5 complete (ST-020—ST-021). AssetManager with inline editing + orphan detection
+  badges (AM-02/03/08/09). SequenceOrchestrator temporal sequencer with absolute positioning,
+  drag-to-change-time (TS-03), zoom slider (TS-04), playhead (TS-05). 116 unit tests all green.
 
 stack:
   framework: SvelteKit (Svelte 5)
@@ -152,9 +155,9 @@ audit:
 
   tests:
     unit:
-      last_run: '2026-03-08T13:23:09+01:00'
+      last_run: '2026-03-08T20:00:00Z'
       status: 'passing'
-      count: 58
+      count: 116
 
 risks:
   - type: critical_resolved
@@ -184,3 +187,9 @@ completed_stories:
   - ST-013
   - ST-014
   - ST-015
+  - ST-016
+  - ST-017
+  - ST-018
+  - ST-019
+  - ST-020
+  - ST-021
