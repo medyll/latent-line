@@ -15,7 +15,11 @@
     "test:unit": "vitest",
     "test": "npm run test:unit -- --run && npm run test:e2e",
     "test:e2e": "playwright test",
-    "bmad:update-dashboard": "node .github/skills/bmad-master/scripts/bmad.mjs dashboard"
+    "test:visual": "node scripts/visual-regression.mjs",
+    "test:unit:coverage": "vitest run --coverage",
+    "test:visual:update": "node scripts/visual-regression.mjs update",
+    "bmad:update-dashboard": "node .github/skills/bmad-master/scripts/bmad.mjs dashboard",
+    "capture:screenshots": "node scripts/capture-screenshots.mjs"
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.2",
@@ -33,6 +37,7 @@
     "@tanstack/table-core": "^8.21.3",
     "@types/node": "^25",
     "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
     "autoprefixer": "^10.4.24",
     "bits-ui": "^2.16.1",
     "embla-carousel-svelte": "^8.6.0",

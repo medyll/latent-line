@@ -1,0 +1,16 @@
+[
+  { "name": "SequenceOrchestrator", "url": "/timeline", "selector": null },
+  { "name": "SynopticView", "url": "/timeline", "selector": null },
+  { "name": "TemporalSequencer", "url": "/timeline", "selector": null },
+  { "name": "AudioTimeline", "url": "/timeline", "selector": null },
+  { "name": "PropertiesPanel", "url": "/timeline", "selector": null },
+  { "name": "CharacterField", "url": "/timeline", "selector": null },
+  { "name": "AssetManager", "url": "/timeline", "selector": null },
+  { "name": "SystemFooter", "url": "/timeline", "selector": null },
+  { "name": "TimelineSelection", "url": "/timeline", "selector": null },
+  { "name": "CardEmptyState1", "url": "/timeline", "selector": null },
+  { "name": "CardEmptyState2", "url": "/timeline", "selector": null },
+  { "name": "CardEmptyState3", "url": "/timeline", "selector": null },
+  { "name": "TimelineHeader", "url": "/timeline", "selector": null },
+  { "name": "TimelineFooter", "url": "/timeline", "selector": null }
+]
