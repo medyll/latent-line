@@ -26,7 +26,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run visual snapshot tests
-        run: npx playwright test e2e/visual-capture.spec.ts
+        run: pnpm run test:visual
         continue-on-error: true
 
       - name: Upload Playwright report

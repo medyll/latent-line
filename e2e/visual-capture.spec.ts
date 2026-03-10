@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+// Screenshot Capture
+
 test.describe('Visual Regression - Snapshot Tests', () => {
 	test('home page matches snapshot', async ({ page }) => {
 		await page.goto('/', { waitUntil: 'networkidle' });
