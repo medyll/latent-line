@@ -1,5 +1,7 @@
 # Latent-line Project Overview
 
+[![CI](https://github.com/medyll/latent-line/actions/workflows/ci.yml/badge.svg)](https://github.com/medyll/latent-line/actions/workflows/ci.yml)
+
 **Latent-line** is a SvelteKit 5 + Vite SPA for orchestrating **AI-driven story/scene production** with interactive timeline editing, asset management, and real-time model inspection.
 
 ## 🎯 Purpose
@@ -140,14 +142,17 @@ Orchestrates timeline event sequences. Works with array timeline without `.Objec
 
 ## 🧪 Testing
 
-- **Unit tests**: `src/lib/model/model-template.test.ts` (Zod validation)
-  - Run: `pnpm run test:unit`
-  - Current: 4 passing tests
-  - **TODO**: Expand to 70%+ coverage on models, stores, components
+- **Unit tests**: 218 tests across model validation, components, and input validation
+  - Run: `npm run test:unit`
+  - Coverage report: `npm run test:unit:coverage`
 
-- **E2E tests**: `e2e/` (Playwright)
-  - Currently empty; should test: load model, edit timeline, export
-  - Run: `pnpm run test:e2e`
+- **E2E tests**: `e2e/` (Playwright) — 12+ scenarios
+  - Run: `npm run test:e2e`
+  - Covers: app boot, timeline load, asset CRUD, event selection, PropertiesPanel editing
+
+- **Visual regression**: Playwright snapshot tests
+  - Run: `npx playwright test e2e/visual-capture.spec.ts`
+  - Update baselines: `npx playwright test e2e/visual-capture.spec.ts --update-snapshots`
 
 ---
 

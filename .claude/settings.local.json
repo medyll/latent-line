@@ -8,7 +8,8 @@
       "Bash(gzip:*)",
       "Bash(npm test:*)",
       "Bash(npm run:*)",
-      "Bash(npx playwright:*)"
+      "Bash(npx playwright:*)",
+      "Bash(npm list:*)"
     ]
   }
 }
