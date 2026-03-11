@@ -59,6 +59,9 @@
 	// --- Edit state ---
 	let editingId = $state<string | null>(null);
 
+	// Debugging aid: visible counts and last action to help E2E traces show store changes.
+	let debugLastAction = $state('');
+
 	// Draft state for adding a new outfit
 	let newOutfitKey = $state('');
 	let newOutfitPrompt = $state('');
@@ -74,6 +77,7 @@
 	function selectAsset(type: 'char' | 'env' | 'audio', id: string) {
 		const key = `${type}:${id}`;
 		console.debug('[AssetManager] selectAsset', key, 'prevSelected:', selectedAssetId);
+		debugLastAction = `select:${key}`;
 		selectedAssetId = selectedAssetId === key ? null : key;
 		console.debug('[AssetManager] selectedAssetId ->', selectedAssetId);
 	}
@@ -81,6 +85,7 @@
 	// --- Character mutations ---
 	function removeCharacter(e: MouseEvent, id: string) {
 		e.stopPropagation();
+		debugLastAction = `remove:char:${id}`;
 		assetStore.characters = assetStore.characters.filter((c) => c.id !== id);
 		if (selectedAssetId === `char:${id}`) selectedAssetId = null;
 		if (editingId === `char:${id}`) editingId = null;
@@ -91,12 +96,14 @@
 			'[AssetManager] addCharacter called, before length:',
 			assetStore.characters?.length ?? 0
 		);
+		debugLastAction = 'add:char:pending';
 		const newId = `char_${Date.now()}`;
 		assetStore.characters = [
 			...assetStore.characters,
 			{ id: newId, name: 'New Character', references: [], outfits: { default: { prompt: '' } } }
 		];
 		editingId = `char:${newId}`;
+		debugLastAction = `add:char:${newId}`;
 		console.debug(
 			'[AssetManager] addCharacter done, after length:',
 			assetStore.characters.length,
@@ -130,6 +137,7 @@
 	// --- Environment mutations ---
 	function removeEnvironment(e: MouseEvent, id: string) {
 		e.stopPropagation();
+		debugLastAction = `remove:env:${id}`;
 		const { [id]: _, ...remaining } = assetStore.environments;
 		assetStore.environments = remaining;
 		if (selectedAssetId === `env:${id}`) selectedAssetId = null;
@@ -141,9 +149,15 @@
 			'[AssetManager] addEnvironment called, before:',
 			Object.keys(assetStore.environments).length
 		);
+		debugLastAction = 'add:env:pending';
 		const newId = `env_${Date.now()}`;
-		assetStore.environments[newId] = { prompt: 'New environment' };
+		// mutate via full replacement to ensure reactivity
+		assetStore.environments = {
+			...(assetStore.environments ?? {}),
+			[newId]: { prompt: 'New environment' }
+		};
 		editingId = `env:${newId}`;
+		debugLastAction = `add:env:${newId}`;
 		console.debug(
 			'[AssetManager] addEnvironment done, after:',
 			Object.keys(assetStore.environments).length,
@@ -155,6 +169,7 @@
 	// --- Audio mutations ---
 	function removeAudio(e: MouseEvent, id: string) {
 		e.stopPropagation();
+		debugLastAction = `remove:audio:${id}`;
 		assetStore.audio = (assetStore.audio ?? []).filter((a) => a.id !== id);
 		if (selectedAssetId === `audio:${id}`) selectedAssetId = null;
 		if (editingId === `audio:${id}`) editingId = null;
@@ -162,9 +177,11 @@
 
 	function addAudio() {
 		console.debug('[AssetManager] addAudio called, before:', (assetStore.audio ?? []).length);
+		debugLastAction = 'add:audio:pending';
 		const newId = `audio_${Date.now()}`;
 		assetStore.audio = [...(assetStore.audio ?? []), { id: newId, url: '', label: 'New Audio' }];
 		editingId = `audio:${newId}`;
+		debugLastAction = `add:audio:${newId}`;
 		console.debug(
 			'[AssetManager] addAudio done, after:',
 			assetStore.audio.length,
