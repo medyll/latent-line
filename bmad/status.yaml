@@ -19,8 +19,9 @@ sprint:
     - CI-002
     - CI-003
   pending_stories:
-    - E2E-002
     - VR-002
+  in_progress_stories:
+    - E2E-002
   completed_stories:
     - TST-001
     - TST-002
@@ -34,6 +35,14 @@ sprint:
     - sprint-5
     - sprint-6
     - sprint-7
-recommendation: bmad dev story E2E-002 --auto
+recommendation: bmad dev review E2E-002
+e2e_report:
+  last_run: 2026-03-11T19:34:52Z
+  passed: 6
+  failed: 20
+  results_dir: test-results
+  notes: |
+    - Playwright initially couldn't connect (dev server port mismatch) — fixed by adding webServer to playwright.config.ts and aligning baseURL to http://localhost:5173
+    - After server start many UI assertions failed: selection attributes not toggling, row counts mismatch, and visual snapshot diffs.
 created_by: bmad-master (auto)
-last_updated: 2026-03-11T12:12:53Z
+last_updated: 2026-03-11T19:34:52Z

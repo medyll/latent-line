@@ -25,7 +25,8 @@
 </script>
 
 <div
-	style="position: relative; z-index: 9999;"
+	data-testid={`timeline-event-${item.id}`}
+	style="position: relative; z-index: 50;"
 	class={`flex h-64 w-64 cursor-pointer flex-col items-start justify-start p-4 shadow-md transition-all ${isSelected ? 'border-2 border-blue-500 bg-blue-50' : 'bg-white hover:shadow-lg'}`}
 	aria-label={`Timeline event ${item.label}`}
 	aria-selected={isSelected}

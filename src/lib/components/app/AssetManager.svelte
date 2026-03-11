@@ -73,7 +73,9 @@
 	// --- Selection ---
 	function selectAsset(type: 'char' | 'env' | 'audio', id: string) {
 		const key = `${type}:${id}`;
+		console.debug('[AssetManager] selectAsset', key, 'prevSelected:', selectedAssetId);
 		selectedAssetId = selectedAssetId === key ? null : key;
+		console.debug('[AssetManager] selectedAssetId ->', selectedAssetId);
 	}
 
 	// --- Character mutations ---
@@ -85,12 +87,22 @@
 	}
 
 	function addCharacter() {
+		console.debug(
+			'[AssetManager] addCharacter called, before length:',
+			assetStore.characters?.length ?? 0
+		);
 		const newId = `char_${Date.now()}`;
 		assetStore.characters = [
 			...assetStore.characters,
 			{ id: newId, name: 'New Character', references: [], outfits: { default: { prompt: '' } } }
 		];
 		editingId = `char:${newId}`;
+		console.debug(
+			'[AssetManager] addCharacter done, after length:',
+			assetStore.characters.length,
+			'editingId=',
+			editingId
+		);
 	}
 
 	function addOutfit(charId: string) {
@@ -125,9 +137,19 @@
 	}
 
 	function addEnvironment() {
+		console.debug(
+			'[AssetManager] addEnvironment called, before:',
+			Object.keys(assetStore.environments).length
+		);
 		const newId = `env_${Date.now()}`;
 		assetStore.environments[newId] = { prompt: 'New environment' };
 		editingId = `env:${newId}`;
+		console.debug(
+			'[AssetManager] addEnvironment done, after:',
+			Object.keys(assetStore.environments).length,
+			'editingId=',
+			editingId
+		);
 	}
 
 	// --- Audio mutations ---
@@ -139,9 +161,16 @@
 	}
 
 	function addAudio() {
+		console.debug('[AssetManager] addAudio called, before:', (assetStore.audio ?? []).length);
 		const newId = `audio_${Date.now()}`;
 		assetStore.audio = [...(assetStore.audio ?? []), { id: newId, url: '', label: 'New Audio' }];
 		editingId = `audio:${newId}`;
+		console.debug(
+			'[AssetManager] addAudio done, after:',
+			assetStore.audio.length,
+			'editingId=',
+			editingId
+		);
 	}
 </script>
 
@@ -158,9 +187,16 @@
 	<div class="p-1">
 		<div class="mb-1 flex items-center justify-between">
 			<span class="font-semibold">Characters</span>
-			<Button variant="ghost" size="sm" onclick={addCharacter} title="Add character" aria-label="Add character">
+			<button
+				type="button"
+				class="rounded p-1 text-gray-600 hover:text-blue-600"
+				onclick={addCharacter}
+				data-testid="add-character"
+				title="Add character"
+				aria-label="Add character"
+			>
 				<Plus class="h-3 w-3" />
-			</Button>
+			</button>
 		</div>
 
 		{#if !assetStore.characters.length}
@@ -179,6 +215,7 @@
 					<li class="flex flex-col rounded border border-transparent hover:border-gray-100">
 						<!-- Row -->
 						<div
+							data-testid={`asset-char-${char.id}`}
 							onclick={() => selectAsset('char', char.id)}
 							onkeydown={(e) => e.key === 'Enter' && selectAsset('char', char.id)}
 							role="option"
@@ -198,14 +235,32 @@
 							</div>
 							<div class="flex shrink-0 items-center gap-1">
 								{#if isOrphan}
-									<span class="rounded bg-orange-100 px-1 py-0.5 text-orange-600" title="Orphan — not used in timeline">○</span>
+									<span
+										class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
+										title="Orphan — not used in timeline">○</span
+									>
 								{:else}
-									<span class="rounded bg-green-100 px-1 py-0.5 text-green-700" title={`Used in ${refCount} frame(s)`}>{refCount}</span>
+									<span
+										class="rounded bg-green-100 px-1 py-0.5 text-green-700"
+										title={`Used in ${refCount} frame(s)`}>{refCount}</span
+									>
 								{/if}
-								<button onclick={(e) => toggleEdit(e, `char:${char.id}`)} title="Edit character" aria-label={`Edit ${char.name}`} class="rounded p-0.5 text-gray-400 hover:text-blue-600">
+								<button
+									onclick={(e) => toggleEdit(e, `char:${char.id}`)}
+									title="Edit character"
+									aria-label={`Edit ${char.name}`}
+									class="rounded p-0.5 text-gray-400 hover:text-blue-600"
+								>
 									{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 								</button>
-								<Button variant="ghost" size="sm" onclick={(e) => removeCharacter(e, char.id)} title={`Delete ${char.name}`} class="h-5 w-5 p-0 text-red-400 hover:text-red-700">
+								<Button
+									variant="ghost"
+									size="sm"
+									onclick={(e) => removeCharacter(e, char.id)}
+									title={`Delete ${char.name}`}
+									class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
+									data-testid={`delete-char-${char.id}`}
+								>
 									<Trash2 class="h-3 w-3" />
 								</Button>
 							</div>
@@ -221,7 +276,8 @@
 									<input
 										type="text"
 										value={assetStore.characters[idx].name}
-										oninput={(e) => (assetStore.characters[idx].name = (e.target as HTMLInputElement).value)}
+										oninput={(e) =>
+											(assetStore.characters[idx].name = (e.target as HTMLInputElement).value)}
 										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
 										aria-label="Character name"
 									/>
@@ -232,7 +288,9 @@
 									<input
 										type="text"
 										value={assetStore.characters[idx].voice_id ?? ''}
-										oninput={(e) => (assetStore.characters[idx].voice_id = (e.target as HTMLInputElement).value || undefined)}
+										oninput={(e) =>
+											(assetStore.characters[idx].voice_id =
+												(e.target as HTMLInputElement).value || undefined)}
 										placeholder="e.g. v_male_deep_01"
 										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
 										aria-label="Voice ID"
@@ -244,10 +302,16 @@
 									{#if assetStore.characters[idx].outfits && Object.keys(assetStore.characters[idx].outfits!).length}
 										<ul class="mb-1 flex flex-col gap-0.5">
 											{#each Object.entries(assetStore.characters[idx].outfits!) as [key, outfit]}
-												<li class="flex items-center justify-between gap-1 rounded bg-white px-1.5 py-0.5">
+												<li
+													class="flex items-center justify-between gap-1 rounded bg-white px-1.5 py-0.5"
+												>
 													<span class="font-mono text-blue-600">{key}</span>
 													<span class="min-w-0 flex-1 truncate text-gray-500">{outfit.prompt}</span>
-													<button onclick={() => removeOutfit(char.id, key)} title={`Remove outfit ${key}`} class="text-red-400 hover:text-red-600">
+													<button
+														onclick={() => removeOutfit(char.id, key)}
+														title={`Remove outfit ${key}`}
+														class="text-red-400 hover:text-red-600"
+													>
 														<X class="h-3 w-3" />
 													</button>
 												</li>
@@ -270,7 +334,12 @@
 											class="flex-1 rounded border border-gray-200 px-1 py-0.5 text-xs"
 											aria-label="New outfit prompt"
 										/>
-										<button onclick={() => addOutfit(char.id)} title="Add outfit" class="rounded bg-blue-50 px-1 text-blue-600 hover:bg-blue-100">
+										<button
+											onclick={() => addOutfit(char.id)}
+											title="Add outfit"
+											class="rounded bg-blue-50 px-1 text-blue-600 hover:bg-blue-100"
+											data-testid={`add-outfit-${char.id}`}
+										>
 											<Plus class="h-3 w-3" />
 										</button>
 									</div>
@@ -287,9 +356,16 @@
 	<div class="p-1">
 		<div class="mb-1 flex items-center justify-between">
 			<span class="font-semibold">Environments</span>
-			<Button variant="ghost" size="sm" onclick={addEnvironment} title="Add environment" aria-label="Add environment">
+			<button
+				type="button"
+				class="rounded p-1 text-gray-600 hover:text-blue-600"
+				onclick={addEnvironment}
+				data-testid="add-environment"
+				title="Add environment"
+				aria-label="Add environment"
+			>
 				<Plus class="h-3 w-3" />
-			</Button>
+			</button>
 		</div>
 
 		{#if !Object.keys(assetStore.environments).length}
@@ -306,6 +382,7 @@
 					<li class="flex flex-col rounded border border-transparent hover:border-gray-100">
 						<!-- Row -->
 						<div
+							data-testid={`asset-env-${id}`}
 							onclick={() => selectAsset('env', id)}
 							onkeydown={(e) => e.key === 'Enter' && selectAsset('env', id)}
 							role="option"
@@ -319,10 +396,22 @@
 								<div class="truncate text-gray-600">{env.prompt}</div>
 							</div>
 							<div class="flex shrink-0 items-center gap-1">
-								<button onclick={(e) => toggleEdit(e, `env:${id}`)} title="Edit environment" aria-label={`Edit ${id}`} class="rounded p-0.5 text-gray-400 hover:text-blue-600">
+								<button
+									onclick={(e) => toggleEdit(e, `env:${id}`)}
+									title="Edit environment"
+									aria-label={`Edit ${id}`}
+									class="rounded p-0.5 text-gray-400 hover:text-blue-600"
+								>
 									{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 								</button>
-								<Button variant="ghost" size="sm" onclick={(e) => removeEnvironment(e, id)} title="Delete environment" class="h-5 w-5 p-0 text-red-400 hover:text-red-700">
+								<Button
+									variant="ghost"
+									size="sm"
+									onclick={(e) => removeEnvironment(e, id)}
+									title="Delete environment"
+									class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
+									data-testid={`delete-env-${id}`}
+								>
 									<Trash2 class="h-3 w-3" />
 								</Button>
 							</div>
@@ -335,7 +424,10 @@
 									<label class="text-gray-400">Prompt</label>
 									<textarea
 										value={env.prompt}
-										oninput={(e) => (assetStore.environments[id].prompt = (e.target as HTMLTextAreaElement).value)}
+										oninput={(e) =>
+											(assetStore.environments[id].prompt = (
+												e.target as HTMLTextAreaElement
+											).value)}
 										rows={2}
 										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
 										aria-label="Environment prompt"
@@ -346,7 +438,9 @@
 									<input
 										type="text"
 										value={env.ref ?? ''}
-										oninput={(e) => (assetStore.environments[id].ref = (e.target as HTMLInputElement).value || undefined)}
+										oninput={(e) =>
+											(assetStore.environments[id].ref =
+												(e.target as HTMLInputElement).value || undefined)}
 										placeholder="filename or URL"
 										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
 										aria-label="Environment reference image"
@@ -364,9 +458,16 @@
 	<div class="p-1">
 		<div class="mb-1 flex items-center justify-between">
 			<span class="font-semibold">Audio</span>
-			<Button variant="ghost" size="sm" onclick={addAudio} title="Add audio" aria-label="Add audio">
+			<button
+				type="button"
+				class="rounded p-1 text-gray-600 hover:text-blue-600"
+				onclick={addAudio}
+				data-testid="add-audio"
+				title="Add audio"
+				aria-label="Add audio"
+			>
 				<Plus class="h-3 w-3" />
-			</Button>
+			</button>
 		</div>
 
 		{#if !assetStore.audio?.length}
@@ -386,6 +487,7 @@
 					<li class="flex flex-col rounded border border-transparent hover:border-gray-100">
 						<!-- Row -->
 						<div
+							data-testid={`asset-audio-${aud.id}`}
 							onclick={() => selectAsset('audio', aud.id)}
 							onkeydown={(e) => e.key === 'Enter' && selectAsset('audio', aud.id)}
 							role="option"
@@ -400,14 +502,32 @@
 							</div>
 							<div class="flex shrink-0 items-center gap-1">
 								{#if isOrphan}
-									<span class="rounded bg-orange-100 px-1 py-0.5 text-orange-600" title="Orphan — not used in timeline">○</span>
+									<span
+										class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
+										title="Orphan — not used in timeline">○</span
+									>
 								{:else}
-									<span class="rounded bg-green-100 px-1 py-0.5 text-green-700" title={`Used in ${refCount} frame(s)`}>{refCount}</span>
+									<span
+										class="rounded bg-green-100 px-1 py-0.5 text-green-700"
+										title={`Used in ${refCount} frame(s)`}>{refCount}</span
+									>
 								{/if}
-								<button onclick={(e) => toggleEdit(e, `audio:${aud.id}`)} title="Edit audio" aria-label={`Edit ${aud.id}`} class="rounded p-0.5 text-gray-400 hover:text-blue-600">
+								<button
+									onclick={(e) => toggleEdit(e, `audio:${aud.id}`)}
+									title="Edit audio"
+									aria-label={`Edit ${aud.id}`}
+									class="rounded p-0.5 text-gray-400 hover:text-blue-600"
+								>
 									{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 								</button>
-								<Button variant="ghost" size="sm" onclick={(e) => removeAudio(e, aud.id)} title="Delete audio" class="h-5 w-5 p-0 text-red-400 hover:text-red-700">
+								<Button
+									variant="ghost"
+									size="sm"
+									onclick={(e) => removeAudio(e, aud.id)}
+									title="Delete audio"
+									class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
+									data-testid={`delete-audio-${aud.id}`}
+								>
 									<Trash2 class="h-3 w-3" />
 								</Button>
 							</div>
@@ -421,7 +541,9 @@
 									<input
 										type="text"
 										value={assetStore.audio![audIdx].label ?? ''}
-										oninput={(e) => (assetStore.audio![audIdx].label = (e.target as HTMLInputElement).value || undefined)}
+										oninput={(e) =>
+											(assetStore.audio![audIdx].label =
+												(e.target as HTMLInputElement).value || undefined)}
 										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
 										aria-label="Audio label"
 									/>
@@ -431,7 +553,8 @@
 									<input
 										type="text"
 										value={assetStore.audio![audIdx].url}
-										oninput={(e) => (assetStore.audio![audIdx].url = (e.target as HTMLInputElement).value)}
+										oninput={(e) =>
+											(assetStore.audio![audIdx].url = (e.target as HTMLInputElement).value)}
 										placeholder="https://... or filename.mp3"
 										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
 										aria-label="Audio URL"
