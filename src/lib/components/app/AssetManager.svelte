@@ -76,10 +76,10 @@
 	// --- Selection ---
 	function selectAsset(type: 'char' | 'env' | 'audio', id: string) {
 		const key = `${type}:${id}`;
-		console.debug('[AssetManager] selectAsset', key, 'prevSelected:', selectedAssetId);
+		console.log('[AssetManager] selectAsset', key, 'prevSelected:', selectedAssetId);
 		debugLastAction = `select:${key}`;
 		selectedAssetId = selectedAssetId === key ? null : key;
-		console.debug('[AssetManager] selectedAssetId ->', selectedAssetId);
+		console.log('[AssetManager] selectedAssetId ->', selectedAssetId);
 	}
 
 	// --- Character mutations ---
@@ -92,7 +92,7 @@
 	}
 
 	function addCharacter() {
-		console.debug(
+		console.log(
 			'[AssetManager] addCharacter called, before length:',
 			assetStore.characters?.length ?? 0
 		);
@@ -104,7 +104,7 @@
 		];
 		editingId = `char:${newId}`;
 		debugLastAction = `add:char:${newId}`;
-		console.debug(
+		console.log(
 			'[AssetManager] addCharacter done, after length:',
 			assetStore.characters.length,
 			'editingId=',
@@ -145,7 +145,7 @@
 	}
 
 	function addEnvironment() {
-		console.debug(
+		console.log(
 			'[AssetManager] addEnvironment called, before:',
 			Object.keys(assetStore.environments).length
 		);
@@ -158,7 +158,7 @@
 		};
 		editingId = `env:${newId}`;
 		debugLastAction = `add:env:${newId}`;
-		console.debug(
+		console.log(
 			'[AssetManager] addEnvironment done, after:',
 			Object.keys(assetStore.environments).length,
 			'editingId=',
@@ -176,13 +176,13 @@
 	}
 
 	function addAudio() {
-		console.debug('[AssetManager] addAudio called, before:', (assetStore.audio ?? []).length);
+		console.log('[AssetManager] addAudio called, before:', (assetStore.audio ?? []).length);
 		debugLastAction = 'add:audio:pending';
 		const newId = `audio_${Date.now()}`;
 		assetStore.audio = [...(assetStore.audio ?? []), { id: newId, url: '', label: 'New Audio' }];
 		editingId = `audio:${newId}`;
 		debugLastAction = `add:audio:${newId}`;
-		console.debug(
+		console.log(
 			'[AssetManager] addAudio done, after:',
 			assetStore.audio.length,
 			'editingId=',
@@ -200,6 +200,19 @@
 	aria-label="Asset Manager"
 	style="background:var(--color-popover); color:var(--color-popover-foreground)"
 >
+	<!-- E2E debug: visible store counts and last action -->
+	<div
+		data-testid="am-debug-visible"
+		aria-hidden="true"
+		style="font-size:10px;line-height:1;opacity:0.9;color:var(--color-popover-foreground);"
+	>
+		{JSON.stringify({
+			chars: assetStore.characters?.length ?? 0,
+			envs: Object.keys(assetStore.environments ?? {}).length,
+			audio: assetStore.audio?.length ?? 0,
+			last: debugLastAction
+		})}
+	</div>
 	<!-- ── Characters ── -->
 	<div class="p-1">
 		<div class="mb-1 flex items-center justify-between">
@@ -208,6 +221,8 @@
 				type="button"
 				class="rounded p-1 text-gray-600 hover:text-blue-600"
 				onclick={addCharacter}
+				onpointerdown={() => (debugLastAction = 'pointerdown:add-char')}
+				onpointerup={() => (debugLastAction = 'pointerup:add-char')}
 				data-testid="add-character"
 				title="Add character"
 				aria-label="Add character"
@@ -377,6 +392,8 @@
 				type="button"
 				class="rounded p-1 text-gray-600 hover:text-blue-600"
 				onclick={addEnvironment}
+				onpointerdown={() => (debugLastAction = 'pointerdown:add-env')}
+				onpointerup={() => (debugLastAction = 'pointerup:add-env')}
 				data-testid="add-environment"
 				title="Add environment"
 				aria-label="Add environment"
@@ -479,6 +496,8 @@
 				type="button"
 				class="rounded p-1 text-gray-600 hover:text-blue-600"
 				onclick={addAudio}
+				onpointerdown={() => (debugLastAction = 'pointerdown:add-audio')}
+				onpointerup={() => (debugLastAction = 'pointerup:add-audio')}
 				data-testid="add-audio"
 				title="Add audio"
 				aria-label="Add audio"
