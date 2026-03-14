@@ -101,7 +101,7 @@ selectionStore.subscribe((id) => {
 			</div>
 			<!-- Properties panel moved into sidebar to avoid overlapping timeline clickable area -->
 			<div class="p-2 mt-4">
-				<PropertiesPanel selectedEventId={selectedEventId ? String(timelineEvents.find((it) => it.id === selectedEventId)?.start) : null} bind:timelineEvents {selectedAssetId} />
+				<PropertiesPanel selectedEventId={selectedEventId ?? null} bind:timelineEvents {selectedAssetId} />
 			</div>
 		</div>
 	</aside>

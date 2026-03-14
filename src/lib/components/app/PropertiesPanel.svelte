@@ -19,7 +19,7 @@
 		LightingType,
 		Mood
 	} from '$lib/model/model-types';
-	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY, SELECTION_STORE_KEY } from '$lib/context/keys';
 	import CharacterField from './CharacterField.svelte';
 
 	const LIGHTING_TYPES: LightingType[] = ['dusk', 'daylight', 'studio', 'tungsten', 'ambient'];
