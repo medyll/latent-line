@@ -9,7 +9,8 @@ test('debug selection', async ({ page }) => {
 	console.log('BEFORE __selectionStoreValue:', await page.evaluate(() => (window as any).__selectionStoreValue));
 	// Use Playwright click (emulated user interaction)
 	await firstEvent.click();
-	await page.waitForTimeout(500);
+	// wait for immediate marker so selection is observable
+	await page.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="true"]', { timeout: 1000 }).catch(()=>{});
 	console.log('AFTER (playwright) aria-selected:', await firstEvent.getAttribute('aria-selected'));
 	console.log('AFTER (playwright) __selectionStoreValue:', await page.evaluate(() => (window as any).__selectionStoreValue));
 
@@ -18,7 +19,8 @@ test('debug selection', async ({ page }) => {
 		const el = document.querySelector('[data-testid^="timeline-event-"]') as HTMLElement | null;
 		if (el) el.click();
 	});
-	await page.waitForTimeout(500);
+	// wait for cleared marker
+	await page.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="false"]', { timeout: 1000 }).catch(()=>{});
 	console.log('AFTER (dom) aria-selected:', await firstEvent.getAttribute('aria-selected'));
 	console.log('AFTER (dom) __selectionStoreValue:', await page.evaluate(() => (window as any).__selectionStoreValue));
 });

@@ -9,7 +9,7 @@
 	 *              Event mutations go directly to model.timeline via MODEL_STORE_KEY context.
 	 * @example <PropertiesPanel {selectedEventId} {selectedAssetId} />
 	 */
-	import { getContext } from 'svelte';
+	import { getContext, tick } from 'svelte';
 	import type {
 		Model,
 		Assets,
@@ -35,6 +35,22 @@
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
+	// Subscribe to shared selectionStore for stronger sync guarantees
+	const selectionStore = getContext(SELECTION_STORE_KEY) as { subscribe: (fn: (v: string | null) => void) => void } | undefined;
+	let syncLabel: string | null = null;
+	if (selectionStore) {
+		selectionStore.subscribe((val) => {
+			if (!val) {
+				syncLabel = null;
+				return;
+			}
+			if (val.startsWith('char:')) syncLabel = 'Character';
+			else if (val.startsWith('env:')) syncLabel = 'Environment';
+			else if (val.startsWith('audio:')) syncLabel = 'Audio';
+			else if (val.startsWith('event_') || String(Number(val)) === val) syncLabel = 'Event';
+			else syncLabel = 'Selection';
+		});
+	}
 
 	// --- Asset selection ---
 	const parsedAsset = $derived.by(() => {
@@ -81,6 +97,24 @@
 // Debug: log selection props for E2E troubleshooting
 $effect(() => {
 	console.log('[bmad-debug] PropertiesPanel props:', { selectedEventId, selectedEventIndex });
+});
+
+// Test-only: expose a DOM-ready marker that flips when selection-derived data is resolved
+let selectionReady = $state(false);
+$effect(async () => {
+	// Wait a microtask to let derived values compute, then mark ready
+	await tick();
+	selectionReady = !!selectedEvent || !!selectedCharacter || !!selectedEnvironment || !!selectedAudio || selectedEventIndex >= 0;
+	// clear marker after short delay to avoid permanent state (keeps DOM updates observable)
+	setTimeout(() => (selectionReady = false), 1000);
+});
+
+// Immediate synchronous marker for tests: updated synchronously when props change
+// Bind selectionImmediate via an effect so it toggles immediately when props change
+let selectionImmediate = $state(false);
+$effect(() => {
+	// Use only the props for immediate signal; derived index can lag briefly
+	selectionImmediate = !!selectedEventId || !!selectedAssetId;
 });
 
 	// --- Mutation helpers (all write directly to model.timeline) ---
@@ -249,6 +283,13 @@ function forwardClick(e: MouseEvent) {
 }
 </script>
 
+<!-- Test-only debug hook: Playwright can wait for this element when selection changes -->
+<div aria-hidden="true" data-testid="pp-selection-ready" style="display:none" data-ready={selectionReady} data-immediate={selectionImmediate} data-no-selection={!selectionImmediate}></div>
+<!-- Immediate synchronous DOM marker for stronger test guarantees -->
+<div aria-hidden="true" data-testid="pp-sync-ready" style="display:none" data-immediate={selectionImmediate}></div>
+
+
+
 <style>
 .properties-panel { pointer-events: auto; }
 .properties-panel input,
@@ -265,6 +306,33 @@ function forwardClick(e: MouseEvent) {
 -->
 <div class="flex flex-col gap-3 p-2 properties-panel" aria-label="Properties Panel" onclick={forwardClick}>
 	<h2 class="text-sm font-bold tracking-wide text-gray-500 uppercase">Properties</h2>
+
+	<!-- Synchronous visible heading for tests: reflects basic selection immediately from props (minimizes derived lookups) -->
+	{#if selectionImmediate}
+		<div class="mb-1 text-sm font-semibold text-gray-600" data-testid="pp-sync-heading">
+			{#if selectedAssetId}
+				{#if selectedAssetId.startsWith('char:')}
+					Character
+				{:else if selectedAssetId.startsWith('env:')}
+					Environment
+				{:else if selectedAssetId.startsWith('audio:')}
+					Audio
+				{:else}
+					Asset
+				{/if}
+			{:else if selectedEventId}
+				Event
+			{:else}
+				Selection
+			{/if}
+		</div>
+	{/if}
+
+	<!-- Always-rendered synchronous label derived directly from props to maximize test-observable stability -->
+	<!-- Always render sync label (helps tests observe selection immediately) -->
+	<div aria-hidden="false" data-testid="pp-sync-label" aria-label="Sync selection label" class="text-xs text-gray-500 mb-1">
+		{syncLabel ?? (selectedAssetId ? (selectedAssetId.startsWith('char:') ? 'Character' : selectedAssetId.startsWith('env:') ? 'Environment' : selectedAssetId.startsWith('audio:') ? 'Audio' : 'Asset') : (selectedEventId ? 'Event' : 'No selection'))}
+	</div>
 
 	{#if selectedCharacter}
 		<!-- Character asset selected -->

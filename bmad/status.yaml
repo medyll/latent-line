@@ -35,16 +35,22 @@ sprint:
     - sprint-5
     - sprint-6
     - sprint-7
-recommendation: bmad dev story E2E-002 --auto
-last_action: bmad dev review E2E-002 (completed: tests run, minor UI toggle fix)
-last_updated: 2026-03-14T00:16:31Z
+recommendation: bmad dev review E2E-002 --auto
+last_action: bmad dev story E2E-002 (in-progress: ran e2e tests, failures observed)
+last_updated: 2026-03-14T00:45:00Z
 e2e_report:
-  last_run: 2026-03-11T19:34:52Z
-  passed: 6
-  failed: 20
+  last_run: 2026-03-14T00:44:58Z
+  passed: 23
+  failed: 4
   results_dir: test-results
   notes: |
-    - Playwright initially couldn't connect (dev server port mismatch) — fixed by adding webServer to playwright.config.ts and aligning baseURL to http://localhost:5173
-    - After server start many UI assertions failed: selection attributes not toggling, row counts mismatch, and visual snapshot diffs.
+    - Playwright run executed (27 tests). Several timing/selection-related failures observed in timeline interactions.
+    - Failures summary:
+      * Timeline creation: adding a character asset — input element not found/visible (timeout).
+      * Clicking a character row did not show 'Character' in Properties Panel in several tests (timing/selection update issue).
+      * Clicking timeline event card did not populate Properties Panel with event label 'Event 1'.
+      * Clicking same timeline event again did not clear selection to show empty state.
+    - Test artifacts written to test-results/ (see detailed error-context.md and screenshots).
+    - Recommendation: investigate selection/PropertiesPanel timing and ensure aria attributes and store updates are synchronous or use retry/wait where appropriate. Consider increasing wait time or stabilizing selection events in the app.
 created_by: bmad-master (auto)
-last_updated: 2026-03-11T19:34:52Z
+last_updated: 2026-03-14T00:44:58Z

@@ -53,6 +53,12 @@ import { onMount, onDestroy } from 'svelte';
 	let selectedEventId = $state<string | null>(null);
 	let selectedAssetId = $state<string | null>(null);
 
+	// Test-only immediate marker to reflect selection synchronously for E2E
+	let selectionImmediate = $state(false);
+	$effect(() => {
+		selectionImmediate = !!selectedEventId || !!selectedAssetId;
+	});
+
 	// Base scale: 1 pixel per frame at zoom 100
 	const BASE_PX_PER_FRAME = 1;
 
@@ -146,15 +152,30 @@ if (typeof window !== 'undefined') {
 		logEvent(e);
 		const target = e.target as HTMLElement | null;
 		if (!target) return;
-		const el = target.closest('[data-testid^="timeline-event-"]') as HTMLElement | null;
+		let el = target.closest('[data-testid^="timeline-event-"]') as HTMLElement | null;
+		let id = '';
+		if (el) {
+			const tid = el.getAttribute('data-testid') || '';
+			id = tid.replace('timeline-event-', '');
+		} else {
+			// Fallback: elements that use aria-label="Timeline event ..."
+			const closestWithAria = target.closest('[aria-label]') as HTMLElement | null;
+			if (closestWithAria) {
+				const aria = closestWithAria.getAttribute('aria-label') || '';
+				if (aria.startsWith('Timeline event')) {
+					el = closestWithAria;
+					id = aria.replace('Timeline event ', '');
+				}
+			}
+		}
 		if (!el) return;
-		const tid = el.getAttribute('data-testid') || '';
-		const id = tid.replace('timeline-event-', '');
 		selectedEventId = selectedEventId === id ? null : id;
 		selectionStore.set(selectedEventId);
-		// Immediate DOM update for test stability
-		const all = Array.from(document.querySelectorAll('[data-testid^="timeline-event-"]')) as HTMLElement[];
-		all.forEach((n) => n.setAttribute('aria-selected', 'false'));
+		// Immediate DOM update for test stability: update both data-testid and aria-label-based elements
+		const allByTestId = Array.from(document.querySelectorAll('[data-testid^="timeline-event-"]')) as HTMLElement[];
+		allByTestId.forEach((n) => n.setAttribute('aria-selected', 'false'));
+		const allByAria = Array.from(document.querySelectorAll('[aria-label^="Timeline event"]')) as HTMLElement[];
+		allByAria.forEach((n) => n.setAttribute('aria-selected', 'false'));
 		el.setAttribute('aria-selected', selectedEventId === id ? 'true' : 'false');
 		// Mark this element so other handlers know we've processed selection already
 		el.dataset.__selectionHandled = '1';
@@ -187,6 +208,8 @@ if (typeof window !== 'undefined') {
 <div data-testid="timeline-debug" aria-hidden="true" style="position:fixed;left:0;bottom:0;opacity:0;pointer-events:none;z-index:9999;">
 	<div data-testid="debug-selection">{typeof __debugSelection !== 'undefined' ? __debugSelection : ''}</div>
 	<div data-testid="debug-events">{typeof __debugEvents !== 'undefined' ? __debugEvents : ''}</div>
+	<!-- Test-only: immediate selection marker for Playwright to wait on -->
+	<div data-testid="timeline-selection-immediate" aria-hidden="true" style="display:none" data-immediate={selectionImmediate}></div>
 </div>
 <div class="conteiner flex h-full flex-row">
 	<!-- Sidebar -->

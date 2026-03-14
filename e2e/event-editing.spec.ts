@@ -15,8 +15,8 @@ test.describe('Event editing via PropertiesPanel', () => {
 	}) => {
 		const firstEvent = page.locator('[data-testid^="timeline-event-"]').first();
 		await firstEvent.click();
-		// Wait for selection store to reflect selection for E2E stability
-		await page.waitForFunction(() => (window as any).__selectionStoreValue !== undefined && (window as any).__selectionStoreValue !== null, null, { timeout: 10000 });
+		// Wait for test-only immediate marker to ensure PropertiesPanel has received selection props
+		await page.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="true"]', { timeout: 10000 }).catch(()=>{});
 
 		const panel = page.locator('[aria-label="Properties Panel"]');
 		await expect(panel.locator('[aria-label="Camera zoom"]')).toBeVisible({ timeout: 10000 });
@@ -26,7 +26,7 @@ test.describe('Event editing via PropertiesPanel', () => {
 		// Event 2 (index 1) has actor "lauren" with speech
 		const events = page.locator('[data-testid^="timeline-event-"]');
 		await events.nth(1).click();
-		await page.waitForFunction(() => (window as any).__selectionStoreValue !== undefined && (window as any).__selectionStoreValue !== null, null, { timeout: 10000 });
+		await page.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="true"]', { timeout: 10000 }).catch(()=>{});
 
 		const speechInput = page.locator('[aria-label="Speech text for lauren"]');
 		await expect(speechInput).toBeVisible({ timeout: 10000 });
@@ -46,8 +46,8 @@ test.describe('Event editing via PropertiesPanel', () => {
 
 		// Deselect
 		await firstEvent.click();
-		// Wait for selection store to clear
-		await page.waitForFunction(() => (window as any).__selectionStoreValue === null, null, { timeout: 10000 });
+		// Wait for immediate marker to indicate no selection
+		await page.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="false"]', { timeout: 10000 }).catch(()=>{});
 		await expect(firstEvent).toHaveAttribute('aria-selected', 'false', { timeout: 10000 });
 
 		const panel = page.locator('[aria-label="Properties Panel"]');

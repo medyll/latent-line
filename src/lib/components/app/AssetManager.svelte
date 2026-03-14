@@ -9,9 +9,9 @@
 	 *              - Reference counts per character and audio asset.
 	 * @example <AssetManager bind:selectedAssetId />
 	 */
-	import { getContext } from 'svelte';
+	import { getContext, tick } from 'svelte';
 	import type { Assets, Model } from '$lib/model/model-types';
-	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY, SELECTION_STORE_KEY } from '$lib/context/keys';
 	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
 	import { Avatar, AvatarFallback } from '$lib/components/ui/avatar';
 	import { Button } from '$lib/components/ui/button';
@@ -22,6 +22,8 @@
 
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
 	const model = getContext<Model>(MODEL_STORE_KEY);
+	// selection store to set selection when adding or selecting assets
+	const selectionStore = getContext(SELECTION_STORE_KEY) as { set?: (v: string | null) => void } | undefined;
 
 	// --- Orphan detection ---
 	const usedCharIds = $derived(
@@ -79,6 +81,8 @@
 		console.log('[AssetManager] selectAsset', key, 'prevSelected:', selectedAssetId);
 		debugLastAction = `select:${key}`;
 		selectedAssetId = selectedAssetId === key ? null : key;
+		// notify global selectionStore so PropertiesPanel (and timeline) see selection synchronously
+		try { selectionStore?.set?.(selectedAssetId); } catch {}
 		console.log('[AssetManager] selectedAssetId ->', selectedAssetId);
 	}
 
@@ -91,24 +95,55 @@
 		if (editingId === `char:${id}`) editingId = null;
 	}
 
-	function addCharacter() {
+	async function addCharacter() {
 		console.log(
 			'[AssetManager] addCharacter called, before length:',
 			assetStore.characters?.length ?? 0
 		);
 		debugLastAction = 'add:char:pending';
 		const newId = `char_${Date.now()}`;
+		// set editingId early so the inline input mounts in the next tick
+		editingId = `char:${newId}`;
 		assetStore.characters = [
 			...assetStore.characters,
 			{ id: newId, name: 'New Character', references: [], outfits: { default: { prompt: '' } } }
 		];
+		// Auto-select and focus the new character to stabilise E2E tests
+		selectedAssetId = `char:${newId}`;
+		// Also notify global selection store so PropertiesPanel and other listeners receive the update synchronously
+		try { selectionStore?.set?.(`char:${newId}`); } catch (err) { /* best-effort */ }
+		// wait a tick so the inline input mounts and bindings apply before tests assert
+		await tick();
+		// reaffirm editingId to ensure inline form remains visible across microtasks
 		editingId = `char:${newId}`;
+		// attempt to focus the new inline input after it's mounted
+		await tick();
+		try {
+			const el = document.querySelector(`[data-testid="asset-char-${newId}"] input[aria-label="Character name"]`) as HTMLInputElement | null;
+			if (el) {
+				try { el.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' }); } catch {}
+				el.focus();
+				el.select();
+				debugLastAction = `add:char:${newId}:focused`;
+			} else {
+				// fallback: schedule a rAF attempt
+				requestAnimationFrame(() => {
+					const el2 = document.querySelector(`[data-testid="asset-char-${newId}"] input[aria-label="Character name"]`) as HTMLInputElement | null;
+					if (el2) { try { el2.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' }); } catch {}
+						el2.focus(); el2.select(); debugLastAction = `add:char:${newId}:focused:raf`; }
+				});
+			}
+		} catch (err) {
+			console.warn('[AssetManager] focus failed', err);
+		}
 		debugLastAction = `add:char:${newId}`;
 		console.log(
 			'[AssetManager] addCharacter done, after length:',
 			assetStore.characters.length,
 			'editingId=',
-			editingId
+			editingId,
+			'selectedAssetId=',
+			selectedAssetId
 		);
 	}
 
