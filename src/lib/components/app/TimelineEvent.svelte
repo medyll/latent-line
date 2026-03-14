@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { MessageCircle, Smile, Activity, ZoomIn, Sparkles, Volume2 } from '@lucide/svelte';
+	import { getContext } from 'svelte';
+	import { SELECTION_STORE_KEY } from '$lib/context/keys';
+	import type { Writable } from 'svelte/store';
+
 	/**
 	 * TimeLineEvent.svelte
 	 * @component TimeLineEvent
@@ -22,15 +26,22 @@
 	}
 
 	let { item, isSelected = false }: { item: TimelineEventItem; isSelected?: boolean } = $props();
+
+	const selectionStore = getContext(SELECTION_STORE_KEY) as Writable<string | null> | undefined;
+
 </script>
 
 <div
 	data-testid={`timeline-event-${item.id}`}
+	role="button"
+	tabindex="0"
 	style="position: relative; z-index: 50;"
 	class={`flex h-64 w-64 cursor-pointer flex-col items-start justify-start p-4 shadow-md transition-all ${isSelected ? 'border-2 border-blue-500 bg-blue-50' : 'bg-white hover:shadow-lg'}`}
 	aria-label={`Timeline event ${item.label}`}
 	aria-selected={isSelected}
->
+	data-selection-available={selectionStore ? 'yes' : 'no'}
+	on:click={(e) => { e.stopPropagation(); selectionStore?.update(curr => curr === item.id ? null : item.id); }}
+	>
 	<div class="mb-2 text-lg font-bold">{item.label}</div>
 	<div class="text-xs">Start: {item.start}</div>
 	<div class="text-xs">End: {item.end}</div>

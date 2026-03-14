@@ -10,14 +10,19 @@
 	import SystemFooter from './SystemFooter.svelte';
 	import TimeLineEvent from './TimelineEvent.svelte';
 	import exampleModel from '$lib/model/model-story-example';
+import { onMount, onDestroy } from 'svelte';
 	import type { Assets } from '$lib/model/model-types';
-	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY, SELECTION_STORE_KEY } from '$lib/context/keys';
 
 	const assetStore = $state<Assets>(structuredClone(exampleModel.assets));
 	const model = $state(structuredClone(exampleModel));
 	import { toTimelineArray } from '$lib/model/timeline-utils';
 	setContext(ASSET_STORE_KEY, assetStore);
 	setContext(MODEL_STORE_KEY, model);
+	// Expose selection store so child components can update selection directly (robust to overlaying elements)
+	import { writable } from 'svelte/store';
+	const selectionStore = writable<string | null>(null);
+	setContext(SELECTION_STORE_KEY, selectionStore);
 
 	let zoom = $state(100);
 	let selectedEventId = $state<string | null>(null);
@@ -62,7 +67,16 @@
 	function selectEvent(eventId: string) {
 		const id = String(eventId);
 		selectedEventId = selectedEventId === id ? null : id;
+		selectionStore.set(selectedEventId);
 	}
+
+
+// Keep local selectedEventId in sync with selectionStore (handles clicks from child components)
+selectionStore.subscribe((id) => {
+	selectedEventId = id;
+	console.log('[bmad-debug] selectionStore ->', id);
+});
+
 </script>
 
 <!-- Timeline with sidebar layout -->
@@ -132,7 +146,7 @@
 												tabindex="0"
 												class={`relative z-50 ${selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}`}
 											>
-												<TimeLineEvent {item} isSelected={selectedEventId === item.id} />
+												<TimeLineEvent {item} isSelected={selectedEventId === item.id} on:click={() => selectEvent(item.id)} on:keydown={(e) => e.key === 'Enter' && selectEvent(item.id)} class={`relative z-50 ${selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}`} />
 											</div>
 										{/each}
 									</div>
