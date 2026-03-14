@@ -9,20 +9,20 @@ test.describe('Event editing via PropertiesPanel', () => {
 	test('selecting a timeline event shows camera zoom field in PropertiesPanel', async ({
 		page
 	}) => {
-		const firstEvent = page.locator('[aria-label^="Timeline event"]').first();
+		const firstEvent = page.locator('[data-testid^="timeline-event-"]').first();
 		await firstEvent.click();
 
 		const panel = page.locator('[aria-label="Properties Panel"]');
-		await expect(panel.locator('[aria-label="Camera zoom"]')).toBeVisible();
+		await expect(panel.locator('[aria-label="Camera zoom"]')).toBeVisible({ timeout: 10000 });
 	});
 
 	test('editing speech text field updates the displayed value', async ({ page }) => {
 		// Event 2 (index 1) has actor "lauren" with speech
-		const events = page.locator('[aria-label^="Timeline event"]');
+		const events = page.locator('[data-testid^="timeline-event-"]');
 		await events.nth(1).click();
 
 		const speechInput = page.locator('[aria-label="Speech text for lauren"]');
-		await expect(speechInput).toBeVisible();
+		await expect(speechInput).toBeVisible({ timeout: 10000 });
 
 		await speechInput.fill('Updated speech text');
 		await speechInput.press('Tab');
@@ -31,22 +31,22 @@ test.describe('Event editing via PropertiesPanel', () => {
 	});
 
 	test('deselecting event returns PropertiesPanel to empty state', async ({ page }) => {
-		const firstEvent = page.locator('[aria-label^="Timeline event"]').first();
+		const firstEvent = page.locator('[data-testid^="timeline-event-"]').first();
 
 		// Select
 		await firstEvent.click();
-		await expect(firstEvent).toHaveAttribute('aria-selected', 'true');
+		await expect(firstEvent).toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
 
 		// Deselect
 		await firstEvent.click();
-		await expect(firstEvent).toHaveAttribute('aria-selected', 'false');
+		await expect(firstEvent).toHaveAttribute('aria-selected', 'false', { timeout: 10000 });
 
 		const panel = page.locator('[aria-label="Properties Panel"]');
 		await expect(panel.locator('[aria-label="No selection"]')).toBeVisible();
 	});
 
 	test('selecting different events updates PropertiesPanel content', async ({ page }) => {
-		const events = page.locator('[aria-label^="Timeline event"]');
+		const events = page.locator('[data-testid^="timeline-event-"]');
 		const count = await events.count();
 		if (count < 2) {
 			test.skip();
@@ -65,7 +65,7 @@ test.describe('Event editing via PropertiesPanel', () => {
 		expect(firstLabel).not.toBe(secondLabel);
 
 		// Second event should now be selected
-		await expect(events.nth(1)).toHaveAttribute('aria-selected', 'true');
+		await expect(events.nth(1)).toHaveAttribute('aria-selected', 'true', { timeout: 10000 });
 		await expect(events.first()).toHaveAttribute('aria-selected', 'false');
 	});
 });

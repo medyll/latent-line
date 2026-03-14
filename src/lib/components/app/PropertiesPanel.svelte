@@ -63,12 +63,25 @@
 
 	// --- Event selection (from model.timeline) ---
 	const selectedEventIndex = $derived(
+		// Support either a timeline time string (e.g. "120") or the local event id (e.g. "event_0")
 		selectedEventId !== null
-			? model.timeline.findIndex((ev) => String(ev.time) === selectedEventId)
+			? ((): number => {
+				if (typeof selectedEventId === 'string' && selectedEventId.startsWith && selectedEventId.startsWith('event_')) {
+					const parts = selectedEventId.split('_');
+					const idx = parseInt(parts[1] ?? '', 10);
+					return Number.isNaN(idx) ? -1 : idx;
+				}
+				return model.timeline.findIndex((ev) => String(ev.time) === selectedEventId);
+			})()
 			: -1
 	);
 
 	const selectedEvent = $derived(selectedEventIndex >= 0 ? model.timeline[selectedEventIndex] : null);
+
+// Debug: log selection props for E2E troubleshooting
+$effect(() => {
+	console.log('[bmad-debug] PropertiesPanel props:', { selectedEventId, selectedEventIndex });
+});
 
 	// --- Mutation helpers (all write directly to model.timeline) ---
 

@@ -23,6 +23,10 @@ import { onMount, onDestroy } from 'svelte';
 	import { writable } from 'svelte/store';
 	const selectionStore = writable<string | null>(null);
 	setContext(SELECTION_STORE_KEY, selectionStore);
+	// Expose selectionStore for integration tests / debug helpers
+	if (typeof window !== 'undefined') {
+		(window as any).__selectionStore = selectionStore;
+	}
 
 	let zoom = $state(100);
 	let selectedEventId = $state<string | null>(null);

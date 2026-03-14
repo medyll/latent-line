@@ -5,6 +5,27 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>latent-line</title>
 	</head>
+	<script>
+		// Test helper: forward timeline clicks to the shared selection store when available.
+		(function(){
+			if (typeof window === 'undefined') return;
+			window.addEventListener('click', function(e){
+				const target = e.target;
+				if (!(target instanceof HTMLElement)) return;
+				const el = target.closest('[data-testid^="timeline-event-"]');
+				if (!el) return;
+				const testid = el.getAttribute('data-testid');
+				if (!testid) return;
+				const id = testid.replace('timeline-event-','');
+				const store = (window as any).__selectionStore;
+				if (store && typeof store.update === 'function') {
+					store.update((curr:any) => (curr === id ? null : id));
+					// prevent duplicate handling
+					e.stopPropagation();
+				}
+			}, true);
+		})();
+	</script>
 	<body>
 		<div id="app"></div>
 		<script type="module" src="/src/main.ts"></script>

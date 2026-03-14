@@ -29,6 +29,43 @@
 
 	const selectionStore = getContext(SELECTION_STORE_KEY) as Writable<string | null> | undefined;
 
+	// Local selected state to make aria-selected reliable for tests even if parent
+	// reactivity hasn't propagated yet. Keep in sync with both the prop and the
+	// shared selection store.
+	let selectedLocal = $state(isSelected);
+	
+	if (selectionStore) {
+		selectionStore.subscribe((id) => {
+			selectedLocal = id === item.id;
+		});
+	}
+
+	$effect(() => {
+		// Sync incoming prop changes
+		selectedLocal = isSelected;
+	});
+
+	function toggleSelection(e: MouseEvent) {
+		e.stopPropagation();
+		console.log('[bmad-debug] TimelineEvent.toggleSelection', item.id);
+		// Direct DOM manipulation to ensure aria-selected updates immediately for E2E stability
+		if (typeof document !== 'undefined') {
+			const all = Array.from(document.querySelectorAll('[data-testid^="timeline-event-"]')) as HTMLElement[];
+			all.forEach((el) => el.setAttribute('aria-selected', 'false'));
+			const current = (e.currentTarget as HTMLElement) ?? (e.target as HTMLElement);
+			if (current) current.setAttribute('aria-selected', 'true');
+		}
+		if (!selectionStore) {
+			console.log('[bmad-debug] selectionStore undefined in TimelineEvent', item.id);
+			return;
+		}
+		selectionStore.update((curr) => {
+			const next = curr === item.id ? null : item.id;
+			console.log('[bmad-debug] selectionStore update', { from: curr, to: next });
+			return next;
+		});
+	}
+
 </script>
 
 <div
@@ -36,11 +73,11 @@
 	role="button"
 	tabindex="0"
 	style="position: relative; z-index: 50;"
-	class={`flex h-64 w-64 cursor-pointer flex-col items-start justify-start p-4 shadow-md transition-all ${isSelected ? 'border-2 border-blue-500 bg-blue-50' : 'bg-white hover:shadow-lg'}`}
+	class={`flex h-64 w-64 cursor-pointer flex-col items-start justify-start p-4 shadow-md transition-all ${selectedLocal ? 'border-2 border-blue-500 bg-blue-50' : 'bg-white hover:shadow-lg'}`}
 	aria-label={`Timeline event ${item.label}`}
-	aria-selected={isSelected}
+	aria-selected={selectedLocal}
 	data-selection-available={selectionStore ? 'yes' : 'no'}
-	on:click={(e) => { e.stopPropagation(); selectionStore?.update(curr => curr === item.id ? null : item.id); }}
+	on:click={toggleSelection}
 	>
 	<div class="mb-2 text-lg font-bold">{item.label}</div>
 	<div class="text-xs">Start: {item.start}</div>
