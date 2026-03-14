@@ -48,6 +48,7 @@
 	});
 
 	function toggleSelection(e: MouseEvent) {
+		console.log('[bmad-debug] TimelineEvent.toggleSelection start', { id: item.id, selectedLocal });
 		// If a higher-level capture handler already processed this selection,
 		// skip to avoid double-toggling. Uses a transient dataset flag set by the
 		// document-level capture listener.
