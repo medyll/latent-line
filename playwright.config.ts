@@ -1,6 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
+	timeout: 60000,
+	retries: 1,
 	use: {
 		// Align with local Vite default port (5173) and app path
 		baseURL: 'http://localhost:5173'

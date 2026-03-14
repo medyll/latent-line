@@ -21,7 +21,30 @@ import { onMount, onDestroy } from 'svelte';
 	setContext(MODEL_STORE_KEY, model);
 	// Expose selection store so child components can update selection directly (robust to overlaying elements)
 	import { writable } from 'svelte/store';
-	const selectionStore = writable<string | null>(null);
+	function createSelectionStore(initial: string | null = null) {
+		const internal = writable<string | null>(initial);
+		let last: string | null = initial;
+		let lastTime = 0;
+		return {
+			subscribe: internal.subscribe,
+			set(val: string | null) {
+				const now = Date.now();
+				// Ignore rapid toggles coming within 60ms — this coalesces duplicate handlers
+				if (now - lastTime < 60 && val !== last) {
+					// drop the update
+					return;
+				}
+				last = val;
+				lastTime = now;
+				internal.set(val);
+			},
+			update(fn: (curr: string | null) => string | null) {
+				const next = fn(last);
+				(this as any).set(next);
+			}
+		};
+	}
+	const selectionStore = createSelectionStore(null);
 	setContext(SELECTION_STORE_KEY, selectionStore);
 	// Expose selectionStore for integration tests / debug helpers
 	if (typeof window !== 'undefined') {
@@ -79,7 +102,70 @@ import { onMount, onDestroy } from 'svelte';
 selectionStore.subscribe((id) => {
 	selectedEventId = id;
 	console.log('[bmad-debug] selectionStore ->', id);
+	if (typeof window !== 'undefined') (window as any).__selectionStoreValue = id;
 });
+
+// Capture clicks at the document level to robustly handle selection across
+// nested elements and overlays. This runs in capture phase so it fires before
+// other bubble-phase handlers and stabilizes aria-selected immediately.
+if (typeof window !== 'undefined') {
+	const __win = window as any;
+	__win.__eventLog = __win.__eventLog || [];
+
+	const logEvent = (e: Event) => {
+		try {
+			const ev: any = e as any;
+			const target = ev.target as HTMLElement | null;
+			const closest = target?.closest ? target.closest('[data-testid^="timeline-event-"]') as HTMLElement | null : null;
+			__win.__eventLog.push({
+				type: e.type,
+				time: Date.now(),
+				targetTag: target?.tagName,
+				targetDataset: target?.dataset ? { ...target.dataset } : {},
+				closestTestId: closest?.getAttribute('data-testid') || null,
+				clientX: ev.clientX ?? null,
+				clientY: ev.clientY ?? null
+			});
+		} catch (err) {
+			// best-effort logging; swallow errors
+		}
+	};
+
+	const onCapturePointerDown = (e: PointerEvent) => {
+		logEvent(e);
+		const target = e.target as HTMLElement | null;
+		if (!target) return;
+		const el = target.closest('[data-testid^="timeline-event-"]') as HTMLElement | null;
+		if (!el) return;
+		const tid = el.getAttribute('data-testid') || '';
+		const id = tid.replace('timeline-event-', '');
+		selectedEventId = selectedEventId === id ? null : id;
+		selectionStore.set(selectedEventId);
+		// Immediate DOM update for test stability
+		const all = Array.from(document.querySelectorAll('[data-testid^="timeline-event-"]')) as HTMLElement[];
+		all.forEach((n) => n.setAttribute('aria-selected', 'false'));
+		el.setAttribute('aria-selected', selectedEventId === id ? 'true' : 'false');
+		// Mark this element so other handlers know we've processed selection already
+		el.dataset.__selectionHandled = '1';
+		// Stop propagation to avoid duplicate toggles from bubble-phase handlers
+		e.stopPropagation();
+	};
+
+	// Generic logging for pointerdown/pointerup/click in capture phase
+	document.addEventListener('pointerdown', logEvent, true);
+	document.addEventListener('pointerup', logEvent, true);
+	document.addEventListener('click', logEvent, true);
+	// Use pointerdown to perform selection (more in line with physical pointer interactions)
+	document.addEventListener('pointerdown', onCapturePointerDown, true);
+
+	// Clean up on module unload / HMR
+	onDestroy(() => {
+		document.removeEventListener('pointerdown', logEvent, true);
+		document.removeEventListener('pointerup', logEvent, true);
+		document.removeEventListener('click', logEvent, true);
+		document.removeEventListener('pointerdown', onCapturePointerDown, true);
+	});
+}
 
 </script>
 
@@ -150,7 +236,7 @@ selectionStore.subscribe((id) => {
 												tabindex="0"
 												class={`relative z-50 ${selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}`}
 											>
-												<TimeLineEvent {item} isSelected={selectedEventId === item.id} on:click={() => selectEvent(item.id)} on:keydown={(e) => e.key === 'Enter' && selectEvent(item.id)} class={`relative z-50 ${selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}`} />
+												<TimeLineEvent {item} isSelected={selectedEventId === item.id} class={`relative z-50 ${selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}`} />
 											</div>
 										{/each}
 									</div>

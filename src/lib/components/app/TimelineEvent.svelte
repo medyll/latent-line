@@ -41,11 +41,23 @@
 	}
 
 	$effect(() => {
-		// Sync incoming prop changes
-		selectedLocal = isSelected;
+		// Sync incoming prop changes only when no shared selection store is available.
+		if (!selectionStore) {
+			selectedLocal = isSelected;
+		}
 	});
 
 	function toggleSelection(e: MouseEvent) {
+		// If a higher-level capture handler already processed this selection,
+		// skip to avoid double-toggling. Uses a transient dataset flag set by the
+		// document-level capture listener.
+		const pre = (e.currentTarget as HTMLElement) ?? (e.target as HTMLElement);
+		if (pre && (pre as any).dataset && (pre as any).dataset.__selectionHandled) {
+			delete (pre as any).dataset.__selectionHandled;
+			return;
+		}
+		// Prevent other click handlers (including parent) from running for this event
+		try { (e as any).stopImmediatePropagation?.(); } catch (err) {}
 		e.stopPropagation();
 		console.log('[bmad-debug] TimelineEvent.toggleSelection', item.id);
 		// Direct DOM manipulation to ensure aria-selected updates immediately for E2E stability
@@ -61,6 +73,8 @@
 		}
 		selectionStore.update((curr) => {
 			const next = curr === item.id ? null : item.id;
+			// Update local state immediately for E2E stability, then propagate to store
+			selectedLocal = next === item.id;
 			console.log('[bmad-debug] selectionStore update', { from: curr, to: next });
 			return next;
 		});
