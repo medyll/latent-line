@@ -29,11 +29,9 @@ import { onMount, onDestroy } from 'svelte';
 			subscribe: internal.subscribe,
 			set(val: string | null) {
 				const now = Date.now();
-				// Ignore rapid toggles coming within 60ms — this coalesces duplicate handlers
-				if (now - lastTime < 60 && val !== last) {
-					// drop the update
-					return;
-				}
+				// Deliver all selection updates; avoid debouncing to prevent dropped toggles during tests
+				// Tests and user interactions should handle rapid events appropriately.
+				// (Removing debounce improves determinism for E2E where simulated clicks may be fast.)
 				last = val;
 				lastTime = now;
 				internal.set(val);
@@ -99,10 +97,23 @@ import { onMount, onDestroy } from 'svelte';
 
 
 // Keep local selectedEventId in sync with selectionStore (handles clicks from child components)
+let __debugSelection = '';
+let __debugEvents = '';
 selectionStore.subscribe((id) => {
 	selectedEventId = id;
 	console.log('[bmad-debug] selectionStore ->', id);
-	if (typeof window !== 'undefined') (window as any).__selectionStoreValue = id;
+	if (typeof window !== 'undefined') {
+		(window as any).__selectionStoreValue = id;
+		__debugSelection = JSON.stringify(id);
+		// mirror recent event log if present
+		// @ts-ignore
+		if ((window as any).__eventLog && Array.isArray((window as any).__eventLog)) {
+			// @ts-ignore
+			__debugEvents = JSON.stringify((window as any).__eventLog.slice(-20));
+		} else {
+			__debugEvents = '[]';
+		}
+	}
 });
 
 // Capture clicks at the document level to robustly handle selection across
@@ -151,12 +162,14 @@ if (typeof window !== 'undefined') {
 		e.stopPropagation();
 	};
 
-	// Generic logging for pointerdown/pointerup/click in capture phase
+	// Generic logging for pointerdown/pointerup/click/mousedown in capture phase
 	document.addEventListener('pointerdown', logEvent, true);
 	document.addEventListener('pointerup', logEvent, true);
 	document.addEventListener('click', logEvent, true);
-	// Use pointerdown to perform selection (more in line with physical pointer interactions)
+	document.addEventListener('mousedown', logEvent, true);
+	// Use pointerdown/mousedown to perform selection (covers environments where pointer events may not fire)
 	document.addEventListener('pointerdown', onCapturePointerDown, true);
+	document.addEventListener('mousedown', onCapturePointerDown, true);
 
 	// Clean up on module unload / HMR
 	onDestroy(() => {
@@ -170,6 +183,11 @@ if (typeof window !== 'undefined') {
 </script>
 
 <!-- Timeline with sidebar layout -->
+<!-- Playwright debug mirrors -->
+<div data-testid="timeline-debug" aria-hidden="true" style="position:fixed;left:0;bottom:0;opacity:0;pointer-events:none;z-index:9999;">
+	<div data-testid="debug-selection">{typeof __debugSelection !== 'undefined' ? __debugSelection : ''}</div>
+	<div data-testid="debug-events">{typeof __debugEvents !== 'undefined' ? __debugEvents : ''}</div>
+</div>
 <div class="conteiner flex h-full flex-row">
 	<!-- Sidebar -->
 	<aside

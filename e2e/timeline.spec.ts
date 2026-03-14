@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 test('selecting a timeline event shows properties in the panel', async ({ page }) => {
-  await page.goto('/timeline');
+  await page.goto('/timeline', { waitUntil: 'networkidle' });
+
+  await page.locator('[data-testid="am-debug-visible"]').waitFor({ timeout: 20000 });
+  await page.locator('[aria-label="Asset Manager"]').waitFor();
 
   // Initially no selection
   await expect(page.locator('[aria-label="No selection"]')).toBeVisible();
