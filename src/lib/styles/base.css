@@ -1,5 +1,8 @@
 @layer base {
-	body { 
+	html {
+		font-size: 11px;
+	}
+	body {
 		font-feature-settings:
 			'rlig' 1,
 			'calt' 1; /* Optionnel : optimisation typo type Shadcn */

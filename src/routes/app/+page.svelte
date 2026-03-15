@@ -20,6 +20,14 @@
 	let selectedTime = $state<number | null>(null);
 	let selectedAssetId = $state<string | null>(null);
 
+	// Mutual exclusion: selecting an event clears the asset, and vice versa
+	$effect(() => {
+		if (selectedTime !== null) selectedAssetId = null;
+	});
+	$effect(() => {
+		if (selectedAssetId !== null) selectedTime = null;
+	});
+
 	// Derive selectedEventId (string form) for PropertiesPanel
 	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
 </script>

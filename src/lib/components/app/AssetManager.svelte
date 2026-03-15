@@ -354,7 +354,7 @@
 						<!-- Inline edit form -->
 						{#if isEditing}
 							{@const idx = assetStore.characters.findIndex((c) => c.id === char.id)}
-							<div class="mt-0.5 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+							<div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
 								<!-- Name -->
 								<div class="flex flex-col gap-0.5">
 									<label class="text-gray-400">Name</label>
@@ -505,7 +505,7 @@
 
 					<!-- Inline edit -->
 					{#if isEditing}
-						<div class="mt-0.5 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+						<div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
 							<div class="flex flex-col gap-0.5">
 								<label class="text-gray-400">Prompt</label>
 								<textarea
@@ -621,7 +621,7 @@
 
 					<!-- Inline edit -->
 					{#if isEditing}
-						<div class="mt-0.5 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+						<div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
 							<div class="flex flex-col gap-0.5">
 								<label class="text-gray-400">Label</label>
 								<input
