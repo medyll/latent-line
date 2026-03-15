@@ -10,7 +10,8 @@
       "Bash(npm run:*)",
       "Bash(npx playwright:*)",
       "Bash(npm list:*)",
-      "mcp__plugin_context-mode_context-mode__ctx_fetch_and_index"
+      "mcp__plugin_context-mode_context-mode__ctx_fetch_and_index",
+      "mcp__plugin_context-mode_context-mode__ctx_batch_execute"
     ]
   }
 }
