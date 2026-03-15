@@ -23,7 +23,9 @@
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
 	const model = getContext<Model>(MODEL_STORE_KEY);
 	// selection store to set selection when adding or selecting assets
-	const selectionStore = getContext(SELECTION_STORE_KEY) as { set?: (v: string | null) => void } | undefined;
+	const selectionStore = getContext(SELECTION_STORE_KEY) as
+		| { set?: (v: string | null) => void }
+		| undefined;
 
 	// --- Orphan detection ---
 	const usedCharIds = $derived(
@@ -82,7 +84,9 @@
 		debugLastAction = `select:${key}`;
 		selectedAssetId = selectedAssetId === key ? null : key;
 		// notify global selectionStore so PropertiesPanel (and timeline) see selection synchronously
-		try { selectionStore?.set?.(selectedAssetId); } catch {}
+		try {
+			selectionStore?.set?.(selectedAssetId);
+		} catch {}
 		console.log('[AssetManager] selectedAssetId ->', selectedAssetId);
 	}
 
@@ -111,7 +115,11 @@
 		// Auto-select and focus the new character to stabilise E2E tests
 		selectedAssetId = `char:${newId}`;
 		// Also notify global selection store so PropertiesPanel and other listeners receive the update synchronously
-		try { selectionStore?.set?.(`char:${newId}`); } catch (err) { /* best-effort */ }
+		try {
+			selectionStore?.set?.(`char:${newId}`);
+		} catch (err) {
+			/* best-effort */
+		}
 		// wait a tick so the inline input mounts and bindings apply before tests assert
 		await tick();
 		// reaffirm editingId to ensure inline form remains visible across microtasks
@@ -119,18 +127,30 @@
 		// attempt to focus the new inline input after it's mounted
 		await tick();
 		try {
-			const el = document.querySelector(`[data-testid="asset-char-${newId}"] input[aria-label="Character name"]`) as HTMLInputElement | null;
+			const el = document.querySelector(
+				`[data-testid="asset-char-${newId}"] input[aria-label="Character name"]`
+			) as HTMLInputElement | null;
 			if (el) {
-				try { el.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' }); } catch {}
+				try {
+					el.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+				} catch {}
 				el.focus();
 				el.select();
 				debugLastAction = `add:char:${newId}:focused`;
 			} else {
 				// fallback: schedule a rAF attempt
 				requestAnimationFrame(() => {
-					const el2 = document.querySelector(`[data-testid="asset-char-${newId}"] input[aria-label="Character name"]`) as HTMLInputElement | null;
-					if (el2) { try { el2.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' }); } catch {}
-						el2.focus(); el2.select(); debugLastAction = `add:char:${newId}:focused:raf`; }
+					const el2 = document.querySelector(
+						`[data-testid="asset-char-${newId}"] input[aria-label="Character name"]`
+					) as HTMLInputElement | null;
+					if (el2) {
+						try {
+							el2.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'nearest' });
+						} catch {}
+						el2.focus();
+						el2.select();
+						debugLastAction = `add:char:${newId}:focused:raf`;
+					}
 				});
 			}
 		} catch (err) {
@@ -230,28 +250,30 @@
   AssetManager Component
   Characters / Environments / Audio with inline editing and orphan badges.
 -->
-<div
+<!-- <div
 	class="flex flex-col gap-1 p-1 text-xs"
 	aria-label="Asset Manager"
 	style="background:var(--color-popover); color:var(--color-popover-foreground)"
 >
-	<!-- E2E debug: visible store counts and last action -->
-	<div
-		data-testid="am-debug-visible"
-		aria-hidden="true"
-		style="font-size:10px;line-height:1;opacity:0.9;color:var(--color-popover-foreground);"
-	>
-		{JSON.stringify({
-			chars: assetStore.characters?.length ?? 0,
-			envs: Object.keys(assetStore.environments ?? {}).length,
-			audio: assetStore.audio?.length ?? 0,
-			last: debugLastAction
-		})}
-	</div>
-	<!-- ── Characters ── -->
-	<div class="p-1">
-		<div class="mb-1 flex items-center justify-between">
-			<span class="font-semibold">Characters</span>
+</div> -->
+<!-- E2E debug: visible store counts and last action -->
+<div
+	data-testid="am-debug-visible"
+	aria-hidden="true"
+	style="font-size:10px;line-height:1;opacity:0.9;color:var(--color-popover-foreground);"
+>
+	{JSON.stringify({
+		chars: assetStore.characters?.length ?? 0,
+		envs: Object.keys(assetStore.environments ?? {}).length,
+		audio: assetStore.audio?.length ?? 0,
+		last: debugLastAction
+	})}
+</div>
+<!-- ── Characters ── -->
+<section class="sidebar-group">
+	<div class="group-header">
+		<h2 class="header-title">Characters</h2>
+		<div class="header-control">
 			<button
 				type="button"
 				class="rounded p-1 text-gray-600 hover:text-blue-600"
@@ -265,7 +287,8 @@
 				<Plus class="h-3 w-3" />
 			</button>
 		</div>
-
+	</div>
+	<div class="group-actions">
 		{#if !assetStore.characters.length}
 			<Empty>
 				<EmptyHeader>
@@ -274,64 +297,59 @@
 				</EmptyHeader>
 			</Empty>
 		{:else}
-			<ul role="listbox" aria-label="Characters" class="flex flex-col gap-0.5">
+			<ul role="listbox" aria-label="Characters" class="sidebar-list">
 				{#each assetStore.characters as char (char.id)}
 					{@const isOrphan = !usedCharIds.has(char.id)}
 					{@const refCount = charRefCounts[char.id] ?? 0}
 					{@const isEditing = editingId === `char:${char.id}`}
-					<li class="flex flex-col rounded border border-transparent hover:border-gray-100">
-						<!-- Row -->
-						<div
-							data-testid={`asset-char-${char.id}`}
-							onclick={() => selectAsset('char', char.id)}
-							onkeydown={(e) => e.key === 'Enter' && selectAsset('char', char.id)}
-							role="option"
-							tabindex="0"
-							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 transition-colors ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
-							aria-label={`Character ${char.name}`}
-							aria-selected={selectedAssetId === `char:${char.id}`}
-						>
-							<div class="flex min-w-0 items-center gap-2">
-								<Avatar class="h-5 w-5 shrink-0 text-xs">
-									<AvatarFallback>{char.name?.[0] ?? '?'}</AvatarFallback>
-								</Avatar>
-								<div class="min-w-0">
-									<div class="font-mono text-muted-foreground">{char.id}</div>
-									<div class="truncate">{char.name}</div>
-								</div>
-							</div>
-							<div class="flex shrink-0 items-center gap-1">
-								{#if isOrphan}
-									<span
-										class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
-										title="Orphan — not used in timeline">○</span
-									>
-								{:else}
-									<span
-										class="rounded bg-green-100 px-1 py-0.5 text-green-700"
-										title={`Used in ${refCount} frame(s)`}>{refCount}</span
-									>
-								{/if}
-								<button
-									onclick={(e) => toggleEdit(e, `char:${char.id}`)}
-									title="Edit character"
-									aria-label={`Edit ${char.name}`}
-									class="rounded p-0.5 text-gray-400 hover:text-blue-600"
-								>
-									{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
-								</button>
-								<Button
-									variant="ghost"
-									size="sm"
-									onclick={(e) => removeCharacter(e, char.id)}
-									title={`Delete ${char.name}`}
-									class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
-									data-testid={`delete-char-${char.id}`}
-								>
-									<Trash2 class="h-3 w-3" />
-								</Button>
-							</div>
+					<li
+						role="option"
+						class={`sidebar-item ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
+						data-testid={`asset-char-${char.id}`}
+						onclick={() => selectAsset('char', char.id)}
+						onkeydown={(e) => e.key === 'Enter' && selectAsset('char', char.id)}
+						tabindex="0"
+						aria-label={`Character ${char.name}`}
+						aria-selected={selectedAssetId === `char:${char.id}`}
+					>
+						<Avatar class="h-5 w-5 shrink-0 text-xs">
+							<AvatarFallback>{char.name?.[0] ?? '?'}</AvatarFallback>
+						</Avatar>
+						<div class="item-info">
+							<div class="info-light">{char.id}</div>
+							<div class="info-main">{char.name}</div>
 						</div>
+						<div class="item-chip">
+							{#if isOrphan}
+								<span
+									class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
+									title="Orphan — not used in timeline">○</span
+								>
+							{:else}
+								<span
+									class="rounded bg-green-100 px-1 py-0.5 text-green-700"
+									title={`Used in ${refCount} frame(s)`}>{refCount}</span
+								>
+							{/if}
+						</div>
+						<button
+							onclick={(e) => toggleEdit(e, `char:${char.id}`)}
+							title="Edit character"
+							aria-label={`Edit ${char.name}`}
+							class="rounded p-0.5 text-gray-400 hover:text-blue-600"
+						>
+							{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
+						</button>
+						<Button
+							variant="ghost"
+							size="sm"
+							onclick={(e) => removeCharacter(e, char.id)}
+							title={`Delete ${char.name}`}
+							class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
+							data-testid={`delete-char-${char.id}`}
+						>
+							<Trash2 class="h-3 w-3" />
+						</Button>
 
 						<!-- Inline edit form -->
 						{#if isEditing}
@@ -418,11 +436,13 @@
 			</ul>
 		{/if}
 	</div>
+</section>
 
-	<!-- ── Environments ── -->
-	<div class="p-1">
-		<div class="mb-1 flex items-center justify-between">
-			<span class="font-semibold">Environments</span>
+<!-- ── Environments ── -->
+<section class="sidebar-group">
+	<div class="group-header">
+		<h2 class="header-title">Environments</h2>
+		<div class="header-control">
 			<button
 				type="button"
 				class="rounded p-1 text-gray-600 hover:text-blue-600"
@@ -436,97 +456,93 @@
 				<Plus class="h-3 w-3" />
 			</button>
 		</div>
-
-		{#if !Object.keys(assetStore.environments).length}
-			<Empty>
-				<EmptyHeader>
-					<EmptyTitle>No environments</EmptyTitle>
-					<EmptyDescription>Add an environment to your story world.</EmptyDescription>
-				</EmptyHeader>
-			</Empty>
-		{:else}
-			<ul role="listbox" aria-label="Environments" class="flex flex-col gap-0.5">
-				{#each Object.entries(assetStore.environments) as [id, env] (id)}
-					{@const isEditing = editingId === `env:${id}`}
-					<li class="flex flex-col rounded border border-transparent hover:border-gray-100">
-						<!-- Row -->
-						<div
-							data-testid={`asset-env-${id}`}
-							onclick={() => selectAsset('env', id)}
-							onkeydown={(e) => e.key === 'Enter' && selectAsset('env', id)}
-							role="option"
-							tabindex="0"
-							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 transition-colors ${selectedAssetId === `env:${id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
-							aria-label={`Environment ${env.prompt}`}
-							aria-selected={selectedAssetId === `env:${id}`}
-						>
-							<div class="min-w-0">
-								<div class="font-mono text-muted-foreground">{id}</div>
-								<div class="truncate text-gray-600">{env.prompt}</div>
-							</div>
-							<div class="flex shrink-0 items-center gap-1">
-								<button
-									onclick={(e) => toggleEdit(e, `env:${id}`)}
-									title="Edit environment"
-									aria-label={`Edit ${id}`}
-									class="rounded p-0.5 text-gray-400 hover:text-blue-600"
-								>
-									{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
-								</button>
-								<Button
-									variant="ghost"
-									size="sm"
-									onclick={(e) => removeEnvironment(e, id)}
-									title="Delete environment"
-									class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
-									data-testid={`delete-env-${id}`}
-								>
-									<Trash2 class="h-3 w-3" />
-								</Button>
-							</div>
-						</div>
-
-						<!-- Inline edit -->
-						{#if isEditing}
-							<div class="mt-0.5 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
-								<div class="flex flex-col gap-0.5">
-									<label class="text-gray-400">Prompt</label>
-									<textarea
-										value={env.prompt}
-										oninput={(e) =>
-											(assetStore.environments[id].prompt = (
-												e.target as HTMLTextAreaElement
-											).value)}
-										rows={2}
-										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
-										aria-label="Environment prompt"
-									></textarea>
-								</div>
-								<div class="flex flex-col gap-0.5">
-									<label class="text-gray-400">Reference image</label>
-									<input
-										type="text"
-										value={env.ref ?? ''}
-										oninput={(e) =>
-											(assetStore.environments[id].ref =
-												(e.target as HTMLInputElement).value || undefined)}
-										placeholder="filename or URL"
-										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
-										aria-label="Environment reference image"
-									/>
-								</div>
-							</div>
-						{/if}
-					</li>
-				{/each}
-			</ul>
-		{/if}
 	</div>
 
-	<!-- ── Audio ── -->
-	<div class="p-1">
-		<div class="mb-1 flex items-center justify-between">
-			<span class="font-semibold">Audio</span>
+	{#if !Object.keys(assetStore.environments).length}
+		<Empty>
+			<EmptyHeader>
+				<EmptyTitle>No environments</EmptyTitle>
+				<EmptyDescription>Add an environment to your story world.</EmptyDescription>
+			</EmptyHeader>
+		</Empty>
+	{:else}
+		<ul role="listbox" aria-label="Environments" class="sidebar-list">
+			{#each Object.entries(assetStore.environments) as [id, env] (id)}
+				{@const isEditing = editingId === `env:${id}`}
+				<li
+					class="sidebar-item"
+					data-testid={`asset-env-${id}`}
+					onclick={() => selectAsset('env', id)}
+					onkeydown={(e) => e.key === 'Enter' && selectAsset('env', id)}
+					role="option"
+					tabindex="0"
+					aria-label={`Environment ${env.prompt}`}
+					aria-selected={selectedAssetId === `env:${id}`}
+				>
+					<avatar>A</avatar>
+					<div class="item-info">
+						<div class="info-light">{id}</div>
+						<div class="info-main">{env.prompt}</div>
+					</div>
+					<button
+						onclick={(e) => toggleEdit(e, `env:${id}`)}
+						title="Edit environment"
+						aria-label={`Edit ${id}`}
+						class="rounded p-0.5 text-gray-400 hover:text-blue-600"
+					>
+						{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
+					</button>
+					<Button
+						variant="ghost"
+						size="sm"
+						onclick={(e) => removeEnvironment(e, id)}
+						title="Delete environment"
+						class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
+						data-testid={`delete-env-${id}`}
+					>
+						<Trash2 class="h-3 w-3" />
+					</Button>
+
+					<!-- Inline edit -->
+					{#if isEditing}
+						<div class="mt-0.5 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+							<div class="flex flex-col gap-0.5">
+								<label class="text-gray-400">Prompt</label>
+								<textarea
+									value={env.prompt}
+									oninput={(e) =>
+										(assetStore.environments[id].prompt = (e.target as HTMLTextAreaElement).value)}
+									rows={2}
+									class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
+									aria-label="Environment prompt"
+								></textarea>
+							</div>
+							<div class="flex flex-col gap-0.5">
+								<label class="text-gray-400">Reference image</label>
+								<input
+									type="text"
+									value={env.ref ?? ''}
+									oninput={(e) =>
+										(assetStore.environments[id].ref =
+											(e.target as HTMLInputElement).value || undefined)}
+									placeholder="filename or URL"
+									class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
+									aria-label="Environment reference image"
+								/>
+							</div>
+						</div>
+					{/if}
+				</li>
+			{/each}
+		</ul>
+	{/if}
+</section>
+
+<!-- ── Audio ── -->
+<section class="sidebar-group">
+	<div class="group-header">
+		<span class="header-title">Audio</span>
+		<div class="header-control">
 			<button
 				type="button"
 				class="rounded p-1 text-gray-600 hover:text-blue-600"
@@ -540,102 +556,100 @@
 				<Plus class="h-3 w-3" />
 			</button>
 		</div>
+	</div>
 
-		{#if !assetStore.audio?.length}
-			<Empty>
-				<EmptyHeader>
-					<EmptyTitle>No audio assets</EmptyTitle>
-					<EmptyDescription>Add music or sound effects to your project.</EmptyDescription>
-				</EmptyHeader>
-			</Empty>
-		{:else}
-			<ul role="listbox" aria-label="Audio assets" class="flex flex-col gap-0.5">
-				{#each assetStore.audio as aud (aud.id)}
-					{@const isOrphan = !usedAudioIds.has(aud.id)}
-					{@const refCount = audioRefCounts[aud.id] ?? 0}
-					{@const isEditing = editingId === `audio:${aud.id}`}
-					{@const audIdx = assetStore.audio!.findIndex((a) => a.id === aud.id)}
-					<li class="flex flex-col rounded border border-transparent hover:border-gray-100">
-						<!-- Row -->
-						<div
-							data-testid={`asset-audio-${aud.id}`}
-							onclick={() => selectAsset('audio', aud.id)}
-							onkeydown={(e) => e.key === 'Enter' && selectAsset('audio', aud.id)}
-							role="option"
-							tabindex="0"
-							class={`flex cursor-pointer items-center justify-between gap-2 rounded px-2 py-1 transition-colors ${selectedAssetId === `audio:${aud.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
-							aria-label={`Audio ${aud.label || aud.id}`}
-							aria-selected={selectedAssetId === `audio:${aud.id}`}
-						>
-							<div class="min-w-0">
-								<div class="font-mono text-muted-foreground">{aud.id}</div>
-								<div class="truncate">{aud.label || aud.id}</div>
+	{#if !assetStore.audio?.length}
+		<Empty>
+			<EmptyHeader>
+				<EmptyTitle>No audio assets</EmptyTitle>
+				<EmptyDescription>Add music or sound effects to your project.</EmptyDescription>
+			</EmptyHeader>
+		</Empty>
+	{:else}
+		<ul role="listbox" aria-label="Audio assets" class="sidebar-list">
+			{#each assetStore.audio as aud (aud.id)}
+				{@const isOrphan = !usedAudioIds.has(aud.id)}
+				{@const refCount = audioRefCounts[aud.id] ?? 0}
+				{@const isEditing = editingId === `audio:${aud.id}`}
+				{@const audIdx = assetStore.audio!.findIndex((a) => a.id === aud.id)}
+				<li
+					role="option"
+					data-testid={`asset-audio-${aud.id}`}
+					onclick={() => selectAsset('audio', aud.id)}
+					onkeydown={(e) => e.key === 'Enter' && selectAsset('audio', aud.id)}
+					tabindex="0"
+					class={`sidebar-item  ${selectedAssetId === `audio:${aud.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
+					aria-label={`Audio ${aud.label || aud.id}`}
+					aria-selected={selectedAssetId === `audio:${aud.id}`}
+				>
+					<avatar>A</avatar>
+					<div class="item-info">
+						<div class="info-light">{aud.id}</div>
+						<div class="info-main">{aud.label || aud.id}</div>
+					</div>
+					<div class="item-chip">
+						{#if isOrphan}
+							<span
+								class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
+								title="Orphan — not used in timeline">○</span
+							>
+						{:else}
+							<span
+								class="rounded bg-green-100 px-1 py-0.5 text-green-700"
+								title={`Used in ${refCount} frame(s)`}>{refCount}</span
+							>
+						{/if}
+					</div>
+					<button
+						onclick={(e) => toggleEdit(e, `audio:${aud.id}`)}
+						title="Edit audio"
+						aria-label={`Edit ${aud.id}`}
+						class="rounded p-0.5 text-gray-400 hover:text-blue-600"
+					>
+						{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
+					</button>
+					<Button
+						variant="ghost"
+						size="sm"
+						onclick={(e) => removeAudio(e, aud.id)}
+						title="Delete audio"
+						class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
+						data-testid={`delete-audio-${aud.id}`}
+					>
+						<Trash2 class="h-3 w-3" />
+					</Button>
+
+					<!-- Inline edit -->
+					{#if isEditing}
+						<div class="mt-0.5 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+							<div class="flex flex-col gap-0.5">
+								<label class="text-gray-400">Label</label>
+								<input
+									type="text"
+									value={assetStore.audio![audIdx].label ?? ''}
+									oninput={(e) =>
+										(assetStore.audio![audIdx].label =
+											(e.target as HTMLInputElement).value || undefined)}
+									class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
+									aria-label="Audio label"
+								/>
 							</div>
-							<div class="flex shrink-0 items-center gap-1">
-								{#if isOrphan}
-									<span
-										class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
-										title="Orphan — not used in timeline">○</span
-									>
-								{:else}
-									<span
-										class="rounded bg-green-100 px-1 py-0.5 text-green-700"
-										title={`Used in ${refCount} frame(s)`}>{refCount}</span
-									>
-								{/if}
-								<button
-									onclick={(e) => toggleEdit(e, `audio:${aud.id}`)}
-									title="Edit audio"
-									aria-label={`Edit ${aud.id}`}
-									class="rounded p-0.5 text-gray-400 hover:text-blue-600"
-								>
-									{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
-								</button>
-								<Button
-									variant="ghost"
-									size="sm"
-									onclick={(e) => removeAudio(e, aud.id)}
-									title="Delete audio"
-									class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
-									data-testid={`delete-audio-${aud.id}`}
-								>
-									<Trash2 class="h-3 w-3" />
-								</Button>
+							<div class="flex flex-col gap-0.5">
+								<label class="text-gray-400">URL / file</label>
+								<input
+									type="text"
+									value={assetStore.audio![audIdx].url}
+									oninput={(e) =>
+										(assetStore.audio![audIdx].url = (e.target as HTMLInputElement).value)}
+									placeholder="https://... or filename.mp3"
+									class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
+									aria-label="Audio URL"
+								/>
 							</div>
 						</div>
-
-						<!-- Inline edit -->
-						{#if isEditing}
-							<div class="mt-0.5 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
-								<div class="flex flex-col gap-0.5">
-									<label class="text-gray-400">Label</label>
-									<input
-										type="text"
-										value={assetStore.audio![audIdx].label ?? ''}
-										oninput={(e) =>
-											(assetStore.audio![audIdx].label =
-												(e.target as HTMLInputElement).value || undefined)}
-										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
-										aria-label="Audio label"
-									/>
-								</div>
-								<div class="flex flex-col gap-0.5">
-									<label class="text-gray-400">URL / file</label>
-									<input
-										type="text"
-										value={assetStore.audio![audIdx].url}
-										oninput={(e) =>
-											(assetStore.audio![audIdx].url = (e.target as HTMLInputElement).value)}
-										placeholder="https://... or filename.mp3"
-										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
-										aria-label="Audio URL"
-									/>
-								</div>
-							</div>
-						{/if}
-					</li>
-				{/each}
-			</ul>
-		{/if}
-	</div>
-</div>
+					{/if}
+				</li>
+			{/each}
+		</ul>
+	{/if}
+</section>

@@ -1,6 +1,4 @@
-<script lang="ts">
-	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
-	import AppSidebar from '$lib/components/app-sidebar.svelte';
+<script lang="ts"> 
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/styles/app.css';
 
@@ -33,23 +31,13 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<!--
-	AppLayout using shadcn-svelte Card for sidebar and main content.
--->
 <div class="h-screen w-screen overflow-hidden">
-	<Sidebar.Provider
-		style="--sidebar-width: calc(var(--spacing) * 72); --header-height: calc(var(--spacing) * 12);"
-	>
-		<AppSidebar />
-		<Sidebar.Inset>
-			<div class="flex h-full flex-col">
-				<header class="flex flex-row items-center gap-2 border-b px-4">
-					<Sidebar.Trigger class="-ms-1" /> latent-line
-				</header>
-				<main class="overflow-none w-full flex-1">
-					{@render children()}
-				</main>
-			</div>
-		</Sidebar.Inset>
-	</Sidebar.Provider>
+	<div class="flex h-full flex-col">
+		<header class="flex flex-row items-center gap-2 border-b px-4">
+			 latent-line
+		</header>
+		<main class="overflow-none w-full flex-1">
+			{@render children()}
+		</main>
+	</div>
 </div>

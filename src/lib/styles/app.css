@@ -3,6 +3,7 @@
 @import './base.css';
 @import './theme.css';
 @import './sidebar.css';
+@import './workspace.css';
 
 @custom-variant dark (&:is(.dark *));
 

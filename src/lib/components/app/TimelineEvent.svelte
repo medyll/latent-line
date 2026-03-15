@@ -33,7 +33,7 @@
 	// reactivity hasn't propagated yet. Keep in sync with both the prop and the
 	// shared selection store.
 	let selectedLocal = $state(isSelected);
-	
+
 	if (selectionStore) {
 		selectionStore.subscribe((id) => {
 			selectedLocal = id === item.id;
@@ -58,12 +58,16 @@
 			return;
 		}
 		// Prevent other click handlers (including parent) from running for this event
-		try { (e as any).stopImmediatePropagation?.(); } catch (err) {}
+		try {
+			(e as any).stopImmediatePropagation?.();
+		} catch (err) {}
 		e.stopPropagation();
 		console.log('[bmad-debug] TimelineEvent.toggleSelection', item.id);
 		// Direct DOM manipulation to ensure aria-selected updates immediately for E2E stability
 		if (typeof document !== 'undefined') {
-			const all = Array.from(document.querySelectorAll('[data-testid^="timeline-event-"]')) as HTMLElement[];
+			const all = Array.from(
+				document.querySelectorAll('[data-testid^="timeline-event-"]')
+			) as HTMLElement[];
 			all.forEach((el) => el.setAttribute('aria-selected', 'false'));
 			const current = (e.currentTarget as HTMLElement) ?? (e.target as HTMLElement);
 			if (current) current.setAttribute('aria-selected', 'true');
@@ -80,62 +84,68 @@
 			return next;
 		});
 	}
-
 </script>
 
 <div
+	class={`asset-card  shadow-md transition-all ${selectedLocal ? 'border-2 border-blue-500 bg-blue-50' : 'bg-white hover:shadow-lg'}`}
 	data-testid={`timeline-event-${item.id}`}
 	role="button"
 	tabindex="0"
 	style="position: relative; z-index: 50;"
-	class={`flex h-64 w-64 cursor-pointer flex-col items-start justify-start p-4 shadow-md transition-all ${selectedLocal ? 'border-2 border-blue-500 bg-blue-50' : 'bg-white hover:shadow-lg'}`}
 	aria-label={`Timeline event ${item.label}`}
 	aria-selected={selectedLocal}
 	data-selection-available={selectionStore ? 'yes' : 'no'}
-	on:click={toggleSelection}
-	>
-	<div class="mb-2 text-lg font-bold">{item.label}</div>
-	<div class="text-xs">Start: {item.start}</div>
-	<div class="text-xs">End: {item.end}</div>
-	{#if item.speech}
-		<div class="mt-2 flex items-center gap-2 text-sm text-gray-700 italic dark:text-gray-300">
-			<MessageCircle class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Speech" />
-			<span>"{item.speech}"</span>
-		</div>
-	{/if}
-	{#if item.mood}
-		<div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
-			<Smile class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Mood" />
-			<span>Mood: {item.mood}</span>
-		</div>
-	{/if}
-	{#if item.action}
-		<div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
-			<Activity class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Action" />
-			<span>Action: {item.action}</span>
-		</div>
-	{/if}
-	{#if item.zoom}
-		<div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
-			<ZoomIn class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Zoom" />
-			<span>Zoom: {item.zoom}</span>
-		</div>
-	{/if}
-	{#if item.fx && item.fx.bloom}
-		<div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
-			<Sparkles class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Bloom" />
-			<span>Bloom: {item.fx.bloom}</span>
-		</div>
-	{/if}
-	{#if item.audio && item.audio.length > 0}
-		<div class="mt-1 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
-			<Volume2 class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Audio" />
-			<span>Audio:</span>
-			<span class="flex flex-wrap gap-2">
-				{#each item.audio as track}
-					<span class="mr-2">{track.id} ({track.volume})</span>
-				{/each}
-			</span>
-		</div>
-	{/if}
+>
+	<div class="card-title">{item.label}</div>
+	<img src="thumb.jpg" alt="Preview" class="card-media" />
+	<div class="card-meta-primary">
+		<div class="meta-left"><span>Start: {item.start}</span></div>
+		<div class="meta-right"><span>End: {item.end}</span></div>
+	</div>
+
+	<div class="card-meta-details">
+		{#if item.speech}
+			<div class="meta-line">
+				<MessageCircle class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Speech" />
+				<span>"{item.speech}"</span>
+			</div>
+		{/if}
+		{#if item.mood}
+			<div class="meta-line">
+				<Smile class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Mood" />
+				<span>Mood: {item.mood}</span>
+			</div>
+		{/if}
+		{#if item.action}
+			<div class="meta-line">
+				<Activity class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Action" />
+				<span>Action: {item.action}</span>
+			</div>
+		{/if}
+		{#if item.zoom}
+			<div class="meta-line">
+				<ZoomIn class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Zoom" />
+				<span>Zoom: {item.zoom}</span>
+			</div>
+		{/if}
+		{#if item.fx && item.fx.bloom}
+			<div class="meta-line">
+				<Sparkles class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Bloom" />
+				<span>Bloom: {item.fx.bloom}</span>
+			</div>
+		{/if}
+		{#if item.audio && item.audio.length > 0}
+			<div class="meta-line">
+				<Volume2 class="h-4 w-4 text-gray-400" stroke-width="1.5" aria-label="Audio" />
+				<div>
+					<span>Audio:</span>
+					<span class="flex flex-wrap gap-2">
+						{#each item.audio as track}
+							<span class="mr-2">{track.id} ({track.volume})</span>
+						{/each}
+					</span>
+				</div>
+			</div>
+		{/if}
+	</div>
 </div>
