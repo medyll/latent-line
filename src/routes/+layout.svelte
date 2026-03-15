@@ -33,9 +33,6 @@
 
 <div class="h-screen w-screen overflow-hidden">
 	<div class="flex h-full flex-col">
-		<header class="flex flex-row items-center gap-2 border-b px-4">
-			 latent-line
-		</header>
 		<main class="overflow-none w-full flex-1">
 			{@render children()}
 		</main>

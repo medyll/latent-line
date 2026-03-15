@@ -243,16 +243,17 @@
 
 							& .meta-left,
 							& .meta-right {
+								font-size: var(--text-xs);
 								display: flex;
 								align-items: center;
-								gap: 4px;
+								padding: var(--pad-sm);
 							}
 						}
 
 						& .card-meta-details {
 							display: grid;
 							gap: 2px;
-							font-size: 0.8rem;
+							font-size: var(--text-xs);
 						}
 
 						& .meta-line {
@@ -260,7 +261,7 @@
 							display: grid;
 							grid-template-columns: 1.5rem 1fr;
 							gap: 2px;
-							font-size: 0.8rem;
+							font-size: var(--text-xs);
 							text-wrap: balance;
 							/* Target the first column (2n+1) */
 							& > *:nth-child(2n + 1) {
