@@ -1,4 +1,5 @@
-<script lang="ts"> 
+<script lang="ts">
+	import { setContext } from 'svelte';
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/styles/app.css';
 
@@ -8,33 +9,32 @@
 	function setTheme(newTheme: 'light' | 'dark') {
 		theme = newTheme;
 		if (typeof document !== 'undefined') {
-			document.documentElement.classList.toggle('dark', theme === 'dark');
-			localStorage.setItem('theme', theme);
+			document.documentElement.style.colorScheme = newTheme;
+			localStorage.setItem('theme', newTheme);
 		}
 	}
 
-	/* eslint-disable @typescript-eslint/no-unused-vars */
-	function _toggleTheme() {
+	function toggleTheme() {
 		setTheme(theme === 'light' ? 'dark' : 'light');
 	}
 
+	setContext('theme', { get current() { return theme; }, toggle: toggleTheme });
+
 	if (typeof document !== 'undefined') {
-		// On mount, restore theme from localStorage
 		const saved = localStorage.getItem('theme');
-		if (saved === 'dark') {
-			setTheme('dark');
-		} else {
-			setTheme('light');
-		}
+		if (saved === 'dark') setTheme('dark');
 	}
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<div class="h-screen w-screen overflow-hidden">
-	<div class="flex h-full flex-col">
-		<main class="overflow-none w-full flex-1">
-			{@render children()}
-		</main>
+<div style="display:flex;flex-direction:column;height:100dvh;width:100vw;overflow:hidden;">
+	<div style="display:flex;align-items:center;justify-content:flex-end;padding:0 0.5rem;height:28px;border-bottom:var(--border-width) solid var(--color-border);flex-shrink:0;">
+		<button onclick={toggleTheme} title="Toggle theme" style="font-size:var(--text-xs);background:none;border:none;cursor:pointer;color:var(--color-text-muted);">
+			{theme === 'dark' ? '☀ Light' : '☾ Dark'}
+		</button>
 	</div>
+	<main style="flex:1;min-height:0;overflow:hidden;">
+		{@render children()}
+	</main>
 </div>

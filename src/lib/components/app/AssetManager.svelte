@@ -12,9 +12,6 @@
 	import { getContext, tick } from 'svelte';
 	import type { Assets, Model } from '$lib/model/model-types';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY, SELECTION_STORE_KEY } from '$lib/context/keys';
-	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
-	import { Avatar, AvatarFallback } from '$lib/components/ui/avatar';
-	import { Button } from '$lib/components/ui/button';
 	import { Trash2, Plus, Pencil, X, Check } from '@lucide/svelte';
 
 	let { selectedAssetId = $bindable<string | null>(null) }: { selectedAssetId?: string | null } =
@@ -290,12 +287,7 @@
 	</div>
 	<div class="group-actions">
 		{#if !assetStore.characters.length}
-			<Empty>
-				<EmptyHeader>
-					<EmptyTitle>No characters</EmptyTitle>
-					<EmptyDescription>Add your first character to get started.</EmptyDescription>
-				</EmptyHeader>
-			</Empty>
+			<div class="empty-state"><p>No characters</p><small>Add your first character to get started.</small></div>
 		{:else}
 			<ul role="listbox" aria-label="Characters" class="sidebar-list">
 				{#each assetStore.characters as char (char.id)}
@@ -312,9 +304,7 @@
 						aria-label={`Character ${char.name}`}
 						aria-selected={selectedAssetId === `char:${char.id}`}
 					>
-						<Avatar class="h-5 w-5 shrink-0 text-xs">
-							<AvatarFallback>{char.name?.[0] ?? '?'}</AvatarFallback>
-						</Avatar>
+						<span class="avatar-fallback">{char.name?.[0] ?? '?'}</span>
 						<div class="item-info">
 							<div class="info-light">{char.id}</div>
 							<div class="info-main">{char.name}</div>
@@ -340,16 +330,7 @@
 						>
 							{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 						</button>
-						<Button
-							variant="ghost"
-							size="sm"
-							onclick={(e) => removeCharacter(e, char.id)}
-							title={`Delete ${char.name}`}
-							class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
-							data-testid={`delete-char-${char.id}`}
-						>
-							<Trash2 class="h-3 w-3" />
-						</Button>
+						<button onclick={(e) => removeCharacter(e, char.id)} title={`Delete ${char.name}`} class="btn-icon" data-testid={`delete-char-${char.id}`}><Trash2 class="h-3 w-3" /></button>
 
 						<!-- Inline edit form -->
 						{#if isEditing}
@@ -459,12 +440,7 @@
 	</div>
 
 	{#if !Object.keys(assetStore.environments).length}
-		<Empty>
-			<EmptyHeader>
-				<EmptyTitle>No environments</EmptyTitle>
-				<EmptyDescription>Add an environment to your story world.</EmptyDescription>
-			</EmptyHeader>
-		</Empty>
+		<div class="empty-state"><p>No environments</p><small>Add an environment to your story world.</small></div>
 	{:else}
 		<ul role="listbox" aria-label="Environments" class="sidebar-list">
 			{#each Object.entries(assetStore.environments) as [id, env] (id)}
@@ -479,7 +455,7 @@
 					aria-label={`Environment ${env.prompt}`}
 					aria-selected={selectedAssetId === `env:${id}`}
 				>
-					<avatar>A</avatar>
+					<span class="avatar-fallback">A</span>
 					<div class="item-info">
 						<div class="info-light">{id}</div>
 						<div class="info-main">{env.prompt}</div>
@@ -492,16 +468,7 @@
 					>
 						{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 					</button>
-					<Button
-						variant="ghost"
-						size="sm"
-						onclick={(e) => removeEnvironment(e, id)}
-						title="Delete environment"
-						class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
-						data-testid={`delete-env-${id}`}
-					>
-						<Trash2 class="h-3 w-3" />
-					</Button>
+					<button onclick={(e) => removeEnvironment(e, id)} title="Delete environment" class="btn-icon" data-testid={`delete-env-${id}`}><Trash2 class="h-3 w-3" /></button>
 
 					<!-- Inline edit -->
 					{#if isEditing}
@@ -559,12 +526,7 @@
 	</div>
 
 	{#if !assetStore.audio?.length}
-		<Empty>
-			<EmptyHeader>
-				<EmptyTitle>No audio assets</EmptyTitle>
-				<EmptyDescription>Add music or sound effects to your project.</EmptyDescription>
-			</EmptyHeader>
-		</Empty>
+		<div class="empty-state"><p>No audio assets</p><small>Add music or sound effects to your project.</small></div>
 	{:else}
 		<ul role="listbox" aria-label="Audio assets" class="sidebar-list">
 			{#each assetStore.audio as aud (aud.id)}
@@ -582,7 +544,7 @@
 					aria-label={`Audio ${aud.label || aud.id}`}
 					aria-selected={selectedAssetId === `audio:${aud.id}`}
 				>
-					<avatar>A</avatar>
+					<span class="avatar-fallback">A</span>
 					<div class="item-info">
 						<div class="info-light">{aud.id}</div>
 						<div class="info-main">{aud.label || aud.id}</div>
@@ -608,16 +570,7 @@
 					>
 						{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 					</button>
-					<Button
-						variant="ghost"
-						size="sm"
-						onclick={(e) => removeAudio(e, aud.id)}
-						title="Delete audio"
-						class="h-5 w-5 p-0 text-red-400 hover:text-red-700"
-						data-testid={`delete-audio-${aud.id}`}
-					>
-						<Trash2 class="h-3 w-3" />
-					</Button>
+					<button onclick={(e) => removeAudio(e, aud.id)} title="Delete audio" class="btn-icon" data-testid={`delete-audio-${aud.id}`}><Trash2 class="h-3 w-3" /></button>
 
 					<!-- Inline edit -->
 					{#if isEditing}

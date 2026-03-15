@@ -1,10 +1,5 @@
 <script lang="ts">
 	import { setContext } from 'svelte';
-	import * as Resizable from '$lib/components/ui/resizable/index.js';
-	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-	import { Slider } from '$lib/components/ui/slider/index.js';
-	import { Label } from '$lib/components/ui/label';
-	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
 	import AssetManager from './AssetManager.svelte';
 	import PropertiesPanel from './PropertiesPanel.svelte';
 	import TimeLineEvent from './TimelineEvent.svelte';
@@ -218,28 +213,22 @@
 	<main class="shell-main">
 		<nav class="command-bar">
 			<!-- Zoom slider -->
-			<Label for="zoom-slider">Zoom</Label>
-			<Slider
+			<label for="zoom-slider">Zoom</label>
+			<input type="range"
 				id="zoom-slider"
-				type="single"
 				bind:value={zoom}
 				min={10}
 				max={400}
 				step={1}
 				class="w-[200px]"
-			/>
+			 />
 			<span>{zoom}%</span>
 		</nav>
 
 		<div class="workspace-view">
 			<section class="asset-grid">
 				{#if timelineEvents.length === 0} 
-					<Empty>
-						<EmptyHeader>
-							<EmptyTitle>No timeline items</EmptyTitle>
-							<EmptyDescription>Add clips to the timeline.</EmptyDescription>
-						</EmptyHeader>
-					</Empty>
+					<div class="empty-state"><p>No timeline items</p><small>Add clips to the timeline.</small></div>
 				{:else}
 					<!-- Timeline clips en vignettes -->
 					{#each timelineEvents as item (item.id)}

@@ -8,10 +8,7 @@
 	 *              Validation displays per-field Zod issues in a readable list.
 	 * @example <ModelInspector />
 	 */
-	import { Button } from '$lib/components/ui/button';
-	import { Card, CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
-	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
-	import exampleModel from '$lib/model/model-example';
+				import exampleModel from '$lib/model/model-example';
 	import { modelTemplate, modelSchema } from '$lib/model/model-template';
 	import type { Model } from '$lib/model/model-types';
 
@@ -56,15 +53,15 @@
 -->
 <div class="flex max-w-2xl flex-col gap-6" style="color:var(--color-foreground)">
 	<!-- Controls -->
-	<Card>
-		<CardHeader>
-			<CardTitle>Model Inspector</CardTitle>
-		</CardHeader>
-		<CardContent>
+	<section>
+		<header class="card-header">
+			<h3 class="card-title">Model Inspector</h3>
+		</header>
+		<div class="card-content">
 			<div class="mb-4 flex gap-2">
-				<Button onclick={useExample}>Use example model</Button>
-				<Button onclick={useTemplate}>Use template model</Button>
-				<Button onclick={() => validate(selected)} class="ml-auto">Validate</Button>
+				<button onclick={useExample}>Use example model</button>
+				<button onclick={useTemplate}>Use template model</button>
+				<button onclick={() => validate(selected)} class="ml-auto">Validate</button>
 			</div>
 
 			{#if validation}
@@ -82,15 +79,15 @@
 					{/if}
 				</div>
 			{/if}
-		</CardContent>
-	</Card>
+		</div>
+	</section>
 
 	<!-- Project Info -->
-	<Card>
-		<CardHeader>
-			<CardTitle>Project</CardTitle>
-		</CardHeader>
-		<CardContent>
+	<section>
+		<header class="card-header">
+			<h3 class="card-title">Project</h3>
+		</header>
+		<div class="card-content">
 			<div class="text-sm">
 				<div><strong>Name:</strong> {selected.project.name}</div>
 				<div><strong>FPS:</strong> {selected.project.fps}</div>
@@ -99,15 +96,15 @@
 					{selected.project.resolution.w}×{selected.project.resolution.h}
 				</div>
 			</div>
-		</CardContent>
-	</Card>
+		</div>
+	</section>
 
 	<!-- Assets Info -->
-	<Card>
-		<CardHeader>
-			<CardTitle>Assets</CardTitle>
-		</CardHeader>
-		<CardContent>
+	<section>
+		<header class="card-header">
+			<h3 class="card-title">Assets</h3>
+		</header>
+		<div class="card-content">
 			<div class="text-sm">
 				<div><strong>Characters:</strong> {selected.assets.characters.length}</div>
 				<div>
@@ -116,15 +113,15 @@
 				</div>
 				<div><strong>Audio tracks:</strong> {selected.assets.audio.length}</div>
 			</div>
-		</CardContent>
-	</Card>
+		</div>
+	</section>
 
 	<!-- Timeline Info -->
-	<Card>
-		<CardHeader>
-			<CardTitle>Timeline</CardTitle>
-		</CardHeader>
-		<CardContent>
+	<section>
+		<header class="card-header">
+			<h3 class="card-title">Timeline</h3>
+		</header>
+		<div class="card-content">
 			<div class="text-sm">
 				<div><strong>Events:</strong> {selected.timeline.length}</div>
 				{#if selected.timeline.length > 0}
@@ -134,28 +131,23 @@
 						{/each}
 					</ul>
 				{:else}
-					<Empty>
-						<EmptyHeader>
-							<EmptyTitle>No events</EmptyTitle>
-							<EmptyDescription>The timeline is empty.</EmptyDescription>
-						</EmptyHeader>
-					</Empty>
+					<div class="empty-state"><p>No events</p><small>The timeline is empty.</small></div>
 				{/if}
 			</div>
-		</CardContent>
-	</Card>
+		</div>
+	</section>
 
 	<!-- Raw JSON View -->
-	<Card>
-		<CardHeader>
-			<CardTitle>Raw JSON</CardTitle>
-		</CardHeader>
-		<CardContent>
+	<section>
+		<header class="card-header">
+			<h3 class="card-title">Raw JSON</h3>
+		</header>
+		<div class="card-content">
 			<pre class="max-h-60 overflow-auto rounded bg-slate-100 p-2 text-xs">{JSON.stringify(
 					selected,
 					null,
 					2
 				)}</pre>
-		</CardContent>
-	</Card>
+		</div>
+	</section>
 </div>

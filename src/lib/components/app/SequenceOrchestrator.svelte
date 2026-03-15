@@ -16,9 +16,6 @@
 	import { writable } from 'svelte/store';
 	import type { Model } from '$lib/model/model-types';
 	import { MODEL_STORE_KEY, SCROLL_SYNC_STORE_KEY } from '$lib/context/keys';
-	import { Card, CardHeader, CardTitle, CardContent } from '$lib/components/ui/card';
-	import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from '$lib/components/ui/empty';
-	import { Button } from '$lib/components/ui/button';
 	import { Plus, Trash2, Copy } from '@lucide/svelte';
 	import { throttle } from '$lib/utils/throttle';
 	import AudioTimeline from './AudioTimeline.svelte';
@@ -176,16 +173,16 @@
 
 <div class="flex h-full w-full flex-col gap-4" aria-label="Sequence Orchestrator">
 	<!-- ── Synoptic View (Top) ── -->
-	<Card>
-		<CardHeader>
-			<CardTitle class="flex items-center justify-between">
+	<section>
+		<header class="card-header">
+			<h3 class="card-title" class="flex items-center justify-between">
 				<span>Synoptic View</span>
-				<Button variant="ghost" size="sm" onclick={addEvent} title="Add event" aria-label="Add timeline event">
+				<button onclick={addEvent} title="Add event" aria-label="Add timeline event">
 					<Plus class="h-4 w-4" />
-				</Button>
-			</CardTitle>
-		</CardHeader>
-		<CardContent class="p-0">
+				</button>
+			</h3>
+		</header>
+		<div class="card-content" class="p-0">
 			<!-- ST-022: Scrollable container with scroll sync -->
 			<div
 				bind:this={synopticScrollContainer}
@@ -195,12 +192,7 @@
 			>
 				<div class="flex flex-row flex-wrap gap-2 p-4">
 					{#if timeline.length === 0}
-						<Empty>
-							<EmptyHeader>
-								<EmptyTitle>No timeline events</EmptyTitle>
-								<EmptyDescription>Click + to add your first event.</EmptyDescription>
-							</EmptyHeader>
-						</Empty>
+						<div class="empty-state"><p>No timeline events</p><small>Click + to add your first event.</small></div>
 					{:else}
 						{#each timeline as event (event.time)}
 							{@const moodActor = event.frame.actors?.find((a) => a.speech?.mood)}
@@ -233,13 +225,13 @@
 				{/if}
 				</div>
 			</div>
-		</CardContent>
-	</Card>
+		</div>
+	</section>
 
 	<!-- ── Temporal Sequencer (Bottom) ── -->
-	<Card>
-		<CardHeader>
-			<CardTitle class="flex items-center justify-between">
+	<section>
+		<header class="card-header">
+			<h3 class="card-title" class="flex items-center justify-between">
 				<span>Temporal Sequencer</span>
 				<!-- Zoom slider (TS-04) -->
 				<div class="flex items-center gap-2">
@@ -255,17 +247,12 @@
 					/>
 					<span class="w-6 text-right text-xs tabular-nums text-gray-500">{zoomLevel}×</span>
 				</div>
-			</CardTitle>
-		</CardHeader>
-		<CardContent class="p-0">
+			</h3>
+		</header>
+		<div class="card-content" class="p-0">
 			{#if timeline.length === 0}
 				<div class="p-4">
-					<Empty>
-						<EmptyHeader>
-							<EmptyTitle>No timeline events</EmptyTitle>
-							<EmptyDescription>Add events to see the sequence here.</EmptyDescription>
-						</EmptyHeader>
-					</Empty>
+					<div class="empty-state"><p>No timeline events</p><small>Add events to see the sequence here.</small></div>
 				</div>
 			{:else}
 				<!-- ST-022: Scrollable track with scroll sync (TS-05 playhead click) -->
@@ -328,16 +315,16 @@
 					</div>
 				</div>
 			{/if}
-		</CardContent>
-	</Card>
+		</div>
+	</section>
 
 	<!-- ST-024: Audio Timeline -->
-	<Card>
-		<CardHeader>
-			<CardTitle>Audio Timeline</CardTitle>
-		</CardHeader>
-		<CardContent>
+	<section>
+		<header class="card-header">
+			<h3 class="card-title">Audio Timeline</h3>
+		</header>
+		<div class="card-content">
 			<AudioTimeline audioAssets={model.assets.audio} />
-		</CardContent>
-	</Card>
+		</div>
+	</section>
 </div>

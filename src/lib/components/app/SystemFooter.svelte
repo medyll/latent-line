@@ -13,9 +13,9 @@
 	import type { Model } from '$lib/model/model-types';
 	import { MODEL_STORE_KEY } from '$lib/context/keys';
 	import { modelSchema } from '$lib/model/model-template';
-	import { Button } from '$lib/components/ui/button';
-	import { Label } from '$lib/components/ui/label';
 
+	const themeCtx = getContext<{ current: 'light' | 'dark'; toggle: () => void }>('theme');
+		
 	const SAMPLERS = ['Euler', 'DPM++', 'DDIM', 'PLMS', 'UniPC'];
 	const TTS_ENGINES = ['Coqui', 'Google', 'ElevenLabs', 'Bark'];
 
@@ -94,7 +94,7 @@
 	<div class="flex flex-wrap items-center gap-4">
 		<!-- Checkpoint -->
 		<div class="flex items-center gap-2">
-			<Label for="checkpoint-select" class="text-xs">Checkpoint</Label>
+			<label for="checkpoint-select" class="text-xs">Checkpoint</label>
 			<input
 				id="checkpoint-select"
 				type="text"
@@ -108,7 +108,7 @@
 
 		<!-- Sampler -->
 		<div class="flex items-center gap-2">
-			<Label for="sampler-select" class="text-xs">Sampler</Label>
+			<label for="sampler-select" class="text-xs">Sampler</label>
 			<select
 				id="sampler-select"
 				value={model.config.sampler ?? ''}
@@ -125,7 +125,7 @@
 
 		<!-- Seed -->
 		<div class="flex items-center gap-2">
-			<Label for="seed-input" class="text-xs">Seed</Label>
+			<label for="seed-input" class="text-xs">Seed</label>
 			<input
 				id="seed-input"
 				type="number"
@@ -140,14 +140,14 @@
 				class="w-24 rounded border border-gray-200 px-2 py-0.5 text-xs"
 				aria-label="Seed"
 			/>
-			<Button variant="ghost" size="sm" onclick={randomSeed} title="Random seed" aria-label="Randomize seed" class="h-6 px-2 text-xs">
+			<button onclick={randomSeed} title="Random seed" aria-label="Randomize seed" class="h-6 px-2 text-xs">
 				⟳
-			</Button>
+			</button>
 		</div>
 
 		<!-- TTS Engine -->
 		<div class="flex items-center gap-2">
-			<Label for="tts-select" class="text-xs">TTS</Label>
+			<label for="tts-select" class="text-xs">TTS</label>
 			<select
 				id="tts-select"
 				value={model.config.tts_engine ?? ''}
@@ -163,6 +163,13 @@
 		</div>
 
 		<div class="ml-auto flex items-center gap-2">
+			<!-- Theme toggle -->
+			<button
+				onclick={() => themeCtx?.toggle()}
+				title="Toggle theme"
+				aria-label="Toggle light/dark theme"
+				class="text-xs"
+			>{themeCtx?.current === 'dark' ? '☀ Light' : '☾ Dark'}</button>
 			<!-- Import -->
 			<input
 				bind:this={fileInput}
@@ -173,14 +180,14 @@
 				id="import-file"
 				aria-label="Import model JSON"
 			/>
-			<Button variant="outline" size="sm" onclick={() => fileInput?.click()} class="text-xs">
+			<button onclick={() => fileInput?.click()} class="text-xs">
 				Import JSON
-			</Button>
+			</button>
 
 			<!-- Export -->
-			<Button onclick={exportModel} size="sm" aria-label="Export JSON" class="text-xs">
+			<button onclick={exportModel} aria-label="Export JSON" class="text-xs">
 				Export JSON
-			</Button>
+			</button>
 		</div>
 	</div>
 
