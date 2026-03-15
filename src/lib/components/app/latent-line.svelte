@@ -207,15 +207,15 @@
 </script>
 
 <div class="app-shell">
-	<header class="app-header">Latent Line</header>
-	<aside class="app-sidebar">
+	<header class="shell-header">Latent Line</header>
+	<aside class="shell-sidebar">
 		<header class="sidebar-header">
 			<h1 class="header-title">Dashboard</h1>
 			<i class="icon-header-action" aria-hidden="true"></i>
 		</header>
 		<AssetManager bind:selectedAssetId />
 	</aside>
-	<main class="app-main">
+	<main class="shell-main">
 		<nav class="command-bar">
 			<!-- Zoom slider -->
 			<Label for="zoom-slider">Zoom</Label>
@@ -233,8 +233,7 @@
 
 		<div class="workspace-view">
 			<section class="asset-grid">
-				{#if timelineEvents.length === 0}
-					<!-- Empty state for timeline -->
+				{#if timelineEvents.length === 0} 
 					<Empty>
 						<EmptyHeader>
 							<EmptyTitle>No timeline items</EmptyTitle>
@@ -256,128 +255,39 @@
 					{/each}
 				{/if}
 			</section>
-
 			<section class="timeline-panel">
-				<div class="timeline-toolbar"></div>
+				<div class="timeline-toolbar">red</div>
 				<div class="timeline-container">
 					<div class="timeline-labels">
-						<div class="label-item">Video 1</div>
-						<div class="label-item">Audio 1</div>
-						<div class="label-item">Audio 2</div>
+						<div class="label-item">Video </div>
 					</div>
 					<div class="timeline-canvas">
 						<div class="timeline-track">
-							<div class="time-segment"></div>
-							<div class="time-segment"></div>
-						</div>
-						<div class="timeline-track">
-							<div class="time-segment"></div>
-						</div>
-						<div class="timeline-track">
-							<div class="time-segment"></div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-
-		<footer class="status-bar">
-			<span>Ready</span>
-		</footer>
-	</main>
-</div>
-
-<!-- Timeline with sidebar layout -->
-<!-- Playwright debug mirrors -->
-<div
-	data-testid="timeline-debug"
-	aria-hidden="true"
-	style="position:fixed;left:0;bottom:0;opacity:0;pointer-events:none;z-index:9999;"
->
-	<div data-testid="debug-selection">
-		{typeof __debugSelection !== 'undefined' ? __debugSelection : ''}
-	</div>
-	<div data-testid="debug-events">{typeof __debugEvents !== 'undefined' ? __debugEvents : ''}</div>
-	<!-- Test-only: immediate selection marker for Playwright to wait on -->
-	<div
-		data-testid="timeline-selection-immediate"
-		aria-hidden="true"
-		style="display:none"
-		data-immediate={selectionImmediate}
-	></div>
-</div>
-<div class="container flex hidden h-full flex-row">
-	<!-- Sidebar -->
-	<aside
-		class="flex h-full min-h-0 w-64 max-w-48 min-w-48 flex-col border-r"
-		style="background:var(--color-sidebar); color:var(--color-sidebar-foreground);"
-	>
-		<div class="mb-4 text-lg font-bold">Assets</div>
-		<div class="flex flex-1 flex-col gap-2">
-			<!-- AssetManager stylé -->
-			<div
-				class="p-2"
-				style="background:var(--color-popover); color:var(--color-popover-foreground);"
-			>
-				<AssetManager bind:selectedAssetId />
-			</div>
-			<!-- Properties panel moved into sidebar to avoid overlapping timeline clickable area -->
-			<div class="mt-4 p-2">
-				<PropertiesPanel
-					selectedEventId={selectedEventId ?? null}
-					bind:timelineEvents
-					{selectedAssetId}
-				/>
-			</div>
-		</div>
-	</aside>
-
-	<!-- Main timeline area : SynopticGrid  -->
-	<div class="flex min-w-0 flex-1 flex-col">
-		<Resizable.PaneGroup direction="vertical" class="h-[400px] w-full ">
-			<Resizable.Pane defaultSize={80}>
-				<div class="flex h-full flex-col">
-					<div>
-						<div>Timeline</div>
-					</div>
-					<div class="flex flex-1 flex-col p-0">
-						<div class="flex items-center gap-4 border-b p-2"></div>
-						<ScrollArea orientation="vertical" class="w-full flex-1 overflow-y-auto"></ScrollArea>
-					</div>
-				</div>
-			</Resizable.Pane>
-			<Resizable.Handle />
-			<Resizable.Pane defaultSize={20}>
-				<div class="h-full">
-					<ScrollArea orientation="horizontal" class="h-full w-full">
-						<!-- Temporal strip: items positioned absolutely by time -->
-						<div
-							class="relative h-full"
-							style="width: {totalDuration * pxPerFrame}px; min-width: 100%;"
-						>
 							{#each timelineEvents as item (item.id)}
 								<div
 									onclick={() => selectEvent(item.id)}
 									onkeydown={(e) => e.key === 'Enter' && selectEvent(item.id)}
 									role="button"
 									tabindex="0"
-									class={`absolute top-2 z-50 h-10 cursor-pointer truncate rounded border px-1 text-xs leading-10 transition-colors ${selectedEventId === item.id ? 'border-blue-500 bg-blue-100 font-semibold' : 'border-gray-300 bg-white hover:bg-gray-50'}`}
-									style="left: {item.start * pxPerFrame}px; width: {(item.end - item.start) *
-										pxPerFrame}px;"
+									class={`time-segment transition-colors ${selectedEventId === item.id ? 'selected' : ''}`}
+									style=" width: {(item.end - item.start) * pxPerFrame}px;"
 									title={item.label}
 								>
 									{item.label}
 								</div>
 							{/each}
 						</div>
-					</ScrollArea>
+					</div>
 				</div>
-			</Resizable.Pane>
-		</Resizable.PaneGroup>
-
-		<!-- SystemFooter intégré en bas -->
-		<div class="mt-2">
-			<!-- <SystemFooter /> -->
+			</section>
 		</div>
-	</div>
+
+			<PropertiesPanel 
+				bind:selectedEventId
+				{selectedAssetId}
+			/>
+		<footer class="status-bar">
+		</footer>
+	</main>
 </div>
+

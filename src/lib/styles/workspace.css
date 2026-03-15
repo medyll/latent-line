@@ -15,27 +15,32 @@
 		overflow: clip;
 
 		/* Top navigation bar */
-		& .app-header {
+		& .shell-header {
 			grid-area: header;
 			height: 48px;
-			border-bottom: 1px solid var(--border-color, #333);
+			border-bottom: var(--border-width) solid var(--color-border);
 		}
 
 		/* Left navigation sidebar */
-		& .app-sidebar {
+		& .shell-sidebar {
 			grid-area: sidebar;
 			width: 260px;
-			border-right: 1px solid var(--border-color, #333);
+			border-right: var(--border-width) solid var(--color-border);
 			display: flex;
 			flex-direction: column;
-			gap: 0.5rem;
+			gap: var(--gutter-sm);
+
+			height: 100%;
+			overflow: auto;
 
 			/* Header component within sidebar */
 			& .sidebar-header {
-				padding: 1rem;
+				padding: var(--pad-md);
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
+				top: 0px;
+				position: sticky;
 
 				& .header-title {
 					font-size: 1.1rem;
@@ -54,14 +59,14 @@
 
 			/* Standalone navigational tile */
 			& .sidebar-tile {
-				margin: 0 0.5rem;
+				margin: 0 var(--marg-sm);
 				padding: 0.75rem;
-				border-radius: 6px;
+				border-radius: var(--radius-md);
 				cursor: pointer;
-				transition: background 0.2s;
+				transition: background var(--transition-slow);
 
 				&:hover {
-					background: rgba(255, 255, 255, 0.05);
+					background: color-mix(in srgb, var(--color-text) 5%, transparent);
 				}
 
 				& .tile-content {
@@ -81,7 +86,7 @@
 
 			/* Content grouping */
 			& .sidebar-group {
-				padding: 1rem;
+				padding: var(--pad-md);
 				& .group-header {
 					display: flex;
 					justify-content: space-between;
@@ -108,17 +113,17 @@
 					gap: 2px;
 
 					& .sidebar-item {
-						padding: 0.5rem;
-						border-radius: 4px;
+						padding: var(--pad-sm);
+						border-radius: var(--radius-sm);
 						cursor: pointer;
 
 						display: grid;
 						grid-template-columns: auto 1fr auto auto auto;
 						align-items: center;
-						gap: 0.5rem;
+						gap: var(--gutter-sm);
 
 						&:hover {
-							background: rgba(255, 255, 255, 0.05);
+							background: color-mix(in srgb, var(--color-text) 5%, transparent);
 						}
 
 						& .item-info {
@@ -144,9 +149,9 @@
 			/* Common UI Elements */
 			& .item-chip {
 				font-size: 0.7rem;
-				background: var(--accent-color, #444);
+				background: var(--color-primary);
 				padding: 1px 5px;
-				border-radius: 10px;
+				border-radius: var(--radius-full);
 				min-width: 18px;
 				text-align: center;
 			}
@@ -163,13 +168,13 @@
 					opacity: 1;
 				}
 				&.btn-trash:hover {
-					color: #ff4444;
+					color: var(--color-critical);
 				}
 			}
 		}
 
 		/* Main content area */
-		& .app-main {
+		& .shell-main {
 			grid-area: main;
 			display: flex;
 			flex-direction: column;
@@ -179,8 +184,8 @@
 				height: 40px;
 				display: flex;
 				align-items: center;
-				padding: 0 1rem;
-				border-bottom: 1px solid var(--border-color, #333);
+				padding: 0 var(--pad-md);
+				border-bottom: var(--border-width) solid var(--color-border);
 			}
 
 			/* Primary workspace container */
@@ -194,10 +199,10 @@
 				& .asset-grid {
 					flex: 1;
 					display: grid;
-					grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+					grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 					grid-auto-rows: min-content;
-					gap: 1.5rem;
-					padding: 1.5rem;
+					gap: var(--gutter-lg);
+					padding: var(--pad-lg);
 					overflow-y: auto;
 					resize: vertical;
 					min-height: 150px;
@@ -207,7 +212,20 @@
 						display: grid;
 						grid-template-rows: subgrid;
 						grid-row: span 4;
-						row-gap: 0.5rem;
+						row-gap: var(--gutter-sm);
+						background: var(--color-surface);
+						border: var(--border-width) solid var(--color-border);
+						border-radius: var(--radius-md);
+						transition: box-shadow var(--transition-slow);
+
+						&.selected {
+							border-color: var(--color-primary);
+							border-width: 2px;
+							background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
+						}
+						&:hover:not(.selected) {
+							box-shadow: var(--shadow-md);
+						}
 
 						& .card-title {
 							font-weight: 500;
@@ -243,7 +261,7 @@
 							grid-template-columns: 1.5rem 1fr;
 							gap: 2px;
 							font-size: 0.8rem;
-                            text-wrap:balance;
+							text-wrap: balance;
 							/* Target the first column (2n+1) */
 							& > *:nth-child(2n + 1) {
 								place-self: center; /* Center horizontally and vertically within the 1.5rem cell */
@@ -259,8 +277,7 @@
 
 				/* Bottom timeline panel */
 				& .timeline-panel {
-					height: 280px;
-					border-top: 2px solid var(--border-color, #333);
+					border-top: 2px solid var(--color-border-strong);
 					display: flex;
 					flex-direction: column;
 					resize: vertical;
@@ -268,7 +285,7 @@
 
 					& .timeline-toolbar {
 						height: 32px;
-						border-bottom: 1px solid var(--border-color, #333);
+						border-bottom: var(--border-width) solid var(--color-border);
 					}
 
 					& .timeline-container {
@@ -278,10 +295,10 @@
 						overflow: hidden;
 
 						& .timeline-labels {
-							border-right: 1px solid var(--border-color, #333);
+							border-right: var(--border-width) solid var(--color-border);
 							& .label-item {
 								height: 32px;
-								border-bottom: 1px solid #222;
+								border-bottom: var(--border-width) solid var(--color-border);
 							}
 						}
 
@@ -291,10 +308,22 @@
 							& .timeline-track {
 								display: flex;
 								height: 32px;
-								border-bottom: 1px solid #222;
+								border-bottom: var(--border-width) solid var(--color-border);
 								& .time-segment {
 									min-width: 80px;
-									border-right: 1px solid #222;
+									background: var(--color-surface);
+									border-right: var(--border-width) solid var(--color-border-strong);
+									color: var(--color-text);
+									transition: background var(--transition-fast);
+
+									&.selected {
+										background: color-mix(in srgb, var(--color-primary) 15%, var(--color-surface));
+										border-color: var(--color-primary);
+										font-weight: var(--font-semibold);
+									}
+									&:hover:not(.selected) {
+										background: var(--color-surface-2);
+									}
 								}
 							}
 						}
@@ -305,7 +334,7 @@
 			/* Bottom docked info zone */
 			& .status-bar {
 				height: 24px;
-				border-top: 1px solid var(--border-color, #333);
+				border-top: var(--border-width) solid var(--color-border);
 				padding: 0 0.75rem;
 				display: flex;
 				align-items: center;

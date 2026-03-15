@@ -87,7 +87,7 @@
 </script>
 
 <div
-	class={`asset-card  shadow-md transition-all ${selectedLocal ? 'border-2 border-blue-500 bg-blue-50' : 'bg-white hover:shadow-lg'}`}
+	class={`asset-card shadow-md transition-all ${selectedLocal ? 'selected' : ''}`}
 	data-testid={`timeline-event-${item.id}`}
 	role="button"
 	tabindex="0"
