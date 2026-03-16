@@ -3,81 +3,26 @@
 	 * PropertiesPanel.svelte
 	 *
 	 * @component PropertiesPanel
-	 * @description Shows contextual properties for the selected timeline event or asset.
-	 *              - Event selected: full editing of camera, lighting, FX, ControlNet, speech per actor.
-	 *              - Asset selected: read-only display of character / environment / audio.
+	 * @description Shows and edits properties for the selected timeline event.
 	 *              Event mutations go directly to model.timeline via MODEL_STORE_KEY context.
-	 * @example <PropertiesPanel {selectedEventId} {selectedAssetId} />
+	 * @example <PropertiesPanel {selectedEventId} />
 	 */
 	import { getContext, tick } from 'svelte';
-	import type {
-		Model,
-		Assets,
-		Character,
-		EnvironmentAsset,
-		AudioAsset,
-		LightingType,
-		Mood
-	} from '$lib/model/model-types';
-	import { ASSET_STORE_KEY, MODEL_STORE_KEY, SELECTION_STORE_KEY } from '$lib/context/keys';
+	import type { Model, Assets, LightingType, Mood } from '$lib/model/model-types';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
 	import CharacterField from './CharacterField.svelte';
 
 	const LIGHTING_TYPES: LightingType[] = ['dusk', 'daylight', 'studio', 'tungsten', 'ambient'];
 	const MOODS: Mood[] = ['joyful', 'melancholic', 'anxious', 'serene', 'curious'];
 
 	let {
-		selectedEventId = $bindable(null),
-		selectedAssetId = null
+		selectedEventId = $bindable(null)
 	}: {
 		selectedEventId?: string | null;
-		selectedAssetId?: string | null;
 	} = $props();
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
-	// Subscribe to shared selectionStore for stronger sync guarantees
-	const selectionStore = getContext(SELECTION_STORE_KEY) as
-		| { subscribe: (fn: (v: string | null) => void) => void }
-		| undefined;
-	let syncLabel: string | null = null;
-	if (selectionStore) {
-		selectionStore.subscribe((val) => {
-			if (!val) {
-				syncLabel = null;
-				return;
-			}
-			if (val.startsWith('char:')) syncLabel = 'Character';
-			else if (val.startsWith('env:')) syncLabel = 'Environment';
-			else if (val.startsWith('audio:')) syncLabel = 'Audio';
-			else if (val.startsWith('event_') || String(Number(val)) === val) syncLabel = 'Event';
-			else syncLabel = 'Selection';
-		});
-	}
-
-	// --- Asset selection ---
-	const parsedAsset = $derived.by(() => {
-		if (!selectedAssetId) return null;
-		const colonIdx = selectedAssetId.indexOf(':');
-		if (colonIdx === -1) return null;
-		return { type: selectedAssetId.slice(0, colonIdx), id: selectedAssetId.slice(colonIdx + 1) };
-	});
-
-	const selectedCharacter = $derived.by((): Character | null => {
-		if (!parsedAsset || parsedAsset.type !== 'char' || !assetStore) return null;
-		return assetStore.characters.find((c) => c.id === parsedAsset.id) ?? null;
-	});
-
-	const selectedEnvironment = $derived.by((): (EnvironmentAsset & { id: string }) | null => {
-		if (!parsedAsset || parsedAsset.type !== 'env' || !assetStore) return null;
-		const env = assetStore.environments[parsedAsset.id];
-		if (!env) return null;
-		return { ...env, id: parsedAsset.id };
-	});
-
-	const selectedAudio = $derived.by((): AudioAsset | null => {
-		if (!parsedAsset || parsedAsset.type !== 'audio' || !assetStore) return null;
-		return assetStore.audio?.find((a) => a.id === parsedAsset.id) ?? null;
-	});
 
 	// --- Event selection (from model.timeline) ---
 	const selectedEventIndex = $derived(
@@ -101,14 +46,6 @@
 	const selectedEvent = $derived(
 		selectedEventIndex >= 0 ? model.timeline[selectedEventIndex] : null
 	);
-
-	// Immediate synchronous marker for tests: updated synchronously when props change
-	// Bind selectionImmediate via an effect so it toggles immediately when props change
-	let selectionImmediate = $state(false);
-	$effect(() => {
-		// Use only the props for immediate signal; derived index can lag briefly
-		// selectionImmediate = !!selectedEventId || !!selectedAssetId;
-	});
 
 	// --- Mutation helpers (all write directly to model.timeline) ---
 
@@ -285,106 +222,13 @@
 <!--
   PropertiesPanel Component
   Shows and edits the selected timeline event's frame properties.
-  Asset selection shows read-only display.
 -->
 <div
 	class="properties-panel flex flex-col gap-3 p-2"
 	aria-label="Properties Panel"
 	onclick={forwardClick}
 >
-	<!-- Sync label: visible for E2E, minimal footprint when empty -->
-	<div
-		data-testid="pp-sync-label"
-		aria-label="Sync selection label"
-		style="font-size:0.6rem;opacity:0.4;min-height:0.8rem;"
-	>{syncLabel ?? (selectedAssetId ? (selectedAssetId.startsWith('char:') ? 'Character' : selectedAssetId.startsWith('env:') ? 'Environment' : 'Audio') : selectedEventId ? 'Event' : '')}</div>
-	<div aria-hidden="true" data-testid="pp-sync-heading" style="display:none"></div>
-
-	{#if selectedCharacter}
-		<!-- Character asset selected -->
-		<div class="rounded border border-blue-200 bg-blue-50 p-3">
-			<div class="mb-2 text-xs font-semibold text-blue-600 uppercase">Character</div>
-			<dl class="flex flex-col gap-1 text-xs">
-				<div class="flex gap-2">
-					<dt class="w-20 shrink-0 text-gray-400">ID</dt>
-					<dd class="font-mono font-medium">{selectedCharacter.id}</dd>
-				</div>
-				<div class="flex gap-2">
-					<dt class="w-20 shrink-0 text-gray-400">Name</dt>
-					<dd class="font-medium">{selectedCharacter.name}</dd>
-				</div>
-				{#if selectedCharacter.voice_id}
-					<div class="flex gap-2">
-						<dt class="w-20 shrink-0 text-gray-400">Voice</dt>
-						<dd class="font-mono">{selectedCharacter.voice_id}</dd>
-					</div>
-				{/if}
-				{#if selectedCharacter.outfits && Object.keys(selectedCharacter.outfits).length}
-					<div class="flex gap-2">
-						<dt class="w-20 shrink-0 text-gray-400">Outfits</dt>
-						<dd class="flex flex-wrap gap-1">
-							{#each Object.keys(selectedCharacter.outfits) as outfit}
-								<span class="rounded bg-blue-100 px-1 py-0.5 font-mono text-blue-700">{outfit}</span
-								>
-							{/each}
-						</dd>
-					</div>
-				{/if}
-				{#if selectedCharacter.references?.length}
-					<div class="flex gap-2">
-						<dt class="w-20 shrink-0 text-gray-400">References</dt>
-						<dd>
-							{selectedCharacter.references.length} ref{selectedCharacter.references.length > 1
-								? 's'
-								: ''}
-						</dd>
-					</div>
-				{/if}
-			</dl>
-		</div>
-	{:else if selectedEnvironment}
-		<!-- Environment asset selected -->
-		<div class="rounded border border-green-200 bg-green-50 p-3">
-			<div class="mb-2 text-xs font-semibold text-green-600 uppercase">Environment</div>
-			<dl class="flex flex-col gap-1 text-xs">
-				<div class="flex gap-2">
-					<dt class="w-20 shrink-0 text-gray-400">ID</dt>
-					<dd class="font-mono font-medium">{selectedEnvironment.id}</dd>
-				</div>
-				<div class="flex gap-2">
-					<dt class="w-20 shrink-0 text-gray-400">Prompt</dt>
-					<dd class="leading-relaxed">{selectedEnvironment.prompt}</dd>
-				</div>
-				{#if selectedEnvironment.ref}
-					<div class="flex gap-2">
-						<dt class="w-20 shrink-0 text-gray-400">Ref</dt>
-						<dd class="font-mono">{selectedEnvironment.ref}</dd>
-					</div>
-				{/if}
-			</dl>
-		</div>
-	{:else if selectedAudio}
-		<!-- Audio asset selected -->
-		<div class="rounded border border-purple-200 bg-purple-50 p-3">
-			<div class="mb-2 text-xs font-semibold text-purple-600 uppercase">Audio</div>
-			<dl class="flex flex-col gap-1 text-xs">
-				<div class="flex gap-2">
-					<dt class="w-20 shrink-0 text-gray-400">ID</dt>
-					<dd class="font-mono font-medium">{selectedAudio.id}</dd>
-				</div>
-				{#if selectedAudio.label}
-					<div class="flex gap-2">
-						<dt class="w-20 shrink-0 text-gray-400">Label</dt>
-						<dd>{selectedAudio.label}</dd>
-					</div>
-				{/if}
-				<div class="flex gap-2">
-					<dt class="w-20 shrink-0 text-gray-400">URL</dt>
-					<dd class="truncate font-mono text-gray-600">{selectedAudio.url || '—'}</dd>
-				</div>
-			</dl>
-		</div>
-	{:else if selectedEvent}
+	{#if selectedEvent}
 		<!-- Timeline event selected — full editing -->
 		<div>
 			<div class="mb-3 text-sm font-semibold text-blue-600">
@@ -402,7 +246,7 @@
 
 			<!-- Camera -->
 			<section class="mb-3">
-				<h3 class="mb-1 text-xs font-semibold text-gray-400 uppercase">Camera</h3>
+				<h3 >Camera</h3>
 				<div class="flex flex-col gap-1 rounded bg-gray-50 p-2">
 					<!-- Zoom -->
 					<div class="flex items-center gap-2">
@@ -708,7 +552,7 @@
 	<!-- Always in DOM: visible only when nothing is selected -->
 	<div
 		aria-label="No selection"
-		style={selectedCharacter || selectedEnvironment || selectedAudio || selectedEvent ? 'display:none' : 'font-size:0.6rem;opacity:0.4;min-height:0.8rem;'}
+		style={selectedEvent ? 'display:none' : 'font-size:0.6rem;opacity:0.4;min-height:0.8rem;'}
 	></div>
 </div>
 

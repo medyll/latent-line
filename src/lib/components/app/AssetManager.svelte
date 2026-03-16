@@ -11,18 +11,13 @@
 	 */
 	import { getContext, tick } from 'svelte';
 	import type { Assets, Model } from '$lib/model/model-types';
-	import { ASSET_STORE_KEY, MODEL_STORE_KEY, SELECTION_STORE_KEY } from '$lib/context/keys';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
 	import { Trash2, Plus, Pencil, X, Check } from '@lucide/svelte';
-
-	let { selectedAssetId = $bindable<string | null>(null) }: { selectedAssetId?: string | null } =
-		$props();
 
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
 	const model = getContext<Model>(MODEL_STORE_KEY);
-	// selection store to set selection when adding or selecting assets
-	const selectionStore = getContext(SELECTION_STORE_KEY) as
-		| { set?: (v: string | null) => void }
-		| undefined;
+
+	let selectedAssetId = $state<string | null>(null);
 
 	// --- Orphan detection ---
 	const usedCharIds = $derived(
@@ -77,14 +72,8 @@
 	// --- Selection ---
 	function selectAsset(type: 'char' | 'env' | 'audio', id: string) {
 		const key = `${type}:${id}`;
-		console.log('[AssetManager] selectAsset', key, 'prevSelected:', selectedAssetId);
 		debugLastAction = `select:${key}`;
 		selectedAssetId = selectedAssetId === key ? null : key;
-		// notify global selectionStore so PropertiesPanel (and timeline) see selection synchronously
-		try {
-			selectionStore?.set?.(selectedAssetId);
-		} catch {}
-		console.log('[AssetManager] selectedAssetId ->', selectedAssetId);
 	}
 
 	// --- Character mutations ---
@@ -109,14 +98,8 @@
 			...assetStore.characters,
 			{ id: newId, name: 'New Character', references: [], outfits: { default: { prompt: '' } } }
 		];
-		// Auto-select and focus the new character to stabilise E2E tests
+		// Auto-select the new character
 		selectedAssetId = `char:${newId}`;
-		// Also notify global selection store so PropertiesPanel and other listeners receive the update synchronously
-		try {
-			selectionStore?.set?.(`char:${newId}`);
-		} catch (err) {
-			/* best-effort */
-		}
 		// wait a tick so the inline input mounts and bindings apply before tests assert
 		await tick();
 		// reaffirm editingId to ensure inline form remains visible across microtasks
@@ -289,14 +272,14 @@
 		{#if !assetStore.characters.length}
 			<div class="empty-state"><p>No characters</p><small>Add your first character to get started.</small></div>
 		{:else}
-			<ul role="listbox" aria-label="Characters" class="sidebar-list">
+			<ul role="listbox" aria-label="Characters" class="menu-list">
 				{#each assetStore.characters as char (char.id)}
 					{@const isOrphan = !usedCharIds.has(char.id)}
 					{@const refCount = charRefCounts[char.id] ?? 0}
 					{@const isEditing = editingId === `char:${char.id}`}
 					<li
 						role="option"
-						class={`sidebar-item ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
+						class={`menu-item ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 						data-testid={`asset-char-${char.id}`}
 						onclick={() => selectAsset('char', char.id)}
 						onkeydown={(e) => e.key === 'Enter' && selectAsset('char', char.id)}
@@ -331,7 +314,8 @@
 							{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 						</button>
 						<button onclick={(e) => removeCharacter(e, char.id)} title={`Delete ${char.name}`} class="btn-icon" data-testid={`delete-char-${char.id}`}><Trash2 class="h-3 w-3" /></button>
-
+						
+						
 						<!-- Inline edit form -->
 						{#if isEditing}
 							{@const idx = assetStore.characters.findIndex((c) => c.id === char.id)}
@@ -412,6 +396,7 @@
 								</div>
 							</div>
 						{/if}
+					<div class="item-info-tip">Info</div>
 					</li>
 				{/each}
 			</ul>
@@ -442,11 +427,11 @@
 	{#if !Object.keys(assetStore.environments).length}
 		<div class="empty-state"><p>No environments</p><small>Add an environment to your story world.</small></div>
 	{:else}
-		<ul role="listbox" aria-label="Environments" class="sidebar-list">
+		<ul role="listbox" aria-label="Environments" class="menu-list">
 			{#each Object.entries(assetStore.environments) as [id, env] (id)}
 				{@const isEditing = editingId === `env:${id}`}
 				<li
-					class="sidebar-item"
+					class="menu-item"
 					data-testid={`asset-env-${id}`}
 					onclick={() => selectAsset('env', id)}
 					onkeydown={(e) => e.key === 'Enter' && selectAsset('env', id)}
@@ -528,7 +513,7 @@
 	{#if !assetStore.audio?.length}
 		<div class="empty-state"><p>No audio assets</p><small>Add music or sound effects to your project.</small></div>
 	{:else}
-		<ul role="listbox" aria-label="Audio assets" class="sidebar-list">
+		<ul role="listbox" aria-label="Audio assets" class="menu-list">
 			{#each assetStore.audio as aud (aud.id)}
 				{@const isOrphan = !usedAudioIds.has(aud.id)}
 				{@const refCount = audioRefCounts[aud.id] ?? 0}
@@ -540,7 +525,7 @@
 					onclick={() => selectAsset('audio', aud.id)}
 					onkeydown={(e) => e.key === 'Enter' && selectAsset('audio', aud.id)}
 					tabindex="0"
-					class={`sidebar-item  ${selectedAssetId === `audio:${aud.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
+					class={`menu-item  ${selectedAssetId === `audio:${aud.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 					aria-label={`Audio ${aud.label || aud.id}`}
 					aria-selected={selectedAssetId === `audio:${aud.id}`}
 				>

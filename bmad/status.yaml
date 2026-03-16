@@ -62,7 +62,7 @@ sprints:
 #
 # Key fixes applied:
 #   - Mutual exclusion $effect: asset ↔ event selection
-#   - col-span-full on inline edit divs in sidebar-item grid
+#   - col-span-full on inline edit divs in menu-item grid
 #   - color-scheme property (not .dark class) for light-dark() support
 #   - Unlayered form element overrides beat Tailwind specificity
 #   - PropertiesPanel: clamp(200px, 22%, 320px) width, no empty-state text

@@ -103,57 +103,6 @@
 					font-size: 0.8rem;
 					opacity: 0.6;
 				}
-
-				& .sidebar-list {
-					list-style: none;
-					padding: 0;
-					margin: 0.75rem 0 0 0;
-					display: flex;
-					flex-direction: column;
-					gap: 2px;
-
-					& .sidebar-item {
-						padding: var(--pad-sm);
-						border-radius: var(--radius-sm);
-						cursor: pointer;
-
-						display: grid;
-						grid-template-columns: auto 1fr auto auto auto;
-						align-items: center;
-						gap: var(--gutter-sm);
-
-						&:hover {
-							background: color-mix(in srgb, var(--color-text) 5%, transparent);
-						}
-
-						& .item-info {
-							display: flex;
-							flex-direction: column;
-							overflow: hidden;
-
-							& .info-light {
-								font-size: 0.7rem;
-								opacity: 0.5;
-							}
-							& .info-main {
-								font-size: 0.85rem;
-								white-space: nowrap;
-								text-overflow: ellipsis;
-								overflow: hidden;
-							}
-						}
-					}
-				}
-			}
-
-			/* Common UI Elements */
-			& .item-chip {
-				font-size: 0.7rem;
-				background: var(--color-primary);
-				padding: 1px 5px;
-				border-radius: var(--radius-full);
-				min-width: 18px;
-				text-align: center;
 			}
 
 			& button[class^='btn-'] {
@@ -351,17 +300,6 @@
 	}
 }
 
-/* ── Section panels (replaces shadcn Card) ── */
-section {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-	background: var(--color-surface);
-	border: var(--border-width) solid var(--color-border);
-	border-radius: var(--radius-md);
-	overflow: hidden;
-}
-
 /* ── Card primitives ── */
 .card-header {
 	display: flex;
@@ -398,6 +336,68 @@ section {
 	& small {
 		font-size: var(--text-xs);
 		opacity: 0.7;
+	}
+}
+
+.menu-list {
+	list-style: none;
+	padding: 0;
+	margin: 0.75rem 0 0 0;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+
+	& .menu-item {
+		anchor-name: menu-item-anchor;
+		anchor-scope: all;
+		position: relative;
+		padding: var(--pad-sm);
+		border-radius: var(--radius-sm);
+		cursor: pointer;
+
+		display: grid;
+		grid-template-columns: auto 1fr auto auto auto;
+		align-items: center;
+		gap: var(--gutter-sm);
+
+		&:hover {
+			background: color-mix(in srgb, var(--color-text) 5%, transparent);
+		}
+
+		& .item-info {
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+
+			& .info-light {
+				font-size: 0.7rem;
+				opacity: 0.5;
+			}
+			& .info-main {
+				font-size: 0.85rem;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+			& .item-chip {
+				font-size: 0.7rem;
+				background: var(--color-primary);
+				padding: 1px 5px;
+				border-radius: var(--radius-full);
+				min-width: 18px;
+				text-align: center;
+			}
+		}
+	}
+
+	& .item-info-tip {
+		position-anchor: menu-item-anchor;
+		position: fixed;
+		z-index: 1000;
+		left: anchor(right);
+  		top: anchor(center);
+		/*opacity: 0;
+		pointer-events: none; */
 	}
 }
 
@@ -447,7 +447,9 @@ select {
 	line-height: var(--leading-normal);
 	outline: none;
 	width: 100%;
-	transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+	transition:
+		border-color var(--transition-fast),
+		box-shadow var(--transition-fast);
 
 	&::placeholder {
 		color: var(--color-text-muted);

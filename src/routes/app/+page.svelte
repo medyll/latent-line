@@ -13,10 +13,6 @@
 	setContext(MODEL_STORE_KEY, model);
 
 	let selectedTime = $state<number | null>(null);
-	let selectedAssetId = $state<string | null>(null);
-
-	$effect(() => { if (selectedTime !== null) selectedAssetId = null; });
-	$effect(() => { if (selectedAssetId !== null) selectedTime = null; });
 
 	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
 </script>
@@ -24,13 +20,13 @@
 <div class="app-layout" style="height:100%;">
 	<div class="app-panels">
 		<aside class="panel panel-left">
-			<AssetManager bind:selectedAssetId />
+			<AssetManager />
 		</aside>
 		<div class="panel panel-main">
 			<SequenceOrchestrator bind:selectedTime />
 		</div>
 		<aside class="panel panel-right">
-			<PropertiesPanel {selectedEventId} {selectedAssetId} />
+			<PropertiesPanel {selectedEventId} />
 		</aside>
 	</div>
 </div>
