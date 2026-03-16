@@ -180,6 +180,13 @@
 			flex-direction: column;
 			overflow: hidden;
 
+			& .properties-panel {
+				width: clamp(200px, 22%, 320px);
+				flex-shrink: 0;
+				border-left: var(--border-width) solid var(--color-border);
+				overflow-y: auto;
+			}
+
 			& .command-bar {
 				height: 40px;
 				display: flex;

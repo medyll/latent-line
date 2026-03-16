@@ -704,9 +704,12 @@
 				</section>
 			{/if}
 		</div>
-	{:else}
-		<div aria-label="No selection" style="display:none"></div>
 	{/if}
+	<!-- Always in DOM: visible only when nothing is selected -->
+	<div
+		aria-label="No selection"
+		style={selectedCharacter || selectedEnvironment || selectedAudio || selectedEvent ? 'display:none' : 'font-size:0.6rem;opacity:0.4;min-height:0.8rem;'}
+	></div>
 </div>
 
 <style>

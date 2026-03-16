@@ -25,7 +25,7 @@
 		timelineFrame?: unknown;
 	}
 
-	let { item, isSelected = false }: { item: TimelineEventItem; isSelected?: boolean } = $props();
+	let { item, isSelected = false, onselect }: { item: TimelineEventItem; isSelected?: boolean; onselect?: (id: string) => void } = $props();
 
 	const selectionStore = getContext(SELECTION_STORE_KEY) as Writable<string | null> | undefined;
 
@@ -47,46 +47,45 @@
 		}
 	});
 
+	let cardEl = $state<HTMLElement | null>(null);
+
+	// Expected behavior:
+	// - First click on the card selects the event: selectedLocal becomes true, selectionStore is updated,
+	//   and the parent (via onselect callback) sets selectedEventId to this card's id.
+	// - Second click on the same card deselects it: selectedLocal becomes false, selectionStore is set to
+	//   null, and PropertiesPanel returns to its empty state.
+	// - Clicking a different card deselects the current one and selects the new one (mutual exclusion
+	//   is handled by the parent through selectionStore).
+	//
+	// Implementation note:
+	// We intentionally use a native addEventListener via $effect (bind:this + cardEl) instead of
+	// Svelte 5's onclick={} template syntax. Svelte 5 uses event delegation internally, and the
+	// delegated handler was observed to be silently dropped after the component re-renders following
+	// the first selection (selectedLocal change triggers a patch). The native listener survives
+	// re-renders because $effect re-registers it whenever cardEl is reassigned.
 	function toggleSelection(e: MouseEvent) {
-		console.log('[bmad-debug] TimelineEvent.toggleSelection start', { id: item.id, selectedLocal });
-		// If a higher-level capture handler already processed this selection,
-		// skip to avoid double-toggling. Uses a transient dataset flag set by the
-		// document-level capture listener.
-		const pre = (e.currentTarget as HTMLElement) ?? (e.target as HTMLElement);
-		if (pre && (pre as any).dataset && (pre as any).dataset.__selectionHandled) {
-			delete (pre as any).dataset.__selectionHandled;
-			return;
-		}
-		// Prevent other click handlers (including parent) from running for this event
-		try {
-			(e as any).stopImmediatePropagation?.();
-		} catch (err) {}
 		e.stopPropagation();
-		console.log('[bmad-debug] TimelineEvent.toggleSelection', item.id);
-		// Direct DOM manipulation to ensure aria-selected updates immediately for E2E stability
-		if (typeof document !== 'undefined') {
-			const all = Array.from(
-				document.querySelectorAll('[data-testid^="timeline-event-"]')
-			) as HTMLElement[];
-			all.forEach((el) => el.setAttribute('aria-selected', 'false'));
-			const current = (e.currentTarget as HTMLElement) ?? (e.target as HTMLElement);
-			if (current) current.setAttribute('aria-selected', 'true');
+		if (onselect) {
+			// Parent handles the toggle logic
+			onselect(item.id);
+		} else if (selectionStore) {
+			selectionStore.update((curr) => {
+				const next = curr === item.id ? null : item.id;
+				selectedLocal = next === item.id;
+				return next;
+			});
 		}
-		if (!selectionStore) {
-			console.log('[bmad-debug] selectionStore undefined in TimelineEvent', item.id);
-			return;
-		}
-		selectionStore.update((curr) => {
-			const next = curr === item.id ? null : item.id;
-			// Update local state immediately for E2E stability, then propagate to store
-			selectedLocal = next === item.id;
-			console.log('[bmad-debug] selectionStore update', { from: curr, to: next });
-			return next;
-		});
 	}
+
+	$effect(() => {
+		if (!cardEl) return;
+		cardEl.addEventListener('click', toggleSelection);
+		return () => cardEl!.removeEventListener('click', toggleSelection);
+	});
 </script>
 
 <div
+	bind:this={cardEl}
 	class={`asset-card shadow-md transition-all ${selectedLocal ? 'selected' : ''}`}
 	data-testid={`timeline-event-${item.id}`}
 	role="button"
@@ -95,6 +94,7 @@
 	aria-label={`Timeline event ${item.label}`}
 	aria-selected={selectedLocal}
 	data-selection-available={selectionStore ? 'yes' : 'no'}
+	onkeydown={(e) => e.key === 'Enter' && toggleSelection(e as unknown as MouseEvent)}
 >
 	<div class="card-title">{item.label}</div>
 	<img src="thumb.jpg" alt="Preview" class="card-media" />

@@ -95,115 +95,19 @@
 		selectionStore.set(selectedEventId);
 	}
 
-	// Keep local selectedEventId in sync with selectionStore (handles clicks from child components)
-	let __debugSelection = '';
-	let __debugEvents = '';
+	// When an asset is selected via the store, clear event selection (mutual exclusion).
+	// Event IDs and null are handled directly by selectEvent — don't touch selectedEventId here.
 	selectionStore.subscribe((id) => {
-		selectedEventId = id;
-		console.log('[bmad-debug] selectionStore ->', id);
-		if (typeof window !== 'undefined') {
-			(window as any).__selectionStoreValue = id;
-			__debugSelection = JSON.stringify(id);
-			// mirror recent event log if present
-			// @ts-ignore
-			if ((window as any).__eventLog && Array.isArray((window as any).__eventLog)) {
-				// @ts-ignore
-				__debugEvents = JSON.stringify((window as any).__eventLog.slice(-20));
-			} else {
-				__debugEvents = '[]';
-			}
+		if (id && !id.startsWith('event_')) {
+			selectedEventId = null;
 		}
 	});
 
-	// Capture clicks at the document level to robustly handle selection across
-	// nested elements and overlays. This runs in capture phase so it fires before
-	// other bubble-phase handlers and stabilizes aria-selected immediately.
-	if (typeof window !== 'undefined') {
-		const __win = window as any;
-		__win.__eventLog = __win.__eventLog || [];
-
-		const logEvent = (e: Event) => {
-			try {
-				const ev: any = e as any;
-				const target = ev.target as HTMLElement | null;
-				const closest = target?.closest
-					? (target.closest('[data-testid^="timeline-event-"]') as HTMLElement | null)
-					: null;
-				__win.__eventLog.push({
-					type: e.type,
-					time: Date.now(),
-					targetTag: target?.tagName,
-					targetDataset: target?.dataset ? { ...target.dataset } : {},
-					closestTestId: closest?.getAttribute('data-testid') || null,
-					clientX: ev.clientX ?? null,
-					clientY: ev.clientY ?? null
-				});
-			} catch (err) {
-				// best-effort logging; swallow errors
-			}
-		};
-
-		const onCapturePointerDown = (e: PointerEvent) => {
-			logEvent(e);
-			const target = e.target as HTMLElement | null;
-			if (!target) return;
-			let el = target.closest('[data-testid^="timeline-event-"]') as HTMLElement | null;
-			let id = '';
-			if (el) {
-				const tid = el.getAttribute('data-testid') || '';
-				id = tid.replace('timeline-event-', '');
-			} else {
-				// Fallback: elements that use aria-label="Timeline event ..."
-				const closestWithAria = target.closest('[aria-label]') as HTMLElement | null;
-				if (closestWithAria) {
-					const aria = closestWithAria.getAttribute('aria-label') || '';
-					if (aria.startsWith('Timeline event')) {
-						el = closestWithAria;
-						id = aria.replace('Timeline event ', '');
-					}
-				}
-			}
-			if (!el) return;
-			selectedEventId = selectedEventId === id ? null : id;
-			selectionStore.set(selectedEventId);
-			// Immediate DOM update for test stability: update both data-testid and aria-label-based elements
-			const allByTestId = Array.from(
-				document.querySelectorAll('[data-testid^="timeline-event-"]')
-			) as HTMLElement[];
-			allByTestId.forEach((n) => n.setAttribute('aria-selected', 'false'));
-			const allByAria = Array.from(
-				document.querySelectorAll('[aria-label^="Timeline event"]')
-			) as HTMLElement[];
-			allByAria.forEach((n) => n.setAttribute('aria-selected', 'false'));
-			el.setAttribute('aria-selected', selectedEventId === id ? 'true' : 'false');
-			// Mark this element so other handlers know we've processed selection already
-			el.dataset.__selectionHandled = '1';
-			// Stop propagation to avoid duplicate toggles from bubble-phase handlers
-			e.stopPropagation();
-		};
-
-		// Generic logging for pointerdown/pointerup/click/mousedown in capture phase
-		document.addEventListener('pointerdown', logEvent, true);
-		document.addEventListener('pointerup', logEvent, true);
-		document.addEventListener('click', logEvent, true);
-		document.addEventListener('mousedown', logEvent, true);
-		// Use pointerdown/mousedown to perform selection (covers environments where pointer events may not fire)
-		document.addEventListener('pointerdown', onCapturePointerDown, true);
-		document.addEventListener('mousedown', onCapturePointerDown, true);
-
-		// Clean up on module unload / HMR
-		onDestroy(() => {
-			document.removeEventListener('pointerdown', logEvent, true);
-			document.removeEventListener('pointerup', logEvent, true);
-			document.removeEventListener('click', logEvent, true);
-			document.removeEventListener('pointerdown', onCapturePointerDown, true);
-		});
-	}
 </script>
 
 <div class="app-shell">
 	<header class="shell-header">Latent Line</header>
-	<aside class="shell-sidebar">
+	<aside class="shell-sidebar" aria-label="Asset Manager">
 		<header class="sidebar-header">
 			<h1 class="header-title">Dashboard</h1>
 			<i class="icon-header-action" aria-hidden="true"></i>
@@ -220,63 +124,55 @@
 				min={10}
 				max={400}
 				step={1}
-				class="w-[200px]"
+				style="width:200px"
 			 />
 			<span>{zoom}%</span>
 		</nav>
 
-		<div class="workspace-view">
-			<section class="asset-grid">
-				{#if timelineEvents.length === 0} 
-					<div class="empty-state"><p>No timeline items</p><small>Add clips to the timeline.</small></div>
-				{:else}
-					<!-- Timeline clips en vignettes -->
-					{#each timelineEvents as item (item.id)}
-						<!-- <div
-									onclick={() => selectEvent(item.id)}
-									onkeydown={(e) => e.key === 'Enter' && selectEvent(item.id)}
-									role="button"
-									tabindex="0"
-									class={`asset-card z-50 ${selectedEventId === item.id ? 'ring-2 ring-blue-500' : ''}`}
-								> -->
-						<TimeLineEvent {item} isSelected={selectedEventId === item.id} />
-						<!-- </div> -->
-					{/each}
-				{/if}
-			</section>
-			<section class="timeline-panel">
-				<div class="timeline-toolbar">red</div>
-				<div class="timeline-container">
-					<div class="timeline-labels">
-						<div class="label-item">Video </div>
-					</div>
-					<div class="timeline-canvas">
-						<div class="timeline-track">
-							{#each timelineEvents as item (item.id)}
-								<div
-									onclick={() => selectEvent(item.id)}
-									onkeydown={(e) => e.key === 'Enter' && selectEvent(item.id)}
-									role="button"
-									tabindex="0"
-									class={`time-segment transition-colors ${selectedEventId === item.id ? 'selected' : ''}`}
-									style=" width: {(item.end - item.start) * pxPerFrame}px;"
-									title={item.label}
-								>
-									{item.label}
-								</div>
-							{/each}
+		<div style="flex:1;display:flex;overflow:hidden;min-height:0;">
+			<div class="workspace-view" style="flex:1;">
+				<div class="asset-grid">
+					{#if timelineEvents.length === 0}
+						<div class="empty-state"><p>No timeline items</p><small>Add clips to the timeline.</small></div>
+					{:else}
+						{#each timelineEvents as item (item.id)}
+							<TimeLineEvent {item} isSelected={selectedEventId === item.id} onselect={selectEvent} />
+						{/each}
+					{/if}
+				</div>
+				<div class="timeline-panel">
+					<div class="timeline-toolbar">red</div>
+					<div class="timeline-container">
+						<div class="timeline-labels">
+							<div class="label-item">Video </div>
+						</div>
+						<div class="timeline-canvas">
+							<div class="timeline-track">
+								{#each timelineEvents as item (item.id)}
+									<div
+										onclick={() => selectEvent(item.id)}
+										onkeydown={(e) => e.key === 'Enter' && selectEvent(item.id)}
+										role="button"
+										tabindex="0"
+										class={`time-segment transition-colors ${selectedEventId === item.id ? 'selected' : ''}`}
+										style="width:{(item.end - item.start) * pxPerFrame}px;"
+										title={item.label}
+									>
+										{item.label}
+									</div>
+								{/each}
+							</div>
 						</div>
 					</div>
 				</div>
-			</section>
-		</div>
+			</div>
 
-			<PropertiesPanel 
+			<PropertiesPanel
 				bind:selectedEventId
 				{selectedAssetId}
 			/>
-		<footer class="status-bar">
-		</footer>
+		</div>
+		<footer class="status-bar"></footer>
 	</main>
 </div>
 

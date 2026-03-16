@@ -116,7 +116,7 @@ test.describe('AssetManager CRUD', () => {
 
 	test('selecting a character shows Character in PropertiesPanel', async ({ page }) => {
 		const assetManager = page.locator('[aria-label="Asset Manager"]');
-		const firstChar = assetManager.locator('ul[aria-label="Characters"] > li [role="option"]').first();
+		const firstChar = assetManager.locator('ul[aria-label="Characters"] li[role="option"]').first();
 		await firstChar.click();
 
 		// prefer asserting the Properties Panel shows the selected asset rather than relying on aria-selected
