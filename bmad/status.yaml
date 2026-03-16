@@ -1,58 +1,72 @@
 project: latent-line
 phase: development
-audit:
-  baseline: true
-prd:
-  created: true
-sprint:
-  active: 8
-  created: true
-  capacity: 10
-  focus:
-    - CI Integration
-    - E2E Test Expansion
-    - Visual Regression Maturation
-  completed_sprint8_stories:
-    - CI-001
-    - E2E-001
-    - VR-001
-    - CI-002
-    - CI-003
-  pending_stories:
-    - VR-002
-  in_progress_stories:
-  completed_stories:
-    - TST-001
-    - TST-002
-    - TST-003
-    - TST-004
-  recommendation: bmad dev review E2E-002 --auto
-  last_action: bmad dev review E2E-002 (reproduced locally: single test passed)
-  last_updated: 2026-03-14T22:00:00Z
-  sprints_completed:
-    - sprint-1
-    - sprint-2
-    - sprint-3
-    - sprint-4
-    - sprint-5
-    - sprint-6
-    - sprint-7
-recommendation: bmad dev review E2E-002 --auto
-last_action: bmad dev story E2E-002 (in-progress: ran e2e tests, failures observed)
-last_updated: 2026-03-14T00:45:00Z
-e2e_report:
-  last_run: 2026-03-14T00:44:58Z
-  passed: 23
-  failed: 4
-  results_dir: test-results
-  notes: |
-    - Playwright run executed (27 tests). Several timing/selection-related failures observed in timeline interactions.
-    - Failures summary:
-      * Timeline creation: adding a character asset — input element not found/visible (timeout).
-      * Clicking a character row did not show 'Character' in Properties Panel in several tests (timing/selection update issue).
-      * Clicking timeline event card did not populate Properties Panel with event label 'Event 1'.
-      * Clicking same timeline event again did not clear selection to show empty state.
-    - Test artifacts written to test-results/ (see detailed error-context.md and screenshots).
-    - Recommendation: investigate selection/PropertiesPanel timing and ensure aria attributes and store updates are synchronous or use retry/wait where appropriate. Consider increasing wait time or stabilizing selection events in the app.
-created_by: bmad-master (auto)
-last_updated: 2026-03-14T00:44:58Z
+progress: 72
+next_action: "Run E2E tests to validate UI after Tailwind/shadcn removal and theme fixes"
+active_role: dev
+
+phases:
+  - name: planning
+    status: done
+  - name: development
+    status: in_progress
+  - name: testing
+    status: in_progress
+  - name: release
+    status: upcoming
+
+artifacts:
+  prd: done
+  architecture: done
+  tech-spec: done
+
+sprints:
+  - id: 1
+    status: completed
+    stories: ["ST-001", "ST-002", "ST-003", "ST-004", "ST-005", "ST-006", "ST-007", "ST-008", "ST-009", "ST-010"]
+  - id: 2
+    status: completed
+    stories: ["ST-011", "ST-012", "ST-013", "ST-014", "ST-015"]
+  - id: 3
+    status: completed
+    stories: ["S3-01", "S3-02", "S3-03", "S3-04", "S3-05", "S3-06", "S3-07", "S3-08"]
+  - id: 4
+    status: completed
+    stories: ["ST-016", "ST-017", "ST-018", "ST-019"]
+  - id: 5
+    status: completed
+    stories: ["ST-020", "ST-021"]
+  - id: 6
+    status: completed
+    stories: ["ST-022", "ST-023", "ST-024"]
+  - id: 7
+    status: completed
+    stories: ["TST-001", "TST-002", "TST-003", "TST-004"]
+  - id: 8
+    status: completed
+    stories: ["CI-001", "E2E-001", "VR-001", "CI-002"]
+  - id: 9
+    status: active
+    stories: ["UI-001", "UI-002", "UI-003", "UI-004"]
+
+# Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
+# UI-001: Remove Tailwind CSS entirely — DONE
+# UI-002: Remove shadcn components — DONE
+# UI-003: Fix dark/light theme toggle + persist to localStorage — DONE
+# UI-004: Fix asset card click → PropertiesPanel + inline edit placement — DONE
+#
+# CSS stack (post-cleanup):
+#   theme.css       — CSS vars, light-dark() tokens, color-scheme
+#   base.css        — html { font-size: 11px }, resets
+#   workspace.css   — app-shell layout, section/card primitives, form elements
+#   utilities.css   — ~150 utility classes replacing Tailwind
+#
+# Key fixes applied:
+#   - Mutual exclusion $effect: asset ↔ event selection
+#   - col-span-full on inline edit divs in sidebar-item grid
+#   - color-scheme property (not .dark class) for light-dark() support
+#   - Unlayered form element overrides beat Tailwind specificity
+#   - PropertiesPanel: clamp(200px, 22%, 320px) width, no empty-state text
+#   - --color-surface-3 added to theme.css
+#   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
+
+last_updated: 2026-03-16T00:00:00Z

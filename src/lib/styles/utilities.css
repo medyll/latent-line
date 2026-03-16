@@ -167,14 +167,22 @@
 .opacity-80  { opacity: 0.8; }
 .transition-colors { transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast); }
 
-/* ── Hover variants (using :hover pseudo) ── */
-.hover\:bg-gray-100:hover { background-color: color-mix(in srgb, var(--color-text) 5%, transparent); }
+/* ── Hover variants ── */
+.hover\:bg-gray-100:hover  { background-color: color-mix(in srgb, var(--color-text) 5%, transparent); }
+.hover\:bg-gray-300:hover  { background-color: color-mix(in srgb, var(--color-text) 15%, transparent); }
+.hover\:bg-blue-100:hover  { background-color: color-mix(in srgb, var(--color-primary) 15%, transparent); }
+.hover\:bg-blue-700:hover  { background-color: var(--color-primary-hover); }
+.hover\:bg-purple-100:hover { background-color: color-mix(in srgb, #a855f7 15%, transparent); }
+.hover\:bg-purple-700:hover { background-color: #7e22ce; }
+.hover\:bg-red-500:hover   { background-color: color-mix(in srgb, var(--color-critical) 80%, transparent); }
+.hover\:bg-red-600:hover   { background-color: var(--color-critical); }
 .hover\:text-blue-600:hover { color: var(--color-primary); }
 .hover\:text-red-600:hover  { color: var(--color-critical); }
 .hover\:text-red-700:hover  { color: color-mix(in srgb, var(--color-critical) 80%, transparent); }
+.hover\:text-purple-600:hover { color: #9333ea; }
 
-/* ── Group hover (simplified: child reacts when parent is hovered) ── */
-.group:hover .group-hover\:flex    { display: flex; }
+/* ── Group hover ── */
+.group:hover .group-hover\:flex { display: flex; }
 .group-hover\:flex { display: none; }
 
 /* ── Z-index ── */

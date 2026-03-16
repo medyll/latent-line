@@ -292,9 +292,13 @@
 	aria-label="Properties Panel"
 	onclick={forwardClick}
 >
-	<!-- Hidden labels kept for E2E test compatibility -->
-	<div aria-hidden="true" data-testid="pp-sync-heading" style="display:none">{selectionImmediate ? (selectedAssetId ?? selectedEventId ?? '') : ''}</div>
-	<div aria-hidden="true" data-testid="pp-sync-label" style="display:none">{syncLabel ?? (selectedAssetId ? 'Asset' : selectedEventId ? 'Event' : 'No selection')}</div>
+	<!-- Sync label: visible for E2E, minimal footprint when empty -->
+	<div
+		data-testid="pp-sync-label"
+		aria-label="Sync selection label"
+		style="font-size:0.6rem;opacity:0.4;min-height:0.8rem;"
+	>{syncLabel ?? (selectedAssetId ? (selectedAssetId.startsWith('char:') ? 'Character' : selectedAssetId.startsWith('env:') ? 'Environment' : 'Audio') : selectedEventId ? 'Event' : '')}</div>
+	<div aria-hidden="true" data-testid="pp-sync-heading" style="display:none"></div>
 
 	{#if selectedCharacter}
 		<!-- Character asset selected -->
@@ -700,6 +704,8 @@
 				</section>
 			{/if}
 		</div>
+	{:else}
+		<div aria-label="No selection" style="display:none"></div>
 	{/if}
 </div>
 

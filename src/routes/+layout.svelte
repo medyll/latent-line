@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setContext } from 'svelte';
+	import { setContext, onMount } from 'svelte';
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/styles/app.css';
 
@@ -8,10 +8,8 @@
 
 	function setTheme(newTheme: 'light' | 'dark') {
 		theme = newTheme;
-		if (typeof document !== 'undefined') {
-			document.documentElement.style.colorScheme = newTheme;
-			localStorage.setItem('theme', newTheme);
-		}
+		document.documentElement.style.colorScheme = newTheme;
+		localStorage.setItem('theme', newTheme);
 	}
 
 	function toggleTheme() {
@@ -20,10 +18,10 @@
 
 	setContext('theme', { get current() { return theme; }, toggle: toggleTheme });
 
-	if (typeof document !== 'undefined') {
-		const saved = localStorage.getItem('theme');
-		if (saved === 'dark') setTheme('dark');
-	}
+	onMount(() => {
+		const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
+		if (saved === 'light' || saved === 'dark') setTheme(saved);
+	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>

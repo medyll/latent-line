@@ -193,13 +193,15 @@
 		/* base colors */
 		--color-text: light-dark(#0f172a, #f1f5f9);
 		--color-primary: #3b82f6;
-		--color-complementary: hsl(from var(--color-primary) calc(h + 180) s l);
+		--color-secondary: --harmony-secondary(var(--color-primary));
+		--color-complementary: --harmony-complementary(var(--color-primary));
 		/* relative variants */
 		--color-primary-hover: hsl(from var(--color-primary) h s calc(l - 8%));
 		--color-primary-muted: hsl(from var(--color-primary) h s calc(l + 28%));
 		/* surfaces */
 		--color-surface: light-dark(#ffffff, #1a1a1a);
 		--color-surface-2: light-dark(#f5f5f5, #252525);
+		--color-surface-3: light-dark(#ebebeb, #2e2e2e);
 		/* status colors */
 		--color-success: #10b981;
 		--color-warning: #f59e0b;
@@ -468,6 +470,15 @@
 }
 
 /* ─── Color harmonies (oklch) ────────────────────────── */
+
+/* secondary */
+@function --harmony-secondary(--color <color>) returns <color> {
+	result: oklch(from var(--primary) l c calc(h + 30));
+}
+/* secondary soft */
+@function --harmony-secondary-soft(--color <color>) returns <color> {
+	result: oklch(from var(--secondary) calc(l + 0.1) calc(c * 0.5) h);
+}
 
 /* Complementary */
 @function --harmony-complementary(--color <color>) returns <color> {
