@@ -136,7 +136,15 @@ Lists characters, environments, and audio assets. Shows empty states. **Now uses
 
 ### SequenceOrchestrator.svelte
 
-Orchestrates timeline event sequences. Works with array timeline without `.Object.values()` overhead.
+Orchestrates timeline event sequences. Includes **play/pause/stop** controls with an animated playhead at 24fps. Click anywhere on the track to scrub. Keyboard: `Space` = play/pause, `Escape` = stop.
+
+### SystemFooter.svelte
+
+Config controls (checkpoint, sampler, seed, TTS). **Export JSON** downloads the validated model. **Import JSON** loads and validates a model file in-place via Zod.
+
+### ModelInspector.svelte
+
+Live model inspection overlay. Click the `⌥` button (bottom-right) to open. Shows project info, asset counts, timeline events, and raw JSON. Validate button runs Zod against the current model.
 
 ---
 
@@ -200,20 +208,26 @@ pnpm run format       # Auto-format with Prettier
 - **Svelte 5.53** – Reactive UI framework (runes: `$state`, `$props`)
 - **SvelteKit 2.53** – Full-stack framework
 - **Zod 4.3** – Runtime type validation
-- **TailwindCSS 4.2** – Utility-first styling
-- **shadcn-svelte 1.1** – Headless UI component library
+- **@lucide/svelte** – Icon library
+
+### CSS Stack (no framework dependency)
+
+- `theme.css` — CSS custom properties, `light-dark()` tokens, `color-scheme`
+- `base.css` — resets, `font-size: 11px` root
+- `workspace.css` — app-shell layout, card/section/form primitives
+- `utilities.css` — ~200 utility classes replacing Tailwind
 
 ### Dev Tools
 
 - **TypeScript 5.9** – Static type checking
-- **Vitest 4** – Unit testing
+- **Vitest 4** – Unit testing (218 tests)
 - **Playwright 1.58** – E2E testing
 - **ESLint + Prettier** – Code quality & formatting
 
-### Removed
+### Removed (Sprint 9)
 
-- ~~lucide-react~~ → use `@lucide/svelte` instead
-- ~~@radix-ui/react-slot~~ (React, not needed in Svelte)
+- ~~TailwindCSS~~ → replaced by custom `utilities.css`
+- ~~shadcn-svelte~~ → replaced by native CSS primitives in `workspace.css`
 
 ---
 
@@ -264,6 +278,6 @@ pnpm run format       # Auto-format with Prettier
 
 ---
 
-**Last Updated**: 2026-03-03  
-**Version**: 0.0.1  
-**Status**: In Development (Phase 2 complete, Phase 3 in progress)
+**Last Updated**: 2026-03-17
+**Version**: 0.1.0
+**Status**: In Development — Sprint 11 (release readiness)

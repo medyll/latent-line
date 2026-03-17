@@ -78,9 +78,67 @@
 	// ── Zoom & playhead (TS-04, TS-05) ──
 	const FRAME_PX = 24; // base pixels per frame unit at zoom 1×
 	const EVENT_WIDTH = 56; // fixed event block width in px
+	const FPS = 24; // playback frames per second
 
 	let zoomLevel = $state(1);
 	let playheadTime = $state(0);
+	let isPlaying = $state(false);
+
+	// rAF playback loop
+	let rafId = 0;
+	let lastTs = 0;
+
+	function startPlayback() {
+		isPlaying = true;
+		lastTs = 0;
+		rafId = requestAnimationFrame(tick);
+	}
+
+	function tick(ts: number) {
+		if (!isPlaying) return;
+		if (lastTs === 0) lastTs = ts;
+		const elapsed = (ts - lastTs) / 1000; // seconds
+		lastTs = ts;
+		playheadTime = playheadTime + elapsed * FPS;
+		const endTime = maxTime + 20;
+		if (playheadTime >= endTime) {
+			playheadTime = endTime;
+			isPlaying = false;
+			return;
+		}
+		rafId = requestAnimationFrame(tick);
+	}
+
+	function pausePlayback() {
+		isPlaying = false;
+		cancelAnimationFrame(rafId);
+	}
+
+	function stopPlayback() {
+		isPlaying = false;
+		cancelAnimationFrame(rafId);
+		playheadTime = 0;
+	}
+
+	function togglePlay() {
+		if (isPlaying) pausePlayback();
+		else startPlayback();
+	}
+
+	// Keyboard shortcuts: Space = play/pause, Escape/0 = stop
+	function handleKeydown(e: KeyboardEvent) {
+		if ((e.target as HTMLElement).closest('input, textarea, select')) return;
+		if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+		else if (e.code === 'Escape' || e.key === '0') stopPlayback();
+	}
+
+	$effect(() => {
+		window.addEventListener('keydown', handleKeydown);
+		return () => {
+			window.removeEventListener('keydown', handleKeydown);
+			cancelAnimationFrame(rafId);
+		};
+	});
 
 	const pixelsPerFrame = $derived(FRAME_PX * zoomLevel);
 	const maxTime = $derived(timeline.length ? Math.max(...timeline.map((ev) => ev.time)) : 0);
@@ -175,14 +233,14 @@
 	<!-- ── Synoptic View (Top) ── -->
 	<section>
 		<header class="card-header">
-			<h3 class="card-title" class="flex items-center justify-between">
+			<h3 class="card-title flex items-center justify-between">
 				<span>Synoptic View</span>
 				<button onclick={addEvent} title="Add event" aria-label="Add timeline event">
 					<Plus class="h-4 w-4" />
 				</button>
 			</h3>
 		</header>
-		<div class="card-content" class="p-0">
+		<div class="card-content p-0">
 			<!-- ST-022: Scrollable container with scroll sync -->
 			<div
 				bind:this={synopticScrollContainer}
@@ -231,25 +289,43 @@
 	<!-- ── Temporal Sequencer (Bottom) ── -->
 	<section>
 		<header class="card-header">
-			<h3 class="card-title" class="flex items-center justify-between">
+			<h3 class="card-title flex items-center justify-between">
 				<span>Temporal Sequencer</span>
-				<!-- Zoom slider (TS-04) -->
-				<div class="flex items-center gap-2">
-					<span class="text-xs text-gray-400">Zoom</span>
-					<input
-						type="range"
-						min="1"
-						max="8"
-						step="0.5"
-						bind:value={zoomLevel}
-						class="w-24"
-						aria-label="Timeline zoom"
-					/>
-					<span class="w-6 text-right text-xs tabular-nums text-gray-500">{zoomLevel}×</span>
+				<div class="flex items-center gap-3">
+					<!-- Playback controls (S10-01) -->
+					<div class="flex items-center gap-1" role="group" aria-label="Playback controls">
+						<button
+							onclick={togglePlay}
+							title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
+							aria-label={isPlaying ? 'Pause' : 'Play'}
+							class="text-xs"
+						>{isPlaying ? '⏸' : '▶'}</button>
+						<button
+							onclick={stopPlayback}
+							title="Stop (Esc)"
+							aria-label="Stop"
+							class="text-xs"
+						>■</button>
+						<span class="tabular-nums text-xs" aria-label="Playhead position">{Math.floor(playheadTime)}</span>
+					</div>
+					<!-- Zoom slider (TS-04) -->
+					<div class="flex items-center gap-2">
+						<span class="text-xs text-gray-400">Zoom</span>
+						<input
+							type="range"
+							min="1"
+							max="8"
+							step="0.5"
+							bind:value={zoomLevel}
+							class="w-24"
+							aria-label="Timeline zoom"
+						/>
+						<span class="w-6 text-right text-xs tabular-nums text-gray-500">{zoomLevel}×</span>
+					</div>
 				</div>
 			</h3>
 		</header>
-		<div class="card-content" class="p-0">
+		<div class="card-content p-0">
 			{#if timeline.length === 0}
 				<div class="p-4">
 					<div class="empty-state"><p>No timeline events</p><small>Add events to see the sequence here.</small></div>

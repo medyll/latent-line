@@ -3,6 +3,7 @@
 	import AssetManager from '$lib/components/app/AssetManager.svelte';
 	import PropertiesPanel from '$lib/components/app/PropertiesPanel.svelte';
 	import SequenceOrchestrator from '$lib/components/app/SequenceOrchestrator.svelte';
+	import ModelInspector from '$lib/components/app/ModelInspector.svelte';
 	import type { Model } from '$lib/model/model-types';
 	import exampleModel from '$lib/model/model-example';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
@@ -13,6 +14,7 @@
 	setContext(MODEL_STORE_KEY, model);
 
 	let selectedTime = $state<number | null>(null);
+	let showInspector = $state(false);
 
 	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
 </script>
@@ -29,7 +31,17 @@
 			<PropertiesPanel {selectedEventId} />
 		</aside>
 	</div>
+	<button
+		class="inspector-toggle"
+		onclick={() => (showInspector = !showInspector)}
+		title="Toggle Model Inspector (Ctrl+I)"
+		aria-label="Toggle Model Inspector"
+	>⌥</button>
 </div>
+
+{#if showInspector}
+	<ModelInspector onclose={() => (showInspector = false)} />
+{/if}
 
 <style>
 	.app-layout {
@@ -52,4 +64,22 @@
 	.panel-left  { width: 20%; min-width: 180px; border-right: none; }
 	.panel-main  { flex: 1; min-width: 0; }
 	.panel-right { width: clamp(200px, 22%, 320px); border-left: none; flex-shrink: 0; }
+	.inspector-toggle {
+		position: fixed;
+		bottom: 0.75rem;
+		right: 0.75rem;
+		z-index: 90;
+		width: 2rem;
+		height: 2rem;
+		border-radius: var(--radius-full);
+		background: var(--color-surface-3);
+		border: var(--border-width) solid var(--color-border);
+		font-size: 0.9rem;
+		cursor: pointer;
+		box-shadow: var(--shadow-md);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.inspector-toggle:hover { background: var(--color-surface-2); }
 </style>

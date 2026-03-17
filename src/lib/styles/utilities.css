@@ -188,3 +188,71 @@
 /* ── Z-index ── */
 .z-10  { z-index: 10; }
 .z-50  { z-index: 50; }
+
+/* ── Pointer events ── */
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+
+/* ── Transform ── */
+.-translate-x-1\/2       { transform: translateX(-50%); }
+.-translate-x-\[3px\]   { transform: translateX(-3px); }
+
+/* ── Size additions ── */
+.w-2   { width: 0.5rem; }
+.w-px  { width: 1px; }
+.w-10  { width: 2.5rem; }
+.w-36  { width: 9rem; }
+.h-2   { height: 0.5rem; }
+.h-12  { height: 3rem; }
+.max-h-60  { max-height: 15rem; }
+.max-w-2xl { max-width: 42rem; }
+
+/* ── Position additions ── */
+.top-0\.5  { top: 0.125rem; }
+.top-2     { top: 0.5rem; }
+.right-0   { right: 0; }
+.right-0\.5 { right: 0.125rem; }
+.left-0    { left: 0; }
+.bottom-0  { bottom: 0; }
+
+/* ── Padding additions ── */
+.px-4  { padding-inline: 1rem; }
+.pl-4  { padding-left: 1rem; }
+.pl-5  { padding-left: 1.25rem; }
+
+/* ── Margin additions ── */
+.mt-2  { margin-top: 0.5rem; }
+.mr-2  { margin-right: 0.5rem; }
+.mb-4  { margin-bottom: 1rem; }
+
+/* ── Typography additions ── */
+.text-center  { text-align: center; }
+.font-normal  { font-weight: 400; }
+.text-\[9px\] { font-size: 9px; }
+
+/* ── Border additions ── */
+.rounded-sm      { border-radius: var(--radius-xs, 2px); }
+.border-gray-200 { border-color: var(--color-border); }
+.border-purple-200 { border-color: color-mix(in srgb, #a855f7 30%, transparent); }
+
+/* ── Background additions ── */
+.bg-red-50      { background-color: color-mix(in srgb, var(--color-critical) 8%, transparent); }
+.bg-red-500     { background-color: var(--color-critical); }
+.bg-gray-100    { background-color: color-mix(in srgb, var(--color-text) 8%, transparent); }
+.bg-gray-200    { background-color: color-mix(in srgb, var(--color-text) 14%, transparent); }
+.bg-slate-100   { background-color: color-mix(in srgb, #64748b 10%, transparent); }
+.bg-purple-50   { background-color: color-mix(in srgb, #a855f7 6%, transparent); }
+.bg-purple-100  { background-color: color-mix(in srgb, #a855f7 14%, transparent); }
+.bg-purple-300  { background-color: color-mix(in srgb, #a855f7 45%, transparent); }
+
+/* ── Text color additions ── */
+.text-gray-300   { color: color-mix(in srgb, var(--color-text) 40%, transparent); }
+.text-purple-400 { color: color-mix(in srgb, #a855f7 65%, transparent); }
+.text-purple-600 { color: #9333ea; }
+.text-purple-700 { color: #7e22ce; }
+
+/* ── List ── */
+.list-disc { list-style-type: disc; }
+
+/* ── Spacing (space-y via gap on flex col) ── */
+.space-y-2 > * + * { margin-top: 0.5rem; }
