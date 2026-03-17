@@ -346,10 +346,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
-
+	anchor-scope: menu-item-anchor;
 	& .menu-item {
-		anchor-name: menu-item-anchor;
-		anchor-scope: all;
 		position: relative;
 		padding: var(--pad-sm);
 		border-radius: var(--radius-sm);
@@ -362,6 +360,7 @@
 
 		&:hover {
 			background: color-mix(in srgb, var(--color-text) 5%, transparent);
+			anchor-name: --menu-anchor;
 		}
 
 		& .item-info {
@@ -392,10 +391,10 @@
 
 	& .item-info-tip {
 		position-anchor: menu-item-anchor;
-		position: fixed;
+		position: absolute;
 		z-index: 1000;
 		left: anchor(right);
-  		top: anchor(center);
+  		top: anchor(bottom);
 		/*opacity: 0;
 		pointer-events: none; */
 	}

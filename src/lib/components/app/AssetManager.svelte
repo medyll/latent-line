@@ -309,11 +309,11 @@
 							onclick={(e) => toggleEdit(e, `char:${char.id}`)}
 							title="Edit character"
 							aria-label={`Edit ${char.name}`}
-							class="rounded p-0.5 text-gray-400 hover:text-blue-600"
+							class="btn-icon"
 						>
-							{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
+							{#if isEditing}<X  />{:else}<Pencil />{/if}
 						</button>
-						<button onclick={(e) => removeCharacter(e, char.id)} title={`Delete ${char.name}`} class="btn-icon" data-testid={`delete-char-${char.id}`}><Trash2 class="h-3 w-3" /></button>
+						<button onclick={(e) => removeCharacter(e, char.id)} title={`Delete ${char.name}`} class="btn-icon" data-testid={`delete-char-${char.id}`}><Trash2 /></button>
 						
 						
 						<!-- Inline edit form -->
@@ -396,9 +396,9 @@
 								</div>
 							</div>
 						{/if}
-					<div class="item-info-tip">Info</div>
 					</li>
 				{/each}
+				<div class="item-info-tip">Info</div>
 			</ul>
 		{/if}
 	</div>
