@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getContext } from 'svelte';
   import { MODEL_STORE_KEY } from '$lib/context/keys';
-  import { createModelTemplate } from '$lib/model/model-template';
+  import { createSampleEvent } from '$lib/features/s12-01';
 
   export let message: string = 'S12-01 placeholder';
 
@@ -13,23 +13,15 @@
     model = undefined;
   }
 
-  function insertSampleEvent() {
-    const template = createModelTemplate();
-    const sample = template.timeline[0];
-    if (!sample) return;
+  let offset: number = 60;
 
+  function insertSampleEvent() {
     if (model && Array.isArray(model.timeline)) {
-      // Find an insert time after the last event
       const last = model.timeline.length ? Math.max(...model.timeline.map((e: any) => e.time)) : 0;
-      const newEvent = JSON.parse(JSON.stringify(sample));
-      newEvent.time = last + 60; // add 60 frames later
-      model.timeline.push(newEvent);
-      // force an update if store uses reactive proxies — mutate in place as other components do
+      const newEvent = createSampleEvent(last + Number(offset));
+      model.timeline.push(JSON.parse(JSON.stringify(newEvent)));
     } else {
-      // no model context — inform the developer
-      // eslint-disable-next-line no-console
       console.warn('S12-01: no model context found; cannot insert event');
-      // show quick feedback
       alert('No model context available to insert sample event.');
     }
   }
@@ -38,8 +30,13 @@
 <section class="s12-01">
   <h2>S12-01</h2>
   <p>{message}</p>
-  <div style="margin-top:8px">
+  <div style="margin-top:8px; display:flex; gap:8px; align-items:center">
+    <label style="font-size:0.9rem">Offset:</label>
+    <input type="number" bind:value={offset} min="0" style="width:6rem" />
     <button onclick={insertSampleEvent}>Insert sample timeline event</button>
+    {#if model && Array.isArray(model.timeline)}
+      <small style="margin-left:8px">Events: {model.timeline.length}</small>
+    {/if}
   </div>
 </section>
 

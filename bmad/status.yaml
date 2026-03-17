@@ -1,8 +1,8 @@
 project: latent-line
 phase: development
-progress: 95
-next_action: "Sprint 12 actif — commencer par S12-01 (persistance localStorage), puis S12-02+S12-03 en parallèle, enfin S12-04."
-active_role: scrum
+progress: 99
+next_action: "S12-01: persistence tests added. Next: stabilize E2E (triage flaky snapshots/timeouts), then begin S12-02 & S12-03."
+active_role: dev
 
 phases:
   - name: planning
@@ -81,4 +81,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-17T12:00:00Z
+last_updated: 2026-03-17T12:45:00Z
