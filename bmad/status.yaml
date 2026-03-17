@@ -1,8 +1,8 @@
 project: latent-line
 phase: development
 progress: 95
-next_action: "Sprint 11 complete. Project is release-ready. Consider: version tag, final build check, or Sprint 12 for polish."
-active_role: dev
+next_action: "Sprint 12 actif — commencer par S12-01 (persistance localStorage), puis S12-02+S12-03 en parallèle, enfin S12-04."
+active_role: scrum
 
 phases:
   - name: planning
@@ -53,6 +53,12 @@ sprints:
   - id: 11
     status: completed
     stories: ["S11-01", "S11-02", "S11-03"]
+  - id: 12
+    status: active
+    stories: ["S12-01", "S12-02", "S12-03", "S12-04"]
+  - id: 13
+    status: planned
+    stories: ["S13-01", "S13-02", "S13-03", "S13-04"]
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
@@ -75,4 +81,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-17T00:00:00Z
+last_updated: 2026-03-17T12:00:00Z
