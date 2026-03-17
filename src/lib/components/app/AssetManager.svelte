@@ -322,7 +322,7 @@
 							<div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
 								<!-- Name -->
 								<div class="flex flex-col gap-0.5">
-									<label class="text-gray-400">Name</label>
+									<label>Name</label>
 									<input
 										type="text"
 										value={assetStore.characters[idx].name}
@@ -334,7 +334,7 @@
 								</div>
 								<!-- Voice ID -->
 								<div class="flex flex-col gap-0.5">
-									<label class="text-gray-400">Voice ID</label>
+									<label>Voice ID</label>
 									<input
 										type="text"
 										value={assetStore.characters[idx].voice_id ?? ''}
@@ -348,7 +348,7 @@
 								</div>
 								<!-- Outfits -->
 								<div>
-									<div class="mb-1 text-gray-400">Outfits</div>
+									<div class="mb-1">Outfits</div>
 									{#if assetStore.characters[idx].outfits && Object.keys(assetStore.characters[idx].outfits!).length}
 										<ul class="mb-1 flex flex-col gap-0.5">
 											{#each Object.entries(assetStore.characters[idx].outfits!) as [key, outfit]}
