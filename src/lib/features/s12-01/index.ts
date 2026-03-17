@@ -16,3 +16,21 @@ export function runS1201(): S1201Result {
 }
 
 export default runS1201;
+
+// Create a sample timeline event object based on the default model template.
+export function createSampleEvent(timeOffset = 60, actorId = 'char_01') {
+  // keep a minimal, serializable event shape
+  return {
+    time: timeOffset,
+    frame: {
+      actors: [
+        {
+          id: actorId,
+          action: 'idle',
+          position: { x: 0.5, y: 0.5 }
+        }
+      ]
+    }
+  } as const;
+}
+

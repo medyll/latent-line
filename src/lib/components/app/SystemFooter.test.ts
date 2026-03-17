@@ -12,7 +12,7 @@ describe('SystemFooter export validation', () => {
 	});
 
 	it('invalid model (missing project.name) returns Zod errors', () => {
-		const bad = structuredClone(exampleModel) as Record<string, unknown>;
+		const bad = structuredClone(exampleModel) as unknown as Record<string, unknown>;
 		(bad.project as Record<string, unknown>).name = undefined;
 		const result = modelSchema.safeParse(bad);
 		expect(result.success).toBe(false);

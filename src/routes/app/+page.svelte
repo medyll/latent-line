@@ -6,9 +6,12 @@
 	import ModelInspector from '$lib/components/app/ModelInspector.svelte';
 	import type { Model } from '$lib/model/model-types';
 	import exampleModel from '$lib/model/model-example';
+	import { loadModelFromLocalStorage, saveModelToLocalStorage } from '$lib/utils/persistence';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
 
-	const model = $state<Model>(structuredClone(exampleModel));
+// Hydrate from localStorage if available and valid, otherwise fall back to exampleModel
+const saved = loadModelFromLocalStorage();
+const model = $state<Model>(saved ?? structuredClone(exampleModel));
 
 	setContext(ASSET_STORE_KEY, model.assets);
 	setContext(MODEL_STORE_KEY, model);
@@ -17,6 +20,11 @@
 	let showInspector = $state(false);
 
 	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
+	
+// Persist the model to localStorage whenever it changes and validates.
+$effect(() => {
+	saveModelToLocalStorage(model);
+}, [model]);
 </script>
 
 <div class="app-layout" style="height:100%;">
