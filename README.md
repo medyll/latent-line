@@ -70,6 +70,140 @@ UI (Svelte 5 reactivity)
 
 ---
 
+## 📈 Diagrams
+
+### 1. System Architecture
+
+```mermaid
+graph TB
+    subgraph "Data Layer"
+        Schema["Model Schema<br/>(Zod)"]
+        Template["Builders<br/>(model-template.ts)"]
+        Persist["Persistence<br/>(localStorage)"]
+    end
+
+    subgraph "Store Layer"
+        Store["Model Store<br/>($state)"]
+    end
+
+    subgraph "Component Layer"
+        AM["AssetManager"]
+        TE["TemporalSequencer"]
+        PP["PropertiesPanel"]
+        MI["ModelInspector"]
+        SF["SystemFooter"]
+    end
+
+    subgraph "View Layer"
+        App["App Page<br/>+page.svelte"]
+        Timeline["Timeline View"]
+        Demo["Demo Page"]
+    end
+
+    Schema --> Template
+    Template --> Store
+    Persist <--> Store
+    Store --> AM
+    Store --> TE
+    Store --> PP
+    Store --> MI
+    Store --> SF
+    AM --> App
+    TE --> App
+    PP --> App
+    MI --> App
+    SF --> App
+    App --> Timeline
+    App --> Demo
+```
+
+### 2. Component Hierarchy & Data Flow
+
+```mermaid
+graph LR
+    A["Model Store"] -->|"setSelection<br/>updateEvent"| B["App Page<br/>+page.svelte"]
+    B --> C["SequenceOrchestrator<br/>(Timeline + Sequencer)"]
+    B --> D["AssetManager<br/>(Characters, Audio)"]
+    B --> E["PropertiesPanel<br/>(Event Editor)"]
+    B --> F["SystemFooter<br/>(Config, Export/Import)"]
+    B --> G["ModelInspector<br/>(Validator)"]
+
+    C --> H["Synoptic View<br/>(scroll-locked)"]
+    C --> I["Temporal Sequencer<br/>(playhead, scrub)"]
+
+    H --> J["TimelineEvent Cards"]
+    I --> K["Timeline Tracks<br/>(pixel-based)"]
+
+    D --> L["Character List"]
+    D --> M["Audio Tracks"]
+
+    E --> N["Camera Controls"]
+    E --> O["Lighting Controls"]
+    E --> P["FX Controls"]
+    E --> Q["ControlNet Params"]
+```
+
+### 3. Timeline Conceptual Model
+
+```mermaid
+graph LR
+    A["TimelineEvent<br/>(time: ms)"] --> B["TimelineFrame<br/>(snapshot)"]
+    B --> C["Actors<br/>(position, speech)"]
+    B --> D["Camera<br/>(zoom, pan)"]
+    B --> E["Lighting<br/>(type, intensity)"]
+    B --> F["FX<br/>(bloom, blur)"]
+    B --> G["Audio Tracks<br/>(music, SFX)"]
+    B --> H["ControlNet<br/>(AI params)"]
+
+    I["Timeline Array<br/>(sorted by time)"] --> A
+    J["Model Store"] --> I
+    J --> K["Assets"]
+    J --> L["Config<br/>(checkpoint, sampler)"]
+```
+
+### 4. Feature Roadmap (Sprints)
+
+```mermaid
+gantt
+    title latent-line — Sprint Progress (Completed & Active)
+    dateFormat YYYY-MM-DD
+
+    section Core
+    Sprints 1-5: crit, done1, 2026-02-01, 40d
+    Sprint 6 (Sync & Audio): crit, done2, 2026-03-12, 10d
+
+    section Testing & CI
+    Sprint 7 (Tests): crit, done3, 2026-03-17, 5d
+    Sprint 8 (CI/CD): crit, done4, 2026-03-20, 3d
+
+    section UI & Cleanup
+    Sprint 9 (UI Polish): crit, done5, 2026-03-16, 5d
+    Sprint 10-11 (Playback): crit, done6, 2026-03-17, 10d
+
+    section Current & Planned
+    Sprint 12 (S12-01): active, active1, 2026-03-18, 7d
+    Sprint 13 (Features): s13, 2026-03-25, 14d
+```
+
+### 5. Data Validation Pipeline
+
+```mermaid
+graph LR
+    A["User Input<br/>(JSON/UI)"] --> B["validateModel()<br/>(Zod)"]
+    B -->|"Valid"| C["Model Store<br/>($state)"]
+    B -->|"Invalid"| D["Error State<br/>(shown in Inspector)"]
+
+    C --> E["localStorage<br/>persist()"]
+    C --> F["Components<br/>(re-render)"]
+
+    E -.->|"hydrate on boot"| C
+
+    G["Export JSON"] -.->|"download"| B
+    H["Import JSON"] -.->|"upload"| B
+```
+
+---
+
 ## 📊 Data Model
 
 ### Core Types
@@ -278,6 +412,6 @@ pnpm run format       # Auto-format with Prettier
 
 ---
 
-**Last Updated**: 2026-03-17
-**Version**: 0.1.0
-**Status**: In Development — Sprint 11 (release readiness)
+**Last Updated**: 2026-03-20
+**Version**: 0.2.0
+**Status**: In Development — Sprint 12 (persistence + stability)
