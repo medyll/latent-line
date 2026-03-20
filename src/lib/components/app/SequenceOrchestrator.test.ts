@@ -74,7 +74,7 @@ describe('Scroll sync store state management (ST-022)', () => {
 	});
 
 	it('should track scrollLeft updates', () => {
-		let state = { scrollLeft: 0, scrollTop: 0 };
+		const state = { scrollLeft: 0, scrollTop: 0 };
 		// Simulate scroll event
 		state.scrollLeft = 150;
 
@@ -83,7 +83,7 @@ describe('Scroll sync store state management (ST-022)', () => {
 	});
 
 	it('should track scrollTop updates', () => {
-		let state = { scrollLeft: 0, scrollTop: 0 };
+		const state = { scrollLeft: 0, scrollTop: 0 };
 		// Simulate vertical scroll
 		state.scrollTop = 50;
 
