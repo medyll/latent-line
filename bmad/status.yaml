@@ -1,7 +1,7 @@
 project: latent-line
-phase: development
+phase: release
 progress: 100
-next_action: "Sprint 13 DONE. Tous les sprints complétés. Phase: release readiness — tag v0.2.0, changelog, déploiement staging."
+next_action: "v0.2.0 released. Déploiement staging en attente. Prochaine itération: polish E2E flaky tests, coverage >80%."
 active_role: dev
 audit_date: 2026-03-20
 audit_coverage: 76.92%
@@ -15,7 +15,7 @@ phases:
   - name: testing
     status: in_progress
   - name: release
-    status: upcoming
+    status: in_progress
 
 artifacts:
   prd: done
