@@ -18,6 +18,7 @@
 	import { MODEL_STORE_KEY, SCROLL_SYNC_STORE_KEY } from '$lib/context/keys';
 	import { Plus, Trash2, Copy } from '@lucide/svelte';
 	import { throttle } from '$lib/utils/throttle';
+	import { tickFrame, clampFrame, seekFromPixel, computeDuration } from '$lib/utils/playback';
 	import AudioTimeline from './AudioTimeline.svelte';
 
 	let { selectedTime = $bindable<number | null>(null) }: { selectedTime?: number | null } =
@@ -97,12 +98,11 @@
 	function tick(ts: number) {
 		if (!isPlaying) return;
 		if (lastTs === 0) lastTs = ts;
-		const elapsed = (ts - lastTs) / 1000; // seconds
+		const elapsedMs = ts - lastTs;
 		lastTs = ts;
-		playheadTime = playheadTime + elapsed * FPS;
-		const endTime = maxTime + 20;
+		const endTime = computeDuration(model.timeline.map((e) => e.time));
+		playheadTime = clampFrame(tickFrame(playheadTime, elapsedMs), endTime);
 		if (playheadTime >= endTime) {
-			playheadTime = endTime;
 			isPlaying = false;
 			return;
 		}
@@ -200,7 +200,7 @@
 		if (dragging) return;
 		const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
 		const x = e.clientX - rect.left;
-		playheadTime = Math.max(0, Math.round(x / pixelsPerFrame));
+		playheadTime = seekFromPixel(x, pixelsPerFrame);
 	}
 
 	// ── Event CRUD (ST-017) ──

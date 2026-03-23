@@ -1,11 +1,11 @@
 project: latent-line
 phase: development
 progress: 100
-next_action: "S13-01 DONE. Next: S13-02 raccourcis clavier (3pts) — dépend de S13-01 undo/redo."
+next_action: "Sprint 13 DONE. Tous les sprints complétés. Phase: release readiness — tag v0.2.0, changelog, déploiement staging."
 active_role: dev
 audit_date: 2026-03-20
 audit_coverage: 76.92%
-audit_tests_passed: 250
+audit_tests_passed: 292
 
 phases:
   - name: planning
@@ -60,7 +60,7 @@ sprints:
     status: completed
     stories: ["S12-01", "S12-02", "S12-03", "S12-04"]
   - id: 13
-    status: active
+    status: completed
     stories: ["S13-01", "S13-02", "S13-03", "S13-04"]
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
