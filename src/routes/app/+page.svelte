@@ -9,6 +9,7 @@
 	import { loadModelFromLocalStorage, saveModelToLocalStorage } from '$lib/utils/persistence';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY, HISTORY_STORE_KEY } from '$lib/context/keys';
 	import { createModelHistory } from '$lib/context/history.svelte';
+	import { resolveAction } from '$lib/utils/keyboard';
 
 // Hydrate from localStorage if available and valid, otherwise fall back to exampleModel
 const saved = loadModelFromLocalStorage();
@@ -65,12 +66,12 @@ function handleRedo() {
 }
 
 function onKeydown(e: KeyboardEvent) {
-	if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-		e.preventDefault();
-		handleUndo();
-	} else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
-		e.preventDefault();
-		handleRedo();
+	const action = resolveAction(e);
+	if (!action) return;
+	switch (action) {
+		case 'undo':          e.preventDefault(); handleUndo(); break;
+		case 'redo':          e.preventDefault(); handleRedo(); break;
+		case 'toggleInspector': e.preventDefault(); showInspector = !showInspector; break;
 	}
 }
 </script>
