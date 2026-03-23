@@ -1,11 +1,11 @@
 project: latent-line
 phase: development
-progress: 99
-next_action: "AUDIT COMPLETE: Fix 10 linting errors (unused vars, empty blocks, missing keys). Rebuild npm deps. Then proceed to S12-02."
-active_role: reviewer
+progress: 100
+next_action: "Sprint 12 DONE. Begin Sprint 13: S13-01 Undo/Redo (8pts, first — S13-02 depends on it)."
+active_role: dev
 audit_date: 2026-03-20
 audit_coverage: 76.92%
-audit_tests_passed: 223
+audit_tests_passed: 239
 
 phases:
   - name: planning
@@ -57,7 +57,7 @@ sprints:
     status: completed
     stories: ["S11-01", "S11-02", "S11-03"]
   - id: 12
-    status: active
+    status: completed
     stories: ["S12-01", "S12-02", "S12-03", "S12-04"]
   - id: 13
     status: planned
