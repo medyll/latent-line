@@ -40,9 +40,11 @@ $effect(() => {
 });
 
 // Persist the model to localStorage whenever it changes and validates.
+// JSON.stringify forces Svelte to deeply track all model properties.
 $effect(() => {
+	const _ = JSON.stringify(model);
 	saveModelToLocalStorage(model);
-}, [model]);
+});
 
 function applySnapshot(snapshot: Model) {
 	isApplyingSnapshot = true;
@@ -80,7 +82,7 @@ function onKeydown(e: KeyboardEvent) {
 
 <div class="app-layout" style="height:100%;">
 	<div class="app-panels">
-		<aside class="panel panel-left">
+		<aside class="panel panel-left" aria-label="Asset Manager">
 			<AssetManager />
 		</aside>
 		<div class="panel panel-main">
