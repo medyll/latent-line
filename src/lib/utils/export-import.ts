@@ -9,7 +9,7 @@ export type ImportResult =
 	| { success: true; data: Model }
 	| { success: false; errors: string[] };
 
-function formatIssues(issues: { path: (string | number)[]; message: string }[]): string[] {
+function formatIssues(issues: { path: PropertyKey[]; message: string }[]): string[] {
 	return issues
 		.slice(0, 8)
 		.map((issue) => `${issue.path.join('.') || '(root)'} — ${issue.message}`);

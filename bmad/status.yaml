@@ -1,8 +1,8 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: "Sprint 14 active — start S14-01: commit persistence.ts fixes + unit tests"
-active_role: scrum
+next_action: "Sprint 14 in progress — S14-01 done (persistence onMount fix + route /), restructuration workspace/ complète. Next: S14-02 E2E undo/shortcuts"
+active_role: dev
 audit_date: 2026-03-20
 audit_coverage: 84.39%
 audit_tests_passed: 307

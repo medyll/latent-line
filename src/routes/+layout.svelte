@@ -21,6 +21,13 @@
 	onMount(() => {
 		const saved = localStorage.getItem('theme') as 'light' | 'dark' | null;
 		if (saved === 'light' || saved === 'dark') setTheme(saved);
+
+		// Unregister any stale service workers (e.g. from other projects on the same port)
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.getRegistrations().then((regs) => {
+				for (const reg of regs) reg.unregister();
+			});
+		}
 	});
 </script>
 

@@ -22,8 +22,6 @@ export function saveModelToLocalStorage(model: unknown, key = DEFAULT_KEY) {
     const validated = modelSchema.safeParse(candidate);
     if (!validated.success) return false;
     localStorage.setItem(key, JSON.stringify(validated.data));
-    // eslint-disable-next-line no-console
-    console.log('[persistence] saved', key);
     return true;
   } catch (err) {
     // surface unexpected errors during E2E runs for easier debugging
