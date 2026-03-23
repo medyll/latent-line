@@ -32,6 +32,24 @@ describe('persistence helpers', () => {
     expect((loaded as any).project?.name).toEqual(modelTemplate.project.name);
   });
 
+  it('returns null when localStorage.getItem throws', () => {
+    // @ts-ignore
+    global.localStorage = { getItem: () => { throw new Error('quota'); }, setItem: () => {} };
+    expect(loadModelFromLocalStorage()).toBeNull();
+  });
+
+  it('returns false when localStorage.setItem throws', () => {
+    // @ts-ignore
+    global.localStorage = { getItem: () => null, setItem: () => { throw new Error('quota'); } };
+    expect(saveModelToLocalStorage(modelTemplate)).toBe(false);
+  });
+
+  it('returns null when stored value is invalid JSON', () => {
+    // @ts-ignore
+    global.localStorage = { getItem: () => '{bad json{{', setItem: () => {} };
+    expect(loadModelFromLocalStorage()).toBeNull();
+  });
+
   it('rejects invalid model on save and does not create storage', () => {
     const bad = { foo: 'bar' } as unknown;
     const ok = saveModelToLocalStorage(bad);
