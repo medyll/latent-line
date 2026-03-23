@@ -79,9 +79,10 @@
 	const timeline = $derived([...model.timeline].sort((a, b) => a.time - b.time));
 
 	// ── Zoom & playhead (TS-04, TS-05) ──
-	const FRAME_PX = 24; // base pixels per frame unit at zoom 1×
-	const EVENT_WIDTH = 56; // fixed event block width in px
-	const FPS = 24; // playback frames per second
+	const FRAME_PX = 2;          // base pixels per frame unit at zoom 1× (1 frame = 2px)
+	const MIN_EVENT_WIDTH = 32;  // minimum readable block width in px
+	const DEFAULT_DURATION = 24; // fallback duration in frames (1s at 24fps)
+	const FPS = 24;              // playback frames per second
 
 	let zoomLevel = $state(1);
 	let playheadTime = $state(0);
@@ -143,8 +144,19 @@
 	});
 
 	const pixelsPerFrame = $derived(FRAME_PX * zoomLevel);
+
+	// Total timeline length = end of last event (time + duration)
 	const maxTime = $derived(timeline.length ? Math.max(...timeline.map((ev) => ev.time)) : 0);
-	const containerWidth = $derived(Math.max(600, (maxTime + 20) * pixelsPerFrame + EVENT_WIDTH + 40));
+	const lastEvent = $derived(timeline.length ? timeline[timeline.length - 1] : null);
+	const totalDuration = $derived(
+		lastEvent ? lastEvent.time + (lastEvent.duration ?? DEFAULT_DURATION) : 0
+	);
+	const containerWidth = $derived(Math.max(600, totalDuration * pixelsPerFrame + 80));
+
+	// Block width in px based on event duration
+	function blockWidth(event: { duration?: number }): number {
+		return Math.max((event.duration ?? DEFAULT_DURATION) * pixelsPerFrame, MIN_EVENT_WIDTH);
+	}
 
 	// ── Drag state (TS-03) ──
 	interface DragState {
@@ -209,7 +221,7 @@
 	function addEvent() {
 		const maxT = model.timeline.reduce((max, ev) => Math.max(max, ev.time), -1);
 		const newTime = maxT + 10;
-		model.timeline.push({ time: newTime, frame: {} });
+		model.timeline.push({ time: newTime, duration: DEFAULT_DURATION, frame: {} });
 		selectedTime = newTime;
 	}
 
@@ -226,7 +238,7 @@
 		if (!source) return;
 		let freeTime = time + 1;
 		while (model.timeline.some((ev) => ev.time === freeTime)) freeTime++;
-		model.timeline.push({ time: freeTime, frame: structuredClone(source.frame) });
+		model.timeline.push({ time: freeTime, duration: source.duration ?? DEFAULT_DURATION, frame: structuredClone(source.frame) });
 		selectedTime = freeTime;
 	}
 </script>
@@ -382,7 +394,7 @@
 								tabindex="0"
 								onkeydown={(e) => e.key === 'Enter' && selectEvent(event.time)}
 								class={`absolute top-4 flex cursor-grab flex-col items-center justify-center rounded border text-xs transition-colors ${isDragging ? 'cursor-grabbing opacity-80 shadow-lg' : ''} ${selectedTime === event.time ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:bg-gray-50'}`}
-								style="left: {displayTime * pixelsPerFrame}px; width: {EVENT_WIDTH}px; height: 48px;"
+								style="left: {displayTime * pixelsPerFrame}px; width: {blockWidth(event)}px; height: 48px;"
 								aria-label={`Time ${event.time}`}
 								aria-selected={selectedTime === event.time}
 							>

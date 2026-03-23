@@ -1,87 +1,29 @@
 <script lang="ts">
-	import { setContext, onMount } from 'svelte';
+	import { setContext } from 'svelte';
+	import { createModelStore } from '$lib/model/model-store.svelte';
+	import { createKeybindingHandler } from '$lib/context/keybindings.svelte';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY, HISTORY_STORE_KEY } from '$lib/context/keys';
 	import AssetManager from '$lib/components/workspace/AssetManager.svelte';
 	import PropertiesPanel from '$lib/components/workspace/PropertiesPanel.svelte';
 	import SequenceOrchestrator from '$lib/components/workspace/SequenceOrchestrator.svelte';
 	import ModelInspector from '$lib/components/workspace/ModelInspector.svelte';
-	import type { Model } from '$lib/model/model-types';
-	import exampleModel from '$lib/model/model-example';
-	import { loadModelFromLocalStorage, saveModelToLocalStorage } from '$lib/utils/persistence';
-	import { ASSET_STORE_KEY, MODEL_STORE_KEY, HISTORY_STORE_KEY } from '$lib/context/keys';
-	import { createModelHistory } from '$lib/context/history.svelte';
-	import { resolveAction } from '$lib/utils/keyboard';
 
-// Initialize with exampleModel — localStorage is loaded in onMount (client only)
-const model = $state<Model>(structuredClone(exampleModel));
+	const { model, history, undo, redo } = createModelStore();
 
-const history = createModelHistory();
-setContext(ASSET_STORE_KEY, model.assets);
-setContext(MODEL_STORE_KEY, model);
-setContext(HISTORY_STORE_KEY, history);
+	setContext(ASSET_STORE_KEY, model.assets);
+	setContext(MODEL_STORE_KEY, model);
+	setContext(HISTORY_STORE_KEY, history);
 
-let selectedTime = $state<number | null>(null);
-let showInspector = $state(false);
+	let selectedTime = $state<number | null>(null);
+	let showInspector = $state(false);
 
-const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
+	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
 
-// Track previous JSON to detect external mutations and push snapshots
-let previousJson = JSON.stringify(model);
-let isApplyingSnapshot = false;
-
-// Auto-snapshot: when the model changes, store the old state for undo
-$effect(() => {
-	const currentJson = JSON.stringify(model);
-	if (!isApplyingSnapshot && currentJson !== previousJson) {
-		history.push(JSON.parse(previousJson) as Model);
-		previousJson = currentJson;
-	}
-	isApplyingSnapshot = false;
-});
-
-// Persist the model to localStorage whenever it changes and validates.
-$effect(() => {
-	const _ = JSON.stringify(model);
-	saveModelToLocalStorage(model);
-});
-
-function applySnapshot(snapshot: Model) {
-	isApplyingSnapshot = true;
-	Object.assign(model.project, snapshot.project);
-	model.assets.characters = snapshot.assets.characters;
-	model.assets.environments = snapshot.assets.environments;
-	model.assets.audio = snapshot.assets.audio;
-	// Mutate array in place to preserve reactivity references held by child components
-	model.timeline.length = 0;
-	model.timeline.push(...snapshot.timeline);
-	model.config = snapshot.config;
-	previousJson = JSON.stringify(snapshot);
-}
-
-// Load persisted model on client only (localStorage unavailable during SSR)
-onMount(() => {
-	const saved = loadModelFromLocalStorage();
-	if (saved) applySnapshot(saved);
-});
-
-function handleUndo() {
-	const prev = history.undo(JSON.parse(JSON.stringify(model)) as Model);
-	if (prev) applySnapshot(prev);
-}
-
-function handleRedo() {
-	const next = history.redo(JSON.parse(JSON.stringify(model)) as Model);
-	if (next) applySnapshot(next);
-}
-
-function onKeydown(e: KeyboardEvent) {
-	const action = resolveAction(e);
-	if (!action) return;
-	switch (action) {
-		case 'undo':          e.preventDefault(); handleUndo(); break;
-		case 'redo':          e.preventDefault(); handleRedo(); break;
-		case 'toggleInspector': e.preventDefault(); showInspector = !showInspector; break;
-	}
-}
+	const onKeydown = createKeybindingHandler({
+		undo,
+		redo,
+		toggleInspector: () => { showInspector = !showInspector; }
+	});
 </script>
 
 <svelte:window onkeydown={onKeydown} />

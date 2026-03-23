@@ -112,6 +112,7 @@ export type LightingType = 'dusk' | 'daylight' | 'studio' | 'tungsten' | 'ambien
 
 export interface TimelineEvent {
 	time: number;
+	duration?: number; // durée en frames — optionnel, rétrocompatible
 	frame: TimelineFrame;
 }
 export interface Assets {

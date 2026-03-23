@@ -133,6 +133,7 @@ const assetsSchema = z.object({
 // timeline as an array
 const timelineEventSchema = z.object({
 	time: z.number().int().nonnegative(),
+	duration: z.number().int().positive().optional(),
 	frame: timelineFrameSchema
 });
 
@@ -174,6 +175,7 @@ export function buildDefaultModel(): Model {
 		timeline: [
 			{
 				time: 0,
+				duration: 48,
 				frame: {
 					actors: [
 						{
@@ -200,6 +202,7 @@ export function buildDefaultModel(): Model {
 			},
 			{
 				time: 120,
+				duration: 48,
 				frame: {
 					actors: [
 						{
