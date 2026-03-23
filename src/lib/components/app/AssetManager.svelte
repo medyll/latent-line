@@ -52,6 +52,20 @@
 		)
 	);
 
+	// --- Search / filter ---
+	let searchQuery = $state('');
+	const q = $derived(searchQuery.trim().toLowerCase());
+
+	const filteredCharacters = $derived(
+		q ? assetStore.characters.filter((c) => c.name.toLowerCase().includes(q) || (c.prompt ?? '').toLowerCase().includes(q)) : assetStore.characters
+	);
+	const filteredEnvironments = $derived(
+		q ? Object.fromEntries(Object.entries(assetStore.environments).filter(([, e]) => (e.prompt ?? '').toLowerCase().includes(q))) : assetStore.environments
+	);
+	const filteredAudio = $derived(
+		q ? (assetStore.audio ?? []).filter((a) => (a.label ?? '').toLowerCase().includes(q) || (a.url ?? '').toLowerCase().includes(q)) : (assetStore.audio ?? [])
+	);
+
 	// --- Edit state ---
 	let editingId = $state<string | null>(null);
 
@@ -249,6 +263,19 @@
 		last: debugLastAction
 	})}
 </div>
+<!-- ── Search ── -->
+<div class="sidebar-group" style="padding-bottom:0">
+	<input
+		type="search"
+		placeholder="Search assets…"
+		aria-label="Search assets"
+		data-testid="asset-search"
+		bind:value={searchQuery}
+		class="w-full"
+		style="font-size:0.8rem"
+	/>
+</div>
+
 <!-- ── Characters ── -->
 <section class="sidebar-group">
 	<div class="group-header">
@@ -273,7 +300,7 @@
 			<div class="empty-state"><p>No characters</p><small>Add your first character to get started.</small></div>
 		{:else}
 			<ul role="listbox" aria-label="Characters" class="menu-list">
-				{#each assetStore.characters as char (char.id)}
+				{#each filteredCharacters as char (char.id)}
 					{@const isOrphan = !usedCharIds.has(char.id)}
 					{@const refCount = charRefCounts[char.id] ?? 0}
 					{@const isEditing = editingId === `char:${char.id}`}
@@ -428,7 +455,7 @@
 		<div class="empty-state"><p>No environments</p><small>Add an environment to your story world.</small></div>
 	{:else}
 		<ul role="listbox" aria-label="Environments" class="menu-list">
-			{#each Object.entries(assetStore.environments) as [id, env] (id)}
+			{#each Object.entries(filteredEnvironments) as [id, env] (id)}
 				{@const isEditing = editingId === `env:${id}`}
 				<li
 					class="menu-item"
@@ -514,7 +541,7 @@
 		<div class="empty-state"><p>No audio assets</p><small>Add music or sound effects to your project.</small></div>
 	{:else}
 		<ul role="listbox" aria-label="Audio assets" class="menu-list">
-			{#each assetStore.audio as aud (aud.id)}
+			{#each filteredAudio as aud (aud.id)}
 				{@const isOrphan = !usedAudioIds.has(aud.id)}
 				{@const refCount = audioRefCounts[aud.id] ?? 0}
 				{@const isEditing = editingId === `audio:${aud.id}`}
