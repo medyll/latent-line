@@ -1,8 +1,8 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: "v0.2.0 released. Déploiement staging en attente. Prochaine itération: polish E2E flaky tests, coverage >80%."
-active_role: dev
+next_action: "Sprint 14 active — start S14-01: commit persistence.ts fixes + unit tests"
+active_role: scrum
 audit_date: 2026-03-20
 audit_coverage: 84.39%
 audit_tests_passed: 307
@@ -62,6 +62,9 @@ sprints:
   - id: 13
     status: completed
     stories: ["S13-01", "S13-02", "S13-03", "S13-04"]
+  - id: 14
+    status: active
+    stories: ["S14-01", "S14-02", "S14-03", "S14-04"]
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
