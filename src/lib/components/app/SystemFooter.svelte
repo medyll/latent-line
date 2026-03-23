@@ -12,7 +12,7 @@
 	import { getContext } from 'svelte';
 	import type { Model } from '$lib/model/model-types';
 	import { MODEL_STORE_KEY } from '$lib/context/keys';
-	import { modelSchema } from '$lib/model/model-template';
+	import { serializeModel, deserializeModel } from '$lib/utils/export-import';
 
 	const themeCtx = getContext<{ current: 'light' | 'dark'; toggle: () => void }>('theme');
 		
@@ -31,15 +31,12 @@
 	 */
 	function exportModel() {
 		exportErrors = [];
-		const result = modelSchema.safeParse(model);
+		const result = serializeModel(model);
 		if (!result.success) {
-			exportErrors = result.error.issues
-				.slice(0, 8)
-				.map((issue) => `${issue.path.join('.') || '(root)'} — ${issue.message}`);
+			exportErrors = result.errors;
 			return;
 		}
-		const data = JSON.stringify(result.data, null, 2);
-		const blob = new Blob([data], { type: 'application/json' });
+		const blob = new Blob([result.json], { type: 'application/json' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
@@ -55,16 +52,11 @@
 		importErrors = [];
 		const file = (e.target as HTMLInputElement).files?.[0];
 		if (!file) return;
-		try {
-			const text = await file.text();
-			const raw = JSON.parse(text);
-			const result = modelSchema.safeParse(raw);
-			if (!result.success) {
-				importErrors = result.error.issues
-					.slice(0, 8)
-					.map((issue) => `${issue.path.join('.') || '(root)'} — ${issue.message}`);
-				return;
-			}
+		const text = await file.text();
+		const result = deserializeModel(text);
+		if (!result.success) {
+			importErrors = result.errors;
+		} else {
 			const imported = result.data;
 			// Mutate in-place so existing context references remain valid
 			Object.assign(model.project, imported.project);
@@ -73,8 +65,6 @@
 			model.assets.audio = imported.assets.audio;
 			model.timeline = imported.timeline;
 			model.config = imported.config;
-		} catch {
-			importErrors = ['Invalid JSON file.'];
 		}
 		// Reset file input so the same file can be re-imported
 		if (fileInput) fileInput.value = '';
