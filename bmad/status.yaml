@@ -4,8 +4,8 @@ progress: 100
 next_action: "v0.2.0 released. Déploiement staging en attente. Prochaine itération: polish E2E flaky tests, coverage >80%."
 active_role: dev
 audit_date: 2026-03-20
-audit_coverage: 76.92%
-audit_tests_passed: 292
+audit_coverage: 84.39%
+audit_tests_passed: 307
 
 phases:
   - name: planning
@@ -84,4 +84,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-17T12:45:00Z
+last_updated: 2026-03-23T15:02:22Z

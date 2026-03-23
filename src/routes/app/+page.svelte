@@ -43,6 +43,9 @@ $effect(() => {
 // JSON.stringify forces Svelte to deeply track all model properties.
 $effect(() => {
 	const _ = JSON.stringify(model);
+	// Debug: indicate effect ran in E2E traces
+	// eslint-disable-next-line no-console
+	console.log('[persistence] effect run');
 	saveModelToLocalStorage(model);
 });
 

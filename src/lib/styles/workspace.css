@@ -346,7 +346,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
-	anchor-scope: menu-item-anchor;
+	anchor-scope: --menu-item-anchor;
 	& .menu-item {
 		position: relative;
 		padding: var(--pad-sm);
@@ -390,7 +390,7 @@
 	}
 
 	& .item-info-tip {
-		position-anchor: menu-item-anchor;
+		position-anchor: --menu-item-anchor;
 		position: absolute;
 		z-index: 1000;
 		left: anchor(right);
