@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Timeline creation & flows', () => {
 	test.beforeEach(async ({ page }) => {
-		await page.goto('/app', { waitUntil: 'networkidle' });
+		await page.goto('/', { waitUntil: 'networkidle' });
 		await page.locator('[aria-label="Asset Manager"]').waitFor();
 	});
 
@@ -68,3 +68,4 @@ test.describe('Timeline creation & flows', () => {
 		expect(label).toMatch(/Playhead at frame \d+/);
 	});
 });
+

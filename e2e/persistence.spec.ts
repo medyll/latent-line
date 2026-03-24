@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('model persists to localStorage after adding a character (S12-01)', async ({ page }) => {
-  await page.goto('/app', { waitUntil: 'networkidle' });
+  await page.goto('/', { waitUntil: 'networkidle' });
 
   // Wait for app to fully initialize
   await page.locator('[aria-label="Asset Manager"]').waitFor({ timeout: 20000 });
@@ -33,3 +33,4 @@ test('model persists to localStorage after adding a character (S12-01)', async (
   // Character added before reload should still be there
   expect(reloaded.assets?.characters?.length ?? 0).toBeGreaterThan(0);
 });
+
