@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { setContext, onMount } from 'svelte';
 	import favicon from '$lib/assets/favicon.svg';
-	import  from  '@medyll/css-base'
+	import '@medyll/css-base'
 	import '$lib/styles/app.css';
 
 	let theme: 'light' | 'dark' = $state('light');

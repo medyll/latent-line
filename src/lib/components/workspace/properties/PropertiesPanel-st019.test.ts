@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { TimelineEvent, TimelineFrame, LightingType, Mood } from '../../model/model-types';
+import type { TimelineEvent, TimelineFrame, LightingType, Mood } from '../../../model/model-types';
 
 // Mirror the mutation helpers from PropertiesPanel for unit testing.
 // All helpers mutate model.timeline[idx].frame directly.

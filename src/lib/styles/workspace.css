@@ -152,85 +152,7 @@
 				overflow: hidden;
 
 				/* Scrollable grid with resizable height */
-				& .asset-grid {
-					flex: 1;
-					display: grid;
-					grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-					grid-auto-rows: min-content;
-					gap: var(--gutter-lg);
-					padding: var(--pad-lg);
-					overflow-y: auto;
-					resize: vertical;
-					min-height: 150px;
-
-					/* Subgrid for alignment across cards */
-					& .asset-card {
-						display: grid;
-						grid-template-rows: subgrid;
-						grid-row: span 4;
-						row-gap: var(--gutter-sm);
-						background: var(--color-surface);
-						border: var(--border-width) solid var(--color-border);
-						border-radius: var(--radius-md);
-						transition: box-shadow var(--transition-slow);
-
-						&.selected {
-							border-color: var(--color-primary);
-							border-width: 2px;
-							background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
-						}
-						&:hover:not(.selected) {
-							box-shadow: var(--shadow-md);
-						}
-
-						& .card-title {
-							font-weight: 500;
-						}
-						& .card-media {
-							width: 100%;
-							aspect-ratio: 16/9;
-							object-fit: cover;
-						}
-
-						& .card-meta-primary {
-							display: flex;
-							justify-content: space-between;
-							align-items: center;
-
-							& .meta-left,
-							& .meta-right {
-								font-size: var(--text-xs);
-								display: flex;
-								align-items: center;
-								padding: var(--pad-sm);
-							}
-						}
-
-						& .card-meta-details {
-							display: grid;
-							gap: 2px;
-							font-size: var(--text-xs);
-						}
-
-						& .meta-line {
-							text-box-trim: trim-both;
-							display: grid;
-							grid-template-columns: 1.5rem 1fr;
-							gap: 2px;
-							font-size: var(--text-xs);
-							text-wrap: balance;
-							/* Target the first column (2n+1) */
-							& > *:nth-child(2n + 1) {
-								place-self: center; /* Center horizontally and vertically within the 1.5rem cell */
-							}
-
-							/* Target the second column (2n+2) if vertical alignment is needed */
-							& > *:nth-child(2n + 2) {
-								align-self: center; /* Ensure text stays vertically aligned with the icon */
-							}
-						}
-					}
-				}
+				
 
 				/* Bottom timeline panel */
 				& .timeline-panel {
@@ -433,6 +355,84 @@
 	}
 }
 
+.asset-grid {
+	flex: 1;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	grid-auto-rows: min-content;
+	gap: var(--gutter-lg);
+	padding: var(--pad-lg);
+	overflow-y: auto;
+	resize: vertical;
+	
+}
+/* Subgrid for alignment across cards */
+.asset-card {
+	display: grid;
+	grid-template-rows: subgrid;
+	grid-row: span 4;
+	row-gap: var(--gutter-sm);
+	background: var(--color-surface);
+	border: var(--border-width) solid var(--color-border);
+	border-radius: var(--radius-md);
+	transition: box-shadow var(--transition-slow);
+
+	&.selected {
+		border-color: var(--color-primary);
+		border-width: 2px;
+		background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
+	}
+	&:hover:not(.selected) {
+		box-shadow: var(--shadow-md);
+	}
+
+	& .card-title {
+		font-weight: 500;
+	}
+	& .card-media {
+		width: 100%;
+		aspect-ratio: 16/9;
+		object-fit: cover;
+	}
+
+	& .card-meta-primary {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		& .meta-left,
+		& .meta-right {
+			font-size: var(--text-xs);
+			display: flex;
+			align-items: center;
+			padding: var(--pad-sm);
+		}
+	}
+
+	& .card-meta-details {
+		display: grid;
+		gap: 2px;
+		font-size: var(--text-xs);
+	}
+
+	& .meta-line {
+		text-box-trim: trim-both;
+		display: grid;
+		grid-template-columns: 1.5rem 1fr;
+		gap: 2px;
+		font-size: var(--text-xs);
+		text-wrap: balance;
+		/* Target the first column (2n+1) */
+		& > *:nth-child(2n + 1) {
+			place-self: center; /* Center horizontally and vertically within the 1.5rem cell */
+		}
+
+		/* Target the second column (2n+2) if vertical alignment is needed */
+		& > *:nth-child(2n + 2) {
+			align-self: center; /* Ensure text stays vertically aligned with the icon */
+		}
+	}
+}
 /* ── Form elements: theme override (unlayered — wins over Tailwind utilities) ── */
 input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
 textarea,

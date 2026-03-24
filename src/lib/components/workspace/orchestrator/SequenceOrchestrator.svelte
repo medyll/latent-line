@@ -17,9 +17,10 @@
 	import type { Model } from '$lib/model/model-types';
 	import { MODEL_STORE_KEY, SCROLL_SYNC_STORE_KEY } from '$lib/context/keys';
 	import { Plus, Trash2, Copy } from '@lucide/svelte';
+	import TimelineEvent from './TimelineEvent.svelte';
 	import { throttle } from '$lib/utils/throttle';
 	import { tickFrame, clampFrame, seekFromPixel, computeDuration } from '$lib/utils/playback';
-	import AudioTimeline from './AudioTimeline.svelte';
+	import AudioTimeline from '$lib/components/workspace/audio/AudioTimeline.svelte';
 
 	let { selectedTime = $bindable<number | null>(null) }: { selectedTime?: number | null } =
 		$props();
@@ -262,38 +263,39 @@
 				onscroll={handleSynopticScroll}
 				aria-label="Synoptic view scroll container"
 			>
-				<div class="flex flex-row flex-wrap gap-2 p-4">
+				<div class="asset-grid">
 					{#if timeline.length === 0}
 						<div class="empty-state"><p>No timeline events</p><small>Click + to add your first event.</small></div>
 					{:else}
 						{#each timeline as event (event.time)}
-							{@const moodActor = event.frame.actors?.find((a) => a.speech?.mood)}
-							<div
-								onclick={() => selectEvent(event.time)}
-								onkeydown={(e) => e.key === 'Enter' && selectEvent(event.time)}
-								role="button"
-							tabindex="0"
-							class={`group relative flex h-24 w-32 cursor-pointer flex-col items-center justify-center gap-1 rounded border transition-colors ${selectedTime === event.time ? 'border-blue-500 bg-blue-50' : 'bg-gray-50 hover:bg-gray-100'}`}
-							aria-label={`Frame ${event.time}`}
-							aria-selected={selectedTime === event.time}
-						>
-							<span class="text-xs font-semibold">Frame {event.time}</span>
-							<span class="text-xs text-gray-500">Actors: {event.frame.actors?.length || 0}</span>
-							{#if moodActor}
-								<span class="rounded bg-purple-100 px-1 py-0.5 text-xs font-medium text-purple-700" aria-label="mood">
-									{moodActor.speech?.mood}
-								</span>
-							{/if}
-							<div class="absolute right-0.5 top-0.5 hidden gap-0.5 group-hover:flex">
-								<button onclick={(e) => duplicateEvent(e, event.time)} title="Duplicate" aria-label={`Duplicate frame ${event.time}`} class="rounded bg-white p-0.5 text-gray-400 shadow hover:text-blue-600">
-									<Copy class="h-3 w-3" />
-								</button>
-								<button onclick={(e) => deleteEvent(e, event.time)} title="Delete" aria-label={`Delete frame ${event.time}`} class="rounded bg-white p-0.5 text-gray-400 shadow hover:text-red-600">
-									<Trash2 class="h-3 w-3" />
-								</button>
+							{@const firstActor = event.frame.actors?.[0]}
+							<div class="group relative">
+								<TimelineEvent
+									item={{
+										id: String(event.time),
+										label: `Frame ${event.time}`,
+										start: event.time,
+										end: event.time + (event.duration ?? DEFAULT_DURATION),
+										speech: firstActor?.speech?.text,
+										mood: firstActor?.speech?.mood,
+										action: firstActor?.action,
+										zoom: event.frame.camera?.zoom,
+										fx: event.frame.fx,
+										audio: event.frame.audio_tracks?.map((t) => ({ id: t.id, volume: t.volume ?? 0 }))
+									}}
+									isSelected={selectedTime === event.time}
+									onselect={() => selectEvent(event.time)}
+								/>
+								<div class="absolute right-0.5 top-0.5 hidden gap-0.5 group-hover:flex" style="z-index:60;">
+									<button onclick={(e) => duplicateEvent(e, event.time)} title="Duplicate" aria-label={`Duplicate frame ${event.time}`} class="rounded bg-white p-0.5 text-gray-400 shadow hover:text-blue-600">
+										<Copy class="h-3 w-3" />
+									</button>
+									<button onclick={(e) => deleteEvent(e, event.time)} title="Delete" aria-label={`Delete frame ${event.time}`} class="rounded bg-white p-0.5 text-gray-400 shadow hover:text-red-600">
+										<Trash2 class="h-3 w-3" />
+									</button>
+								</div>
 							</div>
-						</div>
-					{/each}
+						{/each}
 				{/if}
 				</div>
 			</div>

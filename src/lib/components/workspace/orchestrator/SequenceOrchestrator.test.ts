@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { throttle } from '../../utils/throttle';
+import { throttle } from '../../../utils/throttle';
 
 /**
  * ST-022: Scroll sync tests

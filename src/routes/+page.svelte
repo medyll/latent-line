@@ -3,10 +3,10 @@
 	import { createModelStore } from '$lib/model/model-store.svelte';
 	import { createKeybindingHandler } from '$lib/context/keybindings.svelte';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY, HISTORY_STORE_KEY } from '$lib/context/keys';
-	import AssetManager from '$lib/components/workspace/AssetManager.svelte';
-	import PropertiesPanel from '$lib/components/workspace/PropertiesPanel.svelte';
-	import SequenceOrchestrator from '$lib/components/workspace/SequenceOrchestrator.svelte';
-	import ModelInspector from '$lib/components/workspace/ModelInspector.svelte';
+	import AssetManager from '$lib/components/workspace/assets/AssetManager.svelte';
+	import PropertiesPanel from '$lib/components/workspace/properties/PropertiesPanel.svelte';
+	import SequenceOrchestrator from '$lib/components/workspace/orchestrator/SequenceOrchestrator.svelte';
+	import ModelInspector from '$lib/components/workspace/utils/ModelInspector.svelte';
 
 	const { model, history, undo, redo } = createModelStore();
 

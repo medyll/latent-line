@@ -1,7 +1,7 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: "Sprint 14 in progress — S14-01 done (persistence onMount fix + route /), restructuration workspace/ complète. Next: S14-02 E2E undo/shortcuts"
+next_action: "Sprint 14 active (S14-02 E2E undo/shortcuts). Backlog: 11 sprints planifiés S15→S25 (173 pts, 35 stories)"
 active_role: dev
 audit_date: 2026-03-20
 audit_coverage: 84.39%
@@ -65,6 +65,61 @@ sprints:
   - id: 14
     status: active
     stories: ["S14-01", "S14-02", "S14-03", "S14-04"]
+  - id: 15
+    status: planned
+    stories: ["S15-01", "S15-02", "S15-03"]
+    theme: "Settings persistants — préférences utilisateur, config projet, nouveau projet"
+    points: 8
+  - id: 16
+    status: planned
+    stories: ["S16-01", "S16-02", "S16-03"]
+    theme: "Preview temps réel — tooltip survol, lecteur prévisualisation, miniatures mood"
+    points: 14
+  - id: 17
+    status: planned
+    stories: ["S17-01", "S17-02", "S17-03", "S17-04"]
+    theme: "Timeline avancée — markers, multi-sélection, drag & drop, duplication/templates"
+    points: 19
+  - id: 18
+    status: planned
+    stories: ["S18-01", "S18-02", "S18-03", "S18-04"]
+    theme: "Export — storyboard PDF, CSV, prompts AI, ZIP bundle"
+    points: 16
+  - id: 19
+    status: planned
+    stories: ["S19-01", "S19-02", "S19-03"]
+    theme: "Accessibility WCAG 2.1 AA — navigation clavier, contrastes, tests axe-core"
+    points: 11
+  - id: 20
+    status: planned
+    stories: ["S20-01", "S20-02", "S20-03"]
+    theme: "Performance — virtualisation liste, code splitting, debounce localStorage"
+    points: 13
+  - id: 21
+    status: planned
+    stories: ["S21-01", "S21-02", "S21-03", "S21-04"]
+    theme: "Polish UI — animations, états vides, responsive, panneaux redimensionnables"
+    points: 15
+  - id: 22
+    status: planned
+    stories: ["S22-01", "S22-02", "S22-03"]
+    theme: "Internationalisation — infrastructure paraglide, traductions FR/EN, sélecteur langue"
+    points: 12
+  - id: 23
+    status: planned
+    stories: ["S23-01", "S23-02", "S23-03"]
+    theme: "Collaboration — partage URL, commentaires events, historique de versions"
+    points: 18
+  - id: 24
+    status: planned
+    stories: ["S24-01", "S24-02", "S24-03", "S24-04"]
+    theme: "Rendu AI — prompt builder, export Deforum, FramePack/CogVideoX, webhook ComfyUI"
+    points: 31
+  - id: 25
+    status: planned
+    stories: ["S25-01", "S25-02", "S25-03"]
+    theme: "Production — export EDL, recherche globale, mode présentation"
+    points: 16
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE

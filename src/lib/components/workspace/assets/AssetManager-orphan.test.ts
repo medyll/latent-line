@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { TimelineEvent } from '../../model/model-types';
+import type { TimelineEvent } from '../../../model/model-types';
 
 // Pure orphan-detection and reference-count helpers tested independently.
 

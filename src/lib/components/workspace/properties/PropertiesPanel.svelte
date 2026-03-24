@@ -10,7 +10,7 @@
 	import { getContext, tick } from 'svelte';
 	import type { Model, Assets, LightingType, Mood } from '$lib/model/model-types';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
-	import CharacterField from './CharacterField.svelte';
+	import CharacterField from '$lib/components/workspace/CharacterField.svelte';
 
 	const LIGHTING_TYPES: LightingType[] = ['dusk', 'daylight', 'studio', 'tungsten', 'ambient'];
 	const MOODS: Mood[] = ['joyful', 'melancholic', 'anxious', 'serene', 'curious'];
