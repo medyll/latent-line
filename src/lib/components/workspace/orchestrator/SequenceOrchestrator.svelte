@@ -21,6 +21,7 @@
 	import { throttle } from '$lib/utils/throttle';
 	import { tickFrame, clampFrame, seekFromPixel, computeDuration } from '$lib/utils/playback';
 	import AudioTimeline from '$lib/components/workspace/audio/AudioTimeline.svelte';
+	import PlaybackBar from './playback-bar.svelte';
 	import { deleteEventFromModel } from '$lib/utils/event-helpers';
 
 	let { selectedTime = $bindable<number | null>(null) }: { selectedTime?: number | null } =
@@ -311,20 +312,12 @@
 				<div class="flex items-center gap-3">
 					<!-- Playback controls (S10-01) -->
 					<div class="flex items-center gap-1" role="group" aria-label="Playback controls">
-						<button
-							onclick={togglePlay}
-							title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
-							aria-label={isPlaying ? 'Pause' : 'Play'}
-							class="text-xs"
-						>{isPlaying ? '⏸' : '▶'}</button>
-						<button
-							onclick={stopPlayback}
-							title="Stop (Esc)"
-							aria-label="Stop"
-							class="text-xs"
-						>■</button>
+						<button onclick={togglePlay} title={isPlaying ? 'Pause (Space)' : 'Play (Space)'} aria-label={isPlaying ? 'Pause' : 'Play'} class="text-xs">{isPlaying ? '⏸' : '▶'}</button>
+						<button onclick={stopPlayback} title="Stop (Esc)" aria-label="Stop" class="text-xs">■</button>
 						<span class="tabular-nums text-xs" aria-label="Playhead position">{Math.floor(playheadTime)}</span>
 					</div>
+					<!-- Playback progress bar (S14-04) -->
+					<PlaybackBar bind:playheadTime totalDuration={totalDuration} fps={FPS} on:scrub={(e) => { playheadTime = e.detail.frame }} />
 					<!-- Zoom slider (TS-04) -->
 					<div class="flex items-center gap-2">
 						<span class="text-xs text-gray-400">Zoom</span>

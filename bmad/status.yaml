@@ -1,8 +1,8 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: "Dev: Address review S14-04 — fix & update PR"
-active_role: reviewer
+next_action: "Sprint 14 complete — awaiting next sprint decision"
+active_role: scrum_master
 audit_date: 2026-03-20
 audit_coverage: 84.39%
 audit_tests_passed: 307
@@ -63,7 +63,7 @@ sprints:
     status: completed
     stories: ["S13-01", "S13-02", "S13-03", "S13-04"]
   - id: 14
-    status: active
+    status: completed
     stories: ["S14-01", "S14-02", "S14-03", "S14-04"]
   - id: 15
     status: planned
