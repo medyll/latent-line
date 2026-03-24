@@ -3,6 +3,7 @@
 	import { createModelStore } from '$lib/model/model-store.svelte';
 	import { createKeybindingHandler } from '$lib/context/keybindings.svelte';
 	import { deleteEventFromModel } from '$lib/utils/event-helpers';
+	import ShortcutHelp from '$lib/components/ui/ShortcutHelp.svelte';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY, HISTORY_STORE_KEY } from '$lib/context/keys';
 	import AssetManager from '$lib/components/workspace/assets/AssetManager.svelte';
 	import PropertiesPanel from '$lib/components/workspace/properties/PropertiesPanel.svelte';
@@ -17,6 +18,7 @@
 
 	let selectedTime = $state<number | null>(null);
 	let showInspector = $state(false);
+	let showShortcuts = $state(false);
 
 	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
 
@@ -24,6 +26,7 @@
 		undo,
 		redo,
 		toggleInspector: () => { showInspector = !showInspector; },
+		toggleShortcuts: () => { showShortcuts = !showShortcuts; },
 		deleteSelected: () => {
 			if (selectedTime === null) return;
 			const deleted = deleteEventFromModel(model, selectedTime);
@@ -56,6 +59,10 @@
 
 {#if showInspector}
 	<ModelInspector onclose={() => (showInspector = false)} />
+{/if}
+
+{#if showShortcuts}
+	<ShortcutHelp onclose={() => (showShortcuts = false)} />
 {/if}
 
 <style>

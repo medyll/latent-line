@@ -20,7 +20,9 @@ export const SHORTCUTS: Shortcut[] = [
 	{ key: ' ', action: 'playPause', description: 'Play / Pause timeline' },
 	{ key: 'Escape', action: 'stop', description: 'Stop playback / close panel' },
 	{ key: '0', action: 'stop', description: 'Stop playback and reset' },
-	{ key: 'Delete', action: 'delete', description: 'Delete selected timeline event' }
+	{ key: 'Delete', action: 'delete', description: 'Delete selected timeline event' },
+	{ key: 'F1', action: 'toggleShortcuts', description: 'Show shortcuts help' },
+	{ key: '?', action: 'toggleShortcuts', description: 'Show shortcuts help' }
 ];
 
 /**
