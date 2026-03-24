@@ -1,8 +1,8 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: "Sprint 14 active (S14-02 E2E undo/shortcuts). Backlog: 11 sprints planifiés S15→S25 (173 pts, 35 stories)"
-active_role: dev
+next_action: "Dev: Investigate failing E2E S14-02 — am-debug-visible selector not found. Inspect test-results/**/trace.zip and app console; reproduce locally."
+active_role: tester
 audit_date: 2026-03-20
 audit_coverage: 84.39%
 audit_tests_passed: 307
@@ -142,4 +142,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-23T15:02:22Z
+last_updated: 2026-03-24T11:40:00Z
