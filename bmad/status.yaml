@@ -1,8 +1,8 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: "Dev: Review S14-04 — open PR & changelog"
-active_role: dev
+next_action: "Dev: Address review S14-04 — fix & update PR"
+active_role: reviewer
 audit_date: 2026-03-20
 audit_coverage: 84.39%
 audit_tests_passed: 307
