@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
 test('debug selection', async ({ page }) => {
-	await page.goto('/timeline', { waitUntil: 'networkidle' });
+	await page.goto('/', { waitUntil: 'networkidle' });
 	await page.locator('[data-testid="am-debug-visible"]').waitFor({ timeout: 20000 });
 	await page.locator('[aria-label="Asset Manager"]').waitFor();
 	const firstEvent = page.locator('[data-testid^="timeline-event-"]').first();

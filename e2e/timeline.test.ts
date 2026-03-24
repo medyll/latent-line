@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('/timeline route interactions', () => {
 	test.beforeEach(async ({ page }) => {
-		await page.goto('/timeline');
+		await page.goto('/');
 		// Wait for AssetManager to render
 		await page.locator('[aria-label="Asset Manager"]').waitFor();
 	});
@@ -70,3 +70,4 @@ test.describe('/timeline route interactions', () => {
 		await expect(panel.locator('[aria-label="No selection"]')).toBeVisible({ timeout: 5000 });
 	});
 });
+

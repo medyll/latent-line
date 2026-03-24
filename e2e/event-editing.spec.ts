@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Event editing via PropertiesPanel', () => {
 	test.beforeEach(async ({ page }) => {
-		await page.goto('/timeline', { waitUntil: 'networkidle' });
+		await page.goto('/', { waitUntil: 'networkidle' });
 		// ensure stores and AM rendered
 		await page.locator('[data-testid="am-debug-visible"]').waitFor({ timeout: 20000 });
 		await page.locator('[aria-label="Asset Manager"]').waitFor();
@@ -78,3 +78,4 @@ test.describe('Event editing via PropertiesPanel', () => {
 		await expect(events.first()).toHaveAttribute('aria-selected', 'false');
 	});
 });
+

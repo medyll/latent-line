@@ -9,12 +9,12 @@ test.describe('Visual Regression - Snapshot Tests', () => {
 	});
 
 	test('timeline page matches snapshot', async ({ page }) => {
-		await page.goto('/timeline', { waitUntil: 'networkidle' });
+		await page.goto('/', { waitUntil: 'networkidle' });
 		await expect(page).toHaveScreenshot('TimelinePage.png', { fullPage: true });
 	});
 
 	test('SequenceOrchestrator matches snapshot', async ({ page }) => {
-		await page.goto('/timeline', { waitUntil: 'networkidle' });
+		await page.goto('/', { waitUntil: 'networkidle' });
 		await page.setViewportSize({ width: 1920, height: 1080 });
 
 		const orchestrator = page.locator('[data-test-id="sequence-orchestrator"]').first();
@@ -24,7 +24,7 @@ test.describe('Visual Regression - Snapshot Tests', () => {
 	});
 
 	test('AssetManager matches snapshot', async ({ page }) => {
-		await page.goto('/timeline', { waitUntil: 'networkidle' });
+		await page.goto('/', { waitUntil: 'networkidle' });
 		await page.setViewportSize({ width: 1920, height: 1080 });
 
 		const assetManager = page.locator('[aria-label="Asset Manager"]').first();
@@ -33,7 +33,7 @@ test.describe('Visual Regression - Snapshot Tests', () => {
 	});
 
 	test('PropertiesPanel empty state matches snapshot', async ({ page }) => {
-		await page.goto('/timeline', { waitUntil: 'networkidle' });
+		await page.goto('/', { waitUntil: 'networkidle' });
 		await page.setViewportSize({ width: 1920, height: 1080 });
 
 		// Ensure no selection — click body to clear
@@ -46,7 +46,7 @@ test.describe('Visual Regression - Snapshot Tests', () => {
 	});
 
 	test('PropertiesPanel with event selected matches snapshot', async ({ page }) => {
-		await page.goto('/timeline', { waitUntil: 'networkidle' });
+		await page.goto('/', { waitUntil: 'networkidle' });
 		await page.setViewportSize({ width: 1920, height: 1080 });
 
 		const firstEvent = page.locator('[data-testid^="timeline-event-"]').first();
@@ -59,3 +59,4 @@ test.describe('Visual Regression - Snapshot Tests', () => {
 		// }
 	});
 });
+

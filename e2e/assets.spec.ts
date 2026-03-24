@@ -4,7 +4,7 @@ test.describe('AssetManager CRUD', () => {
 	const T = { ui: 20000 };
 
 	test.beforeEach(async ({ page }) => {
-		await page.goto('/timeline', { waitUntil: 'networkidle' });
+		await page.goto('/', { waitUntil: 'networkidle' });
 		// Wait for Asset Manager debug element to be visible to ensure stores initialized
 		await page.locator('[data-testid="am-debug-visible"]').waitFor({ timeout: T.ui });
 		await page.locator('[aria-label="Asset Manager"]').waitFor({ timeout: T.ui });
@@ -133,3 +133,4 @@ test.describe('AssetManager CRUD', () => {
 		await expect(chars.first()).toHaveAttribute('aria-selected', 'true', { timeout: T.ui });
 	});
 });
+

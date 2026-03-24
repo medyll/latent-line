@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('selecting a timeline event shows properties in the panel', async ({ page }) => {
-  await page.goto('/timeline', { waitUntil: 'networkidle' });
+  await page.goto('/', { waitUntil: 'networkidle' });
 
   // Wait for app UI to stabilize
   const amDebug = page.locator('[data-testid="am-debug-visible"]');
@@ -22,3 +22,4 @@ test('selecting a timeline event shows properties in the panel', async ({ page }
   await props.waitFor({ timeout: 10000 });
   await expect(props).toContainText('Event 1', { timeout: 5000 });
 });
+
