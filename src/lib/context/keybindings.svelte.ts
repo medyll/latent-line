@@ -4,6 +4,7 @@ interface KeybindingCallbacks {
 	undo: () => void;
 	redo: () => void;
 	toggleInspector: () => void;
+	deleteSelected?: () => void;
 }
 
 /**
@@ -18,6 +19,7 @@ export function createKeybindingHandler(callbacks: KeybindingCallbacks) {
 			case 'undo':            e.preventDefault(); callbacks.undo(); break;
 			case 'redo':            e.preventDefault(); callbacks.redo(); break;
 			case 'toggleInspector': e.preventDefault(); callbacks.toggleInspector(); break;
+			case 'delete':          e.preventDefault(); callbacks.deleteSelected?.(); break;
 		}
 	};
 }

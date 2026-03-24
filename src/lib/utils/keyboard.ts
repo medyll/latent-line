@@ -19,7 +19,8 @@ export const SHORTCUTS: Shortcut[] = [
 	{ key: 'i', ctrl: true, action: 'toggleInspector', description: 'Toggle Model Inspector' },
 	{ key: ' ', action: 'playPause', description: 'Play / Pause timeline' },
 	{ key: 'Escape', action: 'stop', description: 'Stop playback / close panel' },
-	{ key: '0', action: 'stop', description: 'Stop playback and reset' }
+	{ key: '0', action: 'stop', description: 'Stop playback and reset' },
+	{ key: 'Delete', action: 'delete', description: 'Delete selected timeline event' }
 ];
 
 /**

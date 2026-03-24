@@ -2,6 +2,7 @@
 	import { setContext } from 'svelte';
 	import { createModelStore } from '$lib/model/model-store.svelte';
 	import { createKeybindingHandler } from '$lib/context/keybindings.svelte';
+	import { deleteEventFromModel } from '$lib/utils/event-helpers';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY, HISTORY_STORE_KEY } from '$lib/context/keys';
 	import AssetManager from '$lib/components/workspace/assets/AssetManager.svelte';
 	import PropertiesPanel from '$lib/components/workspace/properties/PropertiesPanel.svelte';
@@ -22,7 +23,12 @@
 	const onKeydown = createKeybindingHandler({
 		undo,
 		redo,
-		toggleInspector: () => { showInspector = !showInspector; }
+		toggleInspector: () => { showInspector = !showInspector; },
+		deleteSelected: () => {
+			if (selectedTime === null) return;
+			const deleted = deleteEventFromModel(model, selectedTime);
+			if (deleted) selectedTime = null;
+		}
 	});
 </script>
 

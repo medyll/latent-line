@@ -21,6 +21,7 @@
 	import { throttle } from '$lib/utils/throttle';
 	import { tickFrame, clampFrame, seekFromPixel, computeDuration } from '$lib/utils/playback';
 	import AudioTimeline from '$lib/components/workspace/audio/AudioTimeline.svelte';
+	import { deleteEventFromModel } from '$lib/utils/event-helpers';
 
 	let { selectedTime = $bindable<number | null>(null) }: { selectedTime?: number | null } =
 		$props();
@@ -228,8 +229,8 @@
 
 	function deleteEvent(e: MouseEvent, time: number) {
 		e.stopPropagation();
-		if (!confirm(`Delete event at frame ${time}?`)) return;
-		model.timeline = model.timeline.filter((ev) => ev.time !== time);
+		const deleted = deleteEventFromModel(model, time);
+		if (!deleted) return;
 		if (selectedTime === time) selectedTime = null;
 	}
 
