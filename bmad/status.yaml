@@ -1,10 +1,10 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: 'Reviewer: audit completed — create audit artifact and mark for Developer to merge or address comments'
-active_role: reviewer
+next_action: 'Developer: create release PR and push branch for final review; include audit artifact bmad/artifacts/audit-2026-03-25.txt'
+active_role: developer
 next_command: 'bmad continue'
-next_role: developer
+next_role: reviewer
 audit_date: 2026-03-25
 audit_coverage: 84.39%
 audit_tests_passed: 339
