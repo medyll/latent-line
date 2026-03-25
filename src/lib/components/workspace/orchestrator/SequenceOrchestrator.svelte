@@ -172,7 +172,7 @@
 	}
 
 	// ── Multi-selection (S17-02) ──
-	let multiSelectedTimes = $state<Set<number>>(new SvelteSet());
+	let multiSelectedTimes = new SvelteSet<number>();
 
 	function handleSynopticClick(e: MouseEvent, time: number) {
 		if (e.ctrlKey || e.metaKey) {
