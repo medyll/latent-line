@@ -1,14 +1,14 @@
 project: latent-line
 phase: development
-progress: 73
-status: sprint-active
-next_action: 'Dev: S25-01/02 complete (11 pts). S25-03 (Presentation Mode, 5 pts) deferred to next session for fresh implementation.'
-active_role: developer
+progress: 80
+status: release-ready
+next_action: 'Review: S25-03 audit APPROVED. Sprint 25 complete (16/16 pts). Code ready for merge. Next: create PR + tag v0.3.0 or plan Sprint 26.'
+active_role: reviewer
 next_command: 'bmad status'
 next_role: scrum
 audit_date: 2026-03-25
 audit_coverage: 84.39%
-audit_tests_passed: 339
+audit_tests_passed: 430
 
 phases:
   - name: planning
@@ -136,13 +136,13 @@ sprints:
     delivered_points: 22
     notes: 'S24-04 foundation (service + store): 4 pts merged. UI integration (9 pts) deferred to Sprint 25.'
   - id: 25
-    status: in_progress
+    status: completed
     stories: ['S25-01', 'S25-02', 'S25-03']
-    completed_stories: ['S25-01', 'S25-02']
+    completed_stories: ['S25-01', 'S25-02', 'S25-03']
     theme: 'Production — export EDL, recherche globale, mode présentation'
     points: 16
-    delivered_points: 11
-    notes: 'S24-04 UI deferred to Sprint 26. S25-01/02 complete (11 pts). S25-03 presentation mode deferred to next session.'
+    delivered_points: 16
+    notes: 'All stories complete (16 pts). S25-01 EDL export, S25-02 global search, S25-03 presentation mode. Ready for merge.'
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
