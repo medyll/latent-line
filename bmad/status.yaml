@@ -1,10 +1,10 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: 'Developer: create release PR and push branch for final review; include audit artifact bmad/artifacts/audit-2026-03-25.txt'
-active_role: developer
+next_action: 'Scrum: finalize release PR, tag release, and merge; include bmad/artifacts/release-ready-2026-03-25.txt'
+active_role: reviewer
 next_command: 'bmad continue'
-next_role: reviewer
+next_role: scrum
 audit_date: 2026-03-25
 audit_coverage: 84.39%
 audit_tests_passed: 339

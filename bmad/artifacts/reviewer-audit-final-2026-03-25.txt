@@ -1,0 +1,839 @@
+
+> latent-line@0.2.0 lint D:\boulot\dev\node\latent-line
+> prettier --check . && eslint . --fix --ignore-pattern '**/*.test.*'
+
+Checking formatting...
+[warn] src/lib/model/model-template.ts
+[warn] src/lib/utils.ts
+[warn] Code style issues found in 2 files. Run Prettier with --write to fix.
+ÔÇëELIFECYCLEÔÇë Command failed with exit code 1.
+
+> latent-line@0.2.0 build D:\boulot\dev\node\latent-line
+> vite build
+
+[36mvite v8.0.2 [32mbuilding ssr environment for production...[36m[39m
+[2K
+17:04:01 [vite-plugin-svelte] src/lib/stores/templates.svelte.ts:29:2 This reference only captures the initial value of `templates`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+27:   }
+28:   return {
+29:     templates,
+                 ^
+30:     saveTemplate,
+31:     deleteTemplate
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:326:9 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+324:                 <!-- Name -->
+325:                 <div class="flex flex-col gap-0.5">
+326:                   <label>Name</label>
+                                          ^
+327:                   <input
+328:                     type="text"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:338:9 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+336:                 <!-- Voice ID -->
+337:                 <div class="flex flex-col gap-0.5">
+338:                   <label>Voice ID</label>
+                                              ^
+339:                   <input
+340:                     type="text"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:478:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+476:             <div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+477:               <div class="flex flex-col gap-0.5">
+478:                 <label class="text-gray-400">Prompt</label>
+                                                                ^
+479:                 <textarea
+480:                   value={env.prompt}
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:489:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+487:               </div>
+488:               <div class="flex flex-col gap-0.5">
+489:                 <label class="text-gray-400">Reference image</label>
+                                                                         ^
+490:                 <input
+491:                   type="text"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:598:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+596:             <div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+597:               <div class="flex flex-col gap-0.5">
+598:                 <label class="text-gray-400">Label</label>
+                                                               ^
+599:                 <input
+600:                   type="text"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:610:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+608:               </div>
+609:               <div class="flex flex-col gap-0.5">
+610:                 <label class="text-gray-400">URL / file</label>
+                                                                    ^
+611:                 <input
+612:                   type="text"
+17:04:01 [vite-plugin-svelte] src/lib/components/app/PreferencesPanel.svelte:9:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+ 7: 
+ 8: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+ 9: <div class="overlay" onclick={onclose}>
+          ^
+10:   <div
+11:     class="panel card"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/utils/ModelInspector.svelte:39:0 Elements with the 'dialog' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus
+37: <!-- Inspector overlay -->
+38: <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+39: <div
+        ^
+40:   class="inspector-overlay"
+41:   role="dialog"
+17:04:01 [vite-plugin-svelte] src/lib/components/ui/ConfirmDialog.svelte:7:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+ 5: 
+ 6: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+ 7: <div class="overlay" onclick={oncancel} transition:fade={{ duration: 150 }}>
+          ^
+ 8:   <div
+ 9:     class="dialog card"
+17:04:01 [vite-plugin-svelte] src/lib/components/app/ProjectConfig.svelte:39:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+37: 
+38: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+39: <div class="overlay" onclick={onclose}>
+          ^
+40:   <div
+41:     class="panel card"
+17:04:01 [vite-plugin-svelte] src/lib/components/app/ProjectConfig.svelte:176:1 Unused CSS selector "select.error"
+https://svelte.dev/e/css_unused_selector
+174:   }
+175:   input.error,
+176:   select.error {
+                   ^
+177:     border-color: var(--color-danger, red);
+178:   }
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:218:0 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+216:   Shows and edits the selected timeline event's frame properties.
+217: -->
+218: <div
+         ^
+219:   class="properties-panel flex flex-col gap-3 p-2"
+220:   aria-label="Properties Panel"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:218:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+216:   Shows and edits the selected timeline event's frame properties.
+217: -->
+218: <div
+         ^
+219:   class="properties-panel flex flex-col gap-3 p-2"
+220:   aria-label="Properties Panel"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:241:4 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+239:       <!-- Notes -->
+240:       <section class="mb-3">
+241:         <label class="text-xs text-gray-400 mb-1">Notes</label>
+                                                                    ^
+242:         <textarea
+243:           value={selectedEvent.notes ?? ''}
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:461:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+459:               <!-- Speech -->
+460:               <div class="flex flex-col gap-1">
+461:                 <label class="text-xs text-gray-400">Speech text</label>
+                                                                             ^
+462:                 <textarea
+463:                   value={actor.speech?.text ?? ''}
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:570:1 Unused CSS selector ".properties-panel button"
+https://svelte.dev/e/css_unused_selector
+568:   .properties-panel textarea,
+569:   .properties-panel select,
+570:   .properties-panel button,
+                               ^
+571:   .properties-panel [role='button'] {
+572:     pointer-events: auto;
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:571:1 Unused CSS selector ".properties-panel [role='button']"
+https://svelte.dev/e/css_unused_selector
+569:   .properties-panel select,
+570:   .properties-panel button,
+571:   .properties-panel [role='button'] {
+                                        ^
+572:     pointer-events: auto;
+573:   }</style>
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:435:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+433: 
+434: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+435: <div
+         ^
+436:   class="flex h-full w-full flex-col gap-4"
+437:   aria-label="Sequence Orchestrator"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:685:8 The attribute 'aria-selected' is not supported by the role 'button'
+https://svelte.dev/e/a11y_role_supports_aria_props
+683:                 )}px; height: 48px;"
+684:                 aria-label={`Time ${event.time}`}
+685:                 aria-selected={selectedTime === event.time || isMulti}
+                                                                           ^
+686:               >
+687:                 <span class="font-semibold">{event.time}</span>
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:736:1 Elements with the 'menu' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus
+734:   {@const mk = markers.find((m) => m.id === markerMenu!.id)}
+735:   <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+736:   <div
+           ^
+737:     class="marker-menu card"
+738:     style="left:{markerMenu.x}px;top:{markerMenu.y}px;"
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:778:1 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+776: {#if saveTemplateFor !== null}
+777:   <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+778:   <div class="overlay-dim" onclick={() => (saveTemplateFor = null)}>
+             ^
+779:     <div class="card template-dialog" onclick={(e) => e.stopPropagation()} role="dialog">
+780:       <div style="font-size:var(--text-sm);font-weight:600;margin-bottom:0.5rem;">
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:779:2 Elements with the 'dialog' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus
+777:   <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+778:   <div class="overlay-dim" onclick={() => (saveTemplateFor = null)}>
+779:     <div class="card template-dialog" onclick={(e) => e.stopPropagation()} role="dialog">
+               ^
+780:       <div style="font-size:var(--text-sm);font-weight:600;margin-bottom:0.5rem;">
+781:         Sauvegarder comme template
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:34:4 `temporalScrollContainer` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates
+https://svelte.dev/e/non_reactive_update
+32: });
+33: let synopticScrollContainer;
+34: let temporalScrollContainer;
+                               ^
+35: $effect(() => {
+36:     if (!synopticScrollContainer)
+17:04:01 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:145:4 `multiSelectedTimes` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates
+https://svelte.dev/e/non_reactive_update
+143: }
+144: // ÔöÇÔöÇ Multi-selection (S17-02) ÔöÇÔöÇ
+145: let multiSelectedTimes = new SvelteSet();
+                           ^
+146: function handleSynopticClick(e, time) {
+147:     if (e.ctrlKey || e.metaKey) {
+17:04:01 [vite-plugin-svelte] src/lib/components/app/ExportModal.svelte:85:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+83: 
+84: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+85: <div class="overlay" onclick={onclose}>
+          ^
+86:   <div
+87:     class="modal card"
+17:04:07 [vite-plugin-svelte] src/lib/components/workspace/CharacterField.svelte:4:4 `inputRef` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates
+https://svelte.dev/e/non_reactive_update
+2: let isEditing = $state(false);
+3: let editingName = $state('');
+4: let inputRef;
+               ^
+5: const selectedCharacter = $derived(character ? characters.find((c) => c.id === character) : null);
+6: function handleDoubleClick() {
+17:04:07 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/TimelineEvent.svelte:6:27 This reference only captures the initial value of `isSelected`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+4: let { item, isSelected = false, compact = false, onselect } = $props();
+5: const selectionStore = getContext(SELECTION_STORE_KEY);
+6: let selectedLocal = $state(isSelected);
+                                        ^
+7: if (selectionStore) {
+8:     selectionStore.subscribe((id) => {
+17:04:07 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/TimelineEvent.svelte:58:1 The attribute 'aria-selected' is not supported by the role 'button'
+https://svelte.dev/e/a11y_role_supports_aria_props
+56:     {moodColor ? `border-left: 3px solid ${moodColor.border}; background: ${moodColor.bg};` : ''}"
+57:   aria-label={`Timeline event ${item.label}`}
+58:   aria-selected={selectedLocal}
+                                   ^
+59:   data-selection-available={selectionStore ? 'yes' : 'no'}
+60:   onkeydown={(e) => e.key === 'Enter' && toggleSelection(e as unknown as MouseEvent)}
+transforming...Ô£ô 3863 modules transformed.
+[lightningcss minify] Unknown at rule: @function
+461 |  }
+462 |  /* ÔöÇÔöÇÔöÇ States ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
+463 |  @function --hover-state(--color <color>) returns <color> {
+    |           ^
+464 |  	result: hsl(from var(--color) h s calc(l - 10%));
+465 |  }
+[lightningcss minify] Unknown at rule: @function
+464 |  	result: hsl(from var(--color) h s calc(l - 10%));
+465 |  }
+466 |  @function --alpha(--color <color>, --opacity <number>) returns <color> {
+    |           ^
+467 |  	result: hsl(from var(--color) h s l / var(--opacity));
+468 |  }
+[lightningcss minify] Unknown at rule: @function
+468 |  }
+469 |  /* ÔöÇÔöÇÔöÇ Blending ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
+470 |  @function --shade(--color <color>, --intensity <percentage>) returns <color> {
+    |           ^
+471 |  	result: color-mix(in srgb, var(--color), black var(--intensity));
+472 |  }
+[lightningcss minify] Unknown at rule: @function
+471 |  	result: color-mix(in srgb, var(--color), black var(--intensity));
+472 |  }
+473 |  @function --tint(--color <color>, --intensity <percentage>) returns <color> {
+    |           ^
+474 |  	result: color-mix(in srgb, var(--color), white var(--intensity));
+475 |  }
+[lightningcss minify] Unknown at rule: @function
+474 |  	result: color-mix(in srgb, var(--color), white var(--intensity));
+475 |  }
+476 |  @function --surface-tint(--color <color>) returns <color> {
+    |           ^
+477 |  	result: color-mix(in srgb, var(--color) 12%, transparent);
+478 |  }
+[lightningcss minify] Unknown at rule: @function
+477 |  	result: color-mix(in srgb, var(--color) 12%, transparent);
+478 |  }
+479 |  @function --border-from(--color <color>) returns <color> {
+    |           ^
+480 |  	result: color-mix(in srgb, var(--color), black 15%);
+481 |  }
+[lightningcss minify] Unknown at rule: @function
+482 |  /* ÔöÇÔöÇÔöÇ Color harmonies (oklch) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
+483 |  /* secondary */
+484 |  @function --harmony-secondary(--color <color>) returns <color> {
+    |           ^
+485 |  	result: oklch(from var(--primary) l c calc(h + 30));
+486 |  }
+[lightningcss minify] Unknown at rule: @function
+486 |  }
+487 |  /* secondary soft */
+488 |  @function --harmony-secondary-soft(--color <color>) returns <color> {
+    |           ^
+489 |  	result: oklch(from var(--secondary) calc(l + 0.1) calc(c * 0.5) h);
+490 |  }
+[lightningcss minify] Unknown at rule: @function
+490 |  }
+491 |  /* Complementary */
+492 |  @function --harmony-complementary(--color <color>) returns <color> {
+    |           ^
+493 |  	result: oklch(from var(--color) l c calc(h + 180));
+494 |  }
+[lightningcss minify] Unknown at rule: @function
+494 |  }
+495 |  /* Analogous */
+496 |  @function --harmony-analogous-plus(--color <color>) returns <color> {
+    |           ^
+497 |  	result: oklch(from var(--color) l c calc(h + 30));
+498 |  }
+[lightningcss minify] Unknown at rule: @function
+497 |  	result: oklch(from var(--color) l c calc(h + 30));
+498 |  }
+499 |  @function --harmony-analogous-minus(--color <color>) returns <color> {
+    |           ^
+500 |  	result: oklch(from var(--color) l c calc(h - 30));
+501 |  }
+[lightningcss minify] Unknown at rule: @function
+501 |  }
+502 |  /* Split-complementary */
+503 |  @function --harmony-split-1(--color <color>) returns <color> {
+    |           ^
+504 |  	result: oklch(from var(--color) l c calc(h + 150));
+505 |  }
+[lightningcss minify] Unknown at rule: @function
+504 |  	result: oklch(from var(--color) l c calc(h + 150));
+505 |  }
+506 |  @function --harmony-split-2(--color <color>) returns <color> {
+    |           ^
+507 |  	result: oklch(from var(--color) l c calc(h + 210));
+508 |  }
+[lightningcss minify] Unknown at rule: @function
+508 |  }
+509 |  /* Triadic */
+510 |  @function --harmony-triad-1(--color <color>) returns <color> {
+    |           ^
+511 |  	result: oklch(from var(--color) l c calc(h + 120));
+512 |  }
+[lightningcss minify] Unknown at rule: @function
+511 |  	result: oklch(from var(--color) l c calc(h + 120));
+512 |  }
+513 |  @function --harmony-triad-2(--color <color>) returns <color> {
+    |           ^
+514 |  	result: oklch(from var(--color) l c calc(h + 240));
+515 |  }
+[lightningcss minify] Unknown at rule: @function
+515 |  }
+516 |  /* Square */
+517 |  @function --harmony-square-1(--color <color>) returns <color> {
+    |           ^
+518 |  	result: oklch(from var(--color) l c calc(h + 90));
+519 |  }
+[lightningcss minify] Unknown at rule: @function
+518 |  	result: oklch(from var(--color) l c calc(h + 90));
+519 |  }
+520 |  @function --harmony-square-2(--color <color>) returns <color> {
+    |           ^
+521 |  	result: oklch(from var(--color) l c calc(h + 180));
+522 |  }
+[lightningcss minify] Unknown at rule: @function
+521 |  	result: oklch(from var(--color) l c calc(h + 180));
+522 |  }
+523 |  @function --harmony-square-3(--color <color>) returns <color> {
+    |           ^
+524 |  	result: oklch(from var(--color) l c calc(h + 270));
+525 |  }
+[lightningcss minify] Unknown at rule: @function
+525 |  }
+526 |  /* Tetradic */
+527 |  @function --harmony-tetradic-2(--color <color>) returns <color> {
+    |           ^
+528 |  	result: oklch(from var(--color) l c calc(h + 60));
+529 |  }
+rendering chunks...
+[36mvite v8.0.2 [32mbuilding client environment for production...[36m[39m
+[2K
+17:04:08 [vite-plugin-svelte] src/lib/stores/templates.svelte.ts:29:2 This reference only captures the initial value of `templates`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+27:   }
+28:   return {
+29:     templates,
+                 ^
+30:     saveTemplate,
+31:     deleteTemplate
+17:04:08 [vite-plugin-svelte] src/lib/components/app/PreferencesPanel.svelte:9:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+ 7: 
+ 8: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+ 9: <div class="overlay" onclick={onclose}>
+          ^
+10:   <div
+11:     class="panel card"
+17:04:08 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:326:9 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+324:                 <!-- Name -->
+325:                 <div class="flex flex-col gap-0.5">
+326:                   <label>Name</label>
+                                          ^
+327:                   <input
+328:                     type="text"
+17:04:08 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:338:9 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+336:                 <!-- Voice ID -->
+337:                 <div class="flex flex-col gap-0.5">
+338:                   <label>Voice ID</label>
+                                              ^
+339:                   <input
+340:                     type="text"
+17:04:08 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:478:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+476:             <div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+477:               <div class="flex flex-col gap-0.5">
+478:                 <label class="text-gray-400">Prompt</label>
+                                                                ^
+479:                 <textarea
+480:                   value={env.prompt}
+17:04:08 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:489:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+487:               </div>
+488:               <div class="flex flex-col gap-0.5">
+489:                 <label class="text-gray-400">Reference image</label>
+                                                                         ^
+490:                 <input
+491:                   type="text"
+17:04:08 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:598:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+596:             <div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+597:               <div class="flex flex-col gap-0.5">
+598:                 <label class="text-gray-400">Label</label>
+                                                               ^
+599:                 <input
+600:                   type="text"
+17:04:08 [vite-plugin-svelte] src/lib/components/workspace/assets/AssetManager.svelte:610:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+608:               </div>
+609:               <div class="flex flex-col gap-0.5">
+610:                 <label class="text-gray-400">URL / file</label>
+                                                                    ^
+611:                 <input
+612:                   type="text"
+17:04:08 [vite-plugin-svelte] src/lib/components/ui/ConfirmDialog.svelte:7:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+ 5: 
+ 6: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+ 7: <div class="overlay" onclick={oncancel} transition:fade={{ duration: 150 }}>
+          ^
+ 8:   <div
+ 9:     class="dialog card"
+17:04:08 [vite-plugin-svelte] src/lib/components/app/ProjectConfig.svelte:39:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+37: 
+38: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+39: <div class="overlay" onclick={onclose}>
+          ^
+40:   <div
+41:     class="panel card"
+17:04:08 [vite-plugin-svelte] src/lib/components/app/ProjectConfig.svelte:176:1 Unused CSS selector "select.error"
+https://svelte.dev/e/css_unused_selector
+174:   }
+175:   input.error,
+176:   select.error {
+                   ^
+177:     border-color: var(--color-danger, red);
+178:   }
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:435:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+433: 
+434: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+435: <div
+         ^
+436:   class="flex h-full w-full flex-col gap-4"
+437:   aria-label="Sequence Orchestrator"
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:685:8 The attribute 'aria-selected' is not supported by the role 'button'
+https://svelte.dev/e/a11y_role_supports_aria_props
+683:                 )}px; height: 48px;"
+684:                 aria-label={`Time ${event.time}`}
+685:                 aria-selected={selectedTime === event.time || isMulti}
+                                                                           ^
+686:               >
+687:                 <span class="font-semibold">{event.time}</span>
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:736:1 Elements with the 'menu' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus
+734:   {@const mk = markers.find((m) => m.id === markerMenu!.id)}
+735:   <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+736:   <div
+           ^
+737:     class="marker-menu card"
+738:     style="left:{markerMenu.x}px;top:{markerMenu.y}px;"
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:778:1 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+776: {#if saveTemplateFor !== null}
+777:   <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+778:   <div class="overlay-dim" onclick={() => (saveTemplateFor = null)}>
+             ^
+779:     <div class="card template-dialog" onclick={(e) => e.stopPropagation()} role="dialog">
+780:       <div style="font-size:var(--text-sm);font-weight:600;margin-bottom:0.5rem;">
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:779:2 Elements with the 'dialog' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus
+777:   <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+778:   <div class="overlay-dim" onclick={() => (saveTemplateFor = null)}>
+779:     <div class="card template-dialog" onclick={(e) => e.stopPropagation()} role="dialog">
+               ^
+780:       <div style="font-size:var(--text-sm);font-weight:600;margin-bottom:0.5rem;">
+781:         Sauvegarder comme template
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:34:4 `temporalScrollContainer` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates
+https://svelte.dev/e/non_reactive_update
+32: });
+33: let synopticScrollContainer;
+34: let temporalScrollContainer;
+                               ^
+35: $effect(() => {
+36:     if (!synopticScrollContainer)
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/SequenceOrchestrator.svelte:145:4 `multiSelectedTimes` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates
+https://svelte.dev/e/non_reactive_update
+143: }
+144: // ÔöÇÔöÇ Multi-selection (S17-02) ÔöÇÔöÇ
+145: let multiSelectedTimes = new SvelteSet();
+                           ^
+146: function handleSynopticClick(e, time) {
+147:     if (e.ctrlKey || e.metaKey) {
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:218:0 Visible, non-interactive elements with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+216:   Shows and edits the selected timeline event's frame properties.
+217: -->
+218: <div
+         ^
+219:   class="properties-panel flex flex-col gap-3 p-2"
+220:   aria-label="Properties Panel"
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:218:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+216:   Shows and edits the selected timeline event's frame properties.
+217: -->
+218: <div
+         ^
+219:   class="properties-panel flex flex-col gap-3 p-2"
+220:   aria-label="Properties Panel"
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:241:4 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+239:       <!-- Notes -->
+240:       <section class="mb-3">
+241:         <label class="text-xs text-gray-400 mb-1">Notes</label>
+                                                                    ^
+242:         <textarea
+243:           value={selectedEvent.notes ?? ''}
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:461:8 A form label must be associated with a control
+https://svelte.dev/e/a11y_label_has_associated_control
+459:               <!-- Speech -->
+460:               <div class="flex flex-col gap-1">
+461:                 <label class="text-xs text-gray-400">Speech text</label>
+                                                                             ^
+462:                 <textarea
+463:                   value={actor.speech?.text ?? ''}
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:570:1 Unused CSS selector ".properties-panel button"
+https://svelte.dev/e/css_unused_selector
+568:   .properties-panel textarea,
+569:   .properties-panel select,
+570:   .properties-panel button,
+                               ^
+571:   .properties-panel [role='button'] {
+572:     pointer-events: auto;
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/properties/PropertiesPanel.svelte:571:1 Unused CSS selector ".properties-panel [role='button']"
+https://svelte.dev/e/css_unused_selector
+569:   .properties-panel select,
+570:   .properties-panel button,
+571:   .properties-panel [role='button'] {
+                                        ^
+572:     pointer-events: auto;
+573:   }</style>
+17:04:09 [vite-plugin-svelte] src/lib/components/app/ExportModal.svelte:85:0 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+83: 
+84: <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
+85: <div class="overlay" onclick={onclose}>
+          ^
+86:   <div
+87:     class="modal card"
+17:04:09 [vite-plugin-svelte] src/lib/components/workspace/utils/ModelInspector.svelte:39:0 Elements with the 'dialog' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus
+37: <!-- Inspector overlay -->
+38: <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+39: <div
+        ^
+40:   class="inspector-overlay"
+41:   role="dialog"
+17:04:15 [vite-plugin-svelte] src/lib/components/workspace/CharacterField.svelte:4:4 `inputRef` is updated, but is not declared with `$state(...)`. Changing its value will not correctly trigger updates
+https://svelte.dev/e/non_reactive_update
+2: let isEditing = $state(false);
+3: let editingName = $state('');
+4: let inputRef;
+               ^
+5: const selectedCharacter = $derived(character ? characters.find((c) => c.id === character) : null);
+6: function handleDoubleClick() {
+17:04:15 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/TimelineEvent.svelte:6:27 This reference only captures the initial value of `isSelected`. Did you mean to reference it inside a closure instead?
+https://svelte.dev/e/state_referenced_locally
+4: let { item, isSelected = false, compact = false, onselect } = $props();
+5: const selectionStore = getContext(SELECTION_STORE_KEY);
+6: let selectedLocal = $state(isSelected);
+                                        ^
+7: if (selectionStore) {
+8:     selectionStore.subscribe((id) => {
+17:04:15 [vite-plugin-svelte] src/lib/components/workspace/orchestrator/TimelineEvent.svelte:58:1 The attribute 'aria-selected' is not supported by the role 'button'
+https://svelte.dev/e/a11y_role_supports_aria_props
+56:     {moodColor ? `border-left: 3px solid ${moodColor.border}; background: ${moodColor.bg};` : ''}"
+57:   aria-label={`Timeline event ${item.label}`}
+58:   aria-selected={selectedLocal}
+                                   ^
+59:   data-selection-available={selectionStore ? 'yes' : 'no'}
+60:   onkeydown={(e) => e.key === 'Enter' && toggleSelection(e as unknown as MouseEvent)}
+transforming...Ô£ô 3950 modules transformed.
+[lightningcss minify] Unknown at rule: @function
+461 |  }
+462 |  /* ÔöÇÔöÇÔöÇ States ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
+463 |  @function --hover-state(--color <color>) returns <color> {
+    |           ^
+464 |  	result: hsl(from var(--color) h s calc(l - 10%));
+465 |  }
+[lightningcss minify] Unknown at rule: @function
+464 |  	result: hsl(from var(--color) h s calc(l - 10%));
+465 |  }
+466 |  @function --alpha(--color <color>, --opacity <number>) returns <color> {
+    |           ^
+467 |  	result: hsl(from var(--color) h s l / var(--opacity));
+468 |  }
+[lightningcss minify] Unknown at rule: @function
+468 |  }
+469 |  /* ÔöÇÔöÇÔöÇ Blending ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
+470 |  @function --shade(--color <color>, --intensity <percentage>) returns <color> {
+    |           ^
+471 |  	result: color-mix(in srgb, var(--color), black var(--intensity));
+472 |  }
+[lightningcss minify] Unknown at rule: @function
+471 |  	result: color-mix(in srgb, var(--color), black var(--intensity));
+472 |  }
+473 |  @function --tint(--color <color>, --intensity <percentage>) returns <color> {
+    |           ^
+474 |  	result: color-mix(in srgb, var(--color), white var(--intensity));
+475 |  }
+[lightningcss minify] Unknown at rule: @function
+474 |  	result: color-mix(in srgb, var(--color), white var(--intensity));
+475 |  }
+476 |  @function --surface-tint(--color <color>) returns <color> {
+    |           ^
+477 |  	result: color-mix(in srgb, var(--color) 12%, transparent);
+478 |  }
+[lightningcss minify] Unknown at rule: @function
+477 |  	result: color-mix(in srgb, var(--color) 12%, transparent);
+478 |  }
+479 |  @function --border-from(--color <color>) returns <color> {
+    |           ^
+480 |  	result: color-mix(in srgb, var(--color), black 15%);
+481 |  }
+[lightningcss minify] Unknown at rule: @function
+482 |  /* ÔöÇÔöÇÔöÇ Color harmonies (oklch) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ */
+483 |  /* secondary */
+484 |  @function --harmony-secondary(--color <color>) returns <color> {
+    |           ^
+485 |  	result: oklch(from var(--primary) l c calc(h + 30));
+486 |  }
+[lightningcss minify] Unknown at rule: @function
+486 |  }
+487 |  /* secondary soft */
+488 |  @function --harmony-secondary-soft(--color <color>) returns <color> {
+    |           ^
+489 |  	result: oklch(from var(--secondary) calc(l + 0.1) calc(c * 0.5) h);
+490 |  }
+[lightningcss minify] Unknown at rule: @function
+490 |  }
+491 |  /* Complementary */
+492 |  @function --harmony-complementary(--color <color>) returns <color> {
+    |           ^
+493 |  	result: oklch(from var(--color) l c calc(h + 180));
+494 |  }
+[lightningcss minify] Unknown at rule: @function
+494 |  }
+495 |  /* Analogous */
+496 |  @function --harmony-analogous-plus(--color <color>) returns <color> {
+    |           ^
+497 |  	result: oklch(from var(--color) l c calc(h + 30));
+498 |  }
+[lightningcss minify] Unknown at rule: @function
+497 |  	result: oklch(from var(--color) l c calc(h + 30));
+498 |  }
+499 |  @function --harmony-analogous-minus(--color <color>) returns <color> {
+    |           ^
+500 |  	result: oklch(from var(--color) l c calc(h - 30));
+501 |  }
+[lightningcss minify] Unknown at rule: @function
+501 |  }
+502 |  /* Split-complementary */
+503 |  @function --harmony-split-1(--color <color>) returns <color> {
+    |           ^
+504 |  	result: oklch(from var(--color) l c calc(h + 150));
+505 |  }
+[lightningcss minify] Unknown at rule: @function
+504 |  	result: oklch(from var(--color) l c calc(h + 150));
+505 |  }
+506 |  @function --harmony-split-2(--color <color>) returns <color> {
+    |           ^
+507 |  	result: oklch(from var(--color) l c calc(h + 210));
+508 |  }
+[lightningcss minify] Unknown at rule: @function
+508 |  }
+509 |  /* Triadic */
+510 |  @function --harmony-triad-1(--color <color>) returns <color> {
+    |           ^
+511 |  	result: oklch(from var(--color) l c calc(h + 120));
+512 |  }
+[lightningcss minify] Unknown at rule: @function
+511 |  	result: oklch(from var(--color) l c calc(h + 120));
+512 |  }
+513 |  @function --harmony-triad-2(--color <color>) returns <color> {
+    |           ^
+514 |  	result: oklch(from var(--color) l c calc(h + 240));
+515 |  }
+[lightningcss minify] Unknown at rule: @function
+515 |  }
+516 |  /* Square */
+517 |  @function --harmony-square-1(--color <color>) returns <color> {
+    |           ^
+518 |  	result: oklch(from var(--color) l c calc(h + 90));
+519 |  }
+[lightningcss minify] Unknown at rule: @function
+518 |  	result: oklch(from var(--color) l c calc(h + 90));
+519 |  }
+520 |  @function --harmony-square-2(--color <color>) returns <color> {
+    |           ^
+521 |  	result: oklch(from var(--color) l c calc(h + 180));
+522 |  }
+[lightningcss minify] Unknown at rule: @function
+521 |  	result: oklch(from var(--color) l c calc(h + 180));
+522 |  }
+523 |  @function --harmony-square-3(--color <color>) returns <color> {
+    |           ^
+524 |  	result: oklch(from var(--color) l c calc(h + 270));
+525 |  }
+[lightningcss minify] Unknown at rule: @function
+525 |  }
+526 |  /* Tetradic */
+527 |  @function --harmony-tetradic-2(--color <color>) returns <color> {
+    |           ^
+528 |  	result: oklch(from var(--color) l c calc(h + 60));
+529 |  }
+rendering chunks...
+computing gzip size...
+.svelte-kit/output/client/_app/version.json                                     0.02 kB Ôöé gzip:  0.04 kB
+.svelte-kit/output/client/.vite/manifest.json                                   6.11 kB Ôöé gzip:  1.06 kB
+.svelte-kit/output/client/_app/immutable/assets/SnapshotsPanel.Cjquywff.css     0.07 kB Ôöé gzip:  0.08 kB
+.svelte-kit/output/client/_app/immutable/assets/PreferencesPanel.C5TJxvBF.css   0.97 kB Ôöé gzip:  0.38 kB
+.svelte-kit/output/client/_app/immutable/assets/ModelInspector.DIn-Dbjr.css     1.07 kB Ôöé gzip:  0.47 kB
+.svelte-kit/output/client/_app/immutable/assets/ProjectConfig.MqqWhcFq.css      1.33 kB Ôöé gzip:  0.46 kB
+.svelte-kit/output/client/_app/immutable/assets/ExportModal.5HaFPexe.css        1.79 kB Ôöé gzip:  0.58 kB
+.svelte-kit/output/client/_app/immutable/assets/2.DE7mLv3h.css                  9.73 kB Ôöé gzip:  2.17 kB
+.svelte-kit/output/client/_app/immutable/assets/0.CdZZwcJi.css                 39.08 kB Ôöé gzip:  6.67 kB
+.svelte-kit/output/client/_app/immutable/chunks/BHHmxMpB.js                     0.02 kB Ôöé gzip:  0.04 kB
+.svelte-kit/output/client/_app/immutable/chunks/NRldZWc7.js                     0.03 kB Ôöé gzip:  0.05 kB
+.svelte-kit/output/client/_app/immutable/chunks/DXLwiZ0H.js                     0.06 kB Ôöé gzip:  0.08 kB
+.svelte-kit/output/client/_app/immutable/entry/start.D4a7eg48.js                0.07 kB Ôöé gzip:  0.08 kB
+.svelte-kit/output/client/_app/immutable/chunks/CIyhjFZJ.js                     0.19 kB Ôöé gzip:  0.12 kB
+.svelte-kit/output/client/_app/immutable/chunks/DudR1DeY.js                     0.47 kB Ôöé gzip:  0.29 kB
+.svelte-kit/output/client/_app/immutable/chunks/B0tVT899.js                     0.60 kB Ôöé gzip:  0.35 kB
+.svelte-kit/output/client/_app/immutable/chunks/ff1Lv4-v.js                     0.61 kB Ôöé gzip:  0.37 kB
+.svelte-kit/output/client/_app/immutable/chunks/dHs4Ry1l.js                     0.67 kB Ôöé gzip:  0.39 kB
+.svelte-kit/output/client/_app/immutable/nodes/1.CRIfqJ5b.js                    1.10 kB Ôöé gzip:  0.52 kB
+.svelte-kit/output/client/_app/immutable/chunks/BcgnSMxp.js                     1.20 kB Ôöé gzip:  0.68 kB
+.svelte-kit/output/client/_app/immutable/chunks/BdaKwu48.js                     2.16 kB Ôöé gzip:  0.96 kB
+.svelte-kit/output/client/_app/immutable/entry/app.OY21wOl4.js                  2.96 kB Ôöé gzip:  1.35 kB
+.svelte-kit/output/client/_app/immutable/chunks/z5sgXQT_.js                     3.33 kB Ôöé gzip:  1.57 kB
+.svelte-kit/output/client/_app/immutable/chunks/oX_08znx.js                     3.72 kB Ôöé gzip:  1.59 kB
+.svelte-kit/output/client/_app/immutable/chunks/CF3truWY.js                     3.79 kB Ôöé gzip:  1.65 kB
+.svelte-kit/output/client/_app/immutable/chunks/BLMExpKC.js                     9.34 kB Ôöé gzip:  4.01 kB
+.svelte-kit/output/client/_app/immutable/nodes/0.C-hl9Q9u.js                   16.57 kB Ôöé gzip:  5.73 kB
+.svelte-kit/output/client/_app/immutable/chunks/B8PSYk0D.js                    25.66 kB Ôöé gzip: 10.01 kB
+.svelte-kit/output/client/_app/immutable/chunks/DgsK1XOa.js                    57.45 kB Ôöé gzip: 22.04 kB
+.svelte-kit/output/client/_app/immutable/chunks/YYRIdEGg.js                    68.77 kB Ôöé gzip: 18.90 kB
+.svelte-kit/output/client/_app/immutable/nodes/2.D7UeZQ4S.js                   90.08 kB Ôöé gzip: 27.20 kB
+
+[PLUGIN_TIMINGS] Warning: Your build spent significant time in plugins. Here is a breakdown:
+  - vite-plugin-sveltekit-guard (71%)
+  - vite-plugin-sveltekit-virtual-modules (11%)
+  - vite-plugin-svelte:compile (9%)
+  - vite-plugin-svelte:preprocess (9%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+[32mÔ£ô built in 6.76s[39m
+computing gzip size...
+.svelte-kit/output/server/.vite/manifest.json                                    6.26 kB Ôöé gzip:  0.93 kB
+.svelte-kit/output/server/_app/immutable/assets/SnapshotsPanel.Cjquywff.css      0.07 kB Ôöé gzip:  0.08 kB
+.svelte-kit/output/server/_app/immutable/assets/PreferencesPanel.C5TJxvBF.css    0.97 kB Ôöé gzip:  0.38 kB
+.svelte-kit/output/server/_app/immutable/assets/ModelInspector.DIn-Dbjr.css      1.07 kB Ôöé gzip:  0.47 kB
+.svelte-kit/output/server/_app/immutable/assets/ProjectConfig.MqqWhcFq.css       1.33 kB Ôöé gzip:  0.46 kB
+.svelte-kit/output/server/_app/immutable/assets/ExportModal.5HaFPexe.css         1.79 kB Ôöé gzip:  0.58 kB
+.svelte-kit/output/server/_app/immutable/assets/_page.BDyqH4SY.css               9.70 kB Ôöé gzip:  2.16 kB
+.svelte-kit/output/server/_app/immutable/assets/_layout.BFRcZMX0.css            33.18 kB Ôöé gzip:  6.40 kB
+.svelte-kit/output/server/chunks/index-server2.js                                0.03 kB Ôöé gzip:  0.05 kB
+.svelte-kit/output/server/chunks/export-import.js                                0.04 kB Ôöé gzip:  0.05 kB
+.svelte-kit/output/server/chunks/preferences.svelte.js                           0.39 kB Ôöé gzip:  0.27 kB
+.svelte-kit/output/server/internal.js                                            0.40 kB Ôöé gzip:  0.20 kB
+.svelte-kit/output/server/chunks/keys.js                                         0.49 kB Ôöé gzip:  0.24 kB
+.svelte-kit/output/server/chunks/environment.js                                  1.39 kB Ôöé gzip:  0.61 kB
+.svelte-kit/output/server/chunks/PreferencesPanel.js                             2.07 kB Ôöé gzip:  0.74 kB
+.svelte-kit/output/server/chunks/SnapshotsPanel.js                               2.16 kB Ôöé gzip:  0.89 kB
+.svelte-kit/output/server/chunks/ModelInspector.js                               3.32 kB Ôöé gzip:  1.17 kB
+.svelte-kit/output/server/chunks/utils2.js                                       3.36 kB Ôöé gzip:  1.34 kB
+.svelte-kit/output/server/chunks/ProjectConfig.js                                4.19 kB Ôöé gzip:  1.38 kB
+.svelte-kit/output/server/entries/fallbacks/error.svelte.js                      5.87 kB Ôöé gzip:  2.10 kB
+.svelte-kit/output/server/chunks/ExportModal.js                                  6.18 kB Ôöé gzip:  2.42 kB
+.svelte-kit/output/server/chunks/model-template.js                               6.47 kB Ôöé gzip:  2.08 kB
+.svelte-kit/output/server/chunks/exports.js                                     11.76 kB Ôöé gzip:  3.56 kB
+.svelte-kit/output/server/entries/pages/_layout.svelte.js                       19.44 kB Ôöé gzip:  5.80 kB
+.svelte-kit/output/server/chunks/shared.js                                      19.78 kB Ôöé gzip:  5.61 kB
+.svelte-kit/output/server/chunks/internal.js                                    20.37 kB Ôöé gzip:  6.27 kB
+.svelte-kit/output/server/remote-entry.js                                       28.95 kB Ôöé gzip:  6.12 kB
+.svelte-kit/output/server/chunks/utils.js                                       29.00 kB Ôöé gzip:  8.39 kB
+.svelte-kit/output/server/index.js                                             130.23 kB Ôöé gzip: 33.38 kB
+.svelte-kit/output/server/entries/pages/_page.svelte.js                        138.12 kB Ôöé gzip: 25.00 kB
+.svelte-kit/output/server/chunks/index-server.js                               138.15 kB Ôöé gzip: 36.03 kB
+
+[PLUGIN_TIMINGS] Warning: Your build spent significant time in plugins. Here is a breakdown:
+  - vite-plugin-sveltekit-guard (68%)
+  - vite-plugin-svelte:compile (11%)
+  - vite-plugin-sveltekit-virtual-modules (11%)
+  - vite-plugin-svelte:preprocess (10%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+[32mÔ£ô built in 14.92s[39m
+Run npm run preview to preview your production build locally.
+
+> Using @sveltejs/adapter-auto
+  Could not detect a supported production environment. See https://svelte.dev/docs/kit/adapters to learn how to configure your app to run on the platform of your choosing
+  Ô£ö done
+\nReviewer audit completed
