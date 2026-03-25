@@ -46,11 +46,62 @@ export function exportToPromptsJson(model: Model, includeNegative = true): Promp
 		}));
 }
 
-/** Deforum-style keyframe dict: `{"0": "prompt", "24": "prompt"}` */
-export function exportToDeforumFormat(model: Model): string {
-	const entries = [...model.timeline]
-		.sort((a, b) => a.time - b.time)
-		.map((ev) => `  "${ev.time}": "${buildPrompt(ev, model).replace(/"/g, '\\"')}"`)
-		.join(',\n');
-	return `{\n${entries}\n}`;
+export interface DeforumOptions {
+	negative_prompt?: string;
+	seed?: number;
+	steps?: number;
+	cfg_scale?: number;
+}
+
+/** Full Deforum format with prompts, negative_prompts, and options. */
+export function exportToDeforumFormat(model: Model, options: DeforumOptions = {}): string {
+	const sortedEvents = [...model.timeline].sort((a, b) => a.time - b.time);
+
+	// Ensure frame 0 exists (required by Deforum)
+	const hasFrame0 = sortedEvents.some(ev => ev.time === 0);
+	if (!hasFrame0 && sortedEvents.length > 0) {
+		sortedEvents.unshift({
+			time: 0,
+			duration: sortedEvents[0]?.duration ?? 24,
+			frame: sortedEvents[0]?.frame ?? {}
+		});
+	}
+
+	const prompts: Record<string, string> = {};
+	const negativePrompts: Record<string, string> = {};
+
+	sortedEvents.forEach((ev) => {
+		const prompt = buildPrompt(ev, model).replace(/"/g, '\\"');
+		prompts[String(ev.time)] = prompt;
+		negativePrompts[String(ev.time)] = options.negative_prompt ?? 'blur, watermark, low quality, distorted';
+	});
+
+	// Generate morphing prompts for interpolated frames
+	for (let i = 0; i < sortedEvents.length - 1; i++) {
+		const current = sortedEvents[i];
+		const next = sortedEvents[i + 1];
+		const gap = next.time - current.time;
+
+		// Only add morphing frames if gap > 1
+		if (gap > 1) {
+			const step = Math.ceil(gap / 4); // Create intermediate frames
+			for (let f = current.time + step; f < next.time; f += step) {
+				// Morphing prompt hints that transition between frames
+				const morphPrompt = `${buildPrompt(current, model)}, morphing transition`.replace(/"/g, '\\"');
+				prompts[String(f)] = morphPrompt;
+				negativePrompts[String(f)] = options.negative_prompt ?? 'blur, watermark, low quality, distorted';
+			}
+		}
+	}
+
+	// Build full Deforum JSON
+	const deforumObj = {
+		prompts,
+		negative_prompts: negativePrompts,
+		...(options.seed !== undefined && { seed: options.seed }),
+		...(options.steps !== undefined && { steps: options.steps }),
+		...(options.cfg_scale !== undefined && { cfg_scale: options.cfg_scale })
+	};
+
+	return JSON.stringify(deforumObj, null, 2);
 }

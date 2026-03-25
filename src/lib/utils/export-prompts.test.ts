@@ -88,10 +88,28 @@ describe('exportToPromptsJson', () => {
 });
 
 describe('exportToDeforumFormat', () => {
-	it('returns valid JSON-like dict', () => {
+	it('returns valid JSON with prompts and negative_prompts', () => {
 		const deforum = exportToDeforumFormat(makeModel());
-		expect(deforum).toMatch(/^{/);
-		expect(deforum).toContain('"0"');
-		expect(deforum).toContain('"24"');
+		const parsed = JSON.parse(deforum);
+		expect(parsed.prompts).toBeDefined();
+		expect(parsed.negative_prompts).toBeDefined();
+		expect(parsed.prompts['0']).toBeTruthy();
+		expect(parsed.prompts['24']).toBeTruthy();
+		expect(parsed.negative_prompts['0']).toBeTruthy();
+	});
+
+	it('includes seed and steps when provided', () => {
+		const deforum = exportToDeforumFormat(makeModel(), { seed: 123, steps: 50 });
+		const parsed = JSON.parse(deforum);
+		expect(parsed.seed).toBe(123);
+		expect(parsed.steps).toBe(50);
+	});
+
+	it('ensures frame 0 exists', () => {
+		const model = makeModel();
+		model.timeline[0].time = 10; // Start at frame 10
+		const deforum = exportToDeforumFormat(model);
+		const parsed = JSON.parse(deforum);
+		expect(parsed.prompts['0']).toBeDefined();
 	});
 });

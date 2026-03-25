@@ -11,6 +11,7 @@
 	import type { Model, Assets, LightingType, Mood } from '$lib/model/model-types';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
 	import CharacterField from '$lib/components/workspace/CharacterField.svelte';
+	import PromptAssist from '$lib/components/workspace/properties/PromptAssist.svelte';
 
 	const LIGHTING_TYPES: LightingType[] = ['dusk', 'daylight', 'studio', 'tungsten', 'ambient'];
 	const MOODS: Mood[] = ['joyful', 'melancholic', 'anxious', 'serene', 'curious'];
@@ -20,6 +21,10 @@
 	}: {
 		selectedEventId?: string | null;
 	} = $props();
+
+	// Prompt Assist panel state
+	let showPromptAssist = $state(false);
+	let promptAssistActorIdx = $state<number | null>(null);
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
@@ -177,6 +182,21 @@
 		ensureActorSpeech(actorIdx);
 		if (selectedEventIndex < 0) return;
 		model.timeline[selectedEventIndex].frame.actors![actorIdx].speech!.pitch_shift = pitch_shift;
+	}
+
+	function updateActorAction(actorIdx: number, action: string) {
+		if (selectedEventIndex < 0) return;
+		const actor = model.timeline[selectedEventIndex].frame.actors?.[actorIdx];
+		if (!actor) return;
+		actor.action = action || undefined;
+	}
+
+	function appendToActorAction(actorIdx: number, term: string) {
+		if (selectedEventIndex < 0) return;
+		const actor = model.timeline[selectedEventIndex].frame.actors?.[actorIdx];
+		if (!actor) return;
+		const current = actor.action ?? '';
+		actor.action = current ? `${current}, ${term}` : term;
 	}
 
 	function updateEventCharacter(characterId: string | null) {
@@ -562,6 +582,52 @@
 										>{(actor.speech?.pitch_shift ?? 0).toFixed(1)}</span
 									>
 								</div>
+
+								<!-- S24-01: Action field with Assist button -->
+								<div class="mt-2 flex flex-col gap-1 relative">
+									<div class="flex items-center gap-2">
+										<label for="action-{actor.id}" class="w-16 shrink-0 text-xs text-gray-400"
+											>Action</label
+										>
+										<input
+											id="action-{actor.id}"
+											type="text"
+											value={actor.action ?? ''}
+											oninput={(e) => updateActorAction(actorIdx, (e.target as HTMLInputElement).value)}
+											placeholder="e.g. standing, walking..."
+											class="flex-1 rounded border border-gray-200 px-1 py-0.5 text-xs"
+											aria-label={`Action for ${actor.id}`}
+										/>
+										<button
+											class="assist-btn"
+											onclick={() => {
+												showPromptAssist = !showPromptAssist;
+												promptAssistActorIdx = showPromptAssist ? actorIdx : null;
+											}}
+											title="Open prompt suggestions"
+											aria-label="Open prompt suggestions"
+										>
+											✨
+										</button>
+									</div>
+
+									<!-- Prompt Assist panel -->
+									{#if showPromptAssist && promptAssistActorIdx === actorIdx}
+										<div class="assist-container">
+											<PromptAssist
+												onSelect={(term) => {
+													appendToActorAction(actorIdx, term);
+													showPromptAssist = false;
+													promptAssistActorIdx = null;
+												}}
+												onClose={() => {
+													showPromptAssist = false;
+													promptAssistActorIdx = null;
+												}}
+											/>
+										</div>
+									{/if}
+								</div>
 							</div>
 						</div>
 					{/each}
@@ -586,5 +652,29 @@
 	.properties-panel button,
 	.properties-panel [role='button'] {
 		pointer-events: auto;
+	}
+
+	.assist-btn {
+		background: none;
+		border: 1px solid #ddd;
+		border-radius: 3px;
+		padding: 4px 6px;
+		cursor: pointer;
+		font-size: 12px;
+		transition: all 0.2s;
+	}
+
+	.assist-btn:hover {
+		background: #f0f0f0;
+		border-color: #999;
+	}
+
+	.assist-btn:active {
+		background: #e0e0e0;
+	}
+
+	.assist-container {
+		margin-top: 8px;
+		position: relative;
 	}
 </style>

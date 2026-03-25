@@ -1,10 +1,10 @@
 project: latent-line
-phase: release
+phase: development
 progress: 100
-status: released
-next_action: 'Scrum: finalize release PR, tag release, and merge; include bmad/artifacts/release-ready-2026-03-25.txt'
+status: ready-for-merge
+next_action: 'Scrum: Sprint 24 complete. Approve merge of S24-01/02/03. Plan S24-04 (ComfyUI) for future sprint.'
 active_role: reviewer
-next_command: 'bmad continue'
+next_command: 'bmad status'
 next_role: scrum
 audit_date: 2026-03-25
 audit_coverage: 84.39%
@@ -18,7 +18,7 @@ phases:
   - name: testing
     status: in_progress
   - name: release
-    status: in_progress
+    status: done
 
 artifacts:
   prd: done
@@ -121,16 +121,18 @@ sprints:
     theme: 'Internationalisation — infrastructure paraglide, traductions FR/EN, sélecteur langue'
     points: 12
   - id: 23
-    status: in_progress
+    status: completed
     stories: ['S23-01', 'S23-02', 'S23-03']
     completed_stories: ['S23-02', 'S23-01', 'S23-03']
     theme: 'Collaboration — partage URL, commentaires events, historique de versions'
     points: 18
   - id: 24
-    status: planned
+    status: in_progress
     stories: ['S24-01', 'S24-02', 'S24-03', 'S24-04']
+    completed_stories: ['S24-01', 'S24-02', 'S24-03']
     theme: 'Rendu AI — prompt builder, export Deforum, FramePack/CogVideoX, webhook ComfyUI'
     points: 31
+    notes: 'S24-04 post-MVP (webhook ComfyUI integration) — defer to future sprint'
   - id: 25
     status: planned
     stories: ['S25-01', 'S25-02', 'S25-03']
@@ -158,4 +160,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-25T14:10:26.310Z
+last_updated: 2026-03-25T21:12:45.000Z
