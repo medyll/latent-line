@@ -1,7 +1,7 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: 'Reviewer: run audit and approve or request changes; run `pnpm run lint` and `pnpm run build` locally before merging'
+next_action: 'Reviewer: audit completed — create audit artifact and mark for Developer to merge or address comments'
 active_role: reviewer
 next_command: 'bmad continue'
 next_role: developer
