@@ -114,10 +114,7 @@
 	}
 
 	async function addCharacter() {
-		console.log(
-			'[AssetManager] addCharacter called, before length:',
-			assetStore.characters?.length ?? 0
-		);
+
 		debugLastAction = 'add:char:pending';
 		const newId = `char_${Date.now()}`;
 		// set editingId early so the inline input mounts in the next tick
@@ -165,14 +162,7 @@
 			console.warn('[AssetManager] focus failed', err);
 		}
 		debugLastAction = `add:char:${newId}`;
-		console.log(
-			'[AssetManager] addCharacter done, after length:',
-			assetStore.characters.length,
-			'editingId=',
-			editingId,
-			'selectedAssetId=',
-			selectedAssetId
-		);
+
 	}
 
 	function addOutfit(charId: string) {
@@ -208,10 +198,7 @@
 	}
 
 	function addEnvironment() {
-		console.log(
-			'[AssetManager] addEnvironment called, before:',
-			Object.keys(assetStore.environments).length
-		);
+
 		debugLastAction = 'add:env:pending';
 		const newId = `env_${Date.now()}`;
 		// mutate via full replacement to ensure reactivity
@@ -221,12 +208,7 @@
 		};
 		editingId = `env:${newId}`;
 		debugLastAction = `add:env:${newId}`;
-		console.log(
-			'[AssetManager] addEnvironment done, after:',
-			Object.keys(assetStore.environments).length,
-			'editingId=',
-			editingId
-		);
+
 	}
 
 	// --- Audio mutations ---
@@ -253,18 +235,13 @@
 	}
 
 	function addAudio() {
-		console.log('[AssetManager] addAudio called, before:', (assetStore.audio ?? []).length);
+
 		debugLastAction = 'add:audio:pending';
 		const newId = `audio_${Date.now()}`;
 		assetStore.audio = [...(assetStore.audio ?? []), { id: newId, url: '', label: 'New Audio' }];
 		editingId = `audio:${newId}`;
 		debugLastAction = `add:audio:${newId}`;
-		console.log(
-			'[AssetManager] addAudio done, after:',
-			assetStore.audio.length,
-			'editingId=',
-			editingId
-		);
+
 	}
 </script>
 

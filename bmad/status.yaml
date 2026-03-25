@@ -1,13 +1,13 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: 'Review release checklist & finalize'
-active_role: developer
+next_action: 'Developer: run tests, commit fixes, and push for review'
+active_role: reviewer
 next_command: 'bmad continue'
 next_role: developer
-audit_date: 2026-03-20
+audit_date: 2026-03-25
 audit_coverage: 84.39%
-audit_tests_passed: 307
+audit_tests_passed: 339
 
 phases:
   - name: planning
@@ -157,4 +157,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-25T13:49:05.762Z
+last_updated: 2026-03-25T14:10:26.310Z

@@ -6,6 +6,7 @@
 	 */
 	import { getContext } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { SvelteSet } from 'svelte/reactivity';
 	import type { Model, Marker } from '$lib/model/model-types';
 	import { MODEL_STORE_KEY, PLAYBACK_CONTEXT_KEY, TEMPLATES_CONTEXT_KEY } from '$lib/context/keys';
 	import type { PlaybackStore } from '$lib/context/playback-context.svelte';
@@ -167,15 +168,15 @@
 	// ── Single selection ──
 	function selectEvent(time: number) {
 		selectedTime = selectedTime === time ? null : time;
-		multiSelectedTimes = new Set();
+		multiSelectedTimes = new SvelteSet();
 	}
 
 	// ── Multi-selection (S17-02) ──
-	let multiSelectedTimes = $state<Set<number>>(new Set());
+	let multiSelectedTimes = $state<Set<number>>(new SvelteSet());
 
 	function handleSynopticClick(e: MouseEvent, time: number) {
 		if (e.ctrlKey || e.metaKey) {
-			const s = new Set(multiSelectedTimes);
+			const s = new SvelteSet(multiSelectedTimes);
 			if (s.has(time)) s.delete(time);
 			else s.add(time);
 			multiSelectedTimes = s;
@@ -184,10 +185,10 @@
 			const times = timeline.map((ev) => ev.time).sort((a, b) => a - b);
 			const from = Math.min(selectedTime, time);
 			const to = Math.max(selectedTime, time);
-			multiSelectedTimes = new Set(times.filter((t) => t >= from && t <= to));
+			multiSelectedTimes = new SvelteSet(times.filter((t) => t >= from && t <= to));
 			selectedTime = null;
 		} else {
-			multiSelectedTimes = new Set();
+			multiSelectedTimes = new SvelteSet();
 			selectEvent(time);
 		}
 	}
@@ -197,7 +198,7 @@
 			deleteEventFromModel(model, t);
 			if (selectedTime === t) selectedTime = null;
 		}
-		multiSelectedTimes = new Set();
+		multiSelectedTimes = new SvelteSet();
 	}
 
 	function duplicateSelected() {
@@ -213,7 +214,7 @@
 				frame: structuredClone(src.frame)
 			});
 		}
-		multiSelectedTimes = new Set();
+		multiSelectedTimes = new SvelteSet();
 	}
 
 	function shiftSelected(delta: number) {
@@ -222,7 +223,7 @@
 			const idx = model.timeline.findIndex((ev) => ev.time === t);
 			if (idx !== -1) model.timeline[idx].time = Math.max(0, t + delta);
 		}
-		multiSelectedTimes = new Set([...multiSelectedTimes].map((t) => Math.max(0, t + delta)));
+		multiSelectedTimes = new SvelteSet([...multiSelectedTimes].map((t) => Math.max(0, t + delta)));
 		if (selectedTime !== null) selectedTime = Math.max(0, selectedTime + delta);
 	}
 
@@ -389,11 +390,11 @@
 			togglePlay();
 		} else if (e.code === 'Escape' || e.key === '0') {
 			stopPlayback();
-			multiSelectedTimes = new Set();
+			multiSelectedTimes = new SvelteSet();
 			markerMenu = null;
 		} else if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
 			e.preventDefault();
-			multiSelectedTimes = new Set(timeline.map((ev) => ev.time));
+			multiSelectedTimes = new SvelteSet(timeline.map((ev) => ev.time));
 			selectedTime = null;
 		} else if ((e.ctrlKey || e.metaKey) && e.key === 'd' && selectedTime !== null) {
 			e.preventDefault();
