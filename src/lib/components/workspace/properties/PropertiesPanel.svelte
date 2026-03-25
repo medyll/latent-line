@@ -9,9 +9,11 @@
 	 */
 	import { getContext, tick } from 'svelte';
 	import type { Model, Assets, LightingType, Mood } from '$lib/model/model-types';
-	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
+	import type { Preferences } from '$lib/stores/preferences.svelte';
+	import { ASSET_STORE_KEY, MODEL_STORE_KEY, PREFS_CONTEXT_KEY } from '$lib/context/keys';
 	import CharacterField from '$lib/components/workspace/CharacterField.svelte';
 	import PromptAssist from '$lib/components/workspace/properties/PromptAssist.svelte';
+	import GenerateButton from '$lib/components/workspace/GenerateButton.svelte';
 
 	const LIGHTING_TYPES: LightingType[] = ['dusk', 'daylight', 'studio', 'tungsten', 'ambient'];
 	const MOODS: Mood[] = ['joyful', 'melancholic', 'anxious', 'serene', 'curious'];
@@ -28,6 +30,7 @@
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
+	const prefs = getContext<Preferences>(PREFS_CONTEXT_KEY);
 
 	// --- Event selection (from model.timeline) ---
 	const selectedEventIndex = $derived(
@@ -633,6 +636,15 @@
 					{/each}
 				</section>
 			{/if}
+
+			<!-- S24-04-UI: ComfyUI Generate Button -->
+			<section class="mb-3">
+				<GenerateButton
+					eventId={selectedEventId ?? ''}
+					prompt={selectedEvent.frame.prompt ?? ''}
+					{prefs}
+				/>
+			</section>
 		</div>
 	{/if}
 	<!-- Always in DOM: visible only when nothing is selected -->

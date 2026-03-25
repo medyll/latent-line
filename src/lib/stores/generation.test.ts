@@ -6,126 +6,91 @@ describe('generation store', () => {
 		generation.reset();
 	});
 
-	it('initializes empty', () => {
-		let state: any;
-		generation.subscribe((s) => {
-			state = s;
-		})();
-		expect(state.size).toBe(0);
+	it('initializes with idle state', () => {
+		const state = generation.get('event-1');
+		expect(state).toBeUndefined();
 	});
 
-	it('tracks event generation state', () => {
-		generation.start('event_0');
-		const state = generation.get('event_0');
-
-		expect(state).toBeDefined();
+	it('starts generation', () => {
+		generation.start('event-1');
+		const state = generation.get('event-1');
 		expect(state?.status).toBe('queued');
 		expect(state?.progress).toBe(0);
+		expect(state?.error).toBeUndefined();
 	});
 
 	it('updates progress', () => {
-		generation.start('event_0');
-		generation.setProgress('event_0', 50);
-
-		const state = generation.get('event_0');
-		expect(state?.progress).toBe(50);
+		generation.start('event-1');
+		generation.setProgress('event-1', 50);
+		const state = generation.get('event-1');
 		expect(state?.status).toBe('generating');
+		expect(state?.progress).toBe(50);
 	});
 
-	it('marks generation complete', () => {
-		generation.start('event_0');
-		generation.complete('event_0', 'data:image/png;base64,...');
-
-		const state = generation.get('event_0');
+	it('completes generation', () => {
+		generation.start('event-1');
+		generation.complete('event-1', 'base64data');
+		const state = generation.get('event-1');
 		expect(state?.status).toBe('done');
 		expect(state?.progress).toBe(100);
-		expect(state?.image_base64).toBe('data:image/png;base64,...');
+		expect(state?.image_base64).toBe('base64data');
 		expect(state?.generated_at).toBeDefined();
 	});
 
-	it('tracks errors', () => {
-		generation.start('event_0');
-		generation.error('event_0', 'Connection timeout');
-
-		const state = generation.get('event_0');
+	it('sets error state', () => {
+		generation.start('event-1');
+		generation.error('event-1', 'Connection timeout');
+		const state = generation.get('event-1');
 		expect(state?.status).toBe('error');
 		expect(state?.error).toBe('Connection timeout');
 	});
 
-	it('clears individual event state', () => {
-		generation.start('event_0');
-		generation.start('event_1');
-		generation.clear('event_0');
-
-		expect(generation.get('event_0')).toBeUndefined();
-		expect(generation.get('event_1')).toBeDefined();
+	it('clears specific event state', () => {
+		generation.start('event-1');
+		generation.start('event-2');
+		generation.clear('event-1');
+		expect(generation.get('event-1')).toBeUndefined();
+		expect(generation.get('event-2')).toBeDefined();
 	});
 
 	it('resets all state', () => {
-		generation.start('event_0');
-		generation.start('event_1');
+		generation.start('event-1');
+		generation.start('event-2');
 		generation.reset();
-
-		let state: any;
-		generation.subscribe((s) => {
-			state = s;
-		})();
-		expect(state.size).toBe(0);
+		expect(generation.get('event-1')).toBeUndefined();
+		expect(generation.get('event-2')).toBeUndefined();
 	});
 
-	describe('isGenerating derived', () => {
-		it('returns false when idle', () => {
-			generation.start('event_0');
-			generation.complete('event_0', 'data:...');
-
-			let generating = false;
-			isGenerating.subscribe((v) => {
-				generating = v;
-			})();
-
-			expect(generating).toBe(false);
+	it('tracks isGenerating derived store', () => {
+		let generating = false;
+		isGenerating.subscribe((value) => {
+			generating = value;
 		});
 
-		it('returns true when queued', () => {
-			generation.start('event_0');
-
-			let generating = false;
-			isGenerating.subscribe((v) => {
-				generating = v;
-			})();
-
-			expect(generating).toBe(true);
-		});
-
-		it('returns true when generating', () => {
-			generation.start('event_0');
-			generation.setProgress('event_0', 50);
-
-			let generating = false;
-			isGenerating.subscribe((v) => {
-				generating = v;
-			})();
-
-			expect(generating).toBe(true);
-		});
+		expect(generating).toBe(false);
+		generation.start('event-1');
+		expect(generating).toBe(true);
+		generation.complete('event-1', 'base64');
+		expect(generating).toBe(false);
 	});
 
-	describe('generationStats derived', () => {
-		it('counts states correctly', () => {
-			generation.start('event_0');
-			generation.start('event_1');
-			generation.complete('event_0', 'data:...');
-			generation.error('event_2', 'Error');
-
-			let stats: any;
-			generationStats.subscribe((v) => {
-				stats = v;
-			})();
-
-			expect(stats.total).toBe(3);
-			expect(stats.done).toBe(1);
-			expect(stats.error).toBe(1);
-			expect(stats.generating).toBe(1);
+	it('tracks generationStats', () => {
+		let stats = { total: 0, done: 0, error: 0, generating: 0 };
+		generationStats.subscribe((value) => {
+			stats = value;
 		});
+
+		generation.start('event-1');
+		generation.start('event-2');
+		expect(stats.total).toBe(2);
+		expect(stats.generating).toBe(2);
+
+		generation.complete('event-1', 'base64');
+		expect(stats.done).toBe(1);
+		expect(stats.generating).toBe(1);
+
+		generation.error('event-2', 'Failed');
+		expect(stats.error).toBe(1);
+		expect(stats.generating).toBe(0);
 	});
 });

@@ -2,11 +2,19 @@ import { onMount } from 'svelte';
 
 const PREFS_KEY = 'latent-line:prefs';
 
+export interface ComfyUIConfig {
+	enabled: boolean;
+	backend: 'comfyui' | 'a1111';
+	url: string;
+	api_key?: string;
+}
+
 export interface Preferences {
 	theme: 'light' | 'dark';
 	defaultZoom: number;
 	sidebarWidth: number;
 	language: string;
+	comfyui?: ComfyUIConfig;
 }
 
 const DEFAULTS: Preferences = {

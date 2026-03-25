@@ -6,6 +6,7 @@
 	import { createTemplatesStore } from '$lib/stores/templates.svelte';
 	import { createKeybindingHandler } from '$lib/context/keybindings.svelte';
 	import { deleteEventFromModel } from '$lib/utils/event-helpers';
+	import { createPreferencesStore } from '$lib/stores/preferences.svelte';
 	import ShortcutHelp from '$lib/components/ui/ShortcutHelp.svelte';
 	import ConfirmDialog from '$lib/components/ui/ConfirmDialog.svelte';
 	import SaveIndicator from '$lib/components/app/SaveIndicator.svelte';
@@ -14,23 +15,27 @@
 		MODEL_STORE_KEY,
 		HISTORY_STORE_KEY,
 		PLAYBACK_CONTEXT_KEY,
-		TEMPLATES_CONTEXT_KEY
+		TEMPLATES_CONTEXT_KEY,
+		PREFS_CONTEXT_KEY
 	} from '$lib/context/keys';
 	import AssetManager from '$lib/components/workspace/assets/AssetManager.svelte';
 	import PropertiesPanel from '$lib/components/workspace/properties/PropertiesPanel.svelte';
 	import PreviewPanel from '$lib/components/app/PreviewPanel.svelte';
 	import SequenceOrchestrator from '$lib/components/workspace/orchestrator/SequenceOrchestrator.svelte';
+	import GenerateBatchButton from '$lib/components/workspace/GenerateBatchButton.svelte';
 	import { resizable } from '$lib/actions/resizable';
 
 	const { model, history, undo, redo, saveStatus } = createModelStore();
 	const playback = createPlaybackStore();
 	const templatesStore = createTemplatesStore();
+	const { prefs } = createPreferencesStore();
 
 	setContext(ASSET_STORE_KEY, model.assets);
 	setContext(MODEL_STORE_KEY, model);
 	setContext(HISTORY_STORE_KEY, history);
 	setContext(PLAYBACK_CONTEXT_KEY, playback);
 	setContext(TEMPLATES_CONTEXT_KEY, templatesStore);
+	setContext(PREFS_CONTEXT_KEY, prefs);
 
 	let selectedTime = $state<number | null>(null);
 	let showInspector = $state(false);
@@ -39,6 +44,7 @@
 	let showNewProjectConfirm = $state(false);
 	let showExport = $state(false);
 	let showSnapshots = $state(false);
+	let showComfyUISettings = $state(false);
 	let rightTab = $state<'properties' | 'preview'>('properties');
 
 	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
@@ -98,6 +104,14 @@
 		<button onclick={() => (showSnapshots = true)} title="Snapshots" class="toolbar-btn">
 			📸 Snapshots
 		</button>
+		<button
+			onclick={() => (showComfyUISettings = true)}
+			title="ComfyUI / Stable Diffusion Settings"
+			class="toolbar-btn"
+		>
+			🎨 ComfyUI
+		</button>
+		<GenerateBatchButton {model} {prefs} />
 		<span style="margin-left:auto;"><SaveIndicator status={saveStatus.value} /></span>
 	</div>
 	<div class="app-panels">
@@ -177,6 +191,16 @@
 		onconfirm={newProject}
 		oncancel={() => (showNewProjectConfirm = false)}
 	/>
+{/if}
+
+{#if showComfyUISettings}
+	{#await import('$lib/components/app/ComfyUISettings.svelte') then { default: ComfyUISettings }}
+		<ComfyUISettings
+			open={showComfyUISettings}
+			{prefs}
+			onClose={() => (showComfyUISettings = false)}
+		/>
+	{/await}
 {/if}
 
 <style>
