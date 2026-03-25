@@ -54,7 +54,7 @@ export function createModelStore() {
 
 	// Persist model to localStorage with 500ms debounce
 	$effect(() => {
-		const _ = JSON.stringify(model); // deep-track all properties
+		// const _ = JSON.stringify(model); // deep-track all properties
 		debouncedSave.schedule(model);
 	});
 

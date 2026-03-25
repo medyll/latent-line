@@ -17,7 +17,7 @@ class LocalStorageMock {
 }
 
 beforeEach(() => {
-	// @ts-ignore
+	//@ts-expect-error  -- allow overwriting global localStorage for testing
 	global.localStorage = new LocalStorageMock();
 });
 

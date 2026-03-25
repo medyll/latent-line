@@ -11,6 +11,5 @@
 				"parser": "svelte"
 			}
 		}
-	],
-	"tailwindStylesheet": "./src/lib/styles/app.css"
+	]
 }

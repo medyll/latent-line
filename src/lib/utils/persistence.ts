@@ -63,7 +63,7 @@ export function saveModelToLocalStorage(model: unknown, key = DEFAULT_KEY) {
 		return true;
 	} catch (err) {
 		// surface unexpected errors during E2E runs for easier debugging
-		// eslint-disable-next-line no-console
+
 		console.error('[persistence] save failed', err);
 		return false;
 	}

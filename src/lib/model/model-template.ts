@@ -5,9 +5,9 @@ import { z } from 'zod';
 
 // Define enums first
 const moodEnum = z.enum(['joyful', 'melancholic', 'anxious', 'serene', 'curious']);
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 const _lightingTypeEnum = z.enum(['dusk', 'daylight', 'studio', 'tungsten', 'ambient']);
-/* eslint-enable @typescript-eslint/no-unused-vars */
+ 
 
 const positionSchema = z.object({ x: z.number(), y: z.number(), scale: z.number().optional() });
 const speechSchema = z.object({
