@@ -1,6 +1,7 @@
 project: latent-line
 phase: release
 progress: 100
+status: released
 next_action: 'Scrum: finalize release PR, tag release, and merge; include bmad/artifacts/release-ready-2026-03-25.txt'
 active_role: reviewer
 next_command: 'bmad continue'
