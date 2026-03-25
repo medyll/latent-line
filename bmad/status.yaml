@@ -1,9 +1,9 @@
 project: latent-line
 phase: development
-progress: 100
-status: ready-for-merge
-next_action: 'Scrum: Sprint 24 complete. Approve merge of S24-01/02/03. Plan S24-04 (ComfyUI) for future sprint.'
-active_role: reviewer
+progress: 73
+status: sprint-active
+next_action: 'Dev: S25-01/02 complete (11 pts). S25-03 (Presentation Mode, 5 pts) deferred to next session for fresh implementation.'
+active_role: developer
 next_command: 'bmad status'
 next_role: scrum
 audit_date: 2026-03-25
@@ -127,17 +127,22 @@ sprints:
     theme: 'Collaboration — partage URL, commentaires events, historique de versions'
     points: 18
   - id: 24
-    status: in_progress
+    status: completed
     stories: ['S24-01', 'S24-02', 'S24-03', 'S24-04']
     completed_stories: ['S24-01', 'S24-02', 'S24-03']
+    partial_stories: ['S24-04-foundation']
     theme: 'Rendu AI — prompt builder, export Deforum, FramePack/CogVideoX, webhook ComfyUI'
     points: 31
-    notes: 'S24-04 post-MVP (webhook ComfyUI integration) — defer to future sprint'
+    delivered_points: 22
+    notes: 'S24-04 foundation (service + store): 4 pts merged. UI integration (9 pts) deferred to Sprint 25.'
   - id: 25
-    status: planned
+    status: in_progress
     stories: ['S25-01', 'S25-02', 'S25-03']
+    completed_stories: ['S25-01', 'S25-02']
     theme: 'Production — export EDL, recherche globale, mode présentation'
     points: 16
+    delivered_points: 11
+    notes: 'S24-04 UI deferred to Sprint 26. S25-01/02 complete (11 pts). S25-03 presentation mode deferred to next session.'
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
@@ -160,4 +165,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-25T21:12:45.000Z
+last_updated: 2026-03-25T21:50:30.000Z
