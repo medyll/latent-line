@@ -1,8 +1,8 @@
 project: latent-line
 phase: development
-progress: 90
-status: sprint-26-in-progress
-next_action: 'S24-04-UI: ✅ COMPLETE (9/9 pts). ComfyUI settings + per-event generate button + batch generation + IndexedDB persistence. 437 tests passing. Next: S26-01 optional performance work or release.'
+progress: 100
+status: release-ready
+next_action: 'Release v0.4.0: ComfyUI Integration shipped. Sprint 26 complete (9/12 pts: S24-04-UI delivered, S26-01 deferred). Version bumped 0.2.0→0.4.0. Ready for Sprint 27 planning.'
 active_role: scrum
 next_command: 'bmad status'
 next_role: scrum
@@ -144,13 +144,13 @@ sprints:
     delivered_points: 16
     notes: 'All stories complete (16 pts). S25-01 EDL export, S25-02 global search, S25-03 presentation mode. v0.3.0 released.'
   - id: 26
-    status: in_progress
+    status: completed
     stories: ['S24-04-UI', 'S26-01']
     completed_stories: ['S24-04-UI']
     theme: 'Production Completion — ComfyUI UI integration, performance, polish'
     points: 12
     delivered_points: 9
-    notes: 'S24-04-UI COMPLETE: Settings panel + per-event generate button + batch generation with rate limiting + IndexedDB persistence (9 pts). Optional S26-01 performance (3 pts) available.'
+    notes: 'S24-04-UI COMPLETE (9 pts): ComfyUI settings + per-event generate button + batch generation + IndexedDB persistence. S26-01 (3 pts) deferred to Sprint 27. Release v0.4.0 shipped.'
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
