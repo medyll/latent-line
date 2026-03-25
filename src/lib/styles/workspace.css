@@ -152,7 +152,6 @@
 				overflow: hidden;
 
 				/* Scrollable grid with resizable height */
-				
 
 				/* Bottom timeline panel */
 				& .timeline-panel {
@@ -316,7 +315,7 @@
 		position: absolute;
 		z-index: 1000;
 		left: anchor(right);
-  		top: anchor(bottom);
+		top: anchor(bottom);
 		/*opacity: 0;
 		pointer-events: none; */
 	}
@@ -364,7 +363,6 @@
 	padding: var(--pad-lg);
 	overflow-y: auto;
 	resize: vertical;
-	
 }
 /* Subgrid for alignment across cards */
 .asset-card {

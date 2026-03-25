@@ -12,12 +12,12 @@ d'importer un projet. Ce sprint corrige ces manques fondamentaux.
 
 ## Stories
 
-| ID | Titre | Points | Priorité |
-|----|-------|--------|---------|
-| S12-01 | Persistance localStorage (auto-save / restore) | 5 | 🔴 Critique |
-| S12-02 | Export projet JSON | 3 | 🔴 Critique |
-| S12-03 | Import projet JSON | 3 | 🔴 Critique |
-| S12-04 | Settings panel | 3 | 🟠 Haute |
+| ID     | Titre                                          | Points | Priorité    |
+| ------ | ---------------------------------------------- | ------ | ----------- |
+| S12-01 | Persistance localStorage (auto-save / restore) | 5      | 🔴 Critique |
+| S12-02 | Export projet JSON                             | 3      | 🔴 Critique |
+| S12-03 | Import projet JSON                             | 3      | 🔴 Critique |
+| S12-04 | Settings panel                                 | 3      | 🟠 Haute    |
 
 ## Séquencement recommandé
 

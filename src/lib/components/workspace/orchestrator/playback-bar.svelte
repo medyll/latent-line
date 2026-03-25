@@ -48,5 +48,10 @@
 		aria-label="Playback scrubber"
 		class="w-48"
 	/>
-	<div class="text-xs tabular-nums" aria-live="polite">{formatFramesToTime(Math.round(playheadTime), fps)} / {formatFramesToTime(Math.round(totalDuration), fps)}</div>
+	<div class="text-xs tabular-nums" aria-live="polite">
+		{formatFramesToTime(Math.round(playheadTime), fps)} / {formatFramesToTime(
+			Math.round(totalDuration),
+			fps
+		)}
+	</div>
 </div>

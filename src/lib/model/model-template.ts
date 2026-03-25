@@ -101,7 +101,10 @@ const referenceSchema = z.object({
 	context: z.string(),
 	weight: z.number()
 });
-const outfitSchema = z.object({ prompt: z.string().transform(sanitizeText), lora: z.string().optional() });
+const outfitSchema = z.object({
+	prompt: z.string().transform(sanitizeText),
+	lora: z.string().optional()
+});
 const characterSchema = z.object({
 	id: z.string(),
 	name: z.string(),
@@ -134,24 +137,37 @@ const assetsSchema = z.object({
 const timelineEventSchema = z.object({
 	time: z.number().int().nonnegative(),
 	duration: z.number().int().positive().optional(),
+	notes: z.string().transform(sanitizeText).optional(),
 	frame: timelineFrameSchema
+});
+
+const markerSchema = z.object({
+	id: z.string(),
+	time: z.number().int().nonnegative(),
+	label: z.string(),
+	color: z.string()
 });
 
 export const modelSchema = z.object({
 	project: projectSchema,
 	assets: assetsSchema,
 	timeline: z.array(timelineEventSchema),
+	markers: z.array(markerSchema).optional(),
 	config: z.object({
 		checkpoint: z.string().optional(),
 		sampler: z.string().optional(),
 		seed: z.number().optional(),
 		tts_engine: z.string().optional(),
-		audioLanes: z.array(z.object({
-			id: z.string(),
-			name: z.string(),
-			muted: z.boolean(),
-			soloed: z.boolean()
-		})).optional()
+		audioLanes: z
+			.array(
+				z.object({
+					id: z.string(),
+					name: z.string(),
+					muted: z.boolean(),
+					soloed: z.boolean()
+				})
+			)
+			.optional()
 	})
 });
 

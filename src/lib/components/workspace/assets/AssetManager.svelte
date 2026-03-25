@@ -12,6 +12,7 @@
 	import { getContext, tick } from 'svelte';
 	import type { Assets, Model } from '$lib/model/model-types';
 	import { ASSET_STORE_KEY, MODEL_STORE_KEY } from '$lib/context/keys';
+	import TemplatesPanel from '$lib/components/app/TemplatesPanel.svelte';
 	import { Trash2, Plus, Pencil, X, Check } from '@lucide/svelte';
 
 	const assetStore = getContext<Assets>(ASSET_STORE_KEY);
@@ -57,13 +58,26 @@
 	const q = $derived(searchQuery.trim().toLowerCase());
 
 	const filteredCharacters = $derived(
-		q ? assetStore.characters.filter((c) => c.name.toLowerCase().includes(q)) : assetStore.characters
+		q
+			? assetStore.characters.filter((c) => c.name.toLowerCase().includes(q))
+			: assetStore.characters
 	);
 	const filteredEnvironments = $derived(
-		q ? Object.fromEntries(Object.entries(assetStore.environments).filter(([, e]) => (e.prompt ?? '').toLowerCase().includes(q))) : assetStore.environments
+		q
+			? Object.fromEntries(
+					Object.entries(assetStore.environments).filter(([, e]) =>
+						(e.prompt ?? '').toLowerCase().includes(q)
+					)
+				)
+			: assetStore.environments
 	);
 	const filteredAudio = $derived(
-		q ? (assetStore.audio ?? []).filter((a) => (a.label ?? '').toLowerCase().includes(q) || (a.url ?? '').toLowerCase().includes(q)) : (assetStore.audio ?? [])
+		q
+			? (assetStore.audio ?? []).filter(
+					(a) =>
+						(a.label ?? '').toLowerCase().includes(q) || (a.url ?? '').toLowerCase().includes(q)
+				)
+			: (assetStore.audio ?? [])
 	);
 
 	// --- Edit state ---
@@ -224,6 +238,20 @@
 		if (editingId === `audio:${id}`) editingId = null;
 	}
 
+	// --- List keyboard navigation ---
+	function handleListKeyNav(e: KeyboardEvent, items: HTMLElement | null) {
+		if (!items) return;
+		const focusable = Array.from(items.querySelectorAll<HTMLElement>('[tabindex="0"]'));
+		const idx = focusable.indexOf(document.activeElement as HTMLElement);
+		if (e.key === 'ArrowDown') {
+			e.preventDefault();
+			focusable[Math.min(idx + 1, focusable.length - 1)]?.focus();
+		} else if (e.key === 'ArrowUp') {
+			e.preventDefault();
+			focusable[Math.max(idx - 1, 0)]?.focus();
+		}
+	}
+
 	function addAudio() {
 		console.log('[AssetManager] addAudio called, before:', (assetStore.audio ?? []).length);
 		debugLastAction = 'add:audio:pending';
@@ -297,9 +325,17 @@
 	</div>
 	<div class="group-actions">
 		{#if !assetStore.characters.length}
-			<div class="empty-state"><p>No characters</p><small>Add your first character to get started.</small></div>
+			<div class="empty-state">
+				<p>No characters</p>
+				<small>Add your first character to get started.</small>
+			</div>
 		{:else}
-			<ul role="listbox" aria-label="Characters" class="menu-list">
+			<ul
+				role="listbox"
+				aria-label="Characters"
+				class="menu-list"
+				onkeydown={(e) => handleListKeyNav(e, e.currentTarget as HTMLElement)}
+			>
 				{#each filteredCharacters as char (char.id)}
 					{@const isOrphan = !usedCharIds.has(char.id)}
 					{@const refCount = charRefCounts[char.id] ?? 0}
@@ -309,7 +345,10 @@
 						class={`menu-item ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 						data-testid={`asset-char-${char.id}`}
 						onclick={() => selectAsset('char', char.id)}
-						onkeydown={(e) => e.key === 'Enter' && selectAsset('char', char.id)}
+						onkeydown={(e) => {
+							if (e.key === 'Enter') selectAsset('char', char.id);
+							else if (e.key === 'Delete') removeCharacter(e as unknown as MouseEvent, char.id);
+						}}
 						tabindex="0"
 						aria-label={`Character ${char.name}`}
 						aria-selected={selectedAssetId === `char:${char.id}`}
@@ -338,11 +377,15 @@
 							aria-label={`Edit ${char.name}`}
 							class="btn-icon"
 						>
-							{#if isEditing}<X  />{:else}<Pencil />{/if}
+							{#if isEditing}<X />{:else}<Pencil />{/if}
 						</button>
-						<button onclick={(e) => removeCharacter(e, char.id)} title={`Delete ${char.name}`} class="btn-icon" data-testid={`delete-char-${char.id}`}><Trash2 /></button>
-						
-						
+						<button
+							onclick={(e) => removeCharacter(e, char.id)}
+							title={`Delete ${char.name}`}
+							class="btn-icon"
+							data-testid={`delete-char-${char.id}`}><Trash2 /></button
+						>
+
 						<!-- Inline edit form -->
 						{#if isEditing}
 							{@const idx = assetStore.characters.findIndex((c) => c.id === char.id)}
@@ -451,16 +494,27 @@
 	</div>
 
 	{#if !Object.keys(assetStore.environments).length}
-		<div class="empty-state"><p>No environments</p><small>Add an environment to your story world.</small></div>
+		<div class="empty-state">
+			<p>No environments</p>
+			<small>Add an environment to your story world.</small>
+		</div>
 	{:else}
-		<ul role="listbox" aria-label="Environments" class="menu-list">
+		<ul
+			role="listbox"
+			aria-label="Environments"
+			class="menu-list"
+			onkeydown={(e) => handleListKeyNav(e, e.currentTarget as HTMLElement)}
+		>
 			{#each Object.entries(filteredEnvironments) as [id, env] (id)}
 				{@const isEditing = editingId === `env:${id}`}
 				<li
 					class="menu-item"
 					data-testid={`asset-env-${id}`}
 					onclick={() => selectAsset('env', id)}
-					onkeydown={(e) => e.key === 'Enter' && selectAsset('env', id)}
+					onkeydown={(e) => {
+						if (e.key === 'Enter') selectAsset('env', id);
+						else if (e.key === 'Delete') removeEnvironment(e as unknown as MouseEvent, id);
+					}}
 					role="option"
 					tabindex="0"
 					aria-label={`Environment ${env.prompt}`}
@@ -479,7 +533,12 @@
 					>
 						{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 					</button>
-					<button onclick={(e) => removeEnvironment(e, id)} title="Delete environment" class="btn-icon" data-testid={`delete-env-${id}`}><Trash2 class="h-3 w-3" /></button>
+					<button
+						onclick={(e) => removeEnvironment(e, id)}
+						title="Delete environment"
+						class="btn-icon"
+						data-testid={`delete-env-${id}`}><Trash2 class="h-3 w-3" /></button
+					>
 
 					<!-- Inline edit -->
 					{#if isEditing}
@@ -516,6 +575,8 @@
 	{/if}
 </section>
 
+<!-- ── Templates (S17-04) ── -->
+<TemplatesPanel />
 <!-- ── Audio ── -->
 <section class="sidebar-group">
 	<div class="group-header">
@@ -537,9 +598,17 @@
 	</div>
 
 	{#if !assetStore.audio?.length}
-		<div class="empty-state"><p>No audio assets</p><small>Add music or sound effects to your project.</small></div>
+		<div class="empty-state">
+			<p>No audio assets</p>
+			<small>Add music or sound effects to your project.</small>
+		</div>
 	{:else}
-		<ul role="listbox" aria-label="Audio assets" class="menu-list">
+		<ul
+			role="listbox"
+			aria-label="Audio assets"
+			class="menu-list"
+			onkeydown={(e) => handleListKeyNav(e, e.currentTarget as HTMLElement)}
+		>
 			{#each filteredAudio as aud (aud.id)}
 				{@const isOrphan = !usedAudioIds.has(aud.id)}
 				{@const refCount = audioRefCounts[aud.id] ?? 0}
@@ -549,7 +618,10 @@
 					role="option"
 					data-testid={`asset-audio-${aud.id}`}
 					onclick={() => selectAsset('audio', aud.id)}
-					onkeydown={(e) => e.key === 'Enter' && selectAsset('audio', aud.id)}
+					onkeydown={(e) => {
+						if (e.key === 'Enter') selectAsset('audio', aud.id);
+						else if (e.key === 'Delete') removeAudio(e as unknown as MouseEvent, aud.id);
+					}}
 					tabindex="0"
 					class={`menu-item  ${selectedAssetId === `audio:${aud.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
 					aria-label={`Audio ${aud.label || aud.id}`}
@@ -581,7 +653,12 @@
 					>
 						{#if isEditing}<X class="h-3 w-3" />{:else}<Pencil class="h-3 w-3" />{/if}
 					</button>
-					<button onclick={(e) => removeAudio(e, aud.id)} title="Delete audio" class="btn-icon" data-testid={`delete-audio-${aud.id}`}><Trash2 class="h-3 w-3" /></button>
+					<button
+						onclick={(e) => removeAudio(e, aud.id)}
+						title="Delete audio"
+						class="btn-icon"
+						data-testid={`delete-audio-${aud.id}`}><Trash2 class="h-3 w-3" /></button
+					>
 
 					<!-- Inline edit -->
 					{#if isEditing}

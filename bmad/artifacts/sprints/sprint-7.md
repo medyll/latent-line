@@ -9,12 +9,12 @@ Strengthen test coverage with visual regression detection and comprehensive API/
 
 ## Stories
 
-| ID | Category | Title | Points | Priority | Status |
-|---|---|---|---|---|---|
-| TST-001 | Visual | Screenshot test baseline for all components | 3 | Must | Ready |
-| TST-002 | Visual | Visual regression detection setup (baseline + diff) | 3 | Must | Ready |
-| TST-003 | API/Model | Expand model schema edge case tests | 2 | Should | Ready |
-| TST-004 | API/Model | Add input validation tests for all fields | 2 | Should | Ready |
+| ID      | Category  | Title                                               | Points | Priority | Status |
+| ------- | --------- | --------------------------------------------------- | ------ | -------- | ------ |
+| TST-001 | Visual    | Screenshot test baseline for all components         | 3      | Must     | Ready  |
+| TST-002 | Visual    | Visual regression detection setup (baseline + diff) | 3      | Must     | Ready  |
+| TST-003 | API/Model | Expand model schema edge case tests                 | 2      | Should   | Ready  |
+| TST-004 | API/Model | Add input validation tests for all fields           | 2      | Should   | Ready  |
 
 **Total:** 10 points (100% capacity)
 
@@ -40,9 +40,9 @@ Strengthen test coverage with visual regression detection and comprehensive API/
 ## Risks
 
 - **Time risk:** Screenshot capture across 14 components + regression setup may exceed 10 dev-days
-  - *Mitigation:* Prioritize critical components first (SequenceOrchestrator, PropertiesPanel, AudioTimeline), defer nice-to-have components to Sprint 8
+  - _Mitigation:_ Prioritize critical components first (SequenceOrchestrator, PropertiesPanel, AudioTimeline), defer nice-to-have components to Sprint 8
 - **Dependency risk:** Screenshot testing requires stable visual design
-  - *Mitigation:* Lock component styling before Sprint 7 begins
+  - _Mitigation:_ Lock component styling before Sprint 7 begins
 
 ## Notes
 

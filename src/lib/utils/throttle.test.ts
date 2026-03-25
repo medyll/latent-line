@@ -2,8 +2,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { throttle } from './throttle';
 
 describe('throttle', () => {
-	beforeEach(() => { vi.useFakeTimers(); });
-	afterEach(() => { vi.useRealTimers(); });
+	beforeEach(() => {
+		vi.useFakeTimers();
+	});
+	afterEach(() => {
+		vi.useRealTimers();
+	});
 
 	it('calls fn immediately on first invocation', () => {
 		const fn = vi.fn();
@@ -42,7 +46,9 @@ describe('throttle', () => {
 	it('respects delay between rapid calls', () => {
 		const fn = vi.fn();
 		const t = throttle(fn, 100);
-		t('a'); t('b'); t('c'); // all within delay — only 'a' fires immediately
+		t('a');
+		t('b');
+		t('c'); // all within delay — only 'a' fires immediately
 		expect(fn).toHaveBeenCalledTimes(1);
 		vi.advanceTimersByTime(110);
 		expect(fn).toHaveBeenCalledTimes(2); // deferred call fires once

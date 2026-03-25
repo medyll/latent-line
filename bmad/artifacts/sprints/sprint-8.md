@@ -9,12 +9,12 @@ Deliver a fully automated CI pipeline (lint/typecheck/unit/E2E) and expand E2E t
 
 ## Stories
 
-| ID | Category | Title | Points | Priority | Status |
-|---|---|---|---|---|---|
-| CI-001 | CI | Main GitHub Actions pipeline (lint + typecheck + unit + E2E) | 3 | Must | Ready |
-| E2E-001 | E2E | Expand E2E tests for asset CRUD and event editing flows | 3 | Must | Ready |
-| VR-001 | Visual | Migrate visual regression to Playwright snapshot diffing | 2 | Should | Ready |
-| CI-002 | CI | README CI badges + test coverage reporting | 2 | Should | Ready |
+| ID      | Category | Title                                                        | Points | Priority | Status |
+| ------- | -------- | ------------------------------------------------------------ | ------ | -------- | ------ |
+| CI-001  | CI       | Main GitHub Actions pipeline (lint + typecheck + unit + E2E) | 3      | Must     | Ready  |
+| E2E-001 | E2E      | Expand E2E tests for asset CRUD and event editing flows      | 3      | Must     | Ready  |
+| VR-001  | Visual   | Migrate visual regression to Playwright snapshot diffing     | 2      | Should   | Ready  |
+| CI-002  | CI       | README CI badges + test coverage reporting                   | 2      | Should   | Ready  |
 
 **Total:** 10 points (100% capacity)
 
@@ -40,9 +40,9 @@ Deliver a fully automated CI pipeline (lint/typecheck/unit/E2E) and expand E2E t
 ## Risks
 
 - **Visual snapshot platform differences:** Playwright snapshots differ between OS (Linux CI vs Windows dev)
-  - *Mitigation:* Run snapshot updates in CI via `--update-snapshots` on initial setup; commit CI-generated baselines
+  - _Mitigation:_ Run snapshot updates in CI via `--update-snapshots` on initial setup; commit CI-generated baselines
 - **E2E flakiness:** Page navigation race conditions in SvelteKit
-  - *Mitigation:* Use `waitUntil: 'networkidle'` and explicit `waitForSelector` patterns
+  - _Mitigation:_ Use `waitUntil: 'networkidle'` and explicit `waitForSelector` patterns
 
 ## Notes
 

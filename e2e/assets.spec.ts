@@ -20,7 +20,11 @@ test.describe('AssetManager CRUD', () => {
 			.count();
 		await addBtn.click();
 		// wait for selection immediate marker to ensure DOM has settled
-		await page.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="true"]', { timeout: T.ui }).catch(()=>{});
+		await page
+			.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="true"]', {
+				timeout: T.ui
+			})
+			.catch(() => {});
 
 		// A new character option should be added
 		await expect(assetManager.locator('ul[aria-label="Characters"] [role="option"]')).toHaveCount(
@@ -122,7 +126,7 @@ test.describe('AssetManager CRUD', () => {
 
 		// Ensure there is at least one character
 		const chars = assetManager.locator('ul[aria-label="Characters"] li[role="option"]');
-		if (await chars.count() === 0) {
+		if ((await chars.count()) === 0) {
 			await page.locator('[data-testid="add-character"]').click();
 			await expect(chars).toHaveCount(1, { timeout: T.ui });
 		}
@@ -133,4 +137,3 @@ test.describe('AssetManager CRUD', () => {
 		await expect(chars.first()).toHaveAttribute('aria-selected', 'true', { timeout: T.ui });
 	});
 });
-

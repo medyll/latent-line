@@ -70,9 +70,7 @@ describe('deserializeModel (S12-03)', () => {
 		if (!imported.success) return;
 
 		expect(imported.data.project.name).toBe(exampleModel.project.name);
-		expect(imported.data.assets.characters).toHaveLength(
-			exampleModel.assets.characters.length
-		);
+		expect(imported.data.assets.characters).toHaveLength(exampleModel.assets.characters.length);
 		expect(imported.data.timeline).toHaveLength(exampleModel.timeline.length);
 	});
 });

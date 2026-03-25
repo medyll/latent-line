@@ -22,13 +22,22 @@ test.describe('Timeline creation & flows', () => {
 		await addBtn.click();
 		const rows = assetManager.locator('ul[aria-label="Characters"] > li');
 		// wait for the new inline input to appear and be visible
-		await rows.last().locator('input[aria-label="Character name"]').waitFor({ timeout: 10000 }).catch(()=>{});
+		await rows
+			.last()
+			.locator('input[aria-label="Character name"]')
+			.waitFor({ timeout: 10000 })
+			.catch(() => {});
 		// ensure PropertiesPanel settled too
-		await page.waitForSelector('[data-testid="pp-sync-ready"][data-immediate="true"]', { timeout: 10000 }).catch(()=>{});
+		await page
+			.waitForSelector('[data-testid="pp-sync-ready"][data-immediate="true"]', { timeout: 10000 })
+			.catch(() => {});
 		const newCount = await rows.count();
 		expect(newCount).toBeGreaterThan(initialCount);
 		// The last row contains an input for the character name; ensure it's focusable and editable
-		const lastRowText = await rows.last().innerText().catch(()=>'');
+		const lastRowText = await rows
+			.last()
+			.innerText()
+			.catch(() => '');
 		if (!lastRowText || lastRowText.trim().length === 0) {
 			// fallback: ensure the input exists
 			await expect(rows.last().locator('input[aria-label="Character name"]')).toBeVisible();
@@ -42,10 +51,7 @@ test.describe('Timeline creation & flows', () => {
 		await exportBtn.waitFor({ timeout: 20000 });
 		await expect(exportBtn).toBeVisible();
 
-		const [download] = await Promise.all([
-			page.waitForEvent('download'),
-			exportBtn.click()
-		]);
+		const [download] = await Promise.all([page.waitForEvent('download'), exportBtn.click()]);
 
 		const filename = await download.suggestedFilename();
 		expect(filename).toBe('model.json');
@@ -68,4 +74,3 @@ test.describe('Timeline creation & flows', () => {
 		expect(label).toMatch(/Playhead at frame \d+/);
 	});
 });
-

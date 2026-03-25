@@ -170,7 +170,7 @@ describe('Input validation and sanitization', () => {
 		it('should reject invalid mood values', () => {
 			const invalidMoods = ['happy', 'sad', 'angry', 'confused', 'JOYFUL', 'Joyful'];
 			invalidMoods.forEach((mood) => {
-				expect(validMoods.includes(mood as typeof validMoods[0])).toBe(false);
+				expect(validMoods.includes(mood as (typeof validMoods)[0])).toBe(false);
 			});
 		});
 	});

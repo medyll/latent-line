@@ -22,16 +22,18 @@ Applied Phase 2 audit fixes across the repository to address security, validatio
   - Expanded unit tests for model validation and path traversal checks (AUDIT-014)
 
 Notes:
+
 - All changes are covered by unit tests (58 passing). The test runner was executed and confirmed green.
 - `bmad/dashboard.md` and `bmad/artifacts/history/*` contain snapshots and implementation notes for each audit story.
 
 Files changed:
+
 - src/lib/model/model-template.ts (+sanitizer, +isUrlOrFile fixes)
 - src/lib/model/model-template.test.ts (+new tests)
 - src/lib/model/timeline-utils.ts (new)
 - src/lib/components/app/index.ts (new)
 - .env.example (new)
-- bmad/artifacts/stories/AUDIT-*.md (updated)
-- bmad/dashboard.md, bmad/artifacts/history/* (updated)
+- bmad/artifacts/stories/AUDIT-\*.md (updated)
+- bmad/dashboard.md, bmad/artifacts/history/\* (updated)
 
 Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>

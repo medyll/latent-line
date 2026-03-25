@@ -38,3 +38,9 @@ export function historyRedo<T>(state: HistoryState<T>, current: T): T | null {
 
 export const canUndo = <T>(state: HistoryState<T>): boolean => state.past.length > 0;
 export const canRedo = <T>(state: HistoryState<T>): boolean => state.future.length > 0;
+
+/** Clear all undo/redo history (e.g. after a new project is created). */
+export function historyClear<T>(state: HistoryState<T>): void {
+	state.past = [];
+	state.future = [];
+}

@@ -10,12 +10,12 @@ Stabilize persistence layer (in-progress post-v0.2.0 work), add E2E coverage for
 
 ## Stories
 
-| ID      | Title                                                       | Pts | Status  |
-|---------|-------------------------------------------------------------|-----|---------|
-| S14-01  | Persistence hardening — commit in-progress fixes + unit tests | 3   | planned |
-| S14-02  | E2E: undo/redo + keyboard shortcuts (Ctrl+Z/Y, Ctrl+I)      | 3   | planned |
-| S14-03  | E2E: asset search filter (characters/envs/audio)            | 2   | planned |
-| S14-04  | UX: playback progress bar — scrub position display + time label | 2   | planned |
+| ID     | Title                                                           | Pts | Status  |
+| ------ | --------------------------------------------------------------- | --- | ------- |
+| S14-01 | Persistence hardening — commit in-progress fixes + unit tests   | 3   | planned |
+| S14-02 | E2E: undo/redo + keyboard shortcuts (Ctrl+Z/Y, Ctrl+I)          | 3   | planned |
+| S14-03 | E2E: asset search filter (characters/envs/audio)                | 2   | planned |
+| S14-04 | UX: playback progress bar — scrub position display + time label | 2   | planned |
 
 ## Definition of Done
 

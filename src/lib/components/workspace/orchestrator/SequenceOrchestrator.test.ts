@@ -58,7 +58,9 @@ describe('Throttle utility (ST-022)', () => {
 	});
 
 	it('should pass correct arguments to throttled function', () => {
-		const fn = vi.fn((a: number, b: string) => `${a}-${b}`) as unknown as (...args: unknown[]) => void;
+		const fn = vi.fn((a: number, b: string) => `${a}-${b}`) as unknown as (
+			...args: unknown[]
+		) => void;
 		const throttled = throttle(fn, 100);
 
 		throttled(42, 'test');

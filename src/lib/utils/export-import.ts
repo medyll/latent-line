@@ -1,13 +1,9 @@
 import { modelSchema } from '$lib/model/model-template';
 import type { Model } from '$lib/model/model-types';
 
-export type ExportResult =
-	| { success: true; json: string }
-	| { success: false; errors: string[] };
+export type ExportResult = { success: true; json: string } | { success: false; errors: string[] };
 
-export type ImportResult =
-	| { success: true; data: Model }
-	| { success: false; errors: string[] };
+export type ImportResult = { success: true; data: Model } | { success: false; errors: string[] };
 
 function formatIssues(issues: { path: PropertyKey[]; message: string }[]): string[] {
 	return issues

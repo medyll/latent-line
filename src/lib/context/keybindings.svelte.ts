@@ -17,11 +17,26 @@ export function createKeybindingHandler(callbacks: KeybindingCallbacks) {
 		const action = resolveAction(e);
 		if (!action) return;
 		switch (action) {
-			case 'undo':            e.preventDefault(); callbacks.undo(); break;
-			case 'redo':            e.preventDefault(); callbacks.redo(); break;
-			case 'toggleInspector': e.preventDefault(); callbacks.toggleInspector(); break;
-			case 'toggleShortcuts': e.preventDefault(); callbacks.toggleShortcuts?.(); break;
-			case 'delete':          e.preventDefault(); callbacks.deleteSelected?.(); break;
+			case 'undo':
+				e.preventDefault();
+				callbacks.undo();
+				break;
+			case 'redo':
+				e.preventDefault();
+				callbacks.redo();
+				break;
+			case 'toggleInspector':
+				e.preventDefault();
+				callbacks.toggleInspector();
+				break;
+			case 'toggleShortcuts':
+				e.preventDefault();
+				callbacks.toggleShortcuts?.();
+				break;
+			case 'delete':
+				e.preventDefault();
+				callbacks.deleteSelected?.();
+				break;
 		}
 	};
 }

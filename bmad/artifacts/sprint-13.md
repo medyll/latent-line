@@ -12,12 +12,12 @@ et le playhead ne joue pas vraiment. Ce sprint passe de "utilisable" à "agréab
 
 ## Stories
 
-| ID | Titre | Points | Priorité |
-|----|-------|--------|---------|
-| S13-01 | Undo / Redo | 8 | 🟠 Haute |
-| S13-02 | Raccourcis clavier | 3 | 🟡 Moyenne |
-| S13-03 | Recherche et filtre dans AssetManager | 3 | 🟡 Moyenne |
-| S13-04 | Playback engine (play/pause/seek) | 5 | 🟡 Moyenne |
+| ID     | Titre                                 | Points | Priorité   |
+| ------ | ------------------------------------- | ------ | ---------- |
+| S13-01 | Undo / Redo                           | 8      | 🟠 Haute   |
+| S13-02 | Raccourcis clavier                    | 3      | 🟡 Moyenne |
+| S13-03 | Recherche et filtre dans AssetManager | 3      | 🟡 Moyenne |
+| S13-04 | Playback engine (play/pause/seek)     | 5      | 🟡 Moyenne |
 
 ## Séquencement recommandé
 

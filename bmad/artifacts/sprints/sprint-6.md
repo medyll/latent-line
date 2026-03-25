@@ -15,11 +15,11 @@ Enhance multi-pane synchronization and enable character/audio asset management i
 
 ## Story Breakdown
 
-| Story | Title | Points | Status |
-|-------|-------|--------|--------|
-| ST-022 | Scroll sync: Synoptic View ↔ Temporal Sequencer | 5 | ready |
-| ST-023 | PropertiesPanel: character asset inline editing | 5 | ready |
-| ST-024 | Audio timeline lanes / multi-track view | 8 | ready |
+| Story  | Title                                           | Points | Status |
+| ------ | ----------------------------------------------- | ------ | ------ |
+| ST-022 | Scroll sync: Synoptic View ↔ Temporal Sequencer | 5      | ready  |
+| ST-023 | PropertiesPanel: character asset inline editing | 5      | ready  |
+| ST-024 | Audio timeline lanes / multi-track view         | 8      | ready  |
 
 ## Critical Path
 

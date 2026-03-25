@@ -10,11 +10,11 @@ Deliver the last MVP feature (timeline playback preview) and round-trip JSON imp
 
 ## Stories
 
-| ID     | Title                                             | Pts | Status  |
-|--------|---------------------------------------------------|-----|---------|
+| ID     | Title                                                  | Pts | Status  |
+| ------ | ------------------------------------------------------ | --- | ------- |
 | S10-01 | Playback engine — play/pause/scrub + animated playhead | 5   | planned |
-| S10-02 | Export timeline JSON to file download              | 3   | planned |
-| S10-03 | Import timeline JSON from file                     | 2   | planned |
+| S10-02 | Export timeline JSON to file download                  | 3   | planned |
+| S10-03 | Import timeline JSON from file                         | 2   | planned |
 
 ## Definition of Done (no tests)
 

@@ -15,15 +15,18 @@
 	import { serializeModel, deserializeModel } from '$lib/utils/export-import';
 
 	const themeCtx = getContext<{ current: 'light' | 'dark'; toggle: () => void }>('theme');
-		
+
 	const SAMPLERS = ['Euler', 'DPM++', 'DDIM', 'PLMS', 'UniPC'];
 	const TTS_ENGINES = ['Coqui', 'Google', 'ElevenLabs', 'Bark'];
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 
+	import { createModelParam } from '$lib/utils/share';
+
 	let exportErrors = $state<string[]>([]);
 	let importErrors = $state<string[]>([]);
 	let fileInput: HTMLInputElement | undefined = $state();
+	let shareMessage: string = $state('');
 
 	/**
 	 * Validates model via Zod then downloads as model.json.
@@ -89,7 +92,8 @@
 				id="checkpoint-select"
 				type="text"
 				value={model.config.checkpoint ?? ''}
-				oninput={(e) => (model.config.checkpoint = (e.target as HTMLInputElement).value || undefined)}
+				oninput={(e) =>
+					(model.config.checkpoint = (e.target as HTMLInputElement).value || undefined)}
 				placeholder="e.g. v1-5-pruned"
 				class="w-36 rounded border border-gray-200 px-2 py-0.5 text-xs"
 				aria-label="AI checkpoint"
@@ -102,7 +106,8 @@
 			<select
 				id="sampler-select"
 				value={model.config.sampler ?? ''}
-				onchange={(e) => (model.config.sampler = (e.target as HTMLSelectElement).value || undefined)}
+				onchange={(e) =>
+					(model.config.sampler = (e.target as HTMLSelectElement).value || undefined)}
 				class="rounded border border-gray-200 px-2 py-0.5 text-xs"
 				aria-label="Sampler"
 			>
@@ -130,7 +135,12 @@
 				class="w-24 rounded border border-gray-200 px-2 py-0.5 text-xs"
 				aria-label="Seed"
 			/>
-			<button onclick={randomSeed} title="Random seed" aria-label="Randomize seed" class="h-6 px-2 text-xs">
+			<button
+				onclick={randomSeed}
+				title="Random seed"
+				aria-label="Randomize seed"
+				class="h-6 px-2 text-xs"
+			>
 				⟳
 			</button>
 		</div>
@@ -141,7 +151,8 @@
 			<select
 				id="tts-select"
 				value={model.config.tts_engine ?? ''}
-				onchange={(e) => (model.config.tts_engine = (e.target as HTMLSelectElement).value || undefined)}
+				onchange={(e) =>
+					(model.config.tts_engine = (e.target as HTMLSelectElement).value || undefined)}
 				class="rounded border border-gray-200 px-2 py-0.5 text-xs"
 				aria-label="TTS engine"
 			>
@@ -158,8 +169,8 @@
 				onclick={() => themeCtx?.toggle()}
 				title="Toggle theme"
 				aria-label="Toggle light/dark theme"
-				class="text-xs"
-			>{themeCtx?.current === 'dark' ? '☀ Light' : '☾ Dark'}</button>
+				class="text-xs">{themeCtx?.current === 'dark' ? '☀ Light' : '☾ Dark'}</button
+			>
 			<!-- Import -->
 			<input
 				bind:this={fileInput}
@@ -170,15 +181,41 @@
 				id="import-file"
 				aria-label="Import model JSON"
 			/>
-			<button onclick={() => fileInput?.click()} class="text-xs">
-				Import JSON
-			</button>
+			<button onclick={() => fileInput?.click()} class="text-xs"> Import JSON </button>
 
 			<!-- Export -->
-			<button onclick={exportModel} aria-label="Export JSON" class="text-xs">
-				Export JSON
+			<button onclick={exportModel} aria-label="Export JSON" class="text-xs"> Export JSON </button>
+
+			<!-- Share (permalink) -->
+			<button
+				onclick={async () => {
+					shareMessage = '';
+					const res = createModelParam(model);
+					if (!res.success) {
+						shareMessage = res.errors.join('; ');
+						return;
+					}
+					const url = new URL(window.location.href);
+					url.searchParams.set('m', res.param);
+					try {
+						await navigator.clipboard.writeText(url.toString());
+						shareMessage = 'Copied link to clipboard';
+						setTimeout(() => (shareMessage = ''), 3000);
+					} catch (e) {
+						// fallback: open prompt
+						shareMessage = url.toString();
+					}
+				}}
+				aria-label="Share permalink"
+				class="text-xs"
+			>
+				Share
 			</button>
 		</div>
+
+		{#if shareMessage}
+			<div class="ml-2 text-xs text-gray-600">{shareMessage}</div>
+		{/if}
 	</div>
 
 	<!-- Validation errors -->

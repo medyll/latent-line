@@ -9,7 +9,9 @@ export function deleteEventFromModel(model: Model, time: number): boolean {
 	const isTest = (globalThis as any).__TEST__ === true;
 	if (!isTest) {
 		// Use globalThis.confirm so tests can mock it in Node environment
-		const confirmed = (globalThis as any).confirm ? (globalThis as any).confirm(`Delete event at frame ${time}?`) : true;
+		const confirmed = (globalThis as any).confirm
+			? (globalThis as any).confirm(`Delete event at frame ${time}?`)
+			: true;
 		if (!confirmed) return false;
 	}
 	model.timeline = model.timeline.filter((ev: any) => ev.time !== time);

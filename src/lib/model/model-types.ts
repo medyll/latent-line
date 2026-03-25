@@ -113,6 +113,7 @@ export type LightingType = 'dusk' | 'daylight' | 'studio' | 'tungsten' | 'ambien
 export interface TimelineEvent {
 	time: number;
 	duration?: number; // durée en frames — optionnel, rétrocompatible
+	notes?: string; // ST-023-02: freeform notes for this event
 	frame: TimelineFrame;
 }
 export interface Assets {
@@ -136,11 +137,19 @@ export interface Config {
 	audioLanes?: AudioLaneConfig[]; // ST-024: Audio lane mute/solo state
 }
 
+export interface Marker {
+	id: string;
+	time: number;
+	label: string;
+	color: string;
+}
+
 export interface Model {
 	project: Project;
 	assets: Assets;
 	timeline: TimelineEvent[];
 	config: Config;
+	markers?: Marker[];
 }
 
 // Note: Model is exported as a named interface above. Avoid default export for types.

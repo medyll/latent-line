@@ -8,7 +8,7 @@
 	 *              Validation displays per-field Zod issues in a readable list.
 	 * @example <ModelInspector />
 	 */
-				import { getContext } from 'svelte';
+	import { getContext } from 'svelte';
 	import { modelSchema } from '$lib/model/model-template';
 	import type { Model } from '$lib/model/model-types';
 	import { MODEL_STORE_KEY } from '$lib/context/keys';
@@ -68,10 +68,7 @@
 		<div class="inspector-body">
 			<!-- Validation result -->
 			{#if validation}
-				<div
-					class="validation-result {validation.ok ? 'ok' : 'fail'}"
-					aria-live="polite"
-				>
+				<div class="validation-result {validation.ok ? 'ok' : 'fail'}" aria-live="polite">
 					<strong>{validation.ok ? '✓ Valid' : '✗ Invalid'}</strong>: {validation.message}
 					{#if !validation.ok && validation.issues.length > 0}
 						<ul class="list-disc pl-5 text-xs mt-1">
@@ -89,7 +86,10 @@
 				<div class="p-2 text-xs">
 					<div><strong>Name:</strong> {model.project.name}</div>
 					<div><strong>FPS:</strong> {model.project.fps}</div>
-					<div><strong>Resolution:</strong> {model.project.resolution.w}×{model.project.resolution.h}</div>
+					<div>
+						<strong>Resolution:</strong>
+						{model.project.resolution.w}×{model.project.resolution.h}
+					</div>
 				</div>
 			</section>
 
@@ -98,18 +98,23 @@
 				<header class="card-header"><h4 class="card-title">Assets</h4></header>
 				<div class="p-2 text-xs">
 					<div><strong>Characters:</strong> {model.assets.characters.length}</div>
-					<div><strong>Environments:</strong> {Object.keys(model.assets.environments).join(', ') || '—'}</div>
+					<div>
+						<strong>Environments:</strong>
+						{Object.keys(model.assets.environments).join(', ') || '—'}
+					</div>
 					<div><strong>Audio tracks:</strong> {model.assets.audio.length}</div>
 				</div>
 			</section>
 
 			<!-- Timeline -->
 			<section>
-				<header class="card-header"><h4 class="card-title">Timeline ({model.timeline.length} events)</h4></header>
+				<header class="card-header">
+					<h4 class="card-title">Timeline ({model.timeline.length} events)</h4>
+				</header>
 				<div class="p-2 text-xs">
 					{#if model.timeline.length > 0}
 						<ul class="list-disc pl-4">
-							{#each [...model.timeline].sort((a,b) => a.time - b.time) as ev (ev.time)}
+							{#each [...model.timeline].sort((a, b) => a.time - b.time) as ev (ev.time)}
 								<li>frame {ev.time} — {ev.frame.actors?.length ?? 0} actor(s)</li>
 							{/each}
 						</ul>
@@ -163,8 +168,14 @@
 		border-radius: var(--radius-sm);
 		font-size: var(--text-xs);
 	}
-	.validation-result.ok   { background: color-mix(in srgb, #10b981 12%, transparent); color: #065f46; }
-	.validation-result.fail { background: color-mix(in srgb, var(--color-critical) 10%, transparent); color: var(--color-critical); }
+	.validation-result.ok {
+		background: color-mix(in srgb, #10b981 12%, transparent);
+		color: #065f46;
+	}
+	.validation-result.fail {
+		background: color-mix(in srgb, var(--color-critical) 10%, transparent);
+		color: var(--color-critical);
+	}
 	.inspector-json {
 		font-family: var(--font-mono);
 		font-size: 10px;

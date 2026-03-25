@@ -8,7 +8,10 @@ describe('toTimelineArray', () => {
 	});
 
 	it('returns shallow copy of array input', () => {
-		const input = [{ time: 2, frame: {} }, { time: 1, frame: {} }] as any;
+		const input = [
+			{ time: 2, frame: {} },
+			{ time: 1, frame: {} }
+		] as any;
 		const result = toTimelineArray(input);
 		expect(result).toHaveLength(2);
 		expect(result).not.toBe(input); // shallow copy

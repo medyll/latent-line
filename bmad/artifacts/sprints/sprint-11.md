@@ -10,11 +10,11 @@ Push the project to release-ready state: integrate the ModelInspector, document 
 
 ## Stories
 
-| ID     | Title                                                          | Pts | Status  |
-|--------|----------------------------------------------------------------|-----|---------|
-| S11-01 | Integrate ModelInspector — collapsible JSON/validation panel   | 3   | planned |
-| S11-02 | README — project docs (stack, scripts, usage)                  | 2   | planned |
-| S11-03 | CSS audit — fix rendering gaps in utilities.css post-Tailwind  | 3   | planned |
+| ID     | Title                                                         | Pts | Status  |
+| ------ | ------------------------------------------------------------- | --- | ------- |
+| S11-01 | Integrate ModelInspector — collapsible JSON/validation panel  | 3   | planned |
+| S11-02 | README — project docs (stack, scripts, usage)                 | 2   | planned |
+| S11-03 | CSS audit — fix rendering gaps in utilities.css post-Tailwind | 3   | planned |
 
 ## Definition of Done
 

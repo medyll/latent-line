@@ -184,6 +184,16 @@
 		model.timeline[selectedEventIndex].frame.character = characterId ?? undefined;
 	}
 
+	function updateEventNotes(text: string) {
+		if (selectedEventIndex < 0) return;
+		if (!text || text.trim() === '') {
+			// remove empty notes to keep model lean
+			delete (model.timeline[selectedEventIndex] as any).notes;
+		} else {
+			(model.timeline[selectedEventIndex] as any).notes = text;
+		}
+	}
+
 	function getCharacterName(actorId: string): string {
 		return assetStore?.characters.find((c) => c.id === actorId)?.name ?? actorId;
 	}
@@ -216,8 +226,6 @@
 		}
 	}
 </script>
- 
- 
 
 <!--
   PropertiesPanel Component
@@ -244,9 +252,21 @@
 				/>
 			</section>
 
+			<!-- Notes -->
+			<section class="mb-3">
+				<label class="text-xs text-gray-400 mb-1">Notes</label>
+				<textarea
+					value={selectedEvent.notes ?? ''}
+					oninput={(e) => updateEventNotes((e.target as HTMLTextAreaElement).value)}
+					rows={3}
+					class="w-full rounded border border-gray-200 px-1 py-1 text-xs"
+					aria-label="Event notes"
+				></textarea>
+			</section>
+
 			<!-- Camera -->
 			<section class="mb-3">
-				<h3 >Camera</h3>
+				<h3>Camera</h3>
 				<div class="flex flex-col gap-1 rounded bg-gray-50 p-2">
 					<!-- Zoom -->
 					<div class="flex items-center gap-2">

@@ -1,10 +1,19 @@
 <script lang="ts">
 	import { SHORTCUTS } from '$lib/utils/keyboard';
+	import { focusTrap } from '$lib/actions/focus-trap';
+	import { fade, fly } from 'svelte/transition';
 	let { onclose }: { onclose?: () => void } = $props();
 </script>
 
-<div class="shortcuts-overlay" role="dialog" aria-label="Raccourcis clavier" aria-modal="true" onkeydown={(e) => e.key === 'Escape' && onclose?.()}>
-	<div class="shortcuts-panel">
+<div
+	class="shortcuts-overlay"
+	role="dialog"
+	aria-label="Raccourcis clavier"
+	aria-modal="true"
+	use:focusTrap={{ onEscape: onclose }}
+	transition:fade={{ duration: 150 }}
+>
+	<div class="shortcuts-panel" in:fly={{ y: 12, duration: 200 }}>
 		<header class="card-header">
 			<h3 class="card-title">Raccourcis clavier</h3>
 			{#if onclose}
@@ -14,7 +23,14 @@
 		<div class="card-content p-2">
 			<ul class="list-none text-sm">
 				{#each SHORTCUTS as s}
-					<li class="py-1"><strong>{s.key}{s.ctrl ? ' + Ctrl' : ''}{s.meta ? ' + Cmd' : ''}{s.shift ? ' + Shift' : ''}</strong> — {s.description}</li>
+					<li class="py-1">
+						<strong
+							>{s.key}{s.ctrl ? ' + Ctrl' : ''}{s.meta ? ' + Cmd' : ''}{s.shift
+								? ' + Shift'
+								: ''}</strong
+						>
+						— {s.description}
+					</li>
 				{/each}
 			</ul>
 		</div>
@@ -40,5 +56,7 @@
 		max-width: 720px;
 		box-shadow: var(--shadow-lg);
 	}
-	.card-title { font-weight: 600; }
+	.card-title {
+		font-weight: 600;
+	}
 </style>

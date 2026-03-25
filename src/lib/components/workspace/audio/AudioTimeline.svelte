@@ -153,14 +153,17 @@
 
 				<!-- Waveform placeholder (ST-024: visual reference) -->
 				<div class="flex-1 rounded bg-white p-2">
-					<div class="flex h-12 flex-col justify-center rounded bg-gradient-to-b from-purple-100 to-purple-50 px-2">
+					<div
+						class="flex h-12 flex-col justify-center rounded bg-gradient-to-b from-purple-100 to-purple-50 px-2"
+					>
 						<div class="text-xs font-semibold text-purple-700">{lane.name}</div>
 						<div class="mt-1 flex items-center gap-1">
 							<!-- Waveform placeholder bars -->
 							{#each Array.from({ length: 12 }) as _, i}
 								<div
 									class="flex-1 rounded-sm bg-purple-300"
-									style="height: {10 + Math.sin(i * 0.5) * 8}px; opacity: {0.5 + Math.cos(i * 0.3) * 0.4};"
+									style="height: {10 + Math.sin(i * 0.5) * 8}px; opacity: {0.5 +
+										Math.cos(i * 0.3) * 0.4};"
 									aria-label="Waveform bar"
 								></div>
 							{/each}

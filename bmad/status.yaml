@@ -1,8 +1,10 @@
 project: latent-line
 phase: release
 progress: 100
-next_action: "Sprint 14 complete — awaiting next sprint decision"
-active_role: scrum_master
+next_action: 'Review release checklist & finalize'
+active_role: developer
+next_command: 'bmad continue'
+next_role: developer
 audit_date: 2026-03-20
 audit_coverage: 84.39%
 audit_tests_passed: 307
@@ -25,100 +27,113 @@ artifacts:
 sprints:
   - id: 1
     status: completed
-    stories: ["ST-001", "ST-002", "ST-003", "ST-004", "ST-005", "ST-006", "ST-007", "ST-008", "ST-009", "ST-010"]
+    stories:
+      [
+        'ST-001',
+        'ST-002',
+        'ST-003',
+        'ST-004',
+        'ST-005',
+        'ST-006',
+        'ST-007',
+        'ST-008',
+        'ST-009',
+        'ST-010'
+      ]
   - id: 2
     status: completed
-    stories: ["ST-011", "ST-012", "ST-013", "ST-014", "ST-015"]
+    stories: ['ST-011', 'ST-012', 'ST-013', 'ST-014', 'ST-015']
   - id: 3
     status: completed
-    stories: ["S3-01", "S3-02", "S3-03", "S3-04", "S3-05", "S3-06", "S3-07", "S3-08"]
+    stories: ['S3-01', 'S3-02', 'S3-03', 'S3-04', 'S3-05', 'S3-06', 'S3-07', 'S3-08']
   - id: 4
     status: completed
-    stories: ["ST-016", "ST-017", "ST-018", "ST-019"]
+    stories: ['ST-016', 'ST-017', 'ST-018', 'ST-019']
   - id: 5
     status: completed
-    stories: ["ST-020", "ST-021"]
+    stories: ['ST-020', 'ST-021']
   - id: 6
     status: completed
-    stories: ["ST-022", "ST-023", "ST-024"]
+    stories: ['ST-022', 'ST-023', 'ST-024']
   - id: 7
     status: completed
-    stories: ["TST-001", "TST-002", "TST-003", "TST-004"]
+    stories: ['TST-001', 'TST-002', 'TST-003', 'TST-004']
   - id: 8
     status: completed
-    stories: ["CI-001", "E2E-001", "VR-001", "CI-002"]
+    stories: ['CI-001', 'E2E-001', 'VR-001', 'CI-002']
   - id: 9
     status: completed
-    stories: ["UI-001", "UI-002", "UI-003", "UI-004"]
+    stories: ['UI-001', 'UI-002', 'UI-003', 'UI-004']
   - id: 10
     status: completed
-    stories: ["S10-01", "S10-02", "S10-03"]
+    stories: ['S10-01', 'S10-02', 'S10-03']
   - id: 11
     status: completed
-    stories: ["S11-01", "S11-02", "S11-03"]
+    stories: ['S11-01', 'S11-02', 'S11-03']
   - id: 12
     status: completed
-    stories: ["S12-01", "S12-02", "S12-03", "S12-04"]
+    stories: ['S12-01', 'S12-02', 'S12-03', 'S12-04']
   - id: 13
     status: completed
-    stories: ["S13-01", "S13-02", "S13-03", "S13-04"]
+    stories: ['S13-01', 'S13-02', 'S13-03', 'S13-04']
   - id: 14
     status: completed
-    stories: ["S14-01", "S14-02", "S14-03", "S14-04"]
+    stories: ['S14-01', 'S14-02', 'S14-03', 'S14-04']
   - id: 15
-    status: planned
-    stories: ["S15-01", "S15-02", "S15-03"]
-    theme: "Settings persistants — préférences utilisateur, config projet, nouveau projet"
+    status: completed
+    stories: ['S15-01', 'S15-02', 'S15-03']
+    theme: 'Settings persistants — préférences utilisateur, config projet, nouveau projet'
     points: 8
   - id: 16
-    status: planned
-    stories: ["S16-01", "S16-02", "S16-03"]
-    theme: "Preview temps réel — tooltip survol, lecteur prévisualisation, miniatures mood"
+    status: completed
+    stories: ['S16-01', 'S16-02', 'S16-03']
+    theme: 'Preview temps réel — tooltip survol, lecteur prévisualisation, miniatures mood'
     points: 14
   - id: 17
-    status: planned
-    stories: ["S17-01", "S17-02", "S17-03", "S17-04"]
-    theme: "Timeline avancée — markers, multi-sélection, drag & drop, duplication/templates"
+    status: completed
+    stories: ['S17-01', 'S17-02', 'S17-03', 'S17-04']
+    theme: 'Timeline avancée — markers, multi-sélection, drag & drop, duplication/templates'
     points: 19
   - id: 18
-    status: planned
-    stories: ["S18-01", "S18-02", "S18-03", "S18-04"]
-    theme: "Export — storyboard PDF, CSV, prompts AI, ZIP bundle"
+    status: completed
+    stories: ['S18-01', 'S18-02', 'S18-03', 'S18-04']
+    theme: 'Export — storyboard PDF, CSV, prompts AI, ZIP bundle'
     points: 16
   - id: 19
-    status: planned
-    stories: ["S19-01", "S19-02", "S19-03"]
-    theme: "Accessibility WCAG 2.1 AA — navigation clavier, contrastes, tests axe-core"
+    status: completed
+    stories: ['S19-01', 'S19-02', 'S19-03']
+    theme: 'Accessibility WCAG 2.1 AA — navigation clavier, contrastes, tests axe-core'
     points: 11
   - id: 20
-    status: planned
-    stories: ["S20-01", "S20-02", "S20-03"]
-    theme: "Performance — virtualisation liste, code splitting, debounce localStorage"
+    status: completed
+    stories: ['S20-01', 'S20-02', 'S20-03']
+    theme: 'Performance — virtualisation liste, code splitting, debounce localStorage'
     points: 13
   - id: 21
-    status: planned
-    stories: ["S21-01", "S21-02", "S21-03", "S21-04"]
-    theme: "Polish UI — animations, états vides, responsive, panneaux redimensionnables"
+    status: completed
+    stories: ['S21-01', 'S21-02', 'S21-03', 'S21-04']
+    theme: 'Polish UI — animations, états vides, responsive, panneaux redimensionnables'
     points: 15
   - id: 22
-    status: planned
-    stories: ["S22-01", "S22-02", "S22-03"]
-    theme: "Internationalisation — infrastructure paraglide, traductions FR/EN, sélecteur langue"
+    status: completed
+    stories: ['S22-01', 'S22-02', 'S22-03']
+    theme: 'Internationalisation — infrastructure paraglide, traductions FR/EN, sélecteur langue'
     points: 12
   - id: 23
-    status: planned
-    stories: ["S23-01", "S23-02", "S23-03"]
-    theme: "Collaboration — partage URL, commentaires events, historique de versions"
+    status: in_progress
+    stories: ['S23-01', 'S23-02', 'S23-03']
+    completed_stories: ['S23-02', 'S23-01', 'S23-03']
+    theme: 'Collaboration — partage URL, commentaires events, historique de versions'
     points: 18
   - id: 24
     status: planned
-    stories: ["S24-01", "S24-02", "S24-03", "S24-04"]
-    theme: "Rendu AI — prompt builder, export Deforum, FramePack/CogVideoX, webhook ComfyUI"
+    stories: ['S24-01', 'S24-02', 'S24-03', 'S24-04']
+    theme: 'Rendu AI — prompt builder, export Deforum, FramePack/CogVideoX, webhook ComfyUI'
     points: 31
   - id: 25
     status: planned
-    stories: ["S25-01", "S25-02", "S25-03"]
-    theme: "Production — export EDL, recherche globale, mode présentation"
+    stories: ['S25-01', 'S25-02', 'S25-03']
+    theme: 'Production — export EDL, recherche globale, mode présentation'
     points: 16
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
@@ -142,4 +157,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-24T13:53:03.198Z
+last_updated: 2026-03-25T13:49:05.762Z

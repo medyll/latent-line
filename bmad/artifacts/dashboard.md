@@ -16,4 +16,3 @@
 ## Actions
 
 - Next: `bmad dev story E2E-002 --auto` — start implementing E2E improvements (Playwright tests)
-

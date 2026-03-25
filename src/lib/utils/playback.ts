@@ -12,11 +12,7 @@ export interface PlaybackState {
 }
 
 /** Advance playhead by elapsed milliseconds. Returns new frame, clamped to duration. */
-export function tickFrame(
-	currentFrame: number,
-	elapsedMs: number,
-	fps = DEFAULT_FPS
-): number {
+export function tickFrame(currentFrame: number, elapsedMs: number, fps = DEFAULT_FPS): number {
 	return currentFrame + (elapsedMs / 1000) * fps;
 }
 

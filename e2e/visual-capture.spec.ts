@@ -59,4 +59,3 @@ test.describe('Visual Regression - Snapshot Tests', () => {
 		// }
 	});
 });
-

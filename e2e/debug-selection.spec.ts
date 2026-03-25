@@ -6,13 +6,21 @@ test('debug selection', async ({ page }) => {
 	await page.locator('[aria-label="Asset Manager"]').waitFor();
 	const firstEvent = page.locator('[data-testid^="timeline-event-"]').first();
 	console.log('BEFORE aria-selected:', await firstEvent.getAttribute('aria-selected'));
-	console.log('BEFORE __selectionStoreValue:', await page.evaluate(() => (window as any).__selectionStoreValue));
+	console.log(
+		'BEFORE __selectionStoreValue:',
+		await page.evaluate(() => (window as any).__selectionStoreValue)
+	);
 	// Use Playwright click (emulated user interaction)
 	await firstEvent.click();
 	// wait for immediate marker so selection is observable
-	await page.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="true"]', { timeout: 1000 }).catch(()=>{});
+	await page
+		.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="true"]', { timeout: 1000 })
+		.catch(() => {});
 	console.log('AFTER (playwright) aria-selected:', await firstEvent.getAttribute('aria-selected'));
-	console.log('AFTER (playwright) __selectionStoreValue:', await page.evaluate(() => (window as any).__selectionStoreValue));
+	console.log(
+		'AFTER (playwright) __selectionStoreValue:',
+		await page.evaluate(() => (window as any).__selectionStoreValue)
+	);
 
 	// Now dispatch a synthetic DOM click from the page context and check again
 	await page.evaluate(() => {
@@ -20,7 +28,14 @@ test('debug selection', async ({ page }) => {
 		if (el) el.click();
 	});
 	// wait for cleared marker
-	await page.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="false"]', { timeout: 1000 }).catch(()=>{});
+	await page
+		.waitForSelector('[data-testid="pp-selection-ready"][data-immediate="false"]', {
+			timeout: 1000
+		})
+		.catch(() => {});
 	console.log('AFTER (dom) aria-selected:', await firstEvent.getAttribute('aria-selected'));
-	console.log('AFTER (dom) __selectionStoreValue:', await page.evaluate(() => (window as any).__selectionStoreValue));
+	console.log(
+		'AFTER (dom) __selectionStoreValue:',
+		await page.evaluate(() => (window as any).__selectionStoreValue)
+	);
 });

@@ -1,7 +1,11 @@
 import { onMount } from 'svelte';
 import type { Model } from '$lib/model/model-types';
 import exampleModel from '$lib/model/model-example';
-import { loadModelFromLocalStorage, saveModelToLocalStorage } from '$lib/utils/persistence';
+import {
+	loadModelFromLocalStorage,
+	saveModelToLocalStorage,
+	createDebouncedSave
+} from '$lib/utils/persistence';
 import { createModelHistory } from '$lib/context/history.svelte';
 
 /**
@@ -20,6 +24,7 @@ import { createModelHistory } from '$lib/context/history.svelte';
 export function createModelStore() {
 	const model = $state<Model>(structuredClone(exampleModel));
 	const history = createModelHistory();
+	const debouncedSave = createDebouncedSave(saveModelToLocalStorage, 500);
 
 	let previousJson = JSON.stringify(model);
 	let isApplyingSnapshot = false;
@@ -47,16 +52,18 @@ export function createModelStore() {
 		isApplyingSnapshot = false;
 	});
 
-	// Persist model to localStorage on every change
+	// Persist model to localStorage with 500ms debounce
 	$effect(() => {
 		const _ = JSON.stringify(model); // deep-track all properties
-		saveModelToLocalStorage(model);
+		debouncedSave.schedule(model);
 	});
 
 	// Load persisted model on client only (localStorage unavailable during SSR)
 	onMount(() => {
 		const saved = loadModelFromLocalStorage();
 		if (saved) applySnapshot(saved);
+		// Flush pending save before page unload to prevent data loss
+		window.addEventListener('beforeunload', () => debouncedSave.flush());
 	});
 
 	function undo() {
@@ -69,5 +76,5 @@ export function createModelStore() {
 		if (next) applySnapshot(next);
 	}
 
-	return { model, history, undo, redo };
+	return { model, history, undo, redo, saveStatus: debouncedSave.status };
 }

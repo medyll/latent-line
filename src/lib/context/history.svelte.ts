@@ -3,6 +3,7 @@ import {
 	historyPush,
 	historyUndo,
 	historyRedo,
+	historyClear,
 	canUndo,
 	canRedo
 } from '$lib/utils/history';
@@ -40,8 +41,17 @@ export function createModelHistory() {
 			return next;
 		},
 
-		get canUndo() { return _canUndo; },
-		get canRedo() { return _canRedo; }
+		clear() {
+			historyClear(state);
+			_sync();
+		},
+
+		get canUndo() {
+			return _canUndo;
+		},
+		get canRedo() {
+			return _canRedo;
+		}
 	};
 }
 

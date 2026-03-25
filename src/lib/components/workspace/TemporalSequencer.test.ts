@@ -8,7 +8,12 @@ const FRAME_PX = 24;
 /**
  * Compute preview time from drag delta.
  */
-function computePreviewTime(startTime: number, startX: number, currentX: number, pixelsPerFrame: number): number {
+function computePreviewTime(
+	startTime: number,
+	startX: number,
+	currentX: number,
+	pixelsPerFrame: number
+): number {
 	const deltaX = currentX - startX;
 	const deltaTime = Math.round(deltaX / pixelsPerFrame);
 	return Math.max(0, startTime + deltaTime);
@@ -17,11 +22,7 @@ function computePreviewTime(startTime: number, startX: number, currentX: number,
 /**
  * Resolve the final time for a dropped event, bumping if collisions exist.
  */
-function resolveDropTime(
-	timeline: TimelineEvent[],
-	startTime: number,
-	targetTime: number
-): number {
+function resolveDropTime(timeline: TimelineEvent[], startTime: number, targetTime: number): number {
 	let resolved = targetTime;
 	while (timeline.some((ev) => ev.time !== startTime && ev.time === resolved)) {
 		resolved++;

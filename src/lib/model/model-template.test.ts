@@ -108,7 +108,6 @@ describe('model-template', () => {
 			const result = modelSchema.safeParse(invalid);
 			expect(result.success).toBe(false);
 		});
-
 	});
 
 	// AUDIT-014: Test character validation
@@ -332,9 +331,7 @@ describe('model-template', () => {
 
 		it('should accept solo and mute both true simultaneously', () => {
 			const m = buildDefaultModel();
-			m.config.audioLanes = [
-				{ id: 'lane1', name: 'Lane 1', muted: true, soloed: true }
-			];
+			m.config.audioLanes = [{ id: 'lane1', name: 'Lane 1', muted: true, soloed: true }];
 			const result = modelSchema.safeParse(m);
 			expect(result.success).toBe(true);
 		});

@@ -14,4 +14,3 @@ Implemented the path traversal guard described in the audit (isUrlOrFile refinem
 
 - ✅ Implemented and tested (unit tests present in src/lib/model/model-template.test.ts)
 - Completed: 2026-03-07
-
