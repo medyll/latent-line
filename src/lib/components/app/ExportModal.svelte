@@ -8,6 +8,8 @@
 		exportToPromptsJson,
 		exportToDeforumFormat
 	} from '$lib/utils/export-prompts';
+	import { exportAsYAML } from '$lib/utils/export-yaml';
+	import { exportAsJSONLD } from '$lib/utils/export-jsonld';
 	import { generateStoryboardPDF } from '$lib/utils/export-pdf';
 	import { buildZip } from '$lib/utils/export-zip';
 	import { serializeModel } from '$lib/utils/export-import';
@@ -18,9 +20,10 @@
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 
-	type Format = 'pdf' | 'csv' | 'prompts-txt' | 'prompts-json' | 'deforum' | 'zip';
+	type Format = 'pdf' | 'csv' | 'prompts-txt' | 'prompts-json' | 'deforum' | 'zip' | 'yaml' | 'jsonld';
 	let activeFormat = $state<Format>('prompts-txt');
 	let includeNegative = $state(true);
+	let copyFeedback = $state<string | null>(null);
 
 	const slug = $derived(model.project.name.replace(/\s+/g, '_').toLowerCase());
 	const date = $derived(todayStr());
@@ -35,6 +38,12 @@
 				return JSON.stringify(exportToPromptsJson(model, includeNegative), null, 2).slice(0, 1200);
 			case 'deforum':
 				return exportToDeforumFormat(model);
+			case 'yaml':
+				return exportAsYAML(model).slice(0, 1200);
+			case 'jsonld': {
+				const jsonld = exportAsJSONLD(model);
+				return JSON.stringify(jsonld, null, 2).slice(0, 1200);
+			}
 			case 'zip':
 				return `ZIP will contain:\n• model.json\n• prompts.txt\n• prompts.json\n• events.csv\n• README.txt`;
 			case 'pdf':
@@ -44,7 +53,7 @@
 		}
 	});
 
-	function doExport() {
+	async function doExport() {
 		switch (activeFormat) {
 			case 'pdf':
 				generateStoryboardPDF(model);
@@ -67,6 +76,20 @@
 					exportToDeforumFormat(model),
 					`${slug}-deforum-${date}.json`,
 					'application/json'
+				);
+				break;
+			case 'yaml':
+				downloadText(
+					exportAsYAML(model),
+					`${slug}-${date}.yaml`,
+					'application/x-yaml'
+				);
+				break;
+			case 'jsonld':
+				downloadText(
+					JSON.stringify(exportAsJSONLD(model), null, 2),
+					`${slug}-${date}.jsonld`,
+					'application/ld+json'
 				);
 				break;
 			case 'zip': {
@@ -93,12 +116,39 @@
 		onclose();
 	}
 
+	async function copyToClipboard() {
+		try {
+			let content = '';
+			if (activeFormat === 'yaml') {
+				content = exportAsYAML(model);
+			} else if (activeFormat === 'jsonld') {
+				content = JSON.stringify(exportAsJSONLD(model), null, 2);
+			} else {
+				return; // Only for these formats
+			}
+
+			await navigator.clipboard.writeText(content);
+			copyFeedback = '✓ Copied!';
+			setTimeout(() => {
+				copyFeedback = null;
+			}, 2000);
+		} catch (error) {
+			console.error('Failed to copy:', error);
+			copyFeedback = '✗ Failed';
+			setTimeout(() => {
+				copyFeedback = null;
+			}, 2000);
+		}
+	}
+
 	const FORMATS: { id: Format; label: string }[] = [
 		{ id: 'pdf', label: '📄 PDF' },
 		{ id: 'csv', label: '📊 CSV' },
 		{ id: 'prompts-txt', label: '📝 Prompts TXT' },
 		{ id: 'prompts-json', label: '🤖 Prompts JSON' },
 		{ id: 'deforum', label: '🎞 Deforum' },
+		{ id: 'yaml', label: '📋 YAML' },
+		{ id: 'jsonld', label: '🔗 JSON-LD' },
 		{ id: 'zip', label: '📦 ZIP' }
 	];
 </script>
@@ -148,6 +198,14 @@
 
 		<footer class="modal-footer">
 			<button onclick={onclose} class="btn-secondary">Annuler</button>
+			{#if (activeFormat === 'yaml' || activeFormat === 'jsonld') && copyFeedback === null}
+				<button onclick={copyToClipboard} class="btn-secondary" title="Copy to clipboard">
+					📋 Copy
+				</button>
+			{/if}
+			{#if copyFeedback}
+				<span class="copy-feedback">{copyFeedback}</span>
+			{/if}
 			<button onclick={doExport} class="btn-primary">
 				{activeFormat === 'pdf' ? '🖨 Imprimer / PDF' : '⬇ Télécharger'}
 			</button>
@@ -248,5 +306,10 @@
 		justify-content: flex-end;
 		gap: 0.5rem;
 		flex-shrink: 0;
+		align-items: center;
+	}
+	.copy-feedback {
+		font-size: var(--text-xs);
+		color: var(--color-text-muted);
 	}
 </style>

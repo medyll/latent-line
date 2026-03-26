@@ -2,10 +2,10 @@ project: latent-line
 phase: development
 progress: 100
 status: release-ready
-next_action: 'Release v0.4.0: ComfyUI Integration shipped. Sprint 26 complete (9/12 pts: S24-04-UI delivered, S26-01 deferred). Version bumped 0.2.0→0.4.0. Ready for Sprint 27 planning.'
-active_role: scrum
-next_command: 'bmad status'
-next_role: scrum
+next_action: 'Sprint 28 in progress (12 pts). S28-01 API foundation + S28-02 ExportModal UI integrated (YAML/JSON-LD buttons, copy/download). 450 tests passing. S28-03/04 queued.'
+active_role: developer
+next_command: 'bmad continue'
+next_role: developer
 audit_date: 2026-03-25
 audit_coverage: 84.39%
 audit_tests_passed: 430
@@ -151,6 +151,22 @@ sprints:
     points: 12
     delivered_points: 9
     notes: 'S24-04-UI COMPLETE (9 pts): ComfyUI settings + per-event generate button + batch generation + IndexedDB persistence. S26-01 (3 pts) deferred to Sprint 27. Release v0.4.0 shipped.'
+  - id: 27
+    status: completed
+    stories: ['S26-01', 'S27-01', 'S27-02']
+    completed_stories: ['S26-01', 'S27-01', 'S27-02']
+    theme: 'Post-Release Hardening + Export Ecosystem Expansion'
+    points: 9
+    delivered_points: 9
+    notes: 'S26-01 COMPLETE (3 pts): bundle analysis, perf tests, storage cleanup. S27-01 COMPLETE (3 pts): bug triage, a11y fixes. S27-02 COMPLETE (3 pts): YAML export, JSON-LD export, RDF N-Triples conversion. 450 tests passing (+22 new).'
+  - id: 28
+    status: in_progress
+    stories: ['S28-01', 'S28-02', 'S28-03', 'S28-04']
+    in_progress_stories: ['S28-01', 'S28-02']
+    theme: 'Export Ecosystem: REST API Server & UI Integration'
+    points: 12
+    delivered_points: 5.5
+    notes: 'S28-01 API (3 pts): export/import endpoints + JSON-LD conversion. S28-02 ExportModal (2.5 pts): YAML/JSON-LD buttons, copy/download. S28-03/04 queued (ImportModal, docs). Target: v0.5.0.'
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
@@ -173,4 +189,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-25T21:50:30.000Z
+last_updated: 2026-03-26T11:08:00.000Z

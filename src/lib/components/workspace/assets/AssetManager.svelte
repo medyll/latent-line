@@ -363,8 +363,9 @@
 							<div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
 								<!-- Name -->
 								<div class="flex flex-col gap-0.5">
-									<label>Name</label>
+									<label for={`char-name-${char.id}`}>Name</label>
 									<input
+										id={`char-name-${char.id}`}
 										type="text"
 										value={assetStore.characters[idx].name}
 										oninput={(e) =>
@@ -375,8 +376,9 @@
 								</div>
 								<!-- Voice ID -->
 								<div class="flex flex-col gap-0.5">
-									<label>Voice ID</label>
+									<label for={`voice-id-${char.id}`}>Voice ID</label>
 									<input
+										id={`voice-id-${char.id}`}
 										type="text"
 										value={assetStore.characters[idx].voice_id ?? ''}
 										oninput={(e) =>
@@ -515,8 +517,9 @@
 					{#if isEditing}
 						<div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
 							<div class="flex flex-col gap-0.5">
-								<label class="text-gray-400">Prompt</label>
+								<label for={`env-prompt-${id}`} class="text-gray-400">Prompt</label>
 								<textarea
+									id={`env-prompt-${id}`}
 									value={env.prompt}
 									oninput={(e) =>
 										(assetStore.environments[id].prompt = (e.target as HTMLTextAreaElement).value)}
@@ -526,8 +529,9 @@
 								></textarea>
 							</div>
 							<div class="flex flex-col gap-0.5">
-								<label class="text-gray-400">Reference image</label>
+								<label for={`env-ref-${id}`} class="text-gray-400">Reference image</label>
 								<input
+									id={`env-ref-${id}`}
 									type="text"
 									value={env.ref ?? ''}
 									oninput={(e) =>

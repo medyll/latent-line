@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setContext } from 'svelte';
+	import { setContext, onMount } from 'svelte';
 	import favicon from '$lib/assets/favicon.svg';
 	import '@medyll/css-base';
 	import '$lib/styles/app.css';
@@ -7,6 +7,7 @@
 	import ToastManager from '$lib/components/ui/ToastManager.svelte';
 	import LanguageSelector from '$lib/components/ui/LanguageSelector.svelte';
 	import { locale, t } from '$lib/i18n';
+	import { validateStorageVersion } from '$lib/utils/storage-cleanup';
 
 	let { children } = $props();
 
@@ -14,6 +15,11 @@
 	setContext(PREFS_CONTEXT_KEY, { prefs, reset });
 
 	let showPrefs = $state(false);
+
+	// Storage cleanup on app startup
+	onMount(() => {
+		validateStorageVersion();
+	});
 
 	// Sync locale ↔ preferences
 	$effect(() => {
