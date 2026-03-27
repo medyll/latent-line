@@ -15,6 +15,7 @@ Full CMX 3600 EDL export for professional post-production workflow integration. 
 ### New File: `src/lib/utils/export-edl.ts`
 
 **Features:**
+
 - **SMPTE Timecode Conversion** — frame ↔ timecode (HH:MM:SS:FF)
 - **Timeline Validation** — detects overlaps, gaps > 1 frame
 - **CMX 3600 Format** — standard EDL specification
@@ -22,12 +23,14 @@ Full CMX 3600 EDL export for professional post-production workflow integration. 
 - **Frame-accurate** — preserves exact frame timing
 
 **Key Functions:**
+
 - `frameToTimecode(frame, fps)` — convert frame number to SMPTE
 - `timecodeToFrame(timecode, fps)` — convert timecode back to frame
 - `validateTimelineForEDL(model)` — pre-export validation
 - `exportToEDL(model)` — generate EDL content
 
 **Example EDL Output:**
+
 ```
 TITLE: My Project
 FCM: DROP FRAME
@@ -44,6 +47,7 @@ FCM: DROP FRAME
 ### Test Coverage (`src/lib/utils/export-edl.test.ts`)
 
 **20 comprehensive tests:**
+
 - ✅ Timecode conversion (frame 0, 1 sec, boundaries)
 - ✅ Roundtrip conversion preservation
 - ✅ Timeline validation (clean, empty, overlapping, gaps)
@@ -54,12 +58,14 @@ FCM: DROP FRAME
 ## Technical Details
 
 ### CMX 3600 Format
+
 - Standard interchange format for video editing
 - Line format: `EVENT# REEL CH TRANS IN_TC OUT_TC REC_IN_TC REC_OUT_TC`
 - Comment lines start with `*`
 - Frame-accurate timing with SMPTE timecode
 
 ### SMPTE Timecode (HH:MM:SS:FF)
+
 - HH: Hours (0-23)
 - MM: Minutes (0-59)
 - SS: Seconds (0-59)
@@ -67,6 +73,7 @@ FCM: DROP FRAME
 - Example: `00:00:05:12` = 5 seconds + 12 frames
 
 ### Validation Rules
+
 - No overlapping events (current_end ≤ next_start)
 - No gaps > 1 frame between events
 - Timeline not empty
@@ -74,13 +81,13 @@ FCM: DROP FRAME
 
 ## Test Results
 
-| Metric | Count | Status |
-|--------|-------|--------|
-| New tests | 20 | ✅ |
-| Passing | 20 | ✅ |
-| All unit tests | 385 | ✅ |
-| Build | Clean | ✅ |
-| Breaking changes | 0 | ✅ |
+| Metric           | Count | Status |
+| ---------------- | ----- | ------ |
+| New tests        | 20    | ✅     |
+| Passing          | 20    | ✅     |
+| All unit tests   | 385   | ✅     |
+| Build            | Clean | ✅     |
+| Breaking changes | 0     | ✅     |
 
 ## Acceptance Criteria Met
 

@@ -12,6 +12,7 @@
 ### S26-01: Performance & Polish (3 pts) ✅
 
 **Deliverables:**
+
 - Bundle size analysis report (445 KB client, 213 KB JS chunks)
 - Performance test suite: `e2e/performance.spec.ts` (5 tests)
   - Large dataset handling (100/1000 events)
@@ -31,6 +32,7 @@
 ### S27-01: Post-Release Bug Triage & Accessibility Fixes (3 pts) ✅
 
 **Deliverables:**
+
 - Bug triage report: `bmad/artifacts/bug-triage-2026-03-26.md`
   - 4 issues identified: 0 critical, 4 minor/non-breaking
   - Known limitations documented
@@ -50,6 +52,7 @@
 **Deliverables:**
 
 #### YAML Export (`src/lib/utils/export-yaml.ts`)
+
 - Human-readable timeline configuration format
 - Round-trip support: YAML → Model → YAML
 - Character, environment, event, ComfyUI settings included
@@ -64,6 +67,7 @@
   - Edge cases (empty assets, bare events)
 
 #### JSON-LD Export (`src/lib/utils/export-jsonld.ts`)
+
 - Semantic Linked Data format (schema.org compatible)
 - RDF-ready structure for knowledge graphs
 - Asset catalog with Person, Place types
@@ -82,6 +86,7 @@
   - Special character escaping
 
 #### RDF N-Triples Conversion
+
 - Convert JSON-LD to RDF triple format
 - Enables integration with semantic triple stores
 - Supports knowledge graph construction
@@ -92,15 +97,15 @@
 
 ## Summary by Metrics
 
-| Metric | Sprint 26 → Sprint 27 |
-|--------|----------------------|
-| Unit Tests | 428 → 450 (+22) |
-| Test Files | 39 → 41 (+2) |
-| Code Coverage | 84.39% → 85%+ (est.) |
-| Bundle Size | Stable at 445 KB |
-| Bugs Found | 4 minor (all documented) |
-| Critical Issues | 0 |
-| A11y Improvements | 4 form labels fixed |
+| Metric            | Sprint 26 → Sprint 27    |
+| ----------------- | ------------------------ |
+| Unit Tests        | 428 → 450 (+22)          |
+| Test Files        | 39 → 41 (+2)             |
+| Code Coverage     | 84.39% → 85%+ (est.)     |
+| Bundle Size       | Stable at 445 KB         |
+| Bugs Found        | 4 minor (all documented) |
+| Critical Issues   | 0                        |
+| A11y Improvements | 4 form labels fixed      |
 
 ---
 
@@ -129,18 +134,21 @@
 ## Post-Sprint Notes
 
 ### What Worked Well
+
 - Intensive single-day sprint completed all 3 stories
 - Test-driven development ensured quality
 - Export utilities are foundation for future API work
 - Accessibility fixes improve user experience
 
 ### Known Limitations (Documented)
+
 - ComfyUI panel height on very small viewports (workaround: landscape mode)
 - 500+ event timeline scroll jank on older hardware (planned: virtual scrolling)
 - WebSocket/long-polling not yet implemented for real-time updates
 - Export API server not implemented (queued for Sprint 28+)
 
 ### Ready for Next Sprint
+
 - Export utilities tested and documented
 - Bug triage baseline established
 - Performance metrics captured

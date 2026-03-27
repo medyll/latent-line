@@ -9,6 +9,7 @@
 ## Implementation Summary
 
 Added two new export formats for emerging AI video generation tools:
+
 - **FramePack**: JSONL format with per-frame metadata
 - **CogVideoX**: Script-based format with keyframes and interpolation rules
 
@@ -19,18 +20,19 @@ Both formats include complete camera data (zoom, pan, tilt), lighting, and effec
 ### New File: `src/lib/utils/export-framepack.ts`
 
 **Features:**
+
 - JSONL output (one JSON object per line)
 - Per-frame data structure:
   ```json
   {
-    "frame": 0,
-    "prompt": "Alice running, anxious mood...",
-    "character_id": "c1",
-    "character_name": "Alice",
-    "camera": {"zoom": 1.5, "pan": [0.1, -0.2], "tilt": 10},
-    "lighting": {"type": "dusk", "intensity": 0.8},
-    "effects": {"bloom": 0.5, "motion_blur": 0.2},
-    "metadata": {"duration": 24, "version": "1.0"}
+  	"frame": 0,
+  	"prompt": "Alice running, anxious mood...",
+  	"character_id": "c1",
+  	"character_name": "Alice",
+  	"camera": { "zoom": 1.5, "pan": [0.1, -0.2], "tilt": 10 },
+  	"lighting": { "type": "dusk", "intensity": 0.8 },
+  	"effects": { "bloom": 0.5, "motion_blur": 0.2 },
+  	"metadata": { "duration": 24, "version": "1.0" }
   }
   ```
 - `FORMAT_VERSION = '1.0'` constant for versioning
@@ -40,6 +42,7 @@ Both formats include complete camera data (zoom, pan, tilt), lighting, and effec
 ### New File: `src/lib/utils/export-cogvideo.ts`
 
 **Features:**
+
 - Plain-text script format with structured sections
 - METADATA block: version, fps, resolution
 - KEYFRAMES block: indexed keyframe declarations with:
@@ -51,6 +54,7 @@ Both formats include complete camera data (zoom, pan, tilt), lighting, and effec
 - Human-readable output for easy review and editing
 
 **Example output:**
+
 ```
 # CogVideoX Video Sequence Script
 # Format Version: 1.0
@@ -81,6 +85,7 @@ interpolate(from=0, to=24, method="linear", steps=24)
 ### New Test Files
 
 **`src/lib/utils/export-framepack.test.ts`** (6 tests)
+
 - ✅ Validates JSONL format (one JSON per line, parseable)
 - ✅ Verifies frame, prompt, character info included
 - ✅ Confirms camera, lighting, effects data present
@@ -89,6 +94,7 @@ interpolate(from=0, to=24, method="linear", steps=24)
 - ✅ All assertions passing
 
 **`src/lib/utils/export-cogvideo.test.ts`** (7 tests)
+
 - ✅ Returns plain text script format
 - ✅ Includes METADATA section with version, fps, resolution
 - ✅ Declares keyframes correctly

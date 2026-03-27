@@ -15,6 +15,7 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 ### ✅ S24-01 — Prompt Builder with Contextual Suggestions (8 pts)
 
 **What was built:**
+
 - Vocabulary catalog (~200 terms in 4 categories: Movement, Emotion, Environment, Cinematic)
 - PromptAssist.svelte component with suggestion panel
 - "Assist" button on Action field in PropertiesPanel
@@ -23,6 +24,7 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 **Impact:** Users can quickly build quality AI prompts without manual typing
 
 **Files created:**
+
 - `src/lib/data/prompt-vocabulary.ts`
 - `src/lib/components/workspace/properties/PromptAssist.svelte`
 - Updated: `src/lib/components/workspace/properties/PropertiesPanel.svelte`
@@ -30,6 +32,7 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 ### ✅ S24-02 — Deforum JSON Export (5 pts)
 
 **What was built:**
+
 - Full Deforum format: `{ "prompts": {...}, "negative_prompts": {...}, "seed": ..., "steps": ... }`
 - Frame 0 validation (required by Deforum)
 - Automatic morphing interpolation for transition frames
@@ -44,11 +47,13 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 **What was built:**
 
 **FramePack (JSONL format):**
+
 - One JSON object per line
 - Full frame metadata: frame number, prompt, character, camera (zoom/pan/tilt), lighting, effects
 - Metadata with version tracking
 
 **CogVideoX (Script format):**
+
 - Human-readable plain-text script
 - METADATA section: version, fps, resolution
 - KEYFRAMES section: indexed declarations with prompt, duration, camera motion, lighting, effects
@@ -57,6 +62,7 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 **Impact:** Support for two emerging AI video generation tools (FramePack, CogVideoX)
 
 **Files created:**
+
 - `src/lib/utils/export-framepack.ts` (+ 6 unit tests)
 - `src/lib/utils/export-cogvideo.ts` (+ 7 unit tests)
 
@@ -65,6 +71,7 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 **Status:** Post-MVP (marked as 🔴 Basse priority)
 
 **Reasoning:** Core export functionality complete. ComfyUI integration requires:
+
 - Settings UI for server configuration
 - Background worker for non-blocking generation
 - Image storage in IndexedDB
@@ -75,18 +82,18 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 
 ## Test Results
 
-| Metric | Result |
-|--------|--------|
-| Unit Tests | **354 passed** (all) |
-| Build | ✅ Successful (18.39s) |
-| Test Files | 35 test suites |
+| Metric          | Result                                                    |
+| --------------- | --------------------------------------------------------- |
+| Unit Tests      | **354 passed** (all)                                      |
+| Build           | ✅ Successful (18.39s)                                    |
+| Test Files      | 35 test suites                                            |
 | New Tests Added | 13 (S24-02 Deforum + S24-03 FramePack + S24-03 CogVideoX) |
-| Code Quality | ✅ No breaking changes |
+| Code Quality    | ✅ No breaking changes                                    |
 
 ## Architecture Decisions
 
 1. **Vocabulary as constant data** (prompt-vocabulary.ts) — enables offline suggestions, future UI editing
-2. **Separate export utilities** (export-*.ts) — maintains modularity, easy to add new formats
+2. **Separate export utilities** (export-\*.ts) — maintains modularity, easy to add new formats
 3. **Deforum morphing frames** — interpolates between keyframes with transition hints
 4. **CogVideoX script format** — human-readable for debugging, preserves all metadata
 5. **Post-MVP ComfyUI** — prioritizes core export validation before backend integration
@@ -101,6 +108,7 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 ## Files Modified/Created
 
 **New files:** 6
+
 - `src/lib/data/prompt-vocabulary.ts`
 - `src/lib/components/workspace/properties/PromptAssist.svelte`
 - `src/lib/utils/export-framepack.ts`
@@ -109,6 +117,7 @@ Implement AI rendering workflow: contextual prompt suggestions, export to multip
 - `src/lib/utils/export-cogvideo.test.ts`
 
 **Modified files:** 2
+
 - `src/lib/components/workspace/properties/PropertiesPanel.svelte` (added Action field + Assist button)
 - `src/lib/utils/export-prompts.ts` (enhanced Deforum function)
 - `src/lib/utils/export-prompts.test.ts` (added Deforum validation tests)

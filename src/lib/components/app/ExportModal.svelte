@@ -20,7 +20,15 @@
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 
-	type Format = 'pdf' | 'csv' | 'prompts-txt' | 'prompts-json' | 'deforum' | 'zip' | 'yaml' | 'jsonld';
+	type Format =
+		| 'pdf'
+		| 'csv'
+		| 'prompts-txt'
+		| 'prompts-json'
+		| 'deforum'
+		| 'zip'
+		| 'yaml'
+		| 'jsonld';
 	let activeFormat = $state<Format>('prompts-txt');
 	let includeNegative = $state(true);
 	let copyFeedback = $state<string | null>(null);
@@ -79,11 +87,7 @@
 				);
 				break;
 			case 'yaml':
-				downloadText(
-					exportAsYAML(model),
-					`${slug}-${date}.yaml`,
-					'application/x-yaml'
-				);
+				downloadText(exportAsYAML(model), `${slug}-${date}.yaml`, 'application/x-yaml');
 				break;
 			case 'jsonld':
 				downloadText(

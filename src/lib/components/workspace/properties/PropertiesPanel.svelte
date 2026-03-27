@@ -596,7 +596,8 @@
 											id="action-{actor.id}"
 											type="text"
 											value={actor.action ?? ''}
-											oninput={(e) => updateActorAction(actorIdx, (e.target as HTMLInputElement).value)}
+											oninput={(e) =>
+												updateActorAction(actorIdx, (e.target as HTMLInputElement).value)}
 											placeholder="e.g. standing, walking..."
 											class="flex-1 rounded border border-gray-200 px-1 py-0.5 text-xs"
 											aria-label={`Action for ${actor.id}`}

@@ -10,84 +10,97 @@
 
 ### Delivered: 22 of 31 Points (71%)
 
-| Story | Points | Status | Notes |
-|-------|--------|--------|-------|
-| S24-01 | 8 | ✅ Complete | Prompt builder with vocabulary + PromptAssist UI |
-| S24-02 | 5 | ✅ Complete | Deforum JSON export with morphing frames |
-| S24-03 | 5 | ✅ Complete | FramePack (JSONL) & CogVideoX (script) exports |
-| S24-04 | 13 | 🟡 Foundation | AI backend service + generation store (4 pts); UI deferred (9 pts) |
+| Story  | Points | Status        | Notes                                                              |
+| ------ | ------ | ------------- | ------------------------------------------------------------------ |
+| S24-01 | 8      | ✅ Complete   | Prompt builder with vocabulary + PromptAssist UI                   |
+| S24-02 | 5      | ✅ Complete   | Deforum JSON export with morphing frames                           |
+| S24-03 | 5      | ✅ Complete   | FramePack (JSONL) & CogVideoX (script) exports                     |
+| S24-04 | 13     | 🟡 Foundation | AI backend service + generation store (4 pts); UI deferred (9 pts) |
 
 ### Key Metrics
 
-| Metric | Value | Status |
-|--------|-------|--------|
-| Unit Tests | 365/365 | ✅ All passing |
-| Code Quality | APPROVED | ✅ Audit passed |
-| Build Time | 6-17s | ✅ Clean |
-| Files Created | 14 | ✅ Modular |
-| Breaking Changes | 0 | ✅ Safe merge |
+| Metric              | Value    | Status           |
+| ------------------- | -------- | ---------------- |
+| Unit Tests          | 365/365  | ✅ All passing   |
+| Code Quality        | APPROVED | ✅ Audit passed  |
+| Build Time          | 6-17s    | ✅ Clean         |
+| Files Created       | 14       | ✅ Modular       |
+| Breaking Changes    | 0        | ✅ Safe merge    |
 | Test Coverage (new) | 24 tests | ✅ Comprehensive |
 
 ## What Was Built
 
 ### S24-01: Prompt Builder ✅
+
 **Impact:** Dramatically speeds up prompt creation with offline vocabulary suggestions.
 
 **Technical:**
+
 - 200+ terms in 4 categories (Movement, Emotion, Environment, Cinematic)
 - PromptAssist.svelte floating panel component
 - "Assist" button integration in PropertiesPanel
 - Click-to-append with comma-separator
 
 **Files:**
+
 - `src/lib/data/prompt-vocabulary.ts`
 - `src/lib/components/workspace/properties/PromptAssist.svelte`
 - Updated: `PropertiesPanel.svelte`
 
 ### S24-02: Deforum Export ✅
+
 **Impact:** Direct export to most-popular SD WebUI extension (Deforum) without manual conversion.
 
 **Technical:**
+
 - Full Deforum JSON spec: `{ "prompts": {...}, "negative_prompts": {...}, seed, steps, cfg_scale }`
 - Frame 0 validation (Deforum requirement)
 - Automatic morphing interpolation for transition frames
 - Optional rendering parameters
 
 **Files:**
+
 - Enhanced: `src/lib/utils/export-prompts.ts`
 - Tests: `export-prompts.test.ts` (+2 new tests)
 
 ### S24-03: FramePack & CogVideoX Export ✅
+
 **Impact:** Support for emerging AI video tools; positions latent-line as multi-platform hub.
 
 **Technical:**
 
 **FramePack (JSONL):**
+
 - One JSON object per line
 - Full metadata: frame, prompt, character, camera (zoom/pan/tilt), lighting, effects, duration, version
 
 **CogVideoX (Script):**
+
 - Human-readable plain-text script format
 - Sections: METADATA, KEYFRAMES, INTERPOLATION
 - Camera motion descriptions, lighting, effects per keyframe
 - Automatic interpolation rule generation
 
 **Files:**
+
 - `src/lib/utils/export-framepack.ts` (+6 tests)
 - `src/lib/utils/export-cogvideo.ts` (+7 tests)
 
 ### S24-04: ComfyUI Foundation ✅ (4 of 13 pts)
+
 **Impact:** Foundation for direct AI image generation from latent-line without context-switching.
 
 **Technical (Completed):**
 
 **AI Backend Service:**
+
 - Unified abstraction for ComfyUI and Automatic1111
 - Type-safe request/response contracts
 - Connection testing, generation, progress polling
 - Timeout and error handling structure
 
 **Generation State Store:**
+
 - Svelte 5 reactive store (writable + derived)
 - Per-event status tracking (idle/queued/generating/done/error)
 - Progress percentage, image storage (base64), timestamps
@@ -95,11 +108,13 @@
 - 11 comprehensive tests
 
 **Files:**
+
 - `src/lib/services/ai-backend.ts`
 - `src/lib/stores/generation.svelte.ts`
 - Tests: `generation.test.ts` (11 tests)
 
 **Not Completed (Deferred to Sprint 25):**
+
 - Settings UI (server config, API key)
 - Event card buttons and progress indicators
 - Image preview and display
@@ -119,6 +134,7 @@
 ## Quality & Testing
 
 ### New Test Coverage
+
 - FramePack: 6 tests
 - CogVideoX: 7 tests
 - Deforum (enhanced): 2 tests
@@ -126,6 +142,7 @@
 - **Total new:** 24 tests
 
 ### Code Audit Results
+
 - ✅ Build clean (no errors/warnings)
 - ✅ All TypeScript compiles
 - ✅ No unused imports or variables
@@ -138,6 +155,7 @@
 ## Files Changed
 
 ### New Files (14)
+
 ```
 src/lib/data/prompt-vocabulary.ts
 src/lib/components/workspace/properties/PromptAssist.svelte
@@ -156,6 +174,7 @@ bmad/artifacts/sprint-24-summary.md
 ```
 
 ### Modified Files (3)
+
 ```
 src/lib/components/workspace/properties/PropertiesPanel.svelte
 src/lib/utils/export-prompts.ts
@@ -163,17 +182,20 @@ src/lib/utils/export-prompts.test.ts
 ```
 
 ### Deleted Files
+
 - None
 
 ## Decision: S24-04 Foundation Only
 
 **Why defer UI (9 pts) to Sprint 25?**
+
 - Foundation is solid (service + store well-tested)
 - UI integration is 9 separate concerns (settings, buttons, progress, batch, storage, etc.)
 - Post-MVP priority; core exports validated first
 - Cleaner separation: infra → feature implementation
 
 **What's ready to use:**
+
 - Developers can integrate AI backend via `AIBackend` service
 - Components can subscribe to `generation` store for state
 - All types are TypeScript-safe and well-documented
@@ -198,11 +220,13 @@ src/lib/utils/export-prompts.test.ts
 ## Next Actions
 
 **Immediate:**
+
 1. Merge to main branch
 2. Tag as v0.3.0 (AI rendering features)
 3. Update README with new export formats
 
 **Sprint 25:**
+
 1. User validation of exports (Deforum, FramePack, CogVideoX)
 2. S24-04 UI integration (settings, buttons, batch generation)
 3. S24-05: TBD based on feedback

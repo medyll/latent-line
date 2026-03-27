@@ -47,24 +47,28 @@ Full UI implementation for ComfyUI / Automatic1111 webhook-based image generatio
 ### 4. Core Stores & Services
 
 #### Generation Store (`generation.svelte.ts`)
+
 - Per-event generation state tracking
 - Methods: start, setProgress, complete, error, clear, reset
 - Derived stores: `isGenerating`, `generationStats`
 - **Tests:** 9 comprehensive unit tests (all passing)
 
 #### Generated Images Store (`generated-images.svelte.ts`)
+
 - IndexedDB persistence layer for base64 images
 - Methods: save, get, getAll, delete, clear
 - Automatic cleanup and index management
 - Event-based lookup
 
 #### AI Backend Service (`ai-backend.ts`) — Foundation
+
 - Abstraction layer for ComfyUI & Automatic1111 APIs
 - Classes: ComfyUIBackend, A1111Backend, AIBackend facade
 - Methods: generate, checkProgress, testConnection
 - Automatic error handling & HTTP timeout
 
 #### Batch Generate Utility (`batch-generate.ts`)
+
 - Rate-limited sequential batch processing
 - Configurable rate limit and timeout
 - Error resilience (one failure doesn't stop batch)
@@ -73,12 +77,14 @@ Full UI implementation for ComfyUI / Automatic1111 webhook-based image generatio
 ### 5. Integration
 
 **Updated Files:**
+
 - `src/routes/+page.svelte` — toolbar button + ComfyUISettings modal + GenerateBatchButton
 - `src/lib/stores/preferences.svelte.ts` — ComfyUIConfig interface added to Preferences
 - `src/lib/context/keys.ts` — PREFS_CONTEXT_KEY added
 - `src/lib/components/workspace/properties/PropertiesPanel.svelte` — GenerateButton component added
 
 **New Files:**
+
 - `src/lib/components/app/ComfyUISettings.svelte` (settings modal)
 - `src/lib/components/workspace/GenerateButton.svelte` (event-level button)
 - `src/lib/components/workspace/GenerateBatchButton.svelte` (toolbar batch button)
@@ -89,35 +95,41 @@ Full UI implementation for ComfyUI / Automatic1111 webhook-based image generatio
 ## Features Delivered
 
 ✅ **Settings Configuration**
+
 - Server URL + API key configuration
 - Test connection with real-time feedback
 - Persistent storage in localStorage (via preferences store)
 
 ✅ **Per-Event Generation**
+
 - Generate button on timeline events
 - Real-time progress bar (0-100%)
 - Generated image thumbnail display
 - Error state with retry capability
 
 ✅ **Batch Generation**
+
 - "Generate All" button with sequential processing
 - Rate limiting to avoid overwhelming backend
 - Live progress tracking (done/error/total counts)
 - Per-event error resilience
 
 ✅ **Persistence**
+
 - Generated images stored in IndexedDB
 - Automatic cleanup on event deletion
 - Thumbnails survive browser refresh
 - No localStorage bloat (uses proper binary storage)
 
 ✅ **Error Handling**
+
 - Timeout detection (5min per request)
 - Connection failure messages
 - Invalid API key feedback
 - Network retry logic
 
 ✅ **Testing**
+
 - 9 generation store unit tests
 - 428 total tests passing
 - Build successful

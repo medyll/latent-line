@@ -58,7 +58,7 @@ export function exportToDeforumFormat(model: Model, options: DeforumOptions = {}
 	const sortedEvents = [...model.timeline].sort((a, b) => a.time - b.time);
 
 	// Ensure frame 0 exists (required by Deforum)
-	const hasFrame0 = sortedEvents.some(ev => ev.time === 0);
+	const hasFrame0 = sortedEvents.some((ev) => ev.time === 0);
 	if (!hasFrame0 && sortedEvents.length > 0) {
 		sortedEvents.unshift({
 			time: 0,
@@ -73,7 +73,8 @@ export function exportToDeforumFormat(model: Model, options: DeforumOptions = {}
 	sortedEvents.forEach((ev) => {
 		const prompt = buildPrompt(ev, model).replace(/"/g, '\\"');
 		prompts[String(ev.time)] = prompt;
-		negativePrompts[String(ev.time)] = options.negative_prompt ?? 'blur, watermark, low quality, distorted';
+		negativePrompts[String(ev.time)] =
+			options.negative_prompt ?? 'blur, watermark, low quality, distorted';
 	});
 
 	// Generate morphing prompts for interpolated frames
@@ -87,9 +88,13 @@ export function exportToDeforumFormat(model: Model, options: DeforumOptions = {}
 			const step = Math.ceil(gap / 4); // Create intermediate frames
 			for (let f = current.time + step; f < next.time; f += step) {
 				// Morphing prompt hints that transition between frames
-				const morphPrompt = `${buildPrompt(current, model)}, morphing transition`.replace(/"/g, '\\"');
+				const morphPrompt = `${buildPrompt(current, model)}, morphing transition`.replace(
+					/"/g,
+					'\\"'
+				);
 				prompts[String(f)] = morphPrompt;
-				negativePrompts[String(f)] = options.negative_prompt ?? 'blur, watermark, low quality, distorted';
+				negativePrompts[String(f)] =
+					options.negative_prompt ?? 'blur, watermark, low quality, distorted';
 			}
 		}
 	}

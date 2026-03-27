@@ -94,7 +94,7 @@ function searchEvents(model: Model, query: string): SearchResult[] {
 		if (matched) {
 			const actor = event.frame.actors?.[0];
 			const character = actor
-				? model.assets.characters.find((c) => c.id === actor.id)?.name ?? actor.id
+				? (model.assets.characters.find((c) => c.id === actor.id)?.name ?? actor.id)
 				: 'No Actor';
 
 			results.push({
@@ -135,7 +135,9 @@ function searchCharacters(model: Model, query: string): SearchResult[] {
  */
 function searchEnvironments(model: Model, query: string): SearchResult[] {
 	return Object.entries(model.assets.environments)
-		.filter(([key, env]) => env.prompt.toLowerCase().includes(query) || key.toLowerCase().includes(query))
+		.filter(
+			([key, env]) => env.prompt.toLowerCase().includes(query) || key.toLowerCase().includes(query)
+		)
 		.map(([key, env]) => ({
 			type: 'environment',
 			id: key,
@@ -150,7 +152,10 @@ function searchEnvironments(model: Model, query: string): SearchResult[] {
  */
 function searchAudio(model: Model, query: string): SearchResult[] {
 	return model.assets.audio
-		.filter((audio) => audio.label?.toLowerCase().includes(query) || audio.id.toLowerCase().includes(query))
+		.filter(
+			(audio) =>
+				audio.label?.toLowerCase().includes(query) || audio.id.toLowerCase().includes(query)
+		)
 		.map((audio) => ({
 			type: 'audio',
 			id: audio.id,
@@ -163,7 +168,10 @@ function searchAudio(model: Model, query: string): SearchResult[] {
 /**
  * Highlight matching term in text
  */
-export function highlightMatch(text: string, query: string): { before: string; match: string; after: string } {
+export function highlightMatch(
+	text: string,
+	query: string
+): { before: string; match: string; after: string } {
 	const idx = text.toLowerCase().indexOf(query.toLowerCase());
 	if (idx === -1) {
 		return { before: text, match: '', after: '' };

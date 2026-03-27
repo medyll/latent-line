@@ -101,7 +101,9 @@ export function exportToCogVideoX(model: Model): string {
 
 			if (gap > 1) {
 				lines.push(`# Interpolate from frame ${current.time} to ${next.time}`);
-				lines.push(`interpolate(from=${current.time}, to=${next.time}, method="linear", steps=${gap})`);
+				lines.push(
+					`interpolate(from=${current.time}, to=${next.time}, method="linear", steps=${gap})`
+				);
 				lines.push(``);
 			}
 		}

@@ -10,8 +10,7 @@
 	 */
 	import { PROMPT_VOCABULARY, getCategories } from '$lib/data/prompt-vocabulary';
 
-	let { onSelect, onClose }: { onSelect: (term: string) => void; onClose: () => void } =
-		$props();
+	let { onSelect, onClose }: { onSelect: (term: string) => void; onClose: () => void } = $props();
 
 	const categories = getCategories();
 	let selectedCategory = $state(categories[0] ?? 'Movement');
@@ -22,12 +21,7 @@
 <div class="prompt-assist-panel">
 	<div class="assist-header">
 		<h4>Prompt Suggestions</h4>
-		<button
-			onclick={onClose}
-			class="close-btn"
-			aria-label="Close prompt assist"
-			title="Close"
-		>
+		<button onclick={onClose} class="close-btn" aria-label="Close prompt assist" title="Close">
 			✕
 		</button>
 	</div>

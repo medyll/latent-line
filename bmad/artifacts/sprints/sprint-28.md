@@ -8,11 +8,13 @@
 ## Stories
 
 ### S28-01: REST API Server Foundation (3 pts)
+
 **Status:** Ready for development
 
 Implement SvelteKit API routes to expose export and import endpoints.
 
 **Acceptance Criteria:**
+
 - `src/routes/api/export/+server.ts` — POST endpoint for exports
   - Query params: `format=yaml|jsonld|csv|storyboard|framepack`
   - Request body: `{ model, options }`
@@ -28,12 +30,14 @@ Implement SvelteKit API routes to expose export and import endpoints.
 - 5 unit tests covering happy path + error cases
 
 **Technical Notes:**
+
 - Use SvelteKit's `+server.ts` pattern (GET/POST handlers)
 - Validate all inputs against modelSchema
 - Return JSON for client-side consumption
 - Error responses: `{ error: string, details?: unknown, code: string }`
 
 **Definition of Done:**
+
 - [ ] Both endpoints fully functional
 - [ ] Comprehensive error handling
 - [ ] Unit tests passing
@@ -43,11 +47,13 @@ Implement SvelteKit API routes to expose export and import endpoints.
 ---
 
 ### S28-02: ExportModal UI Integration (4 pts)
+
 **Status:** Ready for development
 
 Add export buttons to ExportModal, integrate with API server.
 
 **Acceptance Criteria:**
+
 - [ ] Add buttons to `ExportModal.svelte`:
   - "Download YAML" button
   - "Download JSON-LD" button
@@ -62,6 +68,7 @@ Add export buttons to ExportModal, integrate with API server.
 - [ ] 8 unit + 2 E2E tests
 
 **UI Mockup:**
+
 ```
 ┌─ Export Timeline ──────────────────────────┐
 │ Format:  ◉ YAML  ○ JSON-LD  ○ CSV  ○ ... │
@@ -78,12 +85,14 @@ Add export buttons to ExportModal, integrate with API server.
 ```
 
 **Technical Notes:**
+
 - Use native Fetch API to call `/api/export`
 - Blob handling for file downloads (use `URL.createObjectURL`)
 - Clipboard API: `navigator.clipboard.writeText()`
 - Svelte 5 $state for loading/error handling
 
 **Definition of Done:**
+
 - [ ] All buttons working (download + copy)
 - [ ] Loading states visible
 - [ ] Success/error messages clear
@@ -94,11 +103,13 @@ Add export buttons to ExportModal, integrate with API server.
 ---
 
 ### S28-03: Import Modal & File Upload (3 pts)
+
 **Status:** Ready for development
 
 Implement import dialog to load YAML/JSON-LD timelines.
 
 **Acceptance Criteria:**
+
 - [ ] New `ImportModal.svelte` component
 - [ ] File upload input (accept .yaml, .json, .jsonld)
 - [ ] Drag-and-drop zone for file upload
@@ -111,6 +122,7 @@ Implement import dialog to load YAML/JSON-LD timelines.
 - [ ] 6 unit tests (file parsing, validation, error handling)
 
 **UI Mockup:**
+
 ```
 ┌─ Import Timeline ──────────────────────────┐
 │ Drag & drop your YAML/JSON-LD file here   │
@@ -129,6 +141,7 @@ Implement import dialog to load YAML/JSON-LD timelines.
 ```
 
 **Technical Notes:**
+
 - FileReader API for file upload
 - POST to `/api/import` with file content
 - Model validation: use existing modelSchema
@@ -136,6 +149,7 @@ Implement import dialog to load YAML/JSON-LD timelines.
 - Offer "merge" vs "replace" option (future feature)
 
 **Definition of Done:**
+
 - [ ] File upload working (drag + click)
 - [ ] Format auto-detection working
 - [ ] Validation and error messages clear
@@ -145,11 +159,13 @@ Implement import dialog to load YAML/JSON-LD timelines.
 ---
 
 ### S28-04: API Documentation & Examples (2 pts)
+
 **Status:** Ready for development
 
 Document export/import API for external integrations.
 
 **Acceptance Criteria:**
+
 - [ ] OpenAPI/Swagger spec for both endpoints (JSON)
 - [ ] README section: "Using the Export API"
   - curl examples for all formats
@@ -162,12 +178,14 @@ Document export/import API for external integrations.
 - [ ] Known limitations documented (file size limits, rate limits)
 
 **Artifact Outputs:**
+
 - `bmad/artifacts/api-spec-openapi.json` (Swagger/OpenAPI)
 - `README` section: "API Reference"
 - `examples/export-client.js` (example client)
 - `examples/export-client.py` (example client)
 
 **Definition of Done:**
+
 - [ ] API spec complete and valid
 - [ ] Examples tested and working
 - [ ] Documentation clear for external developers

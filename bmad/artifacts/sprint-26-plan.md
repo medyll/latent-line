@@ -18,9 +18,11 @@ Complete S24-04 UI integration (9 pts) and add performance optimizations or feat
 ### Must-Have (9 pts)
 
 #### S24-04-UI: ComfyUI Webhook UI (9 pts) — PRIORITY
+
 **Description:** Complete the UI integration for the ComfyUI backend foundation built in S24-04.
 
 **Features:**
+
 - Settings panel for ComfyUI server configuration (host, port, API key)
 - Generate buttons + progress indicators for per-event generation
 - Image preview gallery for generated outputs
@@ -28,6 +30,7 @@ Complete S24-04 UI integration (9 pts) and add performance optimizations or feat
 - IndexedDB storage for generated images
 
 **Acceptance Criteria:**
+
 - [x] Settings modal for server configuration
 - [x] Generate button in PropertiesPanel when event selected
 - [x] Progress bar showing generation % complete
@@ -47,7 +50,9 @@ Will be verified during implementation.
 ### Should-Have (3-5 pts)
 
 #### S26-01: Performance Optimization (3 pts) — OPTIONAL
+
 **Focus Areas:**
+
 1. Virtual scrolling for large timelines (>1000 events)
 2. Debounce localStorage writes
 3. Lazy load presentation mode route
@@ -57,7 +62,9 @@ Will be verified during implementation.
 ---
 
 #### S26-02: UI Polish (2 pts) — OPTIONAL
+
 **Focus Areas:**
+
 1. Animation transitions (fade, slide)
 2. Empty states for all panels
 3. Loading spinners for async operations
@@ -66,12 +73,12 @@ Will be verified during implementation.
 
 ## Estimation
 
-| Story | Points | Effort | Risk |
-|-------|--------|--------|------|
-| S24-04-UI | 9 | High | Medium |
-| S26-01 (perf) | 3 | Medium | Low |
-| S26-02 (polish) | 2 | Low | Low |
-| **Total** | **14** | — | — |
+| Story           | Points | Effort | Risk   |
+| --------------- | ------ | ------ | ------ |
+| S24-04-UI       | 9      | High   | Medium |
+| S26-01 (perf)   | 3      | Medium | Low    |
+| S26-02 (polish) | 2      | Low    | Low    |
+| **Total**       | **14** | —      | —      |
 
 **Recommendation:** Commit to S24-04-UI (9 pts). Add S26-01 if time permits.
 
@@ -82,23 +89,28 @@ Will be verified during implementation.
 ### S24-04-UI: ComfyUI Webhook Integration
 
 **New Components:**
+
 1. `ComfyUISettings.svelte` — Server configuration modal
 2. `GenerationPanel.svelte` — Generate buttons + progress
 3. `ImageGallery.svelte` — Preview carousel
 
 **New Utilities:**
+
 1. `comfyui-client.ts` — HTTP client for ComfyUI API
 2. `generation-indexeddb.ts` — IndexedDB wrapper for images
 3. `webhook-handler.ts` — Incoming webhook listener
 
 **New Routes:**
+
 1. `src/routes/webhook/comfyui/+server.ts` — POST endpoint for webhooks
 
 **Modified Components:**
+
 1. `PropertiesPanel.svelte` — Add Generate button
 2. `SystemFooter.svelte` — Add Settings button
 
 **Data Flow:**
+
 ```
 User clicks "Generate"
   → Selection: event + model params
@@ -110,6 +122,7 @@ User clicks "Generate"
 ```
 
 **Webhook Flow:**
+
 ```
 ComfyUI job completes
   → POST /webhook/comfyui with image data
@@ -123,18 +136,19 @@ ComfyUI job completes
 
 ## Risk & Mitigation
 
-| Risk | Probability | Mitigation |
-|------|-------------|-----------|
-| ComfyUI API changes | Low | Document API version, add version check |
-| Webhook timing issues | Medium | Implement exponential backoff + polling fallback |
-| Large image storage | Medium | Compress images before IndexedDB (80% reduction) |
-| CORS issues | Low | Configure ComfyUI CORS headers in docs |
+| Risk                  | Probability | Mitigation                                       |
+| --------------------- | ----------- | ------------------------------------------------ |
+| ComfyUI API changes   | Low         | Document API version, add version check          |
+| Webhook timing issues | Medium      | Implement exponential backoff + polling fallback |
+| Large image storage   | Medium      | Compress images before IndexedDB (80% reduction) |
+| CORS issues           | Low         | Configure ComfyUI CORS headers in docs           |
 
 ---
 
 ## Test Strategy
 
 ### Unit Tests (90% coverage target)
+
 - ComfyUI client HTTP methods
 - Generation store state mutations
 - IndexedDB image operations
@@ -142,11 +156,13 @@ ComfyUI job completes
 - Error handling + retries
 
 ### Integration Tests (5-10 smoke tests)
+
 - End-to-end generation flow (with mock ComfyUI)
 - Settings persistence
 - Webhook reception + image storage
 
 ### Manual QA
+
 - Real ComfyUI instance (if available)
 - Error scenarios (server down, API errors)
 - Large batch generation (10+ concurrent)
@@ -156,6 +172,7 @@ ComfyUI job completes
 ## Implementation Phases
 
 ### Phase 1: Backend (2-3 days)
+
 - [ ] Implement ComfyUI HTTP client
 - [ ] Build generation store (Svelte 5 runes)
 - [ ] Create webhook handler route
@@ -163,6 +180,7 @@ ComfyUI job completes
 - [ ] Unit tests (25+ tests)
 
 ### Phase 2: Frontend (2-3 days)
+
 - [ ] ComfyUISettings modal component
 - [ ] GenerationPanel with progress
 - [ ] ImageGallery carousel
@@ -170,12 +188,14 @@ ComfyUI job completes
 - [ ] Error states + loading states
 
 ### Phase 3: Polish (1 day)
+
 - [ ] Component styling + animations
 - [ ] Accessibility (keyboard nav, aria labels)
 - [ ] Documentation
 - [ ] Final testing + QA sign-off
 
 ### Phase 4: Release (1 day)
+
 - [ ] Code audit
 - [ ] Final tests (430+ passing)
 - [ ] Create v0.4.0 release notes
@@ -186,6 +206,7 @@ ComfyUI job completes
 ## Files to Create/Modify
 
 ### New Files (8)
+
 ```
 src/lib/services/comfyui-client.ts           (+180 lines)
 src/lib/services/comfyui-client.test.ts      (+200 lines)
@@ -198,6 +219,7 @@ src/lib/utils/webhook-handler.ts             (+120 lines)
 ```
 
 ### Modified Files (3)
+
 ```
 src/lib/components/workspace/properties/PropertiesPanel.svelte
 src/lib/components/workspace/SystemFooter.svelte
@@ -208,26 +230,26 @@ src/lib/stores/generation.svelte.ts
 
 ## Success Criteria
 
-| Criterion | Metric | Status |
-|-----------|--------|--------|
-| S24-04-UI complete | 9 pts delivered | ⏳ |
-| All tests pass | 430+ passing | ⏳ |
-| Code audit approved | No critical issues | ⏳ |
-| Bundle size | <50 kB gzipped | ⏳ |
-| E2E smoke tests | 3+ passing | ⏳ |
-| Documentation | Complete | ⏳ |
+| Criterion           | Metric             | Status |
+| ------------------- | ------------------ | ------ |
+| S24-04-UI complete  | 9 pts delivered    | ⏳     |
+| All tests pass      | 430+ passing       | ⏳     |
+| Code audit approved | No critical issues | ⏳     |
+| Bundle size         | <50 kB gzipped     | ⏳     |
+| E2E smoke tests     | 3+ passing         | ⏳     |
+| Documentation       | Complete           | ⏳     |
 
 ---
 
 ## Timeline Estimate
 
-| Phase | Estimate | Actual |
-|-------|----------|--------|
-| Phase 1 (Backend) | 2-3 days | ⏳ |
-| Phase 2 (Frontend) | 2-3 days | ⏳ |
-| Phase 3 (Polish) | 1 day | ⏳ |
-| Phase 4 (Release) | 1 day | ⏳ |
-| **Total** | **6-8 days** | **⏳** |
+| Phase              | Estimate     | Actual |
+| ------------------ | ------------ | ------ |
+| Phase 1 (Backend)  | 2-3 days     | ⏳     |
+| Phase 2 (Frontend) | 2-3 days     | ⏳     |
+| Phase 3 (Polish)   | 1 day        | ⏳     |
+| Phase 4 (Release)  | 1 day        | ⏳     |
+| **Total**          | **6-8 days** | **⏳** |
 
 **Recommended:** 1 week (5 working days)
 

@@ -23,27 +23,35 @@
 ### AI Rendering Features (Sprint 24)
 
 #### S24-01: Prompt Builder (8 pts)
+
 Build AI rendering prompts with contextual vocabulary suggestions.
+
 - 200+ offline vocabulary terms (4 categories: cinematography, effects, mood, composition)
 - PromptAssist.svelte component integrated into PropertiesPanel
 - Click-to-append workflow for quick prompt building
 - No external API calls required
 
 #### S24-02: Deforum Export (5 pts)
+
 Export timelines as Deforum JSON format for AI video generation.
+
 - Full JSON structure: prompts, negative_prompts, keyframes, interpolation settings
 - SMPTE timecode conversion for frame-accurate timing
 - Morphing interpolation for smooth transitions
 - Compatible with Deforum Stable Diffusion pipelines
 
 #### S24-03: FramePack & CogVideoX Export (5 pts)
+
 Multi-format export for video AI models.
+
 - **FramePack (JSONL):** Scene-by-scene export with full metadata (camera, lighting, effects, characters)
 - **CogVideoX (Script):** Human-readable format with metadata sections for LLM integration
 - Both formats preserve visual and narrative context
 
 #### S24-04: ComfyUI Backend Foundation (4 pts)
+
 Abstract service layer for AI image/video generation.
+
 - Service abstraction for ComfyUI and A1111 compatibility
 - Svelte 5 reactive generation store with derived stores
 - Per-event generation progress tracking
@@ -52,21 +60,27 @@ Abstract service layer for AI image/video generation.
 ### Production Features (Sprint 25)
 
 #### S25-01: EDL Export (8 pts)
+
 Professional post-production interchange format.
+
 - CMX 3600 standard format (DaVinci Resolve, Premiere Pro, Final Cut Pro compatible)
 - Frame-accurate SMPTE timecode conversion
 - Timeline validation (overlap detection, gap checking)
 - Event metadata preserved as comments (character, action, mood, notes)
 
 #### S25-02: Global Search (3 pts)
+
 Full-project search across timeline and assets.
+
 - Multi-field search: events, characters, environments, audio
 - Search across: action, speech, mood, character, notes, labels
 - Case-insensitive grouping with highlight support
 - Enables navigation in large projects
 
 #### S25-03: Presentation Mode (5 pts)
+
 Fullscreen review and playback mode.
+
 - Dedicated `/present` route with fullscreen display
 - Keyboard navigation (← → for events, P for play, F for fullscreen, ESC to exit)
 - Per-event duration with auto-playback
@@ -78,24 +92,28 @@ Fullscreen review and playback mode.
 ## Technical Improvements
 
 ### Code Quality
+
 - ✅ 430 unit tests (all passing)
 - ✅ Full TypeScript type safety
 - ✅ Modular architecture (pure functions + components)
 - ✅ Comprehensive test coverage for new features
 
 ### Performance
+
 - Bundle size impact: +15 kB (gzipped)
 - No blocking dependencies added
 - Optimized animation frame loops
 - Efficient search algorithm (O(n) linear scan, acceptable for typical projects)
 
 ### Accessibility
+
 - Keyboard-only navigation supported
 - WCAG 2.1 AA compliance
 - Proper focus management
 - Color contrast verified
 
 ### Security
+
 - Server-side model validation
 - Safe input decoding (base64 with error handling)
 - No arbitrary code execution
@@ -105,28 +123,30 @@ Fullscreen review and playback mode.
 
 ## Stats
 
-| Metric | Value |
-|--------|-------|
-| Files Created | 32 |
-| Files Modified | 8 |
-| Lines of Code | ~3,500 |
-| Test Assertions | 430 |
-| Test Files | 39 |
-| Components | 15+ |
-| Utilities | 20+ |
-| Routes | 3 |
+| Metric          | Value  |
+| --------------- | ------ |
+| Files Created   | 32     |
+| Files Modified  | 8      |
+| Lines of Code   | ~3,500 |
+| Test Assertions | 430    |
+| Test Files      | 39     |
+| Components      | 15+    |
+| Utilities       | 20+    |
+| Routes          | 3      |
 
 ---
 
 ## Installation & Upgrade
 
 ### For New Users
+
 1. Clone repository: `git clone <repo>`
 2. Install dependencies: `npm install`
 3. Start dev server: `npm run dev`
 4. Open http://localhost:5173
 
 ### For Existing Users (v0.2.x)
+
 ```bash
 git pull origin main
 npm install
@@ -149,6 +169,7 @@ No data migration needed — all changes are backward compatible.
 ## Testing & QA
 
 ### Unit Test Coverage
+
 - ✅ EDL export: 20 tests (timecode, validation, format)
 - ✅ Search: 15 tests (multi-field, grouping, highlighting)
 - ✅ Presentation: 31 tests (navigation, playback, duration)
@@ -156,6 +177,7 @@ No data migration needed — all changes are backward compatible.
 - ✅ Export formats: 25+ tests (JSON, script format)
 
 ### Integration Testing
+
 - ✅ End-to-end asset CRUD
 - ✅ Timeline event creation and editing
 - ✅ Export workflows
@@ -163,6 +185,7 @@ No data migration needed — all changes are backward compatible.
 - ✅ Presentation mode keyboard navigation
 
 ### Manual QA Sign-Off
+
 - ✅ EDL export tested with DaVinci Resolve (compatible)
 - ✅ Global search verified with >100 events
 - ✅ Presentation mode tested on desktop/mobile
@@ -174,19 +197,23 @@ No data migration needed — all changes are backward compatible.
 ## Upgrading from v0.2.0
 
 ### What Changed
+
 - New export formats (EDL, FramePack, CogVideoX, Deforum JSON)
 - New search system (global search modal)
 - New presentation mode (fullscreen review)
 - ComfyUI backend service foundation
 
 ### No Breaking Changes
+
 - Existing project files remain compatible
 - All previous export formats still work
 - UI updates are non-invasive (new buttons, no removal)
 - localStorage persistence unchanged
 
 ### Migration Guide
+
 If using older project exports:
+
 1. Open project in v0.3.0
 2. Re-export in new formats if desired
 3. No manual data conversion needed
@@ -205,6 +232,7 @@ If using older project exports:
 ## Next Release (v0.4.0)
 
 Planned for next sprint:
+
 - ComfyUI UI integration (webhook webhook setup, generation UI)
 - S24-04 UI completion (9 pts)
 - Additional features based on user feedback
@@ -214,16 +242,16 @@ Planned for next sprint:
 
 ## Release Checklist
 
-| Item | Status | Date |
-|------|--------|------|
-| Code complete | ✅ | 2026-03-25 |
-| Tests passing (430/430) | ✅ | 2026-03-25 |
-| Code audit approved | ✅ | 2026-03-25 |
-| Documentation complete | ✅ | 2026-03-25 |
-| Release notes written | ✅ | 2026-03-25 |
-| Tagged as v0.3.0 | ⏳ | — |
-| Merged to main | ⏳ | — |
-| Announcement sent | ⏳ | — |
+| Item                    | Status | Date       |
+| ----------------------- | ------ | ---------- |
+| Code complete           | ✅     | 2026-03-25 |
+| Tests passing (430/430) | ✅     | 2026-03-25 |
+| Code audit approved     | ✅     | 2026-03-25 |
+| Documentation complete  | ✅     | 2026-03-25 |
+| Release notes written   | ✅     | 2026-03-25 |
+| Tagged as v0.3.0        | ⏳     | —          |
+| Merged to main          | ⏳     | —          |
+| Announcement sent       | ⏳     | —          |
 
 ---
 

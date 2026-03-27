@@ -15,6 +15,7 @@ Enhanced the Deforum export function to generate fully-compatible JSON for Defor
 ### Updated: `src/lib/utils/export-prompts.ts`
 
 **Added:**
+
 - `DeforumOptions` interface with optional fields:
   - `negative_prompt?: string` — default: `'blur, watermark, low quality, distorted'`
   - `seed?: number` — from model.config
@@ -22,20 +23,21 @@ Enhanced the Deforum export function to generate fully-compatible JSON for Defor
   - `cfg_scale?: number` — classifier-free guidance scale
 
 **Enhanced `exportToDeforumFormat()`:**
+
 - Generates full Deforum JSON structure:
   ```json
   {
-    "prompts": {
-      "0": "prompt...",
-      "24": "prompt..."
-    },
-    "negative_prompts": {
-      "0": "blur, watermark, low quality, distorted",
-      "24": "..."
-    },
-    "seed": 42,
-    "steps": 30,
-    "cfg_scale": 7.5
+  	"prompts": {
+  		"0": "prompt...",
+  		"24": "prompt..."
+  	},
+  	"negative_prompts": {
+  		"0": "blur, watermark, low quality, distorted",
+  		"24": "..."
+  	},
+  	"seed": 42,
+  	"steps": 30,
+  	"cfg_scale": 7.5
   }
   ```
 - **Frame 0 validation:** Ensures frame 0 exists (required by Deforum)
@@ -45,6 +47,7 @@ Enhanced the Deforum export function to generate fully-compatible JSON for Defor
 ### Updated: `src/lib/utils/export-prompts.test.ts`
 
 **Added 3 new tests:**
+
 1. Validates full JSON structure with prompts and negative_prompts
 2. Verifies optional seed and steps parameters are included
 3. Confirms frame 0 auto-creation when timeline doesn't start at 0
@@ -52,19 +55,20 @@ Enhanced the Deforum export function to generate fully-compatible JSON for Defor
 ## Output Example
 
 For a timeline with events at frames 0 and 24:
+
 ```json
 {
-  "prompts": {
-    "0": "Alice running, anxious mood, enchanted forest, dusk, bloom",
-    "24": "Alice resting, serene mood"
-  },
-  "negative_prompts": {
-    "0": "blur, watermark, low quality, distorted",
-    "24": "blur, watermark, low quality, distorted"
-  },
-  "seed": 42,
-  "steps": 30,
-  "cfg_scale": 7.5
+	"prompts": {
+		"0": "Alice running, anxious mood, enchanted forest, dusk, bloom",
+		"24": "Alice resting, serene mood"
+	},
+	"negative_prompts": {
+		"0": "blur, watermark, low quality, distorted",
+		"24": "blur, watermark, low quality, distorted"
+	},
+	"seed": 42,
+	"steps": 30,
+	"cfg_scale": 7.5
 }
 ```
 

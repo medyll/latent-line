@@ -114,9 +114,7 @@ test.describe('Performance: Large Dataset Handling', () => {
 		}
 
 		// Verify scrolling within panel works (if content overflows)
-		const contentBox = await comfyPanel
-			.locator('[data-testid="comfy-content"]')
-			.boundingBox();
+		const contentBox = await comfyPanel.locator('[data-testid="comfy-content"]').boundingBox();
 		const shouldBeScrollable = contentBox && panelBox && contentBox.height > panelBox.height;
 
 		if (shouldBeScrollable) {
@@ -143,9 +141,7 @@ test.describe('Performance: Large Dataset Handling', () => {
 
 		// Verify theme changed
 		const htmlElement = page.locator('html');
-		const colorScheme = await htmlElement.evaluate(
-			(el) => window.getComputedStyle(el).colorScheme
-		);
+		const colorScheme = await htmlElement.evaluate((el) => window.getComputedStyle(el).colorScheme);
 		expect(['light', 'dark', 'light dark', 'dark light']).toContain(colorScheme);
 
 		// Verify localStorage updated

@@ -5,9 +5,8 @@ import { z } from 'zod';
 
 // Define enums first
 const moodEnum = z.enum(['joyful', 'melancholic', 'anxious', 'serene', 'curious']);
- 
+
 const _lightingTypeEnum = z.enum(['dusk', 'daylight', 'studio', 'tungsten', 'ambient']);
- 
 
 const positionSchema = z.object({ x: z.number(), y: z.number(), scale: z.number().optional() });
 const speechSchema = z.object({

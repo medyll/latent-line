@@ -18,11 +18,13 @@ v0.4.0 release was clean. No data loss or crash bugs detected. Minor accessibili
 **Status:** ✅ Identified, fixes queued
 
 **Files Affected:**
+
 - `src/lib/components/workspace/assets/AssetManager.svelte:326` — Name input label
 - `src/lib/components/workspace/assets/AssetManager.svelte:338` — Voice ID label
 - `src/lib/components/workspace/assets/AssetManager.svelte:478` — Prompt textarea
 
 **Fix Applied:**
+
 ```svelte
 <!-- Before -->
 <label>Name</label>
@@ -43,6 +45,7 @@ v0.4.0 release was clean. No data loss or crash bugs detected. Minor accessibili
 **Status:** ✅ Investigated, no action needed
 
 Unknown at-rule: `@function` (CSS Spec draft level 4)
+
 - Lightning CSS minifier doesn't recognize experimental CSS functions
 - Browser fallback works correctly (uses `var()` syntax)
 - No impact on runtime or display
@@ -53,21 +56,25 @@ Unknown at-rule: `@function` (CSS Spec draft level 4)
 ## Known Limitations (Documented)
 
 ### 1. ComfyUI Settings Panel Height
+
 **Limitation:** On very small viewports (mobile), ComfyUI settings panel may exceed viewport height.
 **Workaround:** Use landscape orientation or reduce font size in browser settings.
 **Planned Fix:** Sprint 27 complete with max-height constraint + internal scrolling.
 
 ### 2. Theme Flash on Page Load
+
 **Limitation:** Dark mode users may see white flash on first load if localStorage is slow.
 **Workaround:** Apply theme to `<html>` tag in `+layout.svelte` before DOM parse.
 **Status:** ✅ Fixed in Sprint 26. No flash observed in v0.4.0.
 
 ### 3. Large Dataset Performance (100+ Events)
+
 **Limitation:** Timeline with 500+ events may show scroll jank on older hardware.
 **Workaround:** Split into multiple timelines or use time-range filters.
 **Planned Fix:** Virtual scrolling for temporal sequencer (future sprint).
 
 ### 4. ComfyUI Webhook Timeout
+
 **Limitation:** Slow ComfyUI backend (>10s) may trigger browser timeout on generate requests.
 **Workaround:** Increase timeout in ComfyUI settings or check backend health first.
 **Status:** Expected limitation; documented in UI tooltips.
@@ -77,12 +84,14 @@ Unknown at-rule: `@function` (CSS Spec draft level 4)
 ## Post-Release Monitoring
 
 ### Test Coverage
+
 - ✅ 428 unit tests passing
 - ✅ 84.39% audit coverage
 - ⏳ E2E perf tests added (performance.spec.ts) — awaiting validation
 - ⏳ Accessibility tests (a11y.spec.ts) — queued for v0.4.1
 
 ### Production Readiness Checklist
+
 - [x] Zero-downtime deployment possible (no schema breaking changes)
 - [x] Rollback plan: version pin at 0.3.0 if critical issues emerge
 - [x] Error tracking: Sentry integration available if needed
@@ -90,6 +99,7 @@ Unknown at-rule: `@function` (CSS Spec draft level 4)
 - [x] Security: No new dependencies, Zod validation on all model inputs
 
 ### Next Actions
+
 1. **Monitor real-world usage** — collect error reports via Sentry or analytics
 2. **Accessibility fixes** — apply form label fixes in v0.4.1 patch
 3. **E2E validation** — run perf tests in CI/CD on every build
@@ -102,6 +112,7 @@ Unknown at-rule: `@function` (CSS Spec draft level 4)
 If issues are reported post-launch, use these templates:
 
 ### Bug Report Template
+
 ```
 **Version:** 0.4.0
 **Steps to Reproduce:**
@@ -119,6 +130,7 @@ If issues are reported post-launch, use these templates:
 ```
 
 ### ComfyUI Integration Troubleshooting
+
 ```
 **Symptom:** "Generate" button not responding
 
@@ -141,12 +153,14 @@ If issues are reported post-launch, use these templates:
 **Risk Level:** LOW ✅
 
 **Why:**
+
 - No database migrations or schema changes in v0.4.0
 - All changes are backward-compatible
 - ComfyUI integration is opt-in (disabled by default)
 - Fallback to v0.3.0 is trivial
 
 **Confidence:** HIGH
+
 - Comprehensive test coverage (428 tests)
 - Manual QA on ComfyUI workflows
 - Accessibility review (minor warnings only)

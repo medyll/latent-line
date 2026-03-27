@@ -197,10 +197,7 @@ export const PROMPT_VOCABULARY: PromptVocabulary = {
  * Get suggestions filtered by relevance.
  * Supports filtering by multiple parameters (character mood, environment, etc.).
  */
-export function getSuggestions(
-	category: string,
-	searchTerm?: string
-): string[] {
+export function getSuggestions(category: string, searchTerm?: string): string[] {
 	const suggestions = PROMPT_VOCABULARY[category] ?? [];
 
 	if (!searchTerm) return suggestions;

@@ -6,18 +6,19 @@
 
 ## Test Coverage
 
-| Metric | Result | Status |
-|--------|--------|--------|
-| Unit Tests | 354/354 passed | ✅ |
-| Test Files | 35 suites | ✅ |
-| New Tests | 13 added (S24-02/03) | ✅ |
-| Build Time (SSR) | 6.18s | ✅ |
-| Build Time (Prod) | 17.15s | ✅ |
-| Build Status | Clean, no errors | ✅ |
+| Metric            | Result               | Status |
+| ----------------- | -------------------- | ------ |
+| Unit Tests        | 354/354 passed       | ✅     |
+| Test Files        | 35 suites            | ✅     |
+| New Tests         | 13 added (S24-02/03) | ✅     |
+| Build Time (SSR)  | 6.18s                | ✅     |
+| Build Time (Prod) | 17.15s               | ✅     |
+| Build Status      | Clean, no errors     | ✅     |
 
 ## Code Quality Checks
 
 ### S24-01: Prompt Builder
+
 - ✅ Component structure follows SvelteKit best practices
 - ✅ Vocabulary data properly typed and exported
 - ✅ PromptAssist.svelte uses Svelte 5 runes correctly ($state, $derived, $props)
@@ -25,10 +26,12 @@
 - ✅ No accessibility issues detected
 
 **Minor observations:**
+
 - Vocabulary could be user-editable in Settings (future enhancement)
 - Assist panel positioning uses absolute; works well for current layout
 
 ### S24-02: Deforum Export
+
 - ✅ Enhanced existing function without breaking changes
 - ✅ JSON generation uses proper escaping (backslash quotes)
 - ✅ Frame 0 validation handles edge case correctly
@@ -36,11 +39,13 @@
 - ✅ All new tests cover critical paths
 
 **Code quality:**
+
 - Function signature extended with optional DeforumOptions interface
 - Backward compatible (options parameter optional)
 - Uses JSON.stringify for proper formatting
 
 ### S24-03: FramePack & CogVideoX
+
 - ✅ Separate module design maintains modularity
 - ✅ FramePack JSONL format proper (one object per line)
 - ✅ CogVideoX script format human-readable with comments
@@ -48,12 +53,14 @@
 - ✅ Format versioning implemented (FORMAT_VERSION constant)
 
 **Code quality:**
+
 - FramePack uses optional property spreading (cleaner JSON)
 - CogVideoX camera motion description parsing correct
 - Test coverage thorough (13 new tests, all passing)
 - Documentation inline with format specifications
 
 ### Build Integration
+
 - ✅ All TypeScript compiles without errors
 - ✅ No unused imports or variables
 - ✅ Svelte components properly linted
@@ -62,28 +69,31 @@
 ## Integration with Existing Codebase
 
 ### Model Types
+
 - ✅ No modifications to model-types.ts
 - ✅ Uses existing Actor.action field (already in schema)
 - ✅ Full compatibility with model structure
 
 ### Export Utils
+
 - ✅ Reuses buildPrompt() utility correctly
 - ✅ Maintains consistent interface across exports
 - ✅ All new functions properly typed
 
 ### Component Integration
+
 - ✅ PropertiesPanel changes isolated to Actors section
 - ✅ PromptAssist component properly integrated
 - ✅ No side effects on other panels or features
 
 ## Performance Considerations
 
-| Component | Observation |
-|-----------|-------------|
+| Component           | Observation                             |
+| ------------------- | --------------------------------------- |
 | PromptAssist.svelte | Fast render; suggestion list scrollable |
-| Vocabulary loading | 200 terms constant; instant access |
-| Export functions | Pure functions; no side effects |
-| Interpolation | O(n) where n=frames; acceptable |
+| Vocabulary loading  | 200 terms constant; instant access      |
+| Export functions    | Pure functions; no side effects         |
+| Interpolation       | O(n) where n=frames; acceptable         |
 
 ## Security Review
 

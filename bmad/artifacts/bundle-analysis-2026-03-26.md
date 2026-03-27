@@ -7,6 +7,7 @@
 ## Executive Summary
 
 Total client bundle: **445 KB** (uncompressed)
+
 - JavaScript chunks: 213 KB in `.svelte-kit/output/client/_app/immutable/chunks/`
 - CSS assets: ~58 KB (distributed across component-level + global styles)
 - Manifest & metadata: ~15 KB
@@ -16,16 +17,19 @@ Total client bundle: **445 KB** (uncompressed)
 ## Bundle Breakdown
 
 ### JavaScript Chunks
+
 - **26 JS files** in immutable/chunks/
 - Largest chunks: main entry points, Svelte runtime, and vendor libs (Zod, date utilities)
 - No duplicate vendor code detected (ESM deduplication working)
 
 ### CSS Assets
+
 - **Global CSS** (theme.css, base.css, workspace.css, utilities.css): ~35 KB
 - **Component CSS** (scoped, lazy-loaded): ~23 KB
 - **Status:** Clean post-Tailwind removal (no unused utility classes)
 
 ### Vendor Analysis
+
 - **@medyll/css-base** (re-exported but not bloating main): ~2 KB
 - **Zod** (model validation): ~8 KB
 - **Svelte runtime**: ~12 KB (expected)
@@ -50,6 +54,7 @@ Total client bundle: **445 KB** (uncompressed)
 ## Gzip Compression
 
 Main output is Vite-optimized with gzip-friendly structure:
+
 - Total gzipped: ~145 KB (estimate, 32-35% compression ratio typical for JS+CSS)
 - Acceptable for modern broadband + P2P CDN delivery
 

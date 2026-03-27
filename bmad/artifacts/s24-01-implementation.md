@@ -13,6 +13,7 @@ Added offline contextual prompt suggestions for AI rendering workflows. Users ca
 ## Changes Made
 
 ### 1. New File: `src/lib/data/prompt-vocabulary.ts`
+
 - 200+ terms organized into 4 categories:
   - **Movement**: walking, running, dancing, etc. (40 terms)
   - **Emotion**: joyful, melancholic, anxious, etc. (40 terms)
@@ -21,6 +22,7 @@ Added offline contextual prompt suggestions for AI rendering workflows. Users ca
 - Helper functions: `getSuggestions()`, `getCategories()`
 
 ### 2. New File: `src/lib/components/workspace/properties/PromptAssist.svelte`
+
 - Contextual suggestion panel component
 - Features:
   - Category tabs/selector
@@ -30,7 +32,9 @@ Added offline contextual prompt suggestions for AI rendering workflows. Users ca
 - Styling: floating panel with absolute positioning
 
 ### 3. Updated: `src/lib/components/workspace/properties/PropertiesPanel.svelte`
+
 **Added:**
+
 - Import: `PromptAssist` component
 - State variables: `showPromptAssist`, `promptAssistActorIdx`
 - Helper functions:

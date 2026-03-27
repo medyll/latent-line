@@ -8,7 +8,11 @@ function makeTestModel(): Model {
 		assets: {
 			characters: [
 				{ id: 'c1', name: 'Alice', voice_id: 'alice_001', references: [] },
-				{ id: 'c2', name: 'Bob', references: [{ url: 'ref_url', context: 'angry character', weight: 1 }] }
+				{
+					id: 'c2',
+					name: 'Bob',
+					references: [{ url: 'ref_url', context: 'angry character', weight: 1 }]
+				}
 			],
 			environments: {
 				forest: { prompt: 'enchanted forest with tall trees' },

@@ -180,9 +180,7 @@
 
 	<!-- Controls hint -->
 	<div class="controls-hint">
-		<span>
-			← → to navigate • P to play • F for fullscreen • ESC to exit
-		</span>
+		<span> ← → to navigate • P to play • F for fullscreen • ESC to exit </span>
 	</div>
 </div>
 
@@ -303,7 +301,11 @@
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, var(--color-accent, #7c3aed), var(--color-accent-dark, #6d28d9));
+		background: linear-gradient(
+			90deg,
+			var(--color-accent, #7c3aed),
+			var(--color-accent-dark, #6d28d9)
+		);
 		transition: width 50ms linear;
 		box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
 	}

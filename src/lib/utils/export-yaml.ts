@@ -82,10 +82,14 @@ export function exportAsYAML(model: Model): string {
 			if (event.comfyui_settings) {
 				lines.push(`      comfyui_enabled: ${event.comfyui_settings.enabled}`);
 				if (event.comfyui_settings.custom_positive) {
-					lines.push(`      comfyui_positive: "${escapeYAMLString(event.comfyui_settings.custom_positive)}"`);
+					lines.push(
+						`      comfyui_positive: "${escapeYAMLString(event.comfyui_settings.custom_positive)}"`
+					);
 				}
 				if (event.comfyui_settings.custom_negative) {
-					lines.push(`      comfyui_negative: "${escapeYAMLString(event.comfyui_settings.custom_negative)}"`);
+					lines.push(
+						`      comfyui_negative: "${escapeYAMLString(event.comfyui_settings.custom_negative)}"`
+					);
 				}
 			}
 		});

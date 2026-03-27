@@ -12,28 +12,28 @@ export function exportAsJSONLD(model: Model): object {
 	const jsonld: any = {
 		'@context': {
 			'@vocab': 'https://schema.org/',
-			'latent': 'https://latent-line.io/schema/'
+			latent: 'https://latent-line.io/schema/'
 		},
 		'@type': 'CreativeWork',
 		'@id': timelineId,
-		'name': model.config?.title || 'Untitled Timeline',
-		'description': model.config?.description || '',
-		'dateCreated': new Date().toISOString(),
-		'creator': {
+		name: model.config?.title || 'Untitled Timeline',
+		description: model.config?.description || '',
+		dateCreated: new Date().toISOString(),
+		creator: {
 			'@type': 'SoftwareApplication',
-			'name': 'latent-line',
-			'url': 'https://github.com/medyll/latent-line'
+			name: 'latent-line',
+			url: 'https://github.com/medyll/latent-line'
 		},
-		'duration': formatTime(model.timeline?.duration || 10000),
-		'hasPart': [] as any[]
+		duration: formatTime(model.timeline?.duration || 10000),
+		hasPart: [] as any[]
 	};
 
 	// Asset catalog
 	const assetCatalog: any = {
 		'@type': 'Catalog',
 		'@id': `${timelineId}/assets`,
-		'name': 'Timeline Assets',
-		'containsPlace': [] as any[]
+		name: 'Timeline Assets',
+		containsPlace: [] as any[]
 	};
 
 	// Characters
@@ -43,14 +43,14 @@ export function exportAsJSONLD(model: Model): object {
 			assetCatalog.containsPlace.push({
 				'@type': 'Person',
 				'@id': charId,
-				'name': char.name,
-				'identifier': char.id,
+				name: char.name,
+				identifier: char.id,
 				'latent:voiceId': char.voice_id || null,
 				'latent:outfits': char.outfits
 					? Object.entries(char.outfits).map(([key, outfit]) => ({
 							'@type': 'Thing',
-							'name': key,
-							'description': outfit.prompt
+							name: key,
+							description: outfit.prompt
 						}))
 					: []
 			});
@@ -64,8 +64,8 @@ export function exportAsJSONLD(model: Model): object {
 			assetCatalog.containsPlace.push({
 				'@type': 'Place',
 				'@id': envId,
-				'name': id,
-				'description': env.prompt,
+				name: id,
+				description: env.prompt,
 				'latent:referenceImage': env.ref || null
 			});
 		});
@@ -82,13 +82,13 @@ export function exportAsJSONLD(model: Model): object {
 			const eventPart: any = {
 				'@type': 'Action',
 				'@id': eventId,
-				'name': event.label,
-				'description': event.description || '',
-				'startTime': formatTime(event.time),
-				'result': {
+				name: event.label,
+				description: event.description || '',
+				startTime: formatTime(event.time),
+				result: {
 					'@type': 'MediaObject',
-					'name': `Frame ${event.time}`,
-					'duration': `PT${((event.duration || 200) / 1000).toFixed(1)}S`
+					name: `Frame ${event.time}`,
+					duration: `PT${((event.duration || 200) / 1000).toFixed(1)}S`
 				}
 			};
 
@@ -97,7 +97,7 @@ export function exportAsJSONLD(model: Model): object {
 				eventPart.object = event.assets.map((assetRef) => ({
 					'@type': 'CreativeWork',
 					'@id': assetRef.asset_id,
-					'name': assetRef.asset_id,
+					name: assetRef.asset_id,
 					'latent:variant': assetRef.variant || null
 				}));
 			}

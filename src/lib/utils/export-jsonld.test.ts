@@ -107,11 +107,11 @@ describe('export-jsonld', () => {
 		expect(ntriples).toContain('> <');
 		expect(ntriples).toContain('>');
 		// N-Triples format: each line ends with " ."
-		expect(ntriples.split('\n').some(line => line.endsWith(' .'))).toBe(true);
+		expect(ntriples.split('\n').some((line) => line.endsWith(' .'))).toBe(true);
 		// Should be valid RDF triple format
-		const lines = ntriples.split('\n').filter(l => l.trim());
+		const lines = ntriples.split('\n').filter((l) => l.trim());
 		expect(lines.length).toBeGreaterThan(0);
-		lines.forEach(line => {
+		lines.forEach((line) => {
 			expect(line).toMatch(/<.*?> <.*?> .*? \.$/);
 		});
 	});

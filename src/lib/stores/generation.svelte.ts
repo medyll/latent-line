@@ -93,35 +93,29 @@ export const generation = createGenerationStore();
 /**
  * Derived store: check if any event is currently generating
  */
-export const isGenerating = derived(
-	{ subscribe: generation.subscribe },
-	(state) => {
-		for (const entry of state.values()) {
-			if (entry.status === 'queued' || entry.status === 'generating') {
-				return true;
-			}
+export const isGenerating = derived({ subscribe: generation.subscribe }, (state) => {
+	for (const entry of state.values()) {
+		if (entry.status === 'queued' || entry.status === 'generating') {
+			return true;
 		}
-		return false;
 	}
-);
+	return false;
+});
 
 /**
  * Derived store: count completed generations
  */
-export const generationStats = derived(
-	{ subscribe: generation.subscribe },
-	(state) => {
-		let total = state.size;
-		let done = 0;
-		let error = 0;
-		let generating = 0;
+export const generationStats = derived({ subscribe: generation.subscribe }, (state) => {
+	let total = state.size;
+	let done = 0;
+	let error = 0;
+	let generating = 0;
 
-		for (const entry of state.values()) {
-			if (entry.status === 'done') done++;
-			if (entry.status === 'error') error++;
-			if (entry.status === 'queued' || entry.status === 'generating') generating++;
-		}
-
-		return { total, done, error, generating };
+	for (const entry of state.values()) {
+		if (entry.status === 'done') done++;
+		if (entry.status === 'error') error++;
+		if (entry.status === 'queued' || entry.status === 'generating') generating++;
 	}
-);
+
+	return { total, done, error, generating };
+});

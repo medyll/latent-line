@@ -151,9 +151,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
 		const validated = modelSchema.safeParse(model);
 		if (!validated.success) {
 			// Return validation errors but still provide partial model if possible
-			const errorMessages = validated.error.errors.map(
-				(e) => `${e.path.join('.')}: ${e.message}`
-			);
+			const errorMessages = validated.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
 
 			return json(
 				{

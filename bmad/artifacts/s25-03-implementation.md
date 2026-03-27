@@ -19,6 +19,7 @@ Fullscreen, keyboard-navigable presentation mode for reviewing timelines. Core f
 ## Files Created (5)
 
 ### Utilities
+
 1. **`src/lib/utils/presentation.ts`** (102 lines)
    - Duration calculation from event frames (with fps-aware conversion)
    - Keyboard event handler for navigation (arrows, P, F, ESC)
@@ -34,6 +35,7 @@ Fullscreen, keyboard-navigable presentation mode for reviewing timelines. Core f
    - URL generation/parsing tests
 
 ### Components
+
 3. **`src/lib/components/PresentationView.svelte`** (276 lines)
    - Fullscreen presentation UI
    - Real-time playback with progress bar
@@ -46,6 +48,7 @@ Fullscreen, keyboard-navigable presentation mode for reviewing timelines. Core f
    - Focus management and accessibility (aria-label, role="application")
 
 ### Routes
+
 4. **`src/routes/present/+page.svelte`** (52 lines)
    - Error display for invalid model parameters
    - Integration with PresentationView component
@@ -63,33 +66,38 @@ Fullscreen, keyboard-navigable presentation mode for reviewing timelines. Core f
 ## Technical Details
 
 ### Duration Calculation
+
 - **Formula:** `duration_ms = (frame_count / fps) * 1000`
 - **Clamped:** 1000 ms (minimum) to 30000 ms (maximum)
 - **Default:** 3000 ms if event has no duration specified
 - **FPS-aware:** Respects `model.project.fps` for accurate timing
 
 ### Keyboard Controls
-| Key | Action |
-|-----|--------|
-| ← | Previous event |
-| → | Next event |
-| P | Play/pause |
+
+| Key   | Action                   |
+| ----- | ------------------------ |
+| ←     | Previous event           |
+| →     | Next event               |
+| P     | Play/pause               |
 | Space | Play/pause (alternative) |
-| F | Toggle fullscreen |
-| ESC | Exit presentation |
+| F     | Toggle fullscreen        |
+| ESC   | Exit presentation        |
 
 ### Playback Logic
+
 - Animation frame loop for smooth progress bar updates
 - Auto-advance to next event when duration expires
 - Pause on last event (doesn't loop)
 - Keyboard navigation resets playback timer
 
 ### URL Format
+
 ```
 /present?model=<base64-encoded-model>&index=<start-event-index>
 ```
 
 **Example:**
+
 ```javascript
 // Generate shareable link
 const modelJson = JSON.stringify(model);
@@ -98,7 +106,9 @@ const url = `/present?model=${encodeURIComponent(modelBase64)}&index=0`;
 ```
 
 ### Event Display
+
 Shows for each event:
+
 - **Action** — primary actor's action (fallback: "Scene")
 - **Character** — actor ID with name lookup
 - **Speech** — actor's spoken text
@@ -107,6 +117,7 @@ Shows for each event:
 - **Progress** — current index / total events (bottom-right)
 
 ### Styling
+
 - **Dark gradient background** for readability
 - **Large typography** optimized for presentation (clamp() responsive sizing)
 - **Fade-in animation** on event change
@@ -118,15 +129,15 @@ Shows for each event:
 
 ## Test Coverage
 
-| Component | Tests | Status |
-|-----------|-------|--------|
-| Duration calculation | 6 | ✅ |
-| Keyboard handling | 7 | ✅ |
-| Playback logic | 3 | ✅ |
-| Event formatting | 4 | ✅ |
-| URL parsing/generation | 4 | ✅ |
-| Boundary conditions | 7 | ✅ |
-| **Total** | **31** | **✅** |
+| Component              | Tests  | Status |
+| ---------------------- | ------ | ------ |
+| Duration calculation   | 6      | ✅     |
+| Keyboard handling      | 7      | ✅     |
+| Playback logic         | 3      | ✅     |
+| Event formatting       | 4      | ✅     |
+| URL parsing/generation | 4      | ✅     |
+| Boundary conditions    | 7      | ✅     |
+| **Total**              | **31** | **✅** |
 
 **All unit tests:** 430/430 passing (includes existing tests)
 
@@ -150,6 +161,7 @@ Shows for each event:
 ## Architecture Notes
 
 ### State Management (Svelte 5)
+
 ```svelte
 let state = $state({
   currentIndex: number,
@@ -164,12 +176,15 @@ $effect(() => {
 ```
 
 ### Pure Functions
+
 All utilities are pure functions, enabling:
+
 - Easy testing without DOM dependencies
 - Reusable across components
 - Predictable behavior
 
 ### Component Patterns
+
 - **PresentationView** — Self-contained, reusable component
 - **+page.svelte** — Route handler with error states
 - **+page.server.ts** — Server-side validation and decoding
@@ -179,11 +194,11 @@ All utilities are pure functions, enabling:
 ## Integration Points
 
 ### From Main App
+
 1. Add button in `SystemFooter.svelte`:
+
    ```svelte
-   <button onclick={() => generateAndNavigateToPresentation(model)}>
-     Presentation Mode
-   </button>
+   <button onclick={() => generateAndNavigateToPresentation(model)}> Presentation Mode </button>
    ```
 
 2. Helper function to encode model and navigate:
@@ -211,30 +226,30 @@ All utilities are pure functions, enabling:
 
 ## QA Sign-Off
 
-| Criterion | Status | Notes |
-|-----------|--------|-------|
-| All acceptance criteria met | ✅ | 10/10 |
-| Unit test coverage | ✅ | 31 tests, 430 total |
-| Code quality | ✅ | TypeScript, fully typed |
-| Responsive design | ✅ | Mobile/tablet/desktop |
-| Accessibility | ✅ | aria-label, keyboard navigation |
-| Browser compatibility | ✅ | Fullscreen API, modern ES2020+ |
-| Error handling | ✅ | Graceful degradation |
-| Performance | ✅ | requestAnimationFrame for smooth playback |
+| Criterion                   | Status | Notes                                     |
+| --------------------------- | ------ | ----------------------------------------- |
+| All acceptance criteria met | ✅     | 10/10                                     |
+| Unit test coverage          | ✅     | 31 tests, 430 total                       |
+| Code quality                | ✅     | TypeScript, fully typed                   |
+| Responsive design           | ✅     | Mobile/tablet/desktop                     |
+| Accessibility               | ✅     | aria-label, keyboard navigation           |
+| Browser compatibility       | ✅     | Fullscreen API, modern ES2020+            |
+| Error handling              | ✅     | Graceful degradation                      |
+| Performance                 | ✅     | requestAnimationFrame for smooth playback |
 
 ---
 
 ## Session Statistics
 
-| Metric | Value |
-|--------|-------|
-| Files created | 5 |
-| Lines of code | 745 |
-| Test cases | 31 (+399 existing) |
-| Build status | ✅ Clean |
-| Test results | ✅ 430/430 passing |
-| Breaking changes | 0 |
-| Estimated delivery time | 1.5 hours |
+| Metric                  | Value              |
+| ----------------------- | ------------------ |
+| Files created           | 5                  |
+| Lines of code           | 745                |
+| Test cases              | 31 (+399 existing) |
+| Build status            | ✅ Clean           |
+| Test results            | ✅ 430/430 passing |
+| Breaking changes        | 0                  |
+| Estimated delivery time | 1.5 hours          |
 
 ---
 

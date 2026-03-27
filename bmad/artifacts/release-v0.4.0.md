@@ -11,6 +11,7 @@
 Generate AI images directly from your timeline events using ComfyUI or Automatic1111.
 
 #### Settings
+
 - **New toolbar button:** 🎨 ComfyUI
 - Configure server URL (e.g., http://localhost:7860)
 - Optional API key support
@@ -18,6 +19,7 @@ Generate AI images directly from your timeline events using ComfyUI or Automatic
 - Settings persist across sessions
 
 #### Per-Event Generation
+
 - **Generate button** on selected timeline events
 - Real-time progress bar (0-100%)
 - Generated image preview in event card
@@ -25,6 +27,7 @@ Generate AI images directly from your timeline events using ComfyUI or Automatic
 - Images stored in IndexedDB (persistent, efficient)
 
 #### Batch Generation
+
 - **New toolbar button:** 🚀 Generate All
 - Generates all events with prompts sequentially
 - 2-second rate limiting between requests (prevents backend overload)
@@ -32,6 +35,7 @@ Generate AI images directly from your timeline events using ComfyUI or Automatic
 - One failure doesn't stop the batch
 
 #### Supported Backends
+
 - **Automatic1111** (Stable Diffusion WebUI) — fully implemented
 - **ComfyUI** — API abstraction in place, ready for workflow integration
 
@@ -39,30 +43,34 @@ Generate AI images directly from your timeline events using ComfyUI or Automatic
 
 ## Features Delivered This Sprint
 
-| Feature | Points | Status |
-|---------|--------|--------|
-| S24-04-UI: ComfyUI UI Integration | 9 | ✅ Complete |
-| S26-01: Performance (optional) | 3 | ⏭️ Deferred |
-| **Sprint 26 Total** | **12** | **9/12 delivered** |
+| Feature                           | Points | Status             |
+| --------------------------------- | ------ | ------------------ |
+| S24-04-UI: ComfyUI UI Integration | 9      | ✅ Complete        |
+| S26-01: Performance (optional)    | 3      | ⏭️ Deferred        |
+| **Sprint 26 Total**               | **12** | **9/12 delivered** |
 
 ---
 
 ## Technical Details
 
 ### New Components
+
 - `ComfyUISettings.svelte` — settings modal with test connection
 - `GenerateButton.svelte` — per-event generation with progress & thumbnails
 - `GenerateBatchButton.svelte` — batch operation with live stats
 
 ### New Stores
+
 - `generation.svelte.ts` — per-event state tracking (9 unit tests)
 - `generated-images.svelte.ts` — IndexedDB persistence layer
 
 ### New Utilities
+
 - `batch-generate.ts` — rate-limited sequential processing
 - `ai-backend.ts` — abstraction for ComfyUI & A1111 APIs (foundation)
 
 ### Quality Metrics
+
 - **Unit Tests:** 428 total (9 new generation tests)
 - **Build:** ✅ Successful (no TypeScript errors)
 - **E2E Tests:** 6 smoke tests passing
@@ -111,6 +119,7 @@ None. This is a pure addition with no API or data model changes.
 - Release ready: v0.4.0 shipped with ComfyUI integration
 
 **Releases Shipped (v0.3.0 → v0.4.0):**
+
 - v0.3.0: EDL export, global search, presentation mode (16 pts)
 - v0.4.0: ComfyUI integration, batch generation, IndexedDB persistence (9 pts)
 

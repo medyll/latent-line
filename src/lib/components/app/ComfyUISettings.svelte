@@ -148,150 +148,150 @@
 {/if}
 
 <style>
-		.modal-overlay {
-			position: fixed;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background: rgba(0, 0, 0, 0.5);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			z-index: 1000;
-		}
+	.modal-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+	}
 
-		.modal-content {
-			background: var(--color-surface-2);
-			border: 1px solid var(--color-surface-3);
-			border-radius: 8px;
-			padding: 24px;
-			width: 90%;
-			max-width: 450px;
-			max-height: 90vh;
-			overflow-y: auto;
-		}
+	.modal-content {
+		background: var(--color-surface-2);
+		border: 1px solid var(--color-surface-3);
+		border-radius: 8px;
+		padding: 24px;
+		width: 90%;
+		max-width: 450px;
+		max-height: 90vh;
+		overflow-y: auto;
+	}
 
-		h2 {
-			margin: 0 0 20px 0;
-			font-size: 18px;
-			font-weight: 500;
-		}
+	h2 {
+		margin: 0 0 20px 0;
+		font-size: 18px;
+		font-weight: 500;
+	}
 
-		.form-group {
-			margin-bottom: 16px;
-		}
+	.form-group {
+		margin-bottom: 16px;
+	}
 
-		label {
-			display: block;
-			margin-bottom: 6px;
-			font-size: 13px;
-			font-weight: 500;
-			color: var(--color-text);
-		}
+	label {
+		display: block;
+		margin-bottom: 6px;
+		font-size: 13px;
+		font-weight: 500;
+		color: var(--color-text);
+	}
 
-		small {
-			display: block;
-			margin-top: 4px;
-			font-size: 12px;
-			color: var(--color-text-secondary);
-		}
+	small {
+		display: block;
+		margin-top: 4px;
+		font-size: 12px;
+		color: var(--color-text-secondary);
+	}
 
-		.input-field {
-			width: 100%;
-			padding: 8px 12px;
-			border: 1px solid var(--color-surface-3);
-			border-radius: 4px;
-			background: var(--color-surface-1);
-			color: var(--color-text);
-			font-size: 13px;
-			box-sizing: border-box;
-		}
+	.input-field {
+		width: 100%;
+		padding: 8px 12px;
+		border: 1px solid var(--color-surface-3);
+		border-radius: 4px;
+		background: var(--color-surface-1);
+		color: var(--color-text);
+		font-size: 13px;
+		box-sizing: border-box;
+	}
 
-		.input-field:focus {
-			outline: none;
-			border-color: var(--color-primary);
-			background: var(--color-surface-0);
-		}
+	.input-field:focus {
+		outline: none;
+		border-color: var(--color-primary);
+		background: var(--color-surface-0);
+	}
 
-		select {
-			width: 100%;
-			padding: 8px 12px;
-			border: 1px solid var(--color-surface-3);
-			border-radius: 4px;
-			background: var(--color-surface-1);
-			color: var(--color-text);
-			font-size: 13px;
-		}
+	select {
+		width: 100%;
+		padding: 8px 12px;
+		border: 1px solid var(--color-surface-3);
+		border-radius: 4px;
+		background: var(--color-surface-1);
+		color: var(--color-text);
+		font-size: 13px;
+	}
 
-		input[type='checkbox'] {
-			margin-right: 8px;
-		}
+	input[type='checkbox'] {
+		margin-right: 8px;
+	}
 
-		.button-group {
-			display: flex;
-			gap: 8px;
-			margin: 16px 0;
-		}
+	.button-group {
+		display: flex;
+		gap: 8px;
+		margin: 16px 0;
+	}
 
-		.btn-secondary {
-			padding: 8px 12px;
-			border: 1px solid var(--color-surface-3);
-			border-radius: 4px;
-			background: var(--color-surface-1);
-			color: var(--color-text);
-			cursor: pointer;
-			font-size: 13px;
-			flex: 1;
-		}
+	.btn-secondary {
+		padding: 8px 12px;
+		border: 1px solid var(--color-surface-3);
+		border-radius: 4px;
+		background: var(--color-surface-1);
+		color: var(--color-text);
+		cursor: pointer;
+		font-size: 13px;
+		flex: 1;
+	}
 
-		.btn-secondary:hover:not(:disabled) {
-			background: var(--color-surface-2);
-		}
+	.btn-secondary:hover:not(:disabled) {
+		background: var(--color-surface-2);
+	}
 
-		.btn-secondary:disabled {
-			opacity: 0.5;
-			cursor: not-allowed;
-		}
+	.btn-secondary:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
 
-		.test-result {
-			padding: 12px;
-			border-radius: 4px;
-			margin: 12px 0;
-			font-size: 13px;
-		}
+	.test-result {
+		padding: 12px;
+		border-radius: 4px;
+		margin: 12px 0;
+		font-size: 13px;
+	}
 
-		.test-result.success {
-			background: rgba(76, 175, 80, 0.1);
-			color: #4caf50;
-			border: 1px solid #4caf50;
-		}
+	.test-result.success {
+		background: rgba(76, 175, 80, 0.1);
+		color: #4caf50;
+		border: 1px solid #4caf50;
+	}
 
-		.test-result.error {
-			background: rgba(244, 67, 54, 0.1);
-			color: #f44336;
-			border: 1px solid #f44336;
-		}
+	.test-result.error {
+		background: rgba(244, 67, 54, 0.1);
+		color: #f44336;
+		border: 1px solid #f44336;
+	}
 
-		.modal-actions {
-			display: flex;
-			gap: 8px;
-			margin-top: 20px;
-		}
+	.modal-actions {
+		display: flex;
+		gap: 8px;
+		margin-top: 20px;
+	}
 
-		.btn-primary {
-			flex: 1;
-			padding: 8px 12px;
-			border: none;
-			border-radius: 4px;
-			background: var(--color-primary);
-			color: white;
-			cursor: pointer;
-			font-size: 13px;
-			font-weight: 500;
-		}
+	.btn-primary {
+		flex: 1;
+		padding: 8px 12px;
+		border: none;
+		border-radius: 4px;
+		background: var(--color-primary);
+		color: white;
+		cursor: pointer;
+		font-size: 13px;
+		font-weight: 500;
+	}
 
-		.btn-primary:hover {
-			opacity: 0.9;
-		}
-	</style>
+	.btn-primary:hover {
+		opacity: 0.9;
+	}
+</style>
