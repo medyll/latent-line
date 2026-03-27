@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import type { Preferences } from './preferences.svelte';
 
 // Unit tests for preferences logic (pure, no Svelte context needed)
 
 const PREFS_KEY = 'latent-line:prefs';
 
-const DEFAULTS = {
-	theme: 'light' as const,
+const DEFAULTS: Preferences = {
+	theme: 'light',
 	defaultZoom: 1,
 	sidebarWidth: 20,
 	language: 'en'
@@ -46,7 +47,7 @@ describe('preferences store logic', () => {
 	});
 
 	it('persists preferences to storage', () => {
-		const prefs = { ...DEFAULTS, theme: 'dark' as const, defaultZoom: 2 };
+		const prefs: Preferences = { ...DEFAULTS, theme: 'dark' as const, defaultZoom: 2 };
 		savePrefs(storage, prefs);
 		const loaded = loadPrefs(storage);
 		expect(loaded.theme).toBe('dark');
@@ -54,7 +55,7 @@ describe('preferences store logic', () => {
 	});
 
 	it('reset returns to defaults', () => {
-		let prefs = { ...DEFAULTS, theme: 'dark' as const, language: 'fr' };
+		let prefs = { ...DEFAULTS, theme: 'dark', language: 'fr' };
 		prefs = { ...DEFAULTS };
 		expect(prefs.theme).toBe('light');
 		expect(prefs.language).toBe('en');

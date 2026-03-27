@@ -20,7 +20,7 @@ function makeTestModel(): Model {
 				time: 0,
 				duration: 24, // 1 second at 24fps
 				frame: {
-					actors: [{ id: 'c1', action: 'walking', speech: { text: 'Hello', mood: 'happy' } }]
+					actors: [{ id: 'c1', action: 'walking', speech: { text: 'Hello', mood: 'joyful' } }]
 				}
 			},
 			{
