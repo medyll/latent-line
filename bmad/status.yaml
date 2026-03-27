@@ -2,7 +2,7 @@ project: latent-line
 phase: development
 progress: 100
 status: release-ready
-next_action: 'Sprint 28 COMPLETE (17/12 pts). All stories delivered: API, ExportModal, ImportModal, Documentation. 448/448 tests passing. 0 type errors. v0.5.0 READY FOR RELEASE.'
+next_action: 'Sprint 28 COMPLETE (17/12 pts). All stories delivered: API, ExportModal, ImportModal, Documentation. SSR issues fixed. 448/448 tests passing. 0 type errors. v0.5.0 READY FOR RELEASE.'
 active_role: developer
 next_command: 'bmad continue'
 next_role: developer

@@ -228,7 +228,7 @@
 									type="radio"
 									name="import-mode"
 									value="replace"
-									bind:checked={importMode === 'replace'}
+									bind:group={importMode}
 								/>
 								<div class="mode-card">
 									<Replace size={20} />
@@ -244,7 +244,7 @@
 									type="radio"
 									name="import-mode"
 									value="merge"
-									bind:checked={importMode === 'merge'}
+									bind:group={importMode}
 								/>
 								<div class="mode-card">
 									<GitMerge size={20} />

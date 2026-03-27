@@ -24,6 +24,7 @@ import { createModelHistory } from '$lib/context/history.svelte';
 export function createModelStore() {
 	const model = $state<Model>(structuredClone(exampleModel));
 	const history = createModelHistory();
+	const saveStatus = $state({ value: 'saved' as 'saved' | 'unsaved' | 'saving' });
 	const debouncedSave = createDebouncedSave(saveModelToLocalStorage, 500);
 
 	let previousJson = JSON.stringify(model);
@@ -54,8 +55,12 @@ export function createModelStore() {
 
 	// Persist model to localStorage with 500ms debounce
 	$effect(() => {
-		// const _ = JSON.stringify(model); // deep-track all properties
-		debouncedSave.schedule(model);
+		const _ = JSON.stringify(model);
+		if (!isApplyingSnapshot) {
+			saveStatus.value = 'unsaved';
+			debouncedSave.schedule(model);
+			saveStatus.value = 'saved';
+		}
 	});
 
 	// Load persisted model on client only (localStorage unavailable during SSR)
@@ -76,5 +81,5 @@ export function createModelStore() {
 		if (next) applySnapshot(next);
 	}
 
-	return { model, history, undo, redo, saveStatus: debouncedSave.status };
+	return { model, history, undo, redo, saveStatus };
 }

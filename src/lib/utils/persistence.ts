@@ -6,12 +6,21 @@ const DEFAULT_KEY = 'latent-line:model';
  * Creates a debounced save function.
  * - Calling it starts/resets a timer of `delay` ms.
  * - `flush()` executes immediately (used for beforeunload).
- * - `status` is a reactive Svelte 5 $state: 'saved' | 'unsaved' | 'saving'.
+ * - `onStatusChange` callback for reactive updates (Svelte 5 compatible).
  */
-export function createDebouncedSave(saveFn: (model: unknown) => boolean, delay = 500) {
+export function createDebouncedSave(
+	saveFn: (model: unknown) => boolean,
+	delay = 500,
+	onStatusChange?: (status: 'saved' | 'unsaved' | 'saving') => void
+) {
 	let timer: ReturnType<typeof setTimeout> | null = null;
 	let _model: unknown = null;
-	const status = $state({ value: 'saved' as 'saved' | 'unsaved' | 'saving' });
+	let _status: 'saved' | 'unsaved' | 'saving' = 'saved';
+
+	function setStatus(newStatus: 'saved' | 'unsaved' | 'saving') {
+		_status = newStatus;
+		onStatusChange?.(newStatus);
+	}
 
 	function flush() {
 		if (timer !== null) {
@@ -19,25 +28,25 @@ export function createDebouncedSave(saveFn: (model: unknown) => boolean, delay =
 			timer = null;
 		}
 		if (_model !== null) {
-			status.value = 'saving';
+			setStatus('saving');
 			saveFn(_model);
-			status.value = 'saved';
+			setStatus('saved');
 		}
 	}
 
 	function schedule(model: unknown) {
 		_model = model;
-		status.value = 'unsaved';
+		setStatus('unsaved');
 		if (timer !== null) clearTimeout(timer);
 		timer = setTimeout(() => {
 			timer = null;
-			status.value = 'saving';
+			setStatus('saving');
 			saveFn(_model);
-			status.value = 'saved';
+			setStatus('saved');
 		}, delay);
 	}
 
-	return { schedule, flush, status };
+	return { schedule, flush };
 }
 
 export function loadModelFromLocalStorage(key = DEFAULT_KEY) {

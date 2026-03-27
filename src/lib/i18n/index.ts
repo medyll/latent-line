@@ -30,24 +30,28 @@ function detectLocale(): string {
 	return 'en';
 }
 
-// Reactive locale state
-let _locale = $state(detectLocale());
+// Reactive locale state - wrapped in function for SSR safety
+function createLocaleState() {
+	let _locale = detectLocale();
+	
+	return {
+		get value() {
+			return _locale;
+		},
+		set value(v: string) {
+			if (SUPPORTED.has(v)) _locale = v;
+		}
+	};
+}
 
-export const locale = {
-	get value() {
-		return _locale;
-	},
-	set value(v: string) {
-		if (SUPPORTED.has(v)) _locale = v;
-	}
-};
+export const locale = /* @__PURE__ */ createLocaleState();
 
 /**
  * Translate a message key with optional variable interpolation.
  * `t('assets.refcount.label', { count: 3 })` → "Used in 3 frame(s)"
  */
 export function t(key: string, vars?: Record<string, string | number>): string {
-	const msgs = MESSAGES[_locale] ?? MESSAGES['en'];
+	const msgs = MESSAGES[locale.value] ?? MESSAGES['en'];
 	const fallback = MESSAGES['en'];
 	let msg =
 		(msgs as Record<string, string>)[key] ?? (fallback as Record<string, string>)[key] ?? key;
