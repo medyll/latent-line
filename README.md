@@ -35,6 +35,8 @@ src/
 │       │   ├── SequenceOrchestrator.svelte # Event sequencing UI
 │       │   ├── ModelInspector.svelte # Model validation inspector
 │       │   ├── SystemFooter.svelte # Footer controls
+│       │   ├── ImportModal.svelte # JSON import with validation
+│       │   ├── ExportModal.svelte # Multi-format export
 │       │   ├── index.ts # Barrel export for app components
 │       │   └── [more...].svelte
 │       │
@@ -48,12 +50,22 @@ src/
 │   ├── /demo/+page.svelte      # Demo page
 │   └── /demo-model/+page.svelte # Model demo
 │
+├── utils/
+│   ├── import-parser.ts        # Import validation & merge logic
+│   ├── export-*.ts             # Export format handlers
+│   └── [more...].ts
+│
 └── [other files]
 
-e2e/                           # Playwright end-to-end tests (empty)
+docs/                           # User documentation
+├── USER_GUIDE.md               # End-user guide
+├── API.md                      # REST API reference
+└── MODEL_SCHEMA.md             # Data model reference
+
+e2e/                           # Playwright end-to-end tests
 bmad/                          # Project metadata & docs
 └── artifacts/
-    └── audit-full-2026-03-03.md # Baseline audit report
+    └── audit-*.md             # Audit reports
 ```
 
 ### Data Flow
@@ -279,6 +291,40 @@ Config controls (checkpoint, sampler, seed, TTS). **Export JSON** downloads the 
 ### ModelInspector.svelte
 
 Live model inspection overlay. Click the `⌥` button (bottom-right) to open. Shows project info, asset counts, timeline events, and raw JSON. Validate button runs Zod against the current model.
+
+---
+
+## 📚 Documentation
+
+### User Documentation
+
+| Document | Description |
+|----------|-------------|
+| [**User Guide**](./docs/USER_GUIDE.md) | Complete user manual with tutorials |
+| [**API Reference**](./docs/API.md) | REST API documentation |
+| [**Model Schema**](./docs/MODEL_SCHEMA.md) | Data model reference |
+
+### Quick Reference
+
+**Import/Export Formats:**
+
+| Format | Extension | Use Case |
+|--------|-----------|----------|
+| YAML | `.yaml` | Human-readable config |
+| JSON-LD | `.jsonld` | Semantic web, RDF |
+| CSV | `.csv` | Spreadsheet import |
+| JSON | `.json` | Data interchange |
+| PDF | `.pdf` | Storyboard printing |
+| ZIP | `.zip` | Complete archive |
+
+**Keyboard Shortcuts:**
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo |
+| `Space` | Play/Pause |
+| `Ctrl+I` | Model Inspector |
+| `Ctrl+E` | Export Modal |
 
 ---
 

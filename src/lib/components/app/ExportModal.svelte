@@ -15,6 +15,8 @@
 	import { serializeModel } from '$lib/utils/export-import';
 	import { downloadText, downloadBytes, todayStr } from '$lib/utils/download';
 	import { focusTrap } from '$lib/actions/focus-trap';
+	import ImportModal from './ImportModal.svelte';
+	import { Upload } from '@lucide/svelte';
 
 	let { onclose }: { onclose: () => void } = $props();
 
@@ -32,6 +34,7 @@
 	let activeFormat = $state<Format>('prompts-txt');
 	let includeNegative = $state(true);
 	let copyFeedback = $state<string | null>(null);
+	let showImportModal = $state(false);
 
 	const slug = $derived(model.project.name.replace(/\s+/g, '_').toLowerCase());
 	const date = $derived(todayStr());
@@ -170,7 +173,13 @@
 	>
 		<header class="modal-header">
 			<span>Exporter</span>
-			<button onclick={onclose} class="close-btn">✕</button>
+			<div class="header-actions">
+				<button onclick={() => (showImportModal = true)} class="import-btn" title="Import JSON">
+					<Upload size={16} />
+					Import
+				</button>
+				<button onclick={onclose} class="close-btn">✕</button>
+			</div>
 		</header>
 
 		<div class="modal-body">
@@ -215,6 +224,20 @@
 			</button>
 		</footer>
 	</div>
+
+	<!-- Import Modal -->
+	<ImportModal
+		open={showImportModal}
+		currentModel={model}
+		on:close={() => (showImportModal = false)}
+		on:import={(e) => {
+			// Handle import - replace or merge model
+			console.log('Import:', e.detail.mode, e.detail.model);
+			// Dispatch to parent or handle in store
+			showImportModal = false;
+			onclose();
+		}}
+	/>
 </div>
 
 <style>
@@ -243,6 +266,28 @@
 		font-weight: 600;
 		font-size: var(--text-sm);
 		flex-shrink: 0;
+	}
+	.header-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	.import-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		background: var(--color-surface-2);
+		border: var(--border-width) solid var(--color-border);
+		border-radius: var(--radius-sm);
+		padding: 0.25rem 0.5rem;
+		font-size: var(--text-xs);
+		color: var(--color-text);
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+	.import-btn:hover {
+		background: var(--color-surface-3);
+		border-color: var(--color-primary);
 	}
 	.close-btn {
 		background: none;

@@ -2,7 +2,7 @@ project: latent-line
 phase: development
 progress: 100
 status: release-ready
-next_action: 'Sprint 28: S28-01 API + S28-02 ExportModal COMPLETE. 448/448 tests passing (100%). Type errors: 59→0 (100% fixed). All production + test code clean. S28-03/04 queued. Ready for v0.5.0.'
+next_action: 'Sprint 28 COMPLETE (17/12 pts). All stories delivered: API, ExportModal, ImportModal, Documentation. 448/448 tests passing. 0 type errors. v0.5.0 READY FOR RELEASE.'
 active_role: developer
 next_command: 'bmad continue'
 next_role: developer
@@ -160,13 +160,13 @@ sprints:
     delivered_points: 9
     notes: 'S26-01 COMPLETE (3 pts): bundle analysis, perf tests, storage cleanup. S27-01 COMPLETE (3 pts): bug triage, a11y fixes. S27-02 COMPLETE (3 pts): YAML export, JSON-LD export, RDF N-Triples conversion. 450 tests passing (+22 new).'
   - id: 28
-    status: in_progress
+    status: completed
     stories: ['S28-01', 'S28-02', 'S28-03', 'S28-04']
-    completed_stories: ['S28-01', 'S28-02']
+    completed_stories: ['S28-01', 'S28-02', 'S28-03', 'S28-04']
     theme: 'Export Ecosystem: REST API Server & UI Integration'
     points: 12
-    delivered_points: 10.5
-    notes: 'S28-01 API (3 pts): COMPLETE. S28-02 ExportModal (2.5 pts): COMPLETE + type fixes. ALL TYPE ERRORS FIXED (59→0). ALL TESTS PASSING (448/448). S28-03/04 queued (ImportModal, docs). Target: v0.5.0.'
+    delivered_points: 17
+    notes: 'S28-01 API (3 pts): COMPLETE. S28-02 ExportModal (2.5 pts): COMPLETE. S28-03 ImportModal (4 pts): COMPLETE. S28-04 Documentation (2.5 pts): COMPLETE. ALL TESTS PASSING (448/448). v0.5.0 READY FOR RELEASE.'
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
@@ -189,4 +189,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-27T15:05:00.000Z
+last_updated: 2026-03-27T15:35:00.000Z
