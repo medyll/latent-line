@@ -85,7 +85,7 @@ export function exportToFramePack(model: Model): string {
 					}
 				}),
 				metadata: {
-					duration: ev.duration,
+					duration: ev.duration ?? 1,
 					version: FORMAT_VERSION
 				}
 			};

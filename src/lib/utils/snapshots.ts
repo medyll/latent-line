@@ -72,5 +72,9 @@ export function restoreSnapshot(
 ): { success: true; model: Model } | { success: false; errors: string[] } {
 	const snap = getSnapshot(id);
 	if (!snap) return { success: false, errors: ['Snapshot not found'] };
-	return deserializeModel(snap.json);
+	const result = deserializeModel(snap.json);
+	if (result.success) {
+		return { success: true, model: result.data };
+	}
+	return { success: false, errors: result.errors };
 }

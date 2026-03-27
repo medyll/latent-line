@@ -23,7 +23,12 @@ export function downloadBytes(
 	filename: string,
 	mimeType = 'application/octet-stream'
 ): void {
-	downloadBlob(new Blob([bytes], { type: mimeType }), filename);
+	// Convert Uint8Array to ArrayBuffer, handling both ArrayBuffer and SharedArrayBuffer
+	const arrayBuffer = bytes.buffer.slice(
+		bytes.byteOffset,
+		bytes.byteOffset + bytes.byteLength
+	) as ArrayBuffer;
+	downloadBlob(new Blob([arrayBuffer], { type: mimeType }), filename);
 }
 
 /** Format today as YYYY-MM-DD for filenames. */

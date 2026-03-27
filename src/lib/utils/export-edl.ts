@@ -69,7 +69,7 @@ export function validateTimelineForEDL(model: Model): { valid: boolean; errors: 
 	for (let i = 0; i < sorted.length - 1; i++) {
 		const current = sorted[i];
 		const next = sorted[i + 1];
-		const currentEnd = current.time + current.duration;
+		const currentEnd = current.time + (current.duration ?? 1);
 
 		if (currentEnd > next.time) {
 			errors.push(`Event ${i} overlaps with event ${i + 1}`);
@@ -121,10 +121,10 @@ export function exportToEDL(model: Model): string {
 	sorted.forEach((event, idx) => {
 		const eventNum = idx + 1;
 		const reel = getEventName(event, idx, model);
+		const duration = event.duration ?? 1;
 
 		const fromTime = frameToTimecode(event.time, fps);
-		const toTime = frameToTimecode(event.time + event.duration, fps);
-		const duration = event.duration;
+		const toTime = frameToTimecode(event.time + duration, fps);
 
 		// Main EDL line format:
 		// 001  AX       V     CUT        001:00:00:00 001:00:05:00 000:00:00:00 000:00:05:00

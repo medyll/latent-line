@@ -2,7 +2,7 @@ import { json, type RequestHandler } from '@sveltejs/kit';
 import { modelSchema } from '$lib/model/model-template';
 import { exportAsYAML } from '$lib/utils/export-yaml';
 import { exportAsJSONLD } from '$lib/utils/export-jsonld';
-import { exportAsCSV } from '$lib/utils/export-csv';
+import { exportToCSV } from '$lib/utils/export-csv';
 
 export type ExportRequest = {
 	model: unknown;
@@ -73,7 +73,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
 			return json(
 				{
 					error: 'Invalid model schema',
-					details: validated.error.errors,
+					details: validated.error.issues,
 					code: 'INVALID_MODEL'
 				} as ErrorResponse,
 				{ status: 422 }
@@ -105,7 +105,7 @@ export const POST: RequestHandler = async ({ request, url }) => {
 			}
 
 			case 'csv': {
-				content = exportAsCSV(validatedModel);
+				content = exportToCSV(validatedModel);
 				mimeType = 'text/csv';
 				fileExtension = 'csv';
 				break;

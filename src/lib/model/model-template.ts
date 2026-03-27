@@ -1,7 +1,10 @@
-import type { Model } from './model-types';
+import type { Model, TimelineEvent, TimelineFrame } from './model-types';
 import { z } from 'zod';
 
 /** Minimal Zod schemas matching `src/lib/types.ts` for runtime validation */
+
+// Re-export types for convenience
+export type { Model, TimelineEvent, TimelineFrame } from './model-types';
 
 // Define enums first
 const moodEnum = z.enum(['joyful', 'melancholic', 'anxious', 'serene', 'curious']);
@@ -30,7 +33,7 @@ const cameraSchema = z.object({
 	tilt: z.number().optional()
 });
 const lightingSchema = z.object({
-	type: z.string().optional(),
+	type: _lightingTypeEnum.optional(),
 	intensity: z.number().min(0).max(1).optional()
 });
 const fxSchema = z.object({ bloom: z.number().optional(), motion_blur: z.number().optional() });
@@ -55,7 +58,8 @@ const timelineFrameSchema = z.object({
 	fx: fxSchema.optional(),
 	controlnet: controlNetSchema.optional(),
 	audio_tracks: z.array(audioTrackSchema).optional(),
-	audio_reactive: audioReactiveSchema.optional()
+	audio_reactive: audioReactiveSchema.optional(),
+	prompt: z.string().transform(sanitizeText).optional()
 });
 
 // Improved isUrlOrFile: rejects path traversal

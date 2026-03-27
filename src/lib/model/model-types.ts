@@ -104,6 +104,7 @@ export interface TimelineFrame {
 	audio_tracks?: AudioTrack[];
 	audio_reactive?: AudioReactive;
 	character?: string; // ST-023: Primary character for this event (references Character.id)
+	prompt?: string; // S24-04: AI image generation prompt for this frame
 }
 
 export type Mood = 'joyful' | 'melancholic' | 'anxious' | 'serene' | 'curious';

@@ -6,7 +6,12 @@ import type { Model } from '$lib/model/model-template';
  */
 export function exportAsJSONLD(model: Model): object {
 	const baseURL = typeof window !== 'undefined' ? window.location.origin : 'https://example.com';
-	const timelineId = `${baseURL}/timeline/${model.config?.id || 'untitled'}`;
+	const timelineId = `${baseURL}/timeline/${model.project.name.replace(/\s+/g, '-').toLowerCase()}`;
+
+	// Calculate total duration from timeline events
+	const sortedTimeline = [...model.timeline].sort((a, b) => a.time - b.time);
+	const lastEvent = sortedTimeline[sortedTimeline.length - 1];
+	const totalDuration = lastEvent ? lastEvent.time + (lastEvent.duration ?? 1) : 10000;
 
 	// Main creative work (timeline)
 	const jsonld: any = {
@@ -16,15 +21,15 @@ export function exportAsJSONLD(model: Model): object {
 		},
 		'@type': 'CreativeWork',
 		'@id': timelineId,
-		name: model.config?.title || 'Untitled Timeline',
-		description: model.config?.description || '',
+		name: model.project.name,
+		description: '',
 		dateCreated: new Date().toISOString(),
 		creator: {
 			'@type': 'SoftwareApplication',
 			name: 'latent-line',
 			url: 'https://github.com/medyll/latent-line'
 		},
-		duration: formatTime(model.timeline?.duration || 10000),
+		duration: formatTime(totalDuration),
 		hasPart: [] as any[]
 	};
 
@@ -76,44 +81,42 @@ export function exportAsJSONLD(model: Model): object {
 	}
 
 	// Timeline events as CreativeWork actions
-	if (model.timeline?.events) {
-		model.timeline.events.forEach((event) => {
-			const eventId = `${timelineId}/event/${event.id}`;
-			const eventPart: any = {
-				'@type': 'Action',
-				'@id': eventId,
-				name: event.label,
-				description: event.description || '',
-				startTime: formatTime(event.time),
-				result: {
-					'@type': 'MediaObject',
-					name: `Frame ${event.time}`,
-					duration: `PT${((event.duration || 200) / 1000).toFixed(1)}S`
-				}
-			};
-
-			// Asset references
-			if (event.assets && event.assets.length > 0) {
-				eventPart.object = event.assets.map((assetRef) => ({
-					'@type': 'CreativeWork',
-					'@id': assetRef.asset_id,
-					name: assetRef.asset_id,
-					'latent:variant': assetRef.variant || null
-				}));
+	sortedTimeline.forEach((event, idx) => {
+		const eventId = `${timelineId}/event/${idx}`;
+		const actorName = event.frame.actors?.[0]?.id || 'unknown';
+		const eventPart: any = {
+			'@type': 'Action',
+			'@id': eventId,
+			name: `Event ${idx + 1} at ${event.time}ms`,
+			description: event.notes || '',
+			startTime: formatTime(event.time),
+			result: {
+				'@type': 'MediaObject',
+				name: `Frame ${event.time}`,
+				duration: `PT${((event.duration ?? 200) / 1000).toFixed(1)}S`
 			}
+		};
 
-			// ComfyUI settings
-			if (event.comfyui_settings?.enabled) {
-				eventPart['latent:comfyui'] = {
-					enabled: true,
-					positivePrompt: event.comfyui_settings.custom_positive || null,
-					negativePrompt: event.comfyui_settings.custom_negative || null
+		// Actor information
+		if (event.frame.actors && event.frame.actors.length > 0) {
+			const actor = event.frame.actors[0];
+			const character = model.assets.characters.find((c) => c.id === actor.id);
+			if (character) {
+				eventPart.agent = {
+					'@type': 'Person',
+					'@id': `${timelineId}/character/${character.id}`,
+					name: character.name
 				};
 			}
+		}
 
-			jsonld.hasPart.push(eventPart);
-		});
-	}
+		// Prompt for AI generation
+		if (event.frame.prompt) {
+			eventPart.description = event.frame.prompt;
+		}
+
+		jsonld.hasPart.push(eventPart);
+	});
 
 	return jsonld;
 }
@@ -166,9 +169,9 @@ export function jsonldToNTriples(jsonld: any, baseURI = 'https://example.com/'):
 						processObject(item, blankNode, prefix);
 					}
 				});
-			} else if (typeof value === 'object' && value['@id']) {
+			} else if (typeof value === 'object' && value !== null && '@id' in value && value['@id']) {
 				triples.push(`<${subject}> <${predicate}> <${value['@id']}> .`);
-			} else if (typeof value === 'object') {
+			} else if (typeof value === 'object' && value !== null) {
 				const blankNode = `_:bn${triples.length}`;
 				triples.push(`<${subject}> <${predicate}> ${blankNode} .`);
 				processObject(value, blankNode, prefix);
