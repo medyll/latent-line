@@ -1,14 +1,14 @@
 project: latent-line
 phase: development
 progress: 100
-status: planning
-next_action: 'Sprint 29 Planning ready. S29-01 Virtual Scrolling (5pts), S29-02 Bulk Operations (3pts), S29-03 Performance Tools (2pts). Target: 10 pts, 7 days. Awaiting kickoff.'
+status: release-ready
+next_action: 'Sprint 30 COMPLETE (9/9 pts). All stories delivered: Enhanced Search, Shortcuts Config, Auto-Save. v0.7.0 READY FOR RELEASE.'
 active_role: developer
-next_command: 'bmad dev story S29-01 --auto'
+next_command: 'bmad continue'
 next_role: developer
 audit_date: 2026-03-27
 audit_coverage: 84.39%
-audit_tests_passed: 448
+audit_tests_passed: 483
 
 phases:
   - name: planning
@@ -168,12 +168,21 @@ sprints:
     delivered_points: 17
     notes: 'S28-01 API (3 pts): COMPLETE. S28-02 ExportModal (2.5 pts): COMPLETE. S28-03 ImportModal (4 pts): COMPLETE. S28-04 Documentation (2.5 pts): COMPLETE. ALL TESTS PASSING (448/448). v0.5.0 RELEASED.'
   - id: 29
-    status: planning
+    status: completed
     stories: ['S29-01', 'S29-02', 'S29-03', 'S29-04']
+    completed_stories: ['S29-01', 'S29-02', 'S29-03', 'S29-04']
     theme: 'Performance & Productivity — Virtual scrolling, bulk operations, dev tools, UI/UX polish'
     points: 13
-    delivered_points: 0
-    notes: 'S29-01 Virtual Scrolling (5 pts): Planned. S29-02 Bulk Operations (3 pts): Planned. S29-03 Performance Tools (2 pts): Planned. S29-04 UI/UX Polish (3 pts): Planned. Target: 10 days.'
+    delivered_points: 13
+    notes: 'S29-01 Virtual Scrolling (5 pts): COMPLETE. S29-02 Bulk Operations (3 pts): COMPLETE. S29-03 Performance Tools (2 pts): COMPLETE. S29-04 UI/UX Polish (3 pts): COMPLETE. v0.6.0 RELEASED.'
+  - id: 30
+    status: completed
+    stories: ['S30-01', 'S30-02', 'S30-03']
+    completed_stories: ['S30-01', 'S30-02', 'S30-03']
+    theme: 'Enhanced UX & Automation — Search, shortcuts, auto-save'
+    points: 9
+    delivered_points: 9
+    notes: 'S30-01 Enhanced Search (4 pts): COMPLETE - search-index.ts, search-filters.ts, SearchPanel.svelte. S30-02 Shortcuts Config (3 pts): COMPLETE - shortcuts-config.ts, ShortcutsPanel.svelte. S30-03 Auto-Save (2 pts): COMPLETE - version-history.ts, VersionHistoryPanel.svelte. v0.7.0 READY.'
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
@@ -196,4 +205,4 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-27T16:00:00.000Z
+last_updated: 2026-03-27T17:30:00.000Z

@@ -1,0 +1,56 @@
+/**
+ * design-tokens.css
+ * 
+ * Professional UI/UX design tokens for latent-line.
+ * Principles: Pro, Sobre, Légère, Aérée, Cohérente, Équilibrée
+ */
+
+@layer theme.tokens {
+	:root {
+		/* ─── Spacing Scale (4px base) ───────────────────────────────────────── */
+		--space-1: 0.25rem;   /* 4px */
+		--space-2: 0.5rem;    /* 8px */
+		--space-3: 0.75rem;   /* 12px */
+		--space-4: 1rem;      /* 16px */
+		--space-5: 1.25rem;   /* 20px */
+		--space-6: 1.5rem;    /* 24px */
+		--space-8: 2rem;      /* 32px */
+		--space-10: 2.5rem;   /* 40px */
+		--space-12: 3rem;     /* 48px */
+		--space-16: 4rem;     /* 64px */
+
+		/* ─── Typography Scale ────────────────────────────────────────────────── */
+		--text-xs: 0.6875rem;   /* 11px - Base UI text */
+		--text-sm: 0.75rem;     /* 12px - Labels, captions */
+		--text-base: 0.875rem;  /* 14px - Body text */
+		--text-lg: 1rem;        /* 16px - Headings */
+		--text-xl: 1.125rem;    /* 18px - Section titles */
+		--text-2xl: 1.25rem;    /* 20px - Page titles */
+
+		--line-height-tight: 1.4;
+		--line-height-normal: 1.5;
+		--line-height-relaxed: 1.6;
+
+		/* ─── Border Radius ───────────────────────────────────────────────────── */
+		--radius-sm: 0.25rem;   /* 4px - Buttons, inputs */
+		--radius-md: 0.5rem;    /* 8px - Cards, panels */
+		--radius-lg: 0.75rem;   /* 12px - Modals, dialogs */
+		--radius-xl: 1rem;      /* 16px - Large containers */
+
+		/* ─── Shadows (Subtle elevation only) ─────────────────────────────────── */
+		--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+		--shadow-md: 0 4px 8px rgba(0, 0, 0, 0.06);
+		--shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+		--shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
+
+		/* ─── Border Width ────────────────────────────────────────────────────── */
+		--border-width: 1px;
+		--border-width-thick: 2px;
+
+		/* ─── Transitions ─────────────────────────────────────────────────────── */
+		--transition-fast: 100ms;
+		--transition-normal: 200ms;
+		--transition-slow: 300ms;
+		--ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+	}
+}
