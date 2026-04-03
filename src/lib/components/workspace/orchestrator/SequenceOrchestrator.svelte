@@ -12,10 +12,11 @@
 	import { MODEL_STORE_KEY, PLAYBACK_CONTEXT_KEY, TEMPLATES_CONTEXT_KEY } from '$lib/context/keys';
 	import type { PlaybackStore } from '$lib/context/playback-context.svelte';
 	import type { TemplatesStore } from '$lib/stores/templates.svelte';
-	import { Plus, Trash2, Copy } from '@lucide/svelte';
+	import { Plus, Trash2, Copy, Download } from '@lucide/svelte';
 	import TimelineEvent from './TimelineEvent.svelte';
 	import { throttle } from '$lib/utils/throttle';
 	import { tickFrame, clampFrame, seekFromPixel, computeDuration } from '$lib/utils/playback';
+	import { exportMarkersToCsv, exportMarkersToJson } from '$lib/utils/marker-utils';
 	import AudioTimeline from '$lib/components/workspace/audio/AudioTimeline.svelte';
 	import PlaybackBar from './playback-bar.svelte';
 	import { deleteEventFromModel } from '$lib/utils/event-helpers';
@@ -359,6 +360,28 @@
 		);
 	}
 
+	function exportMarkersCsv() {
+		if (!markers.length) return;
+		const csv = exportMarkersToCsv(markers);
+		downloadFile(csv, 'markers.csv', 'text/csv');
+	}
+
+	function exportMarkersJson() {
+		if (!markers.length) return;
+		const json = exportMarkersToJson(markers);
+		downloadFile(json, 'markers.json', 'application/json');
+	}
+
+	function downloadFile(content: string, filename: string, mimeType: string) {
+		const blob = new Blob([content], { type: mimeType });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = filename;
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
 	interface MarkerMenu {
 		id: string;
 		x: number;
@@ -661,11 +684,36 @@
 					</div>
 				</div>
 			{:else}
+				<!-- Marker toolbar -->
+				<div class="marker-toolbar">
+					<span class="marker-count">{markers.length} marker{markers.length !== 1 ? 's' : ''}</span>
+					{#if markers.length > 0}
+						<button
+							onclick={exportMarkersCsv}
+							title="Export markers as CSV"
+							aria-label="Export markers as CSV"
+							class="marker-export-btn"
+						>
+							<Download class="h-3 w-3" />
+							<span>CSV</span>
+						</button>
+						<button
+							onclick={exportMarkersJson}
+							title="Export markers as JSON"
+							aria-label="Export markers as JSON"
+							class="marker-export-btn"
+						>
+							<Download class="h-3 w-3" />
+							<span>JSON</span>
+						</button>
+					{/if}
+				</div>
+
 				<!-- Ruler (dblclick = create marker) -->
 				<div
 					class="ruler"
 					ondblclick={handleRulerDblClick}
-					title="Double-clic pour créer un marker"
+					title="Double-click to create marker"
 					role="presentation"
 				>
 					{#each Array.from({ length: Math.floor(maxTime / 10) + 2 }, (_, i) => i * 10) as tick}
@@ -872,6 +920,35 @@
 		border-bottom: var(--border-width) solid var(--color-border);
 		overflow: hidden;
 		cursor: crosshair;
+	}
+	.marker-toolbar {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.25rem 0.5rem;
+		background: var(--color-surface-2);
+		border-bottom: var(--border-width) solid var(--color-border);
+		min-height: 28px;
+	}
+	.marker-count {
+		font-size: 11px;
+		color: var(--color-text-muted);
+	}
+	.marker-export-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.15rem 0.4rem;
+		font-size: 11px;
+		background: var(--color-surface-3);
+		border: var(--border-width) solid var(--color-border);
+		border-radius: var(--radius-sm);
+		cursor: pointer;
+		color: var(--color-text);
+		transition: background-color 150ms ease;
+	}
+	.marker-export-btn:hover {
+		background: var(--color-surface-hover);
 	}
 	.ruler-tick {
 		position: absolute;
