@@ -1,19 +1,19 @@
 project: latent-line
 phase: development
-progress: 74
+progress: 76
 status: active-development
-next_action: 'S31-01: Timeline Markers — types, schema, store, components, keyboard shortcut (M), context menu DONE. Remaining: marker export CSV/JSON, E2E test.'
+next_action: 'Sprint 31 COMPLETE (11/11 pts). All stories delivered: Timeline Markers, Asset Usage Tracking, Stats Dashboard. Ready for S32: Tooltip System & UX Micro-interactions.'
 active_role: developer
-next_command: 'Add marker export UI and E2E test for S31-01'
+next_command: 'bmad continue'
 next_role: developer
 audit_date: 2026-04-02
 audit_coverage: 84.39%
-audit_tests_passed: 515
+audit_tests_passed: 553
 roadmap_complete: true
 target_version: v1.0.0
 target_date: 2026-08-01
-current_sprint: 31
-current_story: 'S31-01'
+current_sprint: 32
+current_story: 'S32-01'
 
 phases:
   - name: planning
@@ -189,13 +189,15 @@ sprints:
     delivered_points: 9
     notes: 'S30-01 Enhanced Search (4 pts): COMPLETE. S30-02 Shortcuts Config (3 pts): COMPLETE. S30-03 Auto-Save (2 pts): COMPLETE. v0.7.0 RELEASED.'
   - id: 31
-    status: in_progress
+    status: completed
     stories: ['S31-01', 'S31-02', 'S31-03']
+    completed_stories: ['S31-01', 'S31-02', 'S31-03']
     theme: 'Timeline Markers & Asset Tracking (v0.8.0)'
     points: 11
+    delivered_points: 11
     planned_start: 2026-04-02
     planned_end: 2026-04-16
-    current_story: 'S31-01'
+    notes: 'S31-01 Timeline Markers (4 pts): COMPLETE. S31-02 Asset Usage Tracking (4 pts): COMPLETE. S31-03 Stats Dashboard (3 pts): COMPLETE. 553 tests passing (+38 new).'
   - id: 32
     status: planned
     stories: ['S32-01', 'S32-02', 'S32-03']
