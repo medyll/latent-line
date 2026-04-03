@@ -475,3 +475,114 @@ select {
 	padding-right: calc(var(--pad-sm) * 2 + 12px);
 	cursor: pointer;
 }
+
+/* ── S32-03: Micro-animations & Transitions ── */
+
+/* Panel transitions */
+.panel-enter {
+	animation: panelSlideIn 200ms ease-out;
+}
+
+.panel-exit {
+	animation: panelSlideOut 150ms ease-in forwards;
+}
+
+@keyframes panelSlideIn {
+	from {
+		opacity: 0;
+		transform: translateX(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes panelSlideOut {
+	from {
+		opacity: 1;
+		transform: translateX(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateX(20px);
+	}
+}
+
+/* Card hover effects */
+.card-hover {
+	transition:
+		transform 150ms ease,
+		box-shadow 150ms ease;
+}
+
+.card-hover:hover {
+	transform: scale(1.02);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Button press effect */
+.btn-press {
+	transition: transform 100ms ease;
+}
+
+.btn-press:active {
+	transform: scale(0.95);
+}
+
+/* Smooth playhead movement */
+.playhead {
+	transition: left 100ms linear;
+}
+
+/* List item transitions */
+.list-item {
+	transition:
+		background-color 150ms ease,
+		transform 150ms ease;
+}
+
+.list-item:hover {
+	background-color: var(--color-surface-hover);
+}
+
+/* Fade in animation for new elements */
+.fade-in {
+	animation: fadeIn 200ms ease-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* Slide in from bottom */
+.slide-up {
+	animation: slideUp 200ms ease-out;
+}
+
+@keyframes slideUp {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
