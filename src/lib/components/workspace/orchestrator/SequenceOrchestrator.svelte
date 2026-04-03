@@ -7,7 +7,8 @@
 	import { getContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { SvelteSet } from 'svelte/reactivity';
-	import type { Model, Marker } from '$lib/model/model-types';
+	import type { Model, TimelineMarker } from '$lib/model/model-types';
+	import { createMarker, type MarkerType } from '$lib/model/marker-types';
 	import { MODEL_STORE_KEY, PLAYBACK_CONTEXT_KEY, TEMPLATES_CONTEXT_KEY } from '$lib/context/keys';
 	import type { PlaybackStore } from '$lib/context/playback-context.svelte';
 	import type { TemplatesStore } from '$lib/stores/templates.svelte';
@@ -337,27 +338,25 @@
 		templateNameInput = '';
 	}
 
-	// ── Markers (S17-01) ──
-	const markers = $derived<Marker[]>(model.markers ?? []);
+	// ── Markers (S31-01) ──
+	const markers = $derived<TimelineMarker[]>(model.markers ?? []);
 
-	function createMarker(frame: number) {
-		if (!model.markers) model.markers = [];
-		model.markers.push({
-			id: `mk_${Date.now()}`,
-			time: Math.round(frame),
-			label: 'Marker',
-			color: '#f59e0b'
-		});
+	function createMarkerAtTime(frame: number) {
+		const newMarker = createMarker(Math.round(frame), 'note', 'Marker');
+		model.markers = [...(model.markers ?? []), newMarker];
 	}
+
 	function deleteMarker(id: string) {
 		if (!model.markers) return;
 		model.markers = model.markers.filter((m) => m.id !== id);
 		markerMenu = null;
 	}
-	function renameMarker(id: string, label: string) {
+
+	function updateMarker(id: string, updates: Partial<TimelineMarker>) {
 		if (!model.markers) return;
-		const idx = model.markers.findIndex((m) => m.id === id);
-		if (idx !== -1) model.markers[idx].label = label;
+		model.markers = model.markers.map((m) =>
+			m.id === id ? { ...m, ...updates, updatedAt: Date.now() } : m
+		);
 	}
 
 	interface MarkerMenu {
@@ -367,19 +366,23 @@
 	}
 	let markerMenu = $state<MarkerMenu | null>(null);
 	let markerEditLabel = $state('');
+	let markerEditType = $state<MarkerType>('note');
+	let markerEditColor = $state('');
 
-	function openMarkerMenu(e: MouseEvent, marker: Marker) {
+	function openMarkerMenu(e: MouseEvent, marker: TimelineMarker) {
 		e.preventDefault();
 		e.stopPropagation();
 		markerMenu = { id: marker.id, x: e.clientX, y: e.clientY };
 		markerEditLabel = marker.label;
+		markerEditType = marker.type;
+		markerEditColor = marker.color ?? '';
 	}
 
 	function handleRulerDblClick(e: MouseEvent) {
 		e.stopPropagation();
 		const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
 		const scrollLeft = temporalScrollContainer?.scrollLeft ?? 0;
-		createMarker((e.clientX - rect.left + scrollLeft) / pixelsPerFrame);
+		createMarkerAtTime((e.clientX - rect.left + scrollLeft) / pixelsPerFrame);
 	}
 
 	// ── Keyboard ──
@@ -399,6 +402,11 @@
 		} else if ((e.ctrlKey || e.metaKey) && e.key === 'd' && selectedTime !== null) {
 			e.preventDefault();
 			duplicateEvent(e as unknown as MouseEvent, selectedTime);
+		}
+		// M key: add marker at playhead
+		else if (e.key === 'm' || e.key === 'M') {
+			e.preventDefault();
+			createMarkerAtTime(playback.playheadTime);
 		}
 		// Ctrl+Alt+Arrow: navigate markers
 		else if (e.ctrlKey && e.altKey && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
@@ -772,7 +780,7 @@
 	/>
 {/if}
 
-<!-- S17-01: Marker context menu -->
+<!-- S31-01: Marker context menu -->
 {#if markerMenu}
 	{@const mk = markers.find((m) => m.id === markerMenu!.id)}
 	<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
@@ -788,28 +796,38 @@
 				bind:value={markerEditLabel}
 				onkeydown={(e) => {
 					if (e.key === 'Enter') {
-						renameMarker(mk.id, markerEditLabel);
+						updateMarker(mk.id, { label: markerEditLabel, type: markerEditType, color: markerEditColor || undefined });
 						markerMenu = null;
 					}
 				}}
 				style="width:100%;font-size:var(--text-xs);margin-bottom:0.25rem;"
 				aria-label="Marker label"
 			/>
-			<button
-				onclick={() => {
-					renameMarker(mk.id, markerEditLabel);
-					markerMenu = null;
-				}}
-				class="marker-menu-btn">Renommer</button
+			<select
+				bind:value={markerEditType}
+				style="width:100%;font-size:var(--text-xs);margin-bottom:0.25rem;"
+				aria-label="Marker type"
 			>
+				<option value="chapter">Chapter</option>
+				<option value="beat">Beat</option>
+				<option value="note">Note</option>
+				<option value="cue">Cue</option>
+			</select>
 			<input
 				type="color"
-				bind:value={mk.color}
+				bind:value={markerEditColor}
 				style="width:100%;height:1.4rem;cursor:pointer;margin:0.2rem 0;"
-				title="Couleur"
+				title="Color"
 			/>
+			<button
+				onclick={() => {
+					updateMarker(mk.id, { label: markerEditLabel, type: markerEditType, color: markerEditColor || undefined });
+					markerMenu = null;
+				}}
+				class="marker-menu-btn">Save</button
+			>
 			<button onclick={() => deleteMarker(mk.id)} class="marker-menu-btn marker-menu-btn-danger"
-				>Supprimer</button
+				>Delete</button
 			>
 		{/if}
 	</div>

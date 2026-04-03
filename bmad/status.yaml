@@ -1,14 +1,19 @@
 project: latent-line
 phase: development
-progress: 100
-status: release-ready
-next_action: 'Sprint 30 COMPLETE (9/9 pts). All stories delivered: Enhanced Search, Shortcuts Config, Auto-Save. v0.7.0 READY FOR RELEASE.'
+progress: 74
+status: active-development
+next_action: 'S31-01: Timeline Markers — types, schema, store, components, keyboard shortcut (M), context menu DONE. Remaining: marker export CSV/JSON, E2E test.'
 active_role: developer
-next_command: 'bmad continue'
+next_command: 'Add marker export UI and E2E test for S31-01'
 next_role: developer
-audit_date: 2026-03-27
+audit_date: 2026-04-02
 audit_coverage: 84.39%
-audit_tests_passed: 483
+audit_tests_passed: 515
+roadmap_complete: true
+target_version: v1.0.0
+target_date: 2026-08-01
+current_sprint: 31
+current_story: 'S31-01'
 
 phases:
   - name: planning
@@ -182,7 +187,64 @@ sprints:
     theme: 'Enhanced UX & Automation — Search, shortcuts, auto-save'
     points: 9
     delivered_points: 9
-    notes: 'S30-01 Enhanced Search (4 pts): COMPLETE - search-index.ts, search-filters.ts, SearchPanel.svelte. S30-02 Shortcuts Config (3 pts): COMPLETE - shortcuts-config.ts, ShortcutsPanel.svelte. S30-03 Auto-Save (2 pts): COMPLETE - version-history.ts, VersionHistoryPanel.svelte. v0.7.0 READY.'
+    notes: 'S30-01 Enhanced Search (4 pts): COMPLETE. S30-02 Shortcuts Config (3 pts): COMPLETE. S30-03 Auto-Save (2 pts): COMPLETE. v0.7.0 RELEASED.'
+  - id: 31
+    status: in_progress
+    stories: ['S31-01', 'S31-02', 'S31-03']
+    theme: 'Timeline Markers & Asset Tracking (v0.8.0)'
+    points: 11
+    planned_start: 2026-04-02
+    planned_end: 2026-04-16
+    current_story: 'S31-01'
+  - id: 32
+    status: planned
+    stories: ['S32-01', 'S32-02', 'S32-03']
+    theme: 'Tooltip System & UX Micro-interactions (v0.8.5)'
+    points: 9
+    planned_start: 2026-04-16
+    planned_end: 2026-04-27
+  - id: 33
+    status: planned
+    stories: ['S33-01', 'S33-02', 'S33-03']
+    theme: 'Real-time Collaboration Foundation (v0.9.0)'
+    points: 14
+    planned_start: 2026-04-27
+    planned_end: 2026-05-15
+  - id: 34
+    status: planned
+    stories: ['S34-01', 'S34-02', 'S34-03']
+    theme: 'ComfyUI Workflow Integration (v0.9.5)'
+    points: 16
+    planned_start: 2026-05-15
+    planned_end: 2026-06-05
+  - id: 35
+    status: planned
+    stories: ['S35-01', 'S35-02', 'S35-03']
+    theme: 'Advanced Export — AAF, FCPX, Premiere (v0.10.0)'
+    points: 12
+    planned_start: 2026-06-05
+    planned_end: 2026-06-19
+  - id: 36
+    status: planned
+    stories: ['S36-01', 'S36-02', 'S36-03']
+    theme: 'Performance at Scale (v0.11.0)'
+    points: 13
+    planned_start: 2026-06-19
+    planned_end: 2026-07-03
+  - id: 37
+    status: planned
+    stories: ['S37-01', 'S37-02', 'S37-03']
+    theme: 'Mobile & Responsive Experience (v0.12.0)'
+    points: 10
+    planned_start: 2026-07-03
+    planned_end: 2026-07-14
+  - id: 38
+    status: planned
+    stories: ['S38-01', 'S38-02', 'S38-03', 'S38-04']
+    theme: 'Polish, Testing, Documentation — v1.0.0 Release'
+    points: 15
+    planned_start: 2026-07-14
+    planned_end: 2026-08-01
 
 # Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
 # UI-001: Remove Tailwind CSS entirely — DONE
@@ -205,4 +267,5 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-03-27T17:30:00.000Z
+last_updated: 2026-04-02T12:00:00.000Z
+roadmap_summary: '8 sprints planned (S31-S38), 100 points total. Target v1.0.0: 2026-08-01.'

@@ -147,15 +147,19 @@ const timelineEventSchema = z.object({
 const markerSchema = z.object({
 	id: z.string(),
 	time: z.number().int().nonnegative(),
-	label: z.string(),
-	color: z.string()
+	type: z.enum(['chapter', 'beat', 'note', 'cue']).default('note'),
+	label: z.string().transform(sanitizeText),
+	color: z.string().optional(),
+	notes: z.string().transform(sanitizeText).optional(),
+	createdAt: z.number().default(() => Date.now()),
+	updatedAt: z.number().default(() => Date.now())
 });
 
 export const modelSchema = z.object({
 	project: projectSchema,
 	assets: assetsSchema,
 	timeline: z.array(timelineEventSchema),
-	markers: z.array(markerSchema).optional(),
+	markers: z.array(markerSchema).default([]),
 	config: z.object({
 		checkpoint: z.string().optional(),
 		sampler: z.string().optional(),

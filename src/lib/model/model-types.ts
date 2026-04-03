@@ -138,19 +138,16 @@ export interface Config {
 	audioLanes?: AudioLaneConfig[]; // ST-024: Audio lane mute/solo state
 }
 
-export interface Marker {
-	id: string;
-	time: number;
-	label: string;
-	color: string;
-}
+// Import marker types from marker-types.ts
+import type { TimelineMarker, MarkerType } from './marker-types';
+export type { TimelineMarker, MarkerType };
 
 export interface Model {
 	project: Project;
 	assets: Assets;
 	timeline: TimelineEvent[];
 	config: Config;
-	markers?: Marker[];
+	markers?: TimelineMarker[]; // S31-01: Timeline markers for navigation
 }
 
 // Note: Model is exported as a named interface above. Avoid default export for types.

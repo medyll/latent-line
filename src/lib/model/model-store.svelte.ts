@@ -1,5 +1,6 @@
 import { onMount } from 'svelte';
-import type { Model } from '$lib/model/model-types';
+import type { Model, TimelineMarker } from '$lib/model/model-types';
+import { createMarker } from '$lib/model/marker-types';
 import exampleModel from '$lib/model/model-example';
 import {
 	loadModelFromLocalStorage,
@@ -81,5 +82,24 @@ export function createModelStore() {
 		if (next) applySnapshot(next);
 	}
 
-	return { model, history, undo, redo, saveStatus };
+	// Marker CRUD operations
+	function addMarker(marker: TimelineMarker): void {
+		model.markers = [...(model.markers ?? []), marker];
+	}
+
+	function updateMarker(id: string, updates: Partial<TimelineMarker>): void {
+		model.markers = (model.markers ?? []).map((m) =>
+			m.id === id ? { ...m, ...updates, updatedAt: Date.now() } : m
+		);
+	}
+
+	function deleteMarker(id: string): void {
+		model.markers = (model.markers ?? []).filter((m) => m.id !== id);
+	}
+
+	function getMarkerAtTime(time: number, tolerance = 100): TimelineMarker | undefined {
+		return (model.markers ?? []).find((m) => Math.abs(m.time - time) < tolerance);
+	}
+
+	return { model, history, undo, redo, saveStatus, addMarker, updateMarker, deleteMarker, getMarkerAtTime };
 }
