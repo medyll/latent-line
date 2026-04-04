@@ -1,19 +1,19 @@
 project: latent-line
 phase: development
-progress: 86
+progress: 89
 status: active-development
-next_action: 'Sprint 34 COMPLETE (16/16 pts). All stories delivered: Workflow Builder, Batch Queue, Progress Tracking. Ready for S35: Advanced Export (AAF, FCPX, Premiere).'
+next_action: 'Sprint 35 COMPLETE (12/12 pts). All stories delivered: AAF Export, FCPX XML, Premiere XML. Ready for S36: Performance at Scale.'
 active_role: developer
 next_command: 'bmad continue'
 next_role: developer
 audit_date: 2026-04-02
 audit_coverage: 84.39%
-audit_tests_passed: 632
+audit_tests_passed: 684
 roadmap_complete: true
 target_version: v1.0.0
 target_date: 2026-08-01
-current_sprint: 35
-current_story: 'S35-01'
+current_sprint: 36
+current_story: 'S36-01'
 
 phases:
   - name: planning
@@ -229,12 +229,15 @@ sprints:
     planned_end: 2026-06-05
     notes: 'S34-01 Workflow Builder (6 pts): COMPLETE. S34-02 Batch Queue (5 pts): COMPLETE. S34-03 Progress Tracking (5 pts): COMPLETE. 632 tests passing (+49 new).'
   - id: 35
-    status: planned
+    status: completed
     stories: ['S35-01', 'S35-02', 'S35-03']
+    completed_stories: ['S35-01', 'S35-02', 'S35-03']
     theme: 'Advanced Export — AAF, FCPX, Premiere (v0.10.0)'
     points: 12
+    delivered_points: 12
     planned_start: 2026-06-05
     planned_end: 2026-06-19
+    notes: 'S35-01 AAF Export (5 pts): COMPLETE. S35-02 FCPX XML (4 pts): COMPLETE. S35-03 Premiere XML (3 pts): COMPLETE. 684 tests passing (+52 new).'
   - id: 36
     status: planned
     stories: ['S36-01', 'S36-02', 'S36-03']
