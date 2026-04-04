@@ -1,19 +1,19 @@
 project: latent-line
 phase: development
-progress: 83
+progress: 86
 status: active-development
-next_action: 'Sprint 33 COMPLETE (14/14 pts). All stories delivered: WebSocket Server, Presence System, Model Sync. Ready for S34: ComfyUI Workflow Integration.'
+next_action: 'Sprint 34 COMPLETE (16/16 pts). All stories delivered: Workflow Builder, Batch Queue, Progress Tracking. Ready for S35: Advanced Export (AAF, FCPX, Premiere).'
 active_role: developer
 next_command: 'bmad continue'
 next_role: developer
 audit_date: 2026-04-02
 audit_coverage: 84.39%
-audit_tests_passed: 583
+audit_tests_passed: 632
 roadmap_complete: true
 target_version: v1.0.0
 target_date: 2026-08-01
-current_sprint: 34
-current_story: 'S34-01'
+current_sprint: 35
+current_story: 'S35-01'
 
 phases:
   - name: planning
@@ -219,12 +219,15 @@ sprints:
     planned_end: 2026-05-15
     notes: 'S33-01 WebSocket Server (5 pts): COMPLETE. S33-02 Presence System (5 pts): COMPLETE. S33-03 Model Sync (4 pts): COMPLETE. 583 tests passing (+43 new).'
   - id: 34
-    status: planned
+    status: completed
     stories: ['S34-01', 'S34-02', 'S34-03']
+    completed_stories: ['S34-01', 'S34-02', 'S34-03']
     theme: 'ComfyUI Workflow Integration (v0.9.5)'
     points: 16
+    delivered_points: 16
     planned_start: 2026-05-15
     planned_end: 2026-06-05
+    notes: 'S34-01 Workflow Builder (6 pts): COMPLETE. S34-02 Batch Queue (5 pts): COMPLETE. S34-03 Progress Tracking (5 pts): COMPLETE. 632 tests passing (+49 new).'
   - id: 35
     status: planned
     stories: ['S35-01', 'S35-02', 'S35-03']
