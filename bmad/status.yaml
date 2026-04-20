@@ -1,8 +1,8 @@
 project: latent-line
 phase: development
-progress: 89
+progress: 90
 status: active-development
-next_action: 'Sprint 35 COMPLETE (12/12 pts). All stories delivered: AAF Export, FCPX XML, Premiere XML. Ready for S36: Performance at Scale.'
+next_action: 'Sprint 36 initiated. Environment restored, 684/684 tests passing. Ready to implement S36-01: Performance at Scale.'
 active_role: developer
 next_command: 'bmad continue'
 next_role: developer
@@ -239,7 +239,7 @@ sprints:
     planned_end: 2026-06-19
     notes: 'S35-01 AAF Export (5 pts): COMPLETE. S35-02 FCPX XML (4 pts): COMPLETE. S35-03 Premiere XML (3 pts): COMPLETE. 684 tests passing (+52 new).'
   - id: 36
-    status: planned
+    status: in_progress
     stories: ['S36-01', 'S36-02', 'S36-03']
     theme: 'Performance at Scale (v0.11.0)'
     points: 13
@@ -281,5 +281,5 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-04-02T12:00:00.000Z
+last_updated: 2026-04-17T21:39:00.000Z
 roadmap_summary: '8 sprints planned (S31-S38), 100 points total. Target v1.0.0: 2026-08-01.'
