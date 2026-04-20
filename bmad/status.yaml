@@ -281,5 +281,14 @@ sprints:
 #   - --color-surface-3 added to theme.css
 #   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
 
-last_updated: 2026-04-17T21:39:00.000Z
+last_updated: 2026-04-20T23:25:00.000Z
 roadmap_summary: '8 sprints planned (S31-S38), 100 points total. Target v1.0.0: 2026-08-01.'
+audit_results:
+  date: 2026-04-20
+  tests_passed: 684
+  tests_total: 684
+  i18n_keys: 118
+  type_errors: 48
+  type_warnings: 66
+  format_issues: 307
+  status: type_check_failing
