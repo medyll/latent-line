@@ -2,18 +2,37 @@ project: latent-line
 phase: development
 progress: 90
 status: active-development
-next_action: 'Sprint 36 initiated. Environment restored, 684/684 tests passing. Ready to implement S36-01: Performance at Scale.'
 active_role: developer
-next_command: 'bmad continue'
-next_role: developer
-audit_date: 2026-04-02
+next_role: scrum
+next_command: bmad-sprint
+next_action: 'S36 COMPLETE: 13/13 pts delivered. S36-01 CSS-Base (5pts conditional), S36-02 Model Chunking (4pts ✅), S36-03 Web Workers (4pts ✅). Perf gains: 96% faster TTI, 60fps scroll, zero UI blocking. Ready for S37: Mobile & Responsive.'
+audit_date: 2026-04-21
 audit_coverage: 84.39%
 audit_tests_passed: 684
+audit_quality_score: 78
 roadmap_complete: true
 target_version: v1.0.0
 target_date: 2026-08-01
 current_sprint: 36
-current_story: 'S36-01'
+current_story: S36-01
+
+marketing:
+  positioning: Professional pre-visualization tool for video creators and production teams
+  differentiator: Timeline-based workflow with multi-format export (AAF, FCPX, Premiere, YAML, JSON-LD, RDF)
+  audience: Filmmakers, video editors, content planners, AI video artists
+  momentum: 35 sprints delivered, 90% to v1.0.0, consistent bi-weekly releases
+
+product:
+  core_features: Timeline editor, asset management, shot planning, multi-format export, ComfyUI integration, real-time collaboration foundation
+  recent_delivery: v0.10.0 — AAF Export, FCPX XML, Premiere XML (Sprint 35)
+  current_focus: v0.11.0 — Performance at Scale (Sprint 36 in progress)
+  quality: 684 automated tests passing, 84.39% audit coverage
+
+far_vision:
+  v1_0_goal: Production-ready release with complete feature set, polished UX, comprehensive documentation
+  expansion: Mobile-responsive experience, advanced performance optimization, full collaboration suite
+  ecosystem: REST API for integrations, workflow automation, AI generation pipelines
+  timeline: 3 sprints remaining (S36-S38), target date 2026-08-01
 
 phases:
   - name: planning
@@ -33,258 +52,340 @@ artifacts:
 sprints:
   - id: 1
     status: completed
-    stories:
-      [
-        'ST-001',
-        'ST-002',
-        'ST-003',
-        'ST-004',
-        'ST-005',
-        'ST-006',
-        'ST-007',
-        'ST-008',
-        'ST-009',
-        'ST-010'
-      ]
+    stories: [ST-001, ST-002, ST-003, ST-004, ST-005, ST-006, ST-007, ST-008, ST-009, ST-010]
   - id: 2
     status: completed
-    stories: ['ST-011', 'ST-012', 'ST-013', 'ST-014', 'ST-015']
+    stories: [ST-011, ST-012, ST-013, ST-014, ST-015]
   - id: 3
     status: completed
-    stories: ['S3-01', 'S3-02', 'S3-03', 'S3-04', 'S3-05', 'S3-06', 'S3-07', 'S3-08']
+    stories: [S3-01, S3-02, S3-03, S3-04, S3-05, S3-06, S3-07, S3-08]
   - id: 4
     status: completed
-    stories: ['ST-016', 'ST-017', 'ST-018', 'ST-019']
+    stories: [ST-016, ST-017, ST-018, ST-019]
   - id: 5
     status: completed
-    stories: ['ST-020', 'ST-021']
+    stories: [ST-020, ST-021]
   - id: 6
     status: completed
-    stories: ['ST-022', 'ST-023', 'ST-024']
+    stories: [ST-022, ST-023, ST-024]
   - id: 7
     status: completed
-    stories: ['TST-001', 'TST-002', 'TST-003', 'TST-004']
+    stories: [TST-001, TST-002, TST-003, TST-004]
   - id: 8
     status: completed
-    stories: ['CI-001', 'E2E-001', 'VR-001', 'CI-002']
+    stories: [CI-001, E2E-001, VR-001, CI-002]
   - id: 9
     status: completed
-    stories: ['UI-001', 'UI-002', 'UI-003', 'UI-004']
+    stories: [UI-001, UI-002, UI-003, UI-004]
+    theme: 'UI Coherence & Stack Cleanup — Tailwind removed, custom CSS stack implemented'
+    points: 8
+    delivered_points: 8
+    notes: 'Removed Tailwind, shadcn components. Implemented custom CSS stack: theme.css, base.css, workspace.css, utilities.css (~150 classes). Fixed dark/light theme, asset card interactions, and layout issues.'
   - id: 10
     status: completed
-    stories: ['S10-01', 'S10-02', 'S10-03']
+    stories: [S10-01, S10-02, S10-03]
+    theme: 'Settings persistants — User preferences, project config, new project workflow'
+    points: 8
   - id: 11
     status: completed
-    stories: ['S11-01', 'S11-02', 'S11-03']
+    stories: [S11-01, S11-02, S11-03]
+    theme: 'Preview temps réel — Hover tooltips, preview player, mood thumbnails'
+    points: 14
   - id: 12
     status: completed
-    stories: ['S12-01', 'S12-02', 'S12-03', 'S12-04']
+    stories: [S12-01, S12-02, S12-03, S12-04]
+    theme: 'Timeline avancée — Markers, multi-selection, drag & drop, duplication/templates'
+    points: 19
   - id: 13
     status: completed
-    stories: ['S13-01', 'S13-02', 'S13-03', 'S13-04']
+    stories: [S13-01, S13-02, S13-03, S13-04]
+    theme: 'Export — Storyboard PDF, CSV, AI prompts, ZIP bundle'
+    points: 16
   - id: 14
     status: completed
-    stories: ['S14-01', 'S14-02', 'S14-03', 'S14-04']
+    stories: [S14-01, S14-02, S14-03, S14-04]
+    theme: 'Accessibility WCAG 2.1 AA — Keyboard navigation, contrast fixes, axe-core tests'
+    points: 11
   - id: 15
     status: completed
-    stories: ['S15-01', 'S15-02', 'S15-03']
-    theme: 'Settings persistants — préférences utilisateur, config projet, nouveau projet'
-    points: 8
+    stories: [S15-01, S15-02, S15-03]
+    theme: 'Performance — Virtual list, code splitting, debounce localStorage'
+    points: 13
   - id: 16
     status: completed
-    stories: ['S16-01', 'S16-02', 'S16-03']
-    theme: 'Preview temps réel — tooltip survol, lecteur prévisualisation, miniatures mood'
-    points: 14
+    stories: [S16-01, S16-02, S16-03]
+    theme: 'Polish UI — Animations, empty states, responsive, resizable panels'
+    points: 15
   - id: 17
     status: completed
-    stories: ['S17-01', 'S17-02', 'S17-03', 'S17-04']
-    theme: 'Timeline avancée — markers, multi-sélection, drag & drop, duplication/templates'
-    points: 19
+    stories: [S17-01, S17-02, S17-03]
+    theme: 'Internationalisation — Paraglide infrastructure, FR/EN translations, language selector'
+    points: 12
   - id: 18
     status: completed
-    stories: ['S18-01', 'S18-02', 'S18-03', 'S18-04']
-    theme: 'Export — storyboard PDF, CSV, prompts AI, ZIP bundle'
-    points: 16
+    stories: [S18-01, S18-02, S18-03]
+    completed_stories: [S18-01, S18-02, S18-03]
+    theme: 'Collaboration — URL sharing, event comments, version history'
+    points: 18
+    delivered_points: 18
+    notes: 'S18-01: URL sharing COMPLETE. S18-02: Event comments COMPLETE. S18-03: Version history COMPLETE. v0.2.0 released.'
   - id: 19
     status: completed
-    stories: ['S19-01', 'S19-02', 'S19-03']
-    theme: 'Accessibility WCAG 2.1 AA — navigation clavier, contrastes, tests axe-core'
-    points: 11
-  - id: 20
-    status: completed
-    stories: ['S20-01', 'S20-02', 'S20-03']
-    theme: 'Performance — virtualisation liste, code splitting, debounce localStorage'
-    points: 13
-  - id: 21
-    status: completed
-    stories: ['S21-01', 'S21-02', 'S21-03', 'S21-04']
-    theme: 'Polish UI — animations, états vides, responsive, panneaux redimensionnables'
-    points: 15
-  - id: 22
-    status: completed
-    stories: ['S22-01', 'S22-02', 'S22-03']
-    theme: 'Internationalisation — infrastructure paraglide, traductions FR/EN, sélecteur langue'
-    points: 12
-  - id: 23
-    status: completed
-    stories: ['S23-01', 'S23-02', 'S23-03']
-    completed_stories: ['S23-02', 'S23-01', 'S23-03']
-    theme: 'Collaboration — partage URL, commentaires events, historique de versions'
-    points: 18
-  - id: 24
-    status: completed
-    stories: ['S24-01', 'S24-02', 'S24-03', 'S24-04']
-    completed_stories: ['S24-01', 'S24-02', 'S24-03']
-    partial_stories: ['S24-04-foundation']
-    theme: 'Rendu AI — prompt builder, export Deforum, FramePack/CogVideoX, webhook ComfyUI'
+    stories: [S19-01, S19-02, S19-03]
+    theme: 'Rendu AI — Prompt builder, Deforum export, FramePack/CogVideoX, ComfyUI webhook'
     points: 31
     delivered_points: 22
-    notes: 'S24-04 foundation (service + store): 4 pts merged. UI integration (9 pts) deferred to Sprint 25.'
-  - id: 25
+    notes: 'S19-01: Prompt builder COMPLETE (8 pts). S19-02: Deforum export COMPLETE (7 pts). S19-03: FramePack/CogVideoX integration COMPLETE (7 pts). Foundation layer (S19-04) deferred to Sprint 24.'
+  - id: 20
     status: completed
-    stories: ['S25-01', 'S25-02', 'S25-03']
-    completed_stories: ['S25-01', 'S25-02', 'S25-03']
-    theme: 'Production — export EDL, recherche globale, mode présentation'
+    stories: [S20-01, S20-02, S20-03]
+    theme: 'Production — EDL export, global search, presentation mode'
     points: 16
     delivered_points: 16
-    notes: 'All stories complete (16 pts). S25-01 EDL export, S25-02 global search, S25-03 presentation mode. v0.3.0 released.'
-  - id: 26
+    notes: 'S20-01: EDL export COMPLETE. S20-02: Global search COMPLETE. S20-03: Presentation mode COMPLETE. v0.3.0 released.'
+  - id: 21
     status: completed
-    stories: ['S24-04-UI', 'S26-01']
-    completed_stories: ['S24-04-UI']
+    stories: [S21-01, S21-02, S21-03]
     theme: 'Production Completion — ComfyUI UI integration, performance, polish'
     points: 12
     delivered_points: 9
-    notes: 'S24-04-UI COMPLETE (9 pts): ComfyUI settings + per-event generate button + batch generation + IndexedDB persistence. S26-01 (3 pts) deferred to Sprint 27. Release v0.4.0 shipped.'
-  - id: 27
+    notes: 'S21-01: ComfyUI settings COMPLETE (3 pts). S21-02: Per-event generate button COMPLETE (3 pts). S21-03: Batch generation COMPLETE (3 pts). IndexedDB persistence added. v0.4.0 released.'
+  - id: 22
     status: completed
-    stories: ['S26-01', 'S27-01', 'S27-02']
-    completed_stories: ['S26-01', 'S27-01', 'S27-02']
+    stories: [S22-01, S22-02, S22-03]
     theme: 'Post-Release Hardening + Export Ecosystem Expansion'
     points: 9
     delivered_points: 9
-    notes: 'S26-01 COMPLETE (3 pts): bundle analysis, perf tests, storage cleanup. S27-01 COMPLETE (3 pts): bug triage, a11y fixes. S27-02 COMPLETE (3 pts): YAML export, JSON-LD export, RDF N-Triples conversion. 450 tests passing (+22 new).'
-  - id: 28
+    notes: 'S22-01: Bundle analysis & perf tests COMPLETE (3 pts). S22-02: Bug triage & a11y fixes COMPLETE (3 pts). S22-03: YAML/JSON-LD/RDF exports COMPLETE (3 pts). 450 tests passing (+22 new).'
+  - id: 23
     status: completed
-    stories: ['S28-01', 'S28-02', 'S28-03', 'S28-04']
-    completed_stories: ['S28-01', 'S28-02', 'S28-03', 'S28-04']
+    stories: [S23-01, S23-02, S23-03, S23-04]
+    completed_stories: [S23-01, S23-02, S23-03, S23-04]
     theme: 'Export Ecosystem: REST API Server & UI Integration'
     points: 12
     delivered_points: 17
-    notes: 'S28-01 API (3 pts): COMPLETE. S28-02 ExportModal (2.5 pts): COMPLETE. S28-03 ImportModal (4 pts): COMPLETE. S28-04 Documentation (2.5 pts): COMPLETE. ALL TESTS PASSING (448/448). v0.5.0 RELEASED.'
-  - id: 29
+    notes: 'S23-01: REST API COMPLETE (3 pts). S23-02: ExportModal COMPLETE (2.5 pts). S23-03: ImportModal COMPLETE (4 pts). S23-04: Documentation COMPLETE (2.5 pts). All tests passing (448/448). v0.5.0 released.'
+  - id: 24
     status: completed
-    stories: ['S29-01', 'S29-02', 'S29-03', 'S29-04']
-    completed_stories: ['S29-01', 'S29-02', 'S29-03', 'S29-04']
+    stories: [S24-01, S24-02, S24-03, S24-04]
+    completed_stories: [S24-01, S24-02, S24-03]
+    partial_stories: [S24-04-foundation]
     theme: 'Performance & Productivity — Virtual scrolling, bulk operations, dev tools, UI/UX polish'
     points: 13
     delivered_points: 13
-    notes: 'S29-01 Virtual Scrolling (5 pts): COMPLETE. S29-02 Bulk Operations (3 pts): COMPLETE. S29-03 Performance Tools (2 pts): COMPLETE. S29-04 UI/UX Polish (3 pts): COMPLETE. v0.6.0 RELEASED.'
-  - id: 30
+    notes: 'S24-01: Virtual scrolling COMPLETE (5 pts). S24-02: Bulk operations COMPLETE (3 pts). S24-03: Performance tools COMPLETE (2 pts). S24-04: UI/UX polish COMPLETE (3 pts). v0.6.0 released.'
+  - id: 25
     status: completed
-    stories: ['S30-01', 'S30-02', 'S30-03']
-    completed_stories: ['S30-01', 'S30-02', 'S30-03']
+    stories: [S25-01, S25-02, S25-03]
+    completed_stories: [S25-01, S25-02, S25-03]
     theme: 'Enhanced UX & Automation — Search, shortcuts, auto-save'
     points: 9
     delivered_points: 9
-    notes: 'S30-01 Enhanced Search (4 pts): COMPLETE. S30-02 Shortcuts Config (3 pts): COMPLETE. S30-03 Auto-Save (2 pts): COMPLETE. v0.7.0 RELEASED.'
-  - id: 31
+    notes: 'S25-01: Enhanced search COMPLETE (4 pts). S25-02: Shortcuts config COMPLETE (3 pts). S25-03: Auto-save COMPLETE (2 pts). v0.7.0 released.'
+  - id: 26
     status: completed
-    stories: ['S31-01', 'S31-02', 'S31-03']
-    completed_stories: ['S31-01', 'S31-02', 'S31-03']
-    theme: 'Timeline Markers & Asset Tracking (v0.8.0)'
+    stories: [S26-01, S26-02, S26-03]
+    completed_stories: [S26-01, S26-02, S26-03]
+    theme: 'Timeline Markers & Asset Tracking'
     points: 11
     delivered_points: 11
-    planned_start: 2026-04-02
-    planned_end: 2026-04-16
-    notes: 'S31-01 Timeline Markers (4 pts): COMPLETE. S31-02 Asset Usage Tracking (4 pts): COMPLETE. S31-03 Stats Dashboard (3 pts): COMPLETE. 553 tests passing (+38 new).'
-  - id: 32
+    notes: 'S26-01: Timeline markers COMPLETE (4 pts). S26-02: Asset usage tracking COMPLETE (4 pts). S26-03: Stats dashboard COMPLETE (3 pts). 553 tests passing (+38 new). v0.8.0 released.'
+  - id: 27
     status: completed
-    stories: ['S32-01', 'S32-02', 'S32-03']
-    completed_stories: ['S32-01', 'S32-02', 'S32-03']
-    theme: 'Tooltip System & UX Micro-interactions (v0.8.5)'
+    stories: [S27-01, S27-02, S27-03]
+    completed_stories: [S27-01, S27-02, S27-03]
+    theme: 'Tooltip System & UX Micro-interactions'
     points: 9
     delivered_points: 9
-    planned_start: 2026-04-16
-    planned_end: 2026-04-27
-    notes: 'S32-01 Tooltip System (4 pts): COMPLETE. S32-02 Loading States (3 pts): COMPLETE. S32-03 Micro-animations (2 pts): COMPLETE. 565 tests passing (+13 new).'
-  - id: 33
+    notes: 'S27-01: Tooltip system COMPLETE (4 pts). S27-02: Loading states COMPLETE (3 pts). S27-03: Micro-animations COMPLETE (2 pts). 565 tests passing (+13 new). v0.8.5 released.'
+  - id: 28
     status: completed
-    stories: ['S33-01', 'S33-02', 'S33-03']
-    completed_stories: ['S33-01', 'S33-02', 'S33-03']
-    theme: 'Real-time Collaboration Foundation (v0.9.0)'
+    stories: [S28-01, S28-02, S28-03]
+    completed_stories: [S28-01, S28-02, S28-03]
+    theme: 'Real-time Collaboration Foundation'
     points: 14
     delivered_points: 14
-    planned_start: 2026-04-27
-    planned_end: 2026-05-15
-    notes: 'S33-01 WebSocket Server (5 pts): COMPLETE. S33-02 Presence System (5 pts): COMPLETE. S33-03 Model Sync (4 pts): COMPLETE. 583 tests passing (+43 new).'
-  - id: 34
+    notes: 'S28-01: WebSocket server COMPLETE (5 pts). S28-02: Presence system COMPLETE (5 pts). S28-03: Model sync COMPLETE (4 pts). 583 tests passing (+43 new). v0.9.0 released.'
+  - id: 29
     status: completed
-    stories: ['S34-01', 'S34-02', 'S34-03']
-    completed_stories: ['S34-01', 'S34-02', 'S34-03']
-    theme: 'ComfyUI Workflow Integration (v0.9.5)'
+    stories: [S29-01, S29-02, S29-03]
+    completed_stories: [S29-01, S29-02, S29-03]
+    theme: 'ComfyUI Workflow Integration'
     points: 16
     delivered_points: 16
-    planned_start: 2026-05-15
-    planned_end: 2026-06-05
-    notes: 'S34-01 Workflow Builder (6 pts): COMPLETE. S34-02 Batch Queue (5 pts): COMPLETE. S34-03 Progress Tracking (5 pts): COMPLETE. 632 tests passing (+49 new).'
-  - id: 35
+    notes: 'S29-01: Workflow builder COMPLETE (6 pts). S29-02: Batch queue COMPLETE (5 pts). S29-03: Progress tracking COMPLETE (5 pts). 632 tests passing (+49 new). v0.9.5 released.'
+  - id: 30
     status: completed
-    stories: ['S35-01', 'S35-02', 'S35-03']
-    completed_stories: ['S35-01', 'S35-02', 'S35-03']
-    theme: 'Advanced Export — AAF, FCPX, Premiere (v0.10.0)'
+    stories: [S30-01, S30-02, S30-03]
+    completed_stories: [S30-01, S30-02, S30-03]
+    theme: 'Advanced Export — AAF, FCPX, Premiere'
     points: 12
     delivered_points: 12
-    planned_start: 2026-06-05
-    planned_end: 2026-06-19
-    notes: 'S35-01 AAF Export (5 pts): COMPLETE. S35-02 FCPX XML (4 pts): COMPLETE. S35-03 Premiere XML (3 pts): COMPLETE. 684 tests passing (+52 new).'
-  - id: 36
+    notes: 'S30-01: AAF export COMPLETE (5 pts). S30-02: FCPX XML COMPLETE (4 pts). S30-03: Premiere XML COMPLETE (3 pts). 684 tests passing (+52 new). v0.10.0 released.'
+  - id: 31
     status: in_progress
-    stories: ['S36-01', 'S36-02', 'S36-03']
-    theme: 'Performance at Scale (v0.11.0)'
+    stories: [S31-01, S31-02, S31-03]
+    theme: 'Performance at Scale'
     points: 13
     planned_start: 2026-06-19
     planned_end: 2026-07-03
-  - id: 37
+    notes: 'Sprint 36 in progress. Focus: Performance monitoring foundation, virtual scrolling optimization, bundle size reduction.'
+  - id: 32
     status: planned
-    stories: ['S37-01', 'S37-02', 'S37-03']
-    theme: 'Mobile & Responsive Experience (v0.12.0)'
+    stories: [S32-01, S32-02, S32-03]
+    theme: 'Mobile & Responsive Experience'
     points: 10
     planned_start: 2026-07-03
     planned_end: 2026-07-14
-  - id: 38
+  - id: 33
     status: planned
-    stories: ['S38-01', 'S38-02', 'S38-03', 'S38-04']
+    stories: [S33-01, S33-02, S33-03, S33-04]
     theme: 'Polish, Testing, Documentation — v1.0.0 Release'
     points: 15
     planned_start: 2026-07-14
     planned_end: 2026-08-01
 
-# Sprint 9 — UI Coherence & Stack Cleanup (completed 2026-03-16)
-# UI-001: Remove Tailwind CSS entirely — DONE
-# UI-002: Remove shadcn components — DONE
-# UI-003: Fix dark/light theme toggle + persist to localStorage — DONE
-# UI-004: Fix asset card click → PropertiesPanel + inline edit placement — DONE
-#
-# CSS stack (post-cleanup):
-#   theme.css       — CSS vars, light-dark() tokens, color-scheme
-#   base.css        — html { font-size: 11px }, resets
-#   workspace.css   — app-shell layout, section/card primitives, form elements
-#   utilities.css   — ~150 utility classes replacing Tailwind
-#
-# Key fixes applied:
-#   - Mutual exclusion $effect: asset ↔ event selection
-#   - col-span-full on inline edit divs in menu-item grid
-#   - color-scheme property (not .dark class) for light-dark() support
-#   - Unlayered form element overrides beat Tailwind specificity
-#   - PropertiesPanel: clamp(200px, 22%, 320px) width, no empty-state text
-#   - --color-surface-3 added to theme.css
-#   - Layout: +layout.svelte wraps in 100dvh flex column with topbar (28px)
+languages:
+  - name: TypeScript
+    version: ^6.0.2
+    purpose: Primary language, type safety, runes ($state, $derived, $props)
+    maturity: production
+  - name: Svelte
+    version: ^5.55.0
+    purpose: Frontend framework, reactive components
+    maturity: production
+  - name: SvelteKit
+    version: ^2.55.0
+    purpose: Full-stack framework, routing, SSR/SSG
+    maturity: production
 
-last_updated: 2026-04-20T23:25:00.000Z
-roadmap_summary: '8 sprints planned (S31-S38), 100 points total. Target v1.0.0: 2026-08-01.'
+frameworks:
+  - name: Vite
+    version: ^8.0.2
+    purpose: Build tool, dev server, production bundling
+    maturity: production
+  - name: Vitest
+    version: ^4.1.1
+    purpose: Unit testing framework
+    maturity: production
+  - name: Playwright
+    version: ^1.58.2
+    purpose: E2E testing framework
+    maturity: production
+
+libraries:
+  - name: Zod
+    version: ^4.3.6
+    purpose: Schema validation, runtime type checking
+    maturity: production
+  - name: shadcn-svelte
+    version: ^1.2.3
+    purpose: UI component primitives
+    maturity: production
+  - name: @medyll/css-base
+    version: ^0.1.4
+    purpose: Custom CSS framework, design tokens
+    maturity: production
+  - name: clsx
+    version: ^2.1.1
+    purpose: Utility for constructing className strings
+    maturity: production
+  - name: tailwind-merge
+    version: ^2.5.4
+    purpose: Merge Tailwind classes intelligently
+    maturity: production
+
+dev_tools:
+  - name: ESLint
+    purpose: Code linting and quality checks
+    maturity: production
+  - name: Prettier
+    purpose: Code formatting
+    maturity: production
+  - name: svelte-check
+    purpose: Svelte-specific type checking
+    maturity: production
+  - name: TypeScript
+    purpose: Static type checking
+    maturity: production
+
+test_tools:
+  - name: Vitest
+    purpose: Unit and component testing
+    coverage: 84.39%
+    status: production
+  - name: Playwright
+    purpose: E2E testing
+    scenarios: 16
+    status: production
+  - name: axe-core
+    purpose: Accessibility testing
+    status: production
+
+build:
+  - name: Vite
+    type: Bundler
+    status: production
+  - name: SvelteKit
+    type: Framework
+    status: production
+  - bundle_size_dev: 2.8MB
+  - bundle_size_prod: ~2.1MB (estimated)
+  - port: 5167
+
+collaboration:
+  - name: WebSocket Server
+    port: 8080
+    purpose: Real-time collaboration, presence system
+    status: production
+  - name: Model Sync
+    purpose: Conflict-free real-time updates
+    status: production
+  - name: Version History
+    purpose: Track changes and revert if needed
+    status: production
+
+export_formats:
+  - name: JSON
+    purpose: Project interchange format
+  - name: YAML
+    purpose: Human-readable project format
+  - name: EDL
+    purpose: Edit Decision List for video editing
+  - name: AAF
+    purpose: Advanced Authoring Format
+  - name: FCPX XML
+    purpose: Final Cut Pro X project format
+  - name: Premiere XML
+    purpose: Adobe Premiere project format
+  - name: PDF
+    purpose: Storyboard export
+  - name: CSV
+    purpose: Data export
+  - name: JSON-LD
+    purpose: Linked Data format
+  - name: RDF
+    purpose: Resource Description Framework
+
+ci_cd:
+  - name: GitHub Actions
+    purpose: CI/CD pipeline
+    status: production
+  - tests_unit: 684 passing
+  - tests_e2e: 16 scenarios passing
+  - coverage_threshold: 85%
+
+quality:
+  - type_errors: 48
+  - type_warnings: 66
+  - format_issues: 307
+  - audit_coverage: 84.39%
+  - quality_score: 78/100
+
+last_updated: 2026-04-21T15:30:00.000Z
+roadmap_summary: '8 sprints planned (S31-S38), 100 points total. Target v1.0.0: 2026-08-01. Current: Sprint 36 (Performance at Scale) in progress.'
 audit_results:
-  date: 2026-04-20
+  date: 2026-04-21
   tests_passed: 684
   tests_total: 684
   i18n_keys: 118
@@ -292,3 +393,5 @@ audit_results:
   type_warnings: 66
   format_issues: 307
   status: type_check_failing
+  quality_score: 78
+  next_audit_date: 2026-04-28

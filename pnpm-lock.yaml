@@ -9,14 +9,17 @@ importers:
   .:
     dependencies:
       '@medyll/css-base':
-        specifier: ^0.1.4
-        version: 0.1.4
+        specifier: ^0.6.0
+        version: 0.6.0
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      pixelmatch:
+        specifier: ^7.1.0
+        version: 7.1.0
       shadcn-svelte:
         specifier: ^1.2.3
         version: 1.2.3(svelte@5.55.0)
@@ -102,6 +105,9 @@ importers:
       playwright:
         specifier: ^1.58.2
         version: 1.58.2
+      pngjs:
+        specifier: ^7.0.0
+        version: 7.0.0
       prettier:
         specifier: ^3.8.1
         version: 3.8.1
@@ -483,8 +489,8 @@ packages:
     peerDependencies:
       svelte: ^5
 
-  '@medyll/css-base@0.1.4':
-    resolution: {integrity: sha512-EbkGVl6gZt/p/KdbKa81clO2JiSTGwLKtuyvvLpwjkEFj8G/IjO6K4DT4XOjuZImF3nHwD+zOwVVumw+mObv0A==}
+  '@medyll/css-base@0.6.0':
+    resolution: {integrity: sha512-yqMZPI+k38ZRhiPWb/5Mm0dDAJRSBKMS2nCU8cxmTHld8yBayyf1q2JyKY5fVgdsJZt6K4poojEfa3EAUK4/Mw==}
 
   '@modelcontextprotocol/sdk@1.28.0':
     resolution: {integrity: sha512-gmloF+i+flI8ouQK7MWW4mOwuMh4RePBuPFAEPC6+pdqyWOUMDOixb6qZ69owLJpz6XmyllCouc4t8YWO+E2Nw==}
@@ -2266,6 +2272,10 @@ packages:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
 
+  pixelmatch@7.1.0:
+    resolution: {integrity: sha512-1wrVzJ2STrpmONHKBy228LM1b84msXDUoAzVEl0R8Mz4Ce6EPr+IVtxm8+yvrqLYMHswREkjYFaMxnyGnaY3Ng==}
+    hasBin: true
+
   pkce-challenge@5.0.1:
     resolution: {integrity: sha512-wQ0b/W4Fr01qtpHlqSqspcj3EhBvimsdh0KlHhH8HRZnMsEa0ea2fTULOXOS9ccQr3om+GcGRk4e+isrZWV8qQ==}
     engines: {node: '>=16.20.0'}
@@ -3469,7 +3479,7 @@ snapshots:
     dependencies:
       svelte: 5.55.0
 
-  '@medyll/css-base@0.1.4': {}
+  '@medyll/css-base@0.6.0': {}
 
   '@modelcontextprotocol/sdk@1.28.0(zod@3.25.76)':
     dependencies:
@@ -5219,6 +5229,10 @@ snapshots:
   picomatch@2.3.2: {}
 
   picomatch@4.0.4: {}
+
+  pixelmatch@7.1.0:
+    dependencies:
+      pngjs: 7.0.0
 
   pkce-challenge@5.0.1: {}
 

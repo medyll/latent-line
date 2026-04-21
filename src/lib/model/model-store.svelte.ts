@@ -8,6 +8,7 @@ import {
 	createDebouncedSave
 } from '$lib/utils/persistence';
 import { createModelHistory } from '$lib/context/history.svelte';
+import { chunkModel, loadChunks, type LoadProgress } from '$lib/utils/model-chunker';
 
 /**
  * createModelStore — Svelte 5 external reactive store for the app model.
@@ -27,6 +28,11 @@ export function createModelStore() {
 	const history = createModelHistory();
 	const saveStatus = $state({ value: 'saved' as 'saved' | 'unsaved' | 'saving' });
 	const debouncedSave = createDebouncedSave(saveModelToLocalStorage, 500);
+	
+	// Chunked loading state
+	const isLoadingLarge = $state(false);
+	const loadProgress = $state<LoadProgress | null>(null);
+	const chunkSize = $state(100); // Default: 100 events per chunk
 
 	let previousJson = JSON.stringify(model);
 	let isApplyingSnapshot = false;
@@ -100,6 +106,52 @@ export function createModelStore() {
 	function getMarkerAtTime(time: number, tolerance = 100): TimelineMarker | undefined {
 		return (model.markers ?? []).find((m) => Math.abs(m.time - time) < tolerance);
 	}
+	
+	/**
+	 * Load a large model progressively in chunks
+	 * Prevents UI freeze when loading 1000+ events
+	 */
+	async function loadLargeModel(newModel: Model, size: number = chunkSize): Promise<void> {
+		isLoadingLarge = true;
+		loadProgress = null;
+		
+		// Split model into chunks
+		const chunked = chunkModel(newModel, size);
+		
+		// Load chunks progressively
+		const allEvents = await loadChunks(chunked, (progress) => {
+			loadProgress = progress;
+			// Update model incrementally as chunks load
+			model.timeline = allEvents.slice(0, progress.eventsLoaded);
+		});
+		
+		// Final update with all events
+		model.timeline = allEvents;
+		isLoadingLarge = false;
+		loadProgress = null;
+	}
+	
+	/**
+	 * Check if a model is large enough to warrant chunked loading
+	 */
+	function isLargeModel(newModel: Model): boolean {
+		return (newModel.events?.length || 0) > 200;
+	}
 
-	return { model, history, undo, redo, saveStatus, addMarker, updateMarker, deleteMarker, getMarkerAtTime };
+	return { 
+		model, 
+		history, 
+		undo, 
+		redo, 
+		saveStatus, 
+		addMarker, 
+		updateMarker, 
+		deleteMarker, 
+		getMarkerAtTime,
+		loadLargeModel,
+		isLargeModel,
+		isLoadingLarge,
+		loadProgress,
+		chunkSize
+	};
 }

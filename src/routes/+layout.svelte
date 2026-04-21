@@ -28,35 +28,55 @@
 	$effect(() => {
 		prefs.language = locale.value;
 	});
+
+	// Sync theme with data-theme attribute for css-base
+	$effect(() => {
+		if (prefs.theme === 'dark') {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		} else if (prefs.theme === 'light') {
+			document.documentElement.setAttribute('data-theme', 'light');
+		} else {
+			document.documentElement.removeAttribute('data-theme');
+		}
+	});
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href={favicon} />
+	<title>Latent Line</title>
+</svelte:head>
 
-<div style="display:flex;flex-direction:column;height:100dvh;width:100vw;overflow:hidden;">
-	<div
-		style="display:flex;align-items:center;justify-content:flex-end;padding:0 0.5rem;height:28px;border-bottom:var(--border-width) solid var(--color-border);flex-shrink:0;gap:0.5rem;"
-	>
-		<LanguageSelector compact />
-		<button
-			onclick={() => (showPrefs = true)}
-			title={t('toolbar.preferences')}
-			aria-label={t('toolbar.preferences')}
-			style="font-size:var(--text-xs);background:none;border:none;cursor:pointer;color:var(--color-text-muted);"
-			>⚙</button
-		>
-		<button
-			onclick={() => {
-				prefs.theme = prefs.theme === 'light' ? 'dark' : 'light';
-			}}
-			title={t('toolbar.toggleTheme.toDark')}
-			aria-label={t('toolbar.toggleTheme.toDark')}
-			style="font-size:var(--text-xs);background:none;border:none;cursor:pointer;color:var(--color-text-muted);"
-			>{prefs.theme === 'dark'
-				? t('toolbar.toggleTheme.toLight')
-				: t('toolbar.toggleTheme.toDark')}</button
-		>
-	</div>
-	<main style="flex:1;min-height:0;overflow:hidden;">
+<div class="app-shell">
+	<header class="app-header">
+		<div class="flex items-center gap-md">
+			<h1 class="text-lg font-semibold text-gradient hide-mobile">Latent Line</h1>
+		</div>
+		<div class="flex items-center gap-sm">
+			<LanguageSelector compact />
+			<button
+				class="icon-btn"
+				onclick={() => (showPrefs = true)}
+				title={t('toolbar.preferences')}
+				aria-label={t('toolbar.preferences')}
+				type="button"
+			>
+				⚙
+			</button>
+			<button
+				class="icon-btn"
+				onclick={() => {
+					prefs.theme = prefs.theme === 'dark' ? 'light' : 'dark';
+				}}
+				title={prefs.theme === 'dark' ? t('toolbar.toggleTheme.toLight') : t('toolbar.toggleTheme.toDark')}
+				aria-label={prefs.theme === 'dark' ? t('toolbar.toggleTheme.toLight') : t('toolbar.toggleTheme.toDark')}
+				type="button"
+			>
+				{prefs.theme === 'dark' ? '☀️' : '🌙'}
+			</button>
+		</div>
+	</header>
+	
+	<main class="app-main">
 		{@render children()}
 	</main>
 </div>
