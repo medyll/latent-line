@@ -25,7 +25,25 @@
 [data-theme="dark"] {
 	--color-primary: oklch(0.65 0.25 280); /* Brighter in dark mode */
 	--default-color-text-light: oklch(0.85 0.02 265);
-	--default-color-surface-light: oklch(0.12 0.02 265);
+	--default-color-surface-light: oklch(0.10 0.02 265); /* Darker surface for studio feel */
+}
+
+/* AI identity tokens */
+:root {
+	--ai-purple: oklch(0.65 0.25 280);
+	--ai-teal: oklch(0.72 0.18 195);
+}
+
+/* AI glow utility */
+.ai-glow {
+	box-shadow: 0 0 0 1px var(--ai-purple, oklch(0.65 0.25 280)) / 0.5,
+		0 0 12px oklch(0.65 0.25 280 / 0.2);
+}
+
+/* Mono font for prompts and timecodes */
+code, .font-mono, .timecode, .prompt-text {
+	font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+	font-size: 0.85em;
 }
 
 /* ============================================

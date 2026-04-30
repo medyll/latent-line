@@ -30,9 +30,9 @@ export function createModelStore() {
 	const debouncedSave = createDebouncedSave(saveModelToLocalStorage, 500);
 	
 	// Chunked loading state
-	const isLoadingLarge = $state(false);
-	const loadProgress = $state<LoadProgress | null>(null);
-	const chunkSize = $state(100); // Default: 100 events per chunk
+	let isLoadingLarge = $state(false);
+	let loadProgress = $state<LoadProgress | null>(null);
+	let chunkSize = $state(100); // Default: 100 events per chunk
 
 	let previousJson = JSON.stringify(model);
 	let isApplyingSnapshot = false;
@@ -121,8 +121,6 @@ export function createModelStore() {
 		// Load chunks progressively
 		const allEvents = await loadChunks(chunked, (progress) => {
 			loadProgress = progress;
-			// Update model incrementally as chunks load
-			model.timeline = allEvents.slice(0, progress.eventsLoaded);
 		});
 		
 		// Final update with all events
@@ -135,7 +133,7 @@ export function createModelStore() {
 	 * Check if a model is large enough to warrant chunked loading
 	 */
 	function isLargeModel(newModel: Model): boolean {
-		return (newModel.events?.length || 0) > 200;
+		return (newModel.timeline?.length || 0) > 200;
 	}
 
 	return { 

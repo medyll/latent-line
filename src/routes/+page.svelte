@@ -10,6 +10,7 @@
 	import ShortcutHelp from '$lib/components/ui/ShortcutHelp.svelte';
 	import ConfirmDialog from '$lib/components/ui/ConfirmDialog.svelte';
 	import SaveIndicator from '$lib/components/app/SaveIndicator.svelte';
+	import OnboardingFlow from '$lib/components/app/OnboardingFlow.svelte';
 	import {
 		ASSET_STORE_KEY,
 		MODEL_STORE_KEY,
@@ -40,6 +41,13 @@
 	let selectedTime = $state<number | null>(null);
 	let showInspector = $state(false);
 	let showShortcuts = $state(false);
+
+	// Show onboarding on first visit (empty project)
+	const isEmptyProject = $derived(
+		model.timeline.length === 0 && model.assets.characters.length === 0
+	);
+	let onboardingDismissed = $state(false);
+	const showOnboarding = $derived(isEmptyProject && !onboardingDismissed);
 	let showProjectConfig = $state(false);
 	let showNewProjectConfirm = $state(false);
 	let showExport = $state(false);
@@ -104,6 +112,15 @@
 		<button onclick={() => (showSnapshots = true)} title="Snapshots" class="toolbar-btn">
 			📸 Snapshots
 		</button>
+		<a
+			href="/present?model={encodeURIComponent(btoa(JSON.stringify($state.snapshot(model))))}&index=0"
+			target="_blank"
+			rel="noopener"
+			class="toolbar-btn toolbar-btn--screening"
+			title="Ouvrir le screening"
+		>
+			▶ Screening
+		</a>
 		<button
 			onclick={() => (showComfyUISettings = true)}
 			title="ComfyUI / Stable Diffusion Settings"
@@ -151,8 +168,8 @@
 	<button
 		class="inspector-toggle"
 		onclick={() => (showInspector = !showInspector)}
-		title="Toggle Model Inspector (Ctrl+I)"
-		aria-label="Toggle Model Inspector">⌥</button
+		title="Régie (Ctrl+I)"
+		aria-label="Ouvrir la Régie">⌥</button
 	>
 </div>
 
@@ -201,6 +218,10 @@
 			onClose={() => (showComfyUISettings = false)}
 		/>
 	{/await}
+{/if}
+
+{#if showOnboarding}
+	<OnboardingFlow {model} onComplete={() => (onboardingDismissed = true)} />
 {/if}
 
 <style>

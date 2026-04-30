@@ -517,7 +517,7 @@
 	<section>
 		<header class="card-header">
 			<h3 class="card-title flex items-center justify-between">
-				<span>Synoptic View</span>
+				<span>Storyboard</span>
 				<div style="display:flex;gap:0.25rem;align-items:center;">
 					<button
 						onclick={() => (compactMode = !compactMode)}
@@ -635,7 +635,7 @@
 	<section>
 		<header class="card-header">
 			<h3 class="card-title flex items-center justify-between">
-				<span>Temporal Sequencer</span>
+				<span>Script</span>
 				<div class="flex items-center gap-3">
 					<div class="flex items-center gap-1" role="group" aria-label="Playback controls">
 						<button

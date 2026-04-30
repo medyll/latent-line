@@ -619,6 +619,8 @@
 									{#if showPromptAssist && promptAssistActorIdx === actorIdx}
 										<div class="assist-container">
 											<PromptAssist
+												currentMood={selectedEvent?.frame?.actors?.[actorIdx]?.speech?.mood}
+												previousScene={model.timeline[selectedEventIndex - 1]?.frame?.prompt}
 												onSelect={(term) => {
 													appendToActorAction(actorIdx, term);
 													showPromptAssist = false;

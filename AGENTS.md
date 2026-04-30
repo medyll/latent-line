@@ -55,8 +55,9 @@ e2e/              # Playwright E2E tests (16 scenarios)
 ```
 
 **Key entrypoints:**
-- `src/routes/+page.svelte` — Landing page
-- `src/routes/app/+page.svelte` — Main editor
+- `src/routes/+page.svelte` — Main editor (no `app/` subdirectory)
+- `src/routes/+layout.svelte` — App shell, header, theme, prefs context
+- `src/routes/present/+page.svelte` — Presentation/screening view
 - `src/lib/model/model-types.ts` — TypeScript interfaces
 - `src/lib/model/model-template.ts` — Zod validation schemas
 
@@ -69,20 +70,26 @@ e2e/              # Playwright E2E tests (16 scenarios)
 - **NEVER** use `$:` reactive declarations (Svelte 4 anti-pattern)
 - Prefer snippets over slots: `{@render children()}`
 - Clone state on mutation: `structuredClone()` to prevent shared references
+- **`$state` must use `let` not `const`** — `$state` vars are reassigned; `const` = compile error
+- **`$derived` block form:** use `$derived.by(() => { ...; return val; })` NOT `$derived(() => {...})` — the latter makes the derived value the function itself, not its return value
 
 ### Data Model
 - Timeline events MUST be sorted by ascending `time` (milliseconds)
+- **`TimelineEvent` has no `id` field** — keyed by `time` (use `String(ev.time)` as string key)
+- `Character` requires `references: Reference[]` — always include even if empty array
 - Asset IDs must be unique and reference valid entries in `assets.characters[]`
 - Path traversal prevention: `isUrlOrFile()` rejects `..` in paths
 - Always validate with `modelSchema.safeParse(value)` before persisting
+- Generated images stored in IndexedDB `generated-images` store, keyed by `event_id` string
+- Global generation state: `$lib/stores/generation.svelte` — `generation` store + `generationStats` derived
 
 ### Styling
-- Custom CSS stack (NO Tailwind, removed Sprint 9):
-  - `src/styles/theme.css` — CSS vars, `light-dark()` tokens
-  - `src/styles/base.css` — root `font-size: 11px`, resets
-  - `src/styles/workspace.css` — layout primitives
-  - `src/styles/utilities.css` — ~200 utility classes
-- Use `color-scheme` property for dark mode (not `.dark` class)
+- Hybrid stack: `@medyll/css-base` tokens + Tailwind utility classes
+  - `src/lib/styles/app.css` — design system overrides, oklch color tokens, layout components
+  - `tailwind.config.cjs` — CSS var references + concrete `ai-purple`/`ai-teal` tokens
+- Dark mode via `data-theme="dark"` on `<html>` (set in `+layout.svelte`), NOT `.dark` class
+- Primary brand color: `oklch(0.55 0.25 280)` (purple-violet), brighter in dark mode
+- AI identity palette: `--ai-purple: oklch(0.65 0.25 280)`, `--ai-teal: oklch(0.72 0.18 195)`
 
 ### Testing
 - Unit tests: `src/**/*.test.ts` (Vitest, 2 tiers: client browser + server node)
@@ -156,14 +163,18 @@ e2e/__snapshots__/{test}/{arg}-{platform}{ext}
 
 ## Common Mistakes to Avoid
 
-1. **Wrong port:** Dev server runs on 5167, not 5173
+1. **Wrong port:** Dev server runs on 5167 (may shift to 5168+ if busy)
 2. **Svelte 4 syntax:** No `$:` reactive declarations, use `$derived()`
-3. **Mutating state directly:** Always clone with `structuredClone()`
-4. **Modifying shadcn components:** `src/lib/components/ui/` is read-only
-5. **Unsorted timeline:** Events must be ascending by `time`
-6. **Skipping svelte-kit sync:** Run before typecheck if types are stale
-7. **Tailwind classes:** Removed in Sprint 9, use `utilities.css` instead
-8. **Wrong test command:** `test:unit` for Vitest, `test:e2e` for Playwright
+3. **`$state` with `const`:** Always `let x = $state(...)` — `const` causes compile error on reassign
+4. **`$derived` with function arg:** `$derived(() => x)` = derived value IS the function. Use `$derived.by(() => { return x; })` for block form
+5. **`TimelineEvent.id`:** Doesn't exist — use `String(event.time)` as event key
+6. **Mutating state directly:** Always clone with `structuredClone()`
+7. **Modifying shadcn components:** `src/lib/components/ui/` is read-only
+8. **Unsorted timeline:** Events must be ascending by `time`
+9. **Skipping svelte-kit sync:** Run before typecheck if types are stale
+10. **Tailwind IS active:** `tailwind.config.cjs` + utility classes used throughout — don't assume removed
+11. **Wrong test command:** `test:unit` for Vitest, `test:e2e` for Playwright
+12. **Context overlap:** `PREFS_CONTEXT_KEY` set in BOTH layout (`{prefs,reset}`) and page (`prefs`). Page overrides layout — components inside page receive `prefs` directly.
 
 ---
 
@@ -178,4 +189,4 @@ Before committing:
 
 ---
 
-_Last updated: 2026-04-20_
+_Last updated: 2026-04-30_

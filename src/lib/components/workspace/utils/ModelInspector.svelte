@@ -56,7 +56,7 @@
 >
 	<div class="inspector-panel">
 		<header class="card-header">
-			<h3 class="card-title">Model Inspector</h3>
+			<h3 class="card-title">Régie</h3>
 			<div class="flex items-center gap-2">
 				<button onclick={validate} class="text-xs">Validate</button>
 				{#if onclose}

@@ -8,6 +8,7 @@
 	import LanguageSelector from '$lib/components/ui/LanguageSelector.svelte';
 	import { locale, t } from '$lib/i18n';
 	import { validateStorageVersion } from '$lib/utils/storage-cleanup';
+	import { generationStats } from '$lib/stores/generation.svelte';
 
 	let { children } = $props();
 
@@ -39,6 +40,24 @@
 			document.documentElement.removeAttribute('data-theme');
 		}
 	});
+
+	let stats = $state({ total: 0, done: 0, error: 0, generating: 0 });
+	$effect(() => {
+		const unsub = generationStats.subscribe((s) => (stats = s));
+		return unsub;
+	});
+
+	// Show "done" badge briefly after all complete
+	let showDone = $state(false);
+	let doneTimer: ReturnType<typeof setTimeout> | undefined;
+	$effect(() => {
+		if (stats.total > 0 && stats.generating === 0 && stats.done > 0) {
+			showDone = true;
+			clearTimeout(doneTimer);
+			doneTimer = setTimeout(() => (showDone = false), 3000);
+		}
+		if (stats.generating > 0) showDone = false;
+	});
 </script>
 
 <svelte:head>
@@ -51,7 +70,15 @@
 		<div class="flex items-center gap-md">
 			<h1 class="text-lg font-semibold text-gradient hide-mobile">Latent Line</h1>
 		</div>
-		<div class="flex items-center gap-sm">
+		<div class="flex items-center gap-sm" style="margin-left:auto;">
+			{#if stats.generating > 0}
+				<span class="gen-badge gen-badge--active">
+					<span class="gen-spinner"></span>
+					{stats.generating}/{stats.total} frames
+				</span>
+			{:else if showDone}
+				<span class="gen-badge gen-badge--done">✓ {stats.done} done</span>
+			{/if}
 			<LanguageSelector compact />
 			<button
 				class="icon-btn"
@@ -88,3 +115,38 @@
 {/if}
 
 <ToastManager />
+
+<style>
+	.gen-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.7rem;
+		font-weight: 600;
+		padding: 3px 8px;
+		border-radius: 20px;
+		white-space: nowrap;
+	}
+	.gen-badge--active {
+		background: oklch(0.65 0.25 280 / 0.12);
+		color: oklch(0.75 0.2 280);
+		border: 1px solid oklch(0.65 0.25 280 / 0.3);
+	}
+	.gen-badge--done {
+		background: oklch(0.72 0.18 150 / 0.1);
+		color: oklch(0.72 0.18 150);
+		border: 1px solid oklch(0.72 0.18 150 / 0.25);
+	}
+	.gen-spinner {
+		display: inline-block;
+		width: 8px;
+		height: 8px;
+		border: 1.5px solid oklch(0.65 0.25 280 / 0.3);
+		border-top-color: oklch(0.75 0.2 280);
+		border-radius: 50%;
+		animation: gspin 0.7s linear infinite;
+	}
+	@keyframes gspin {
+		to { transform: rotate(360deg); }
+	}
+</style>

@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { MODEL_STORE_KEY, PLAYBACK_CONTEXT_KEY } from '$lib/context/keys';
 	import type { Model, TimelineEvent } from '$lib/model/model-types';
 	import type { PlaybackStore } from '$lib/context/playback-context.svelte';
 	import { getMoodColor } from '$lib/model/mood-palette';
+	import { generation } from '$lib/stores/generation.svelte';
+	import { generatedImages } from '$lib/stores/generated-images.svelte';
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 	const playback = getContext<PlaybackStore>(PLAYBACK_CONTEXT_KEY);
@@ -32,6 +34,38 @@
 	const characterName = $derived(() => {
 		if (!firstActor) return null;
 		return model.assets.characters.find((c) => c.id === firstActor.id)?.name ?? firstActor.id;
+	});
+
+	let activeImageSrc = $state<string | undefined>();
+	let lastLoadedEventId = $state<string | undefined>();
+
+	// Load persisted image when active event changes
+	// TimelineEvent uses `time` as key, not `id`
+	$effect(() => {
+		const ev = activeEvent as any;
+		const eventId = ev ? String(ev.time) : undefined;
+		if (!eventId || eventId === lastLoadedEventId) return;
+		lastLoadedEventId = eventId;
+		activeImageSrc = undefined;
+		generatedImages.get(eventId).then((saved) => {
+			if (saved?.image_base64) {
+				activeImageSrc = `data:image/png;base64,${saved.image_base64}`;
+			}
+		});
+	});
+
+	// React to live generation completing for active event
+	$effect(() => {
+		const ev = activeEvent as any;
+		const eventId = ev ? String(ev.time) : undefined;
+		if (!eventId) return;
+		const unsubscribe = generation.subscribe((map) => {
+			const state = map.get(eventId);
+			if (state?.status === 'done' && state.image_base64) {
+				activeImageSrc = `data:image/png;base64,${state.image_base64}`;
+			}
+		});
+		return unsubscribe;
 	});
 
 	function toggleFullscreen() {
@@ -81,6 +115,16 @@
 			<div class="preview-empty">No event at playhead</div>
 		{:else}
 			<div class="preview-event">
+				{#if activeImageSrc}
+					<div class="preview-generated-frame">
+						<img src={activeImageSrc} alt="Generated frame" class="preview-frame-img" />
+						<span class="preview-ai-badge">✦ AI</span>
+					</div>
+				{:else if moodColor}
+					<div class="preview-frame-placeholder" style="background:{moodColor.bg};border:1px solid {moodColor.border};">
+						<span style="color:{moodColor.text};opacity:0.5;font-size:1.5rem;">🎬</span>
+					</div>
+				{/if}
 				<div class="preview-frame-label">Frame {activeEvent.time}</div>
 
 				{#if characterName()}
@@ -212,5 +256,39 @@
 	.preview-env,
 	.preview-camera {
 		color: var(--color-text-muted);
+	}
+	.preview-generated-frame {
+		position: relative;
+		width: 100%;
+		border-radius: 6px;
+		overflow: hidden;
+		margin-bottom: 0.5rem;
+		box-shadow: 0 0 0 1px oklch(0.65 0.25 280 / 0.4), 0 0 12px oklch(0.65 0.25 280 / 0.15);
+	}
+	.preview-frame-img {
+		width: 100%;
+		display: block;
+		object-fit: cover;
+		max-height: 160px;
+	}
+	.preview-ai-badge {
+		position: absolute;
+		bottom: 6px;
+		right: 6px;
+		font-size: 0.65rem;
+		font-weight: 700;
+		background: oklch(0.65 0.25 280 / 0.85);
+		color: #fff;
+		padding: 2px 6px;
+		border-radius: 3px;
+	}
+	.preview-frame-placeholder {
+		width: 100%;
+		height: 80px;
+		border-radius: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 0.5rem;
 	}
 </style>
