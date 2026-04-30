@@ -12,13 +12,13 @@ export interface UseMultiSelectOptions {
 
 export function useMultiSelect(options: UseMultiSelectOptions = {}) {
 	const { onSelect, onDeselect } = options;
-	
+
 	const selectedTimes = $state<Set<number>>(new Set());
 	let lastSelectedTime: number | null = null;
 
 	function handleClick(time: number, event: MouseEvent) {
 		const wasSelected = selectedTimes.has(time);
-		
+
 		if (event.ctrlKey || event.metaKey) {
 			// Toggle single selection
 			if (wasSelected) {
@@ -63,7 +63,7 @@ export function useMultiSelect(options: UseMultiSelectOptions = {}) {
 		const range: number[] = [];
 		const min = Math.min(start, end);
 		const max = Math.max(start, end);
-		
+
 		// This is simplified - real implementation needs timeline access
 		for (let t = min; t <= max; t += 200) {
 			range.push(t);

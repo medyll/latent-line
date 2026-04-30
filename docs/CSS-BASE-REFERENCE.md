@@ -112,35 +112,40 @@
 ## 🎯 Common Patterns
 
 ### Button
+
 ```html
 <button class="btn btn-primary">Click me</button>
 <button class="icon-btn" aria-label="Settings">⚙</button>
 ```
 
 ### Card
+
 ```html
 <div class="card">
-  <div class="card-header">Title</div>
-  <div class="card-body">Content</div>
-  <div class="card-footer">Actions</div>
+	<div class="card-header">Title</div>
+	<div class="card-body">Content</div>
+	<div class="card-footer">Actions</div>
 </div>
 ```
 
 ### Badge
+
 ```html
 <span class="badge badge-primary">New</span>
 ```
 
 ### Alert
+
 ```html
 <div class="alert alert-success">Success!</div>
 ```
 
 ### Form
+
 ```html
 <div class="form-group">
-  <label for="input">Label</label>
-  <input id="input" type="text" />
+	<label for="input">Label</label>
+	<input id="input" type="text" />
 </div>
 ```
 

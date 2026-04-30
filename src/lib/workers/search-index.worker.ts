@@ -1,6 +1,6 @@
 /**
  * Search Index Worker
- * 
+ *
  * Handles heavy search indexing operations in a background thread.
  * Keeps main thread responsive during large model indexing.
  */
@@ -75,7 +75,7 @@ function buildIndex(model: any): SearchIndex {
 	if (model.timeline) {
 		model.timeline.forEach((event: any) => {
 			const words: string[] = [];
-			
+
 			if (event.label) {
 				words.push(event.label.toLowerCase());
 			}
@@ -120,9 +120,7 @@ function search(index: SearchIndex, query: SearchQuery): SearchResult {
 	if (query.model.assets?.characters) {
 		results.characters = query.model.assets.characters.filter((char: any) => {
 			const nameMatch = char.name.toLowerCase().includes(queryLower);
-			const tagMatch = char.tags?.some((tag: string) => 
-				tag.toLowerCase().includes(queryLower)
-			);
+			const tagMatch = char.tags?.some((tag: string) => tag.toLowerCase().includes(queryLower));
 			return nameMatch || tagMatch;
 		});
 	}
@@ -131,9 +129,7 @@ function search(index: SearchIndex, query: SearchQuery): SearchResult {
 	if (query.model.assets?.environments) {
 		results.environments = query.model.assets.environments.filter((env: any) => {
 			const nameMatch = env.name.toLowerCase().includes(queryLower);
-			const tagMatch = env.tags?.some((tag: string) => 
-				tag.toLowerCase().includes(queryLower)
-			);
+			const tagMatch = env.tags?.some((tag: string) => tag.toLowerCase().includes(queryLower));
 			return nameMatch || tagMatch;
 		});
 	}
@@ -142,7 +138,7 @@ function search(index: SearchIndex, query: SearchQuery): SearchResult {
 	if (query.model.timeline) {
 		results.events = query.model.timeline.filter((event: any) => {
 			const words = index.eventLabels.get(event.id) || [];
-			
+
 			// Check if any query word matches
 			const matches = queryWords.some((qWord) => {
 				return words.some((word) => word.includes(qWord));
@@ -164,7 +160,7 @@ function search(index: SearchIndex, query: SearchQuery): SearchResult {
 }
 
 // Handle messages from main thread
-self.onmessage = function(e: MessageEvent) {
+self.onmessage = function (e: MessageEvent) {
 	const { type, data, taskId } = e.data;
 
 	try {

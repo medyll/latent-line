@@ -30,17 +30,11 @@ export interface FilterConfig {
 	hasPrompt?: boolean;
 }
 
-export function applyFilters(
-	events: TimelineEvent[],
-	filters: FilterConfig
-): TimelineEvent[] {
+export function applyFilters(events: TimelineEvent[], filters: FilterConfig): TimelineEvent[] {
 	return events.filter((event) => matchesFilters(event, filters));
 }
 
-function matchesFilters(
-	event: TimelineEvent,
-	filters: FilterConfig
-): boolean {
+function matchesFilters(event: TimelineEvent, filters: FilterConfig): boolean {
 	// Time range
 	if (filters.timeStart !== undefined && event.time < filters.timeStart) {
 		return false;
@@ -51,9 +45,7 @@ function matchesFilters(
 
 	// Mood filter
 	if (filters.mood) {
-		const hasMood = event.frame.actors?.some(
-			(actor) => actor.speech?.mood === filters.mood
-		);
+		const hasMood = event.frame.actors?.some((actor) => actor.speech?.mood === filters.mood);
 		if (!hasMood) return false;
 	}
 
@@ -66,9 +58,7 @@ function matchesFilters(
 
 	// Character filter
 	if (filters.characterId) {
-		const hasCharacter = event.frame.actors?.some(
-			(actor) => actor.id === filters.characterId
-		);
+		const hasCharacter = event.frame.actors?.some((actor) => actor.id === filters.characterId);
 		if (!hasCharacter) return false;
 	}
 
@@ -136,9 +126,7 @@ export function getFilterPresets(): Record<string, FilterConfig> {
 
 export function saveFilterPreset(name: string, filter: FilterConfig): void {
 	try {
-		const presets = JSON.parse(
-			localStorage.getItem('latent-line:filter-presets') ?? '{}'
-		);
+		const presets = JSON.parse(localStorage.getItem('latent-line:filter-presets') ?? '{}');
 		presets[name] = filter;
 		localStorage.setItem('latent-line:filter-presets', JSON.stringify(presets));
 	} catch {
@@ -148,9 +136,7 @@ export function saveFilterPreset(name: string, filter: FilterConfig): void {
 
 export function loadFilterPresets(): Record<string, FilterConfig> {
 	try {
-		const stored = JSON.parse(
-			localStorage.getItem('latent-line:filter-presets') ?? '{}'
-		);
+		const stored = JSON.parse(localStorage.getItem('latent-line:filter-presets') ?? '{}');
 		return { ...getFilterPresets(), ...stored };
 	} catch {
 		return getFilterPresets();
@@ -159,9 +145,7 @@ export function loadFilterPresets(): Record<string, FilterConfig> {
 
 export function deleteFilterPreset(name: string): void {
 	try {
-		const presets = JSON.parse(
-			localStorage.getItem('latent-line:filter-presets') ?? '{}'
-		);
+		const presets = JSON.parse(localStorage.getItem('latent-line:filter-presets') ?? '{}');
 		delete presets[name];
 		localStorage.setItem('latent-line:filter-presets', JSON.stringify(presets));
 	} catch {

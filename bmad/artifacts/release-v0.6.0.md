@@ -13,12 +13,14 @@
 Handle timelines with 1000+ events without performance degradation.
 
 **Features:**
+
 - Windowed rendering (only visible items in DOM)
 - Configurable overscan for smooth scrolling
 - Automatic height estimation
 - Preserves selection state during scroll
 
 **Performance:**
+
 - 1000 events at 60fps ✅
 - Memory usage under 200MB ✅
 - Scroll latency < 16ms ✅
@@ -30,11 +32,13 @@ Handle timelines with 1000+ events without performance degradation.
 Select and operate on multiple timeline events simultaneously.
 
 **Multi-Select:**
+
 - **Ctrl+Click** — Toggle single event
 - **Shift+Click** — Select range
 - **Ctrl+A** — Select all
 
 **Bulk Actions:**
+
 - **Delete** — Remove all selected events
 - **Duplicate** — Copy with time offset
 - **Move** — Shift time for all selected
@@ -47,12 +51,14 @@ Select and operate on multiple timeline events simultaneously.
 Real-time performance monitoring for developers and power users.
 
 **Metrics:**
+
 - FPS counter (real-time)
 - Frame time (ms)
 - Memory usage (MB)
 - Render count
 
 **Visualizations:**
+
 - FPS history graph (60 samples)
 - Memory usage graph
 - Color-coded alerts (good/warn/bad)
@@ -66,6 +72,7 @@ Real-time performance monitoring for developers and power users.
 Complete UI/UX refinement for professional production use.
 
 **Principles:**
+
 - **Professionnelle** — Clean, modern, production-ready
 - **Sobre** — No visual clutter, minimal distractions
 - **Légère** — Light visual weight, subtle shadows
@@ -74,6 +81,7 @@ Complete UI/UX refinement for professional production use.
 - **Équilibrée** — Visual hierarchy, proportional sizing
 
 **Design Tokens:**
+
 - Spacing scale: 4, 8, 12, 16, 24, 32, 48px
 - Typography: 11, 12, 14, 16, 18, 20px
 - Border radius: 4, 8, 12, 16px
@@ -83,13 +91,13 @@ Complete UI/UX refinement for professional production use.
 
 ## Features Delivered This Sprint
 
-| Feature | Points | Status |
-|---------|--------|--------|
-| S29-01: Virtual Scrolling | 5 | ✅ Complete |
-| S29-02: Bulk Operations | 3 | ✅ Complete |
-| S29-03: Performance Tools | 2 | ✅ Complete |
-| S29-04: UI/UX Polish | 3 | ✅ Complete |
-| **Sprint 29 Total** | **13** | **13 delivered** |
+| Feature                   | Points | Status           |
+| ------------------------- | ------ | ---------------- |
+| S29-01: Virtual Scrolling | 5      | ✅ Complete      |
+| S29-02: Bulk Operations   | 3      | ✅ Complete      |
+| S29-03: Performance Tools | 2      | ✅ Complete      |
+| S29-04: UI/UX Polish      | 3      | ✅ Complete      |
+| **Sprint 29 Total**       | **13** | **13 delivered** |
 
 ---
 
@@ -137,12 +145,12 @@ None. This is a backward-compatible release.
 
 ## Quality Metrics
 
-| Metric | v0.5.0 | v0.6.0 | Change |
-|--------|--------|--------|--------|
-| **Unit Tests** | 448 | 448 | — |
-| **Type Errors** | 0 | 0 | — |
-| **Bundle Size** | ~102 KB | ~115 KB | +13 KB |
-| **Performance** | 100 events | 1000+ events | 10x |
+| Metric          | v0.5.0     | v0.6.0       | Change |
+| --------------- | ---------- | ------------ | ------ |
+| **Unit Tests**  | 448        | 448          | —      |
+| **Type Errors** | 0          | 0            | —      |
+| **Bundle Size** | ~102 KB    | ~115 KB      | +13 KB |
+| **Performance** | 100 events | 1000+ events | 10x    |
 
 ---
 
@@ -151,6 +159,7 @@ None. This is a backward-compatible release.
 ### v0.7.0 Planning (Sprint 30+)
 
 **Under Consideration:**
+
 - 🔮 Enhanced search & filtering
 - 🔮 Keyboard shortcuts customization
 - 🔮 Auto-save improvements
@@ -170,6 +179,7 @@ None. This is a backward-compatible release.
 - Professional UI/UX design tokens
 
 **Releases Shipped (v0.1.0 → v0.6.0):**
+
 - v0.1.0: Core timeline editor
 - v0.2.0: Undo/Redo + persistence
 - v0.3.0: EDL export, global search, presentation mode
@@ -189,6 +199,7 @@ None. This is a backward-compatible release.
 ## Changelog Summary (v0.5.0 → v0.6.0)
 
 ### Added
+
 - VirtualTimeline component with windowed rendering
 - useMultiSelect hook for multi-selection
 - Bulk operations (delete, duplicate, move, edit)
@@ -196,14 +207,17 @@ None. This is a backward-compatible release.
 - Design tokens (spacing, typography, shadows)
 
 ### Changed
+
 - UI/UX refined for professional quality
 - Spacing scale standardized (4px base)
 - Typography scale consistent (11-20px)
 
 ### Fixed
+
 - None (no bugs reported in v0.5.0)
 
 ### Removed
+
 - None
 
 ---

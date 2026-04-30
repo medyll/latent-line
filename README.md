@@ -298,33 +298,33 @@ Live model inspection overlay. Click the `⌥` button (bottom-right) to open. Sh
 
 ### User Documentation
 
-| Document | Description |
-|----------|-------------|
-| [**User Guide**](./docs/USER_GUIDE.md) | Complete user manual with tutorials |
-| [**API Reference**](./docs/API.md) | REST API documentation |
-| [**Model Schema**](./docs/MODEL_SCHEMA.md) | Data model reference |
+| Document                                   | Description                         |
+| ------------------------------------------ | ----------------------------------- |
+| [**User Guide**](./docs/USER_GUIDE.md)     | Complete user manual with tutorials |
+| [**API Reference**](./docs/API.md)         | REST API documentation              |
+| [**Model Schema**](./docs/MODEL_SCHEMA.md) | Data model reference                |
 
 ### Quick Reference
 
 **Import/Export Formats:**
 
-| Format | Extension | Use Case |
-|--------|-----------|----------|
-| YAML | `.yaml` | Human-readable config |
-| JSON-LD | `.jsonld` | Semantic web, RDF |
-| CSV | `.csv` | Spreadsheet import |
-| JSON | `.json` | Data interchange |
-| PDF | `.pdf` | Storyboard printing |
-| ZIP | `.zip` | Complete archive |
+| Format  | Extension | Use Case              |
+| ------- | --------- | --------------------- |
+| YAML    | `.yaml`   | Human-readable config |
+| JSON-LD | `.jsonld` | Semantic web, RDF     |
+| CSV     | `.csv`    | Spreadsheet import    |
+| JSON    | `.json`   | Data interchange      |
+| PDF     | `.pdf`    | Storyboard printing   |
+| ZIP     | `.zip`    | Complete archive      |
 
 **Keyboard Shortcuts:**
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo |
-| `Space` | Play/Pause |
-| `Ctrl+I` | Model Inspector |
-| `Ctrl+E` | Export Modal |
+| Shortcut            | Action          |
+| ------------------- | --------------- |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo     |
+| `Space`             | Play/Pause      |
+| `Ctrl+I`            | Model Inspector |
+| `Ctrl+E`            | Export Modal    |
 
 ---
 
@@ -460,27 +460,30 @@ pnpm run format       # Auto-format with Prettier
 
 ## 📦 Releases
 
-| Version | Date | Theme | Tests | Points |
-|---------|------|-------|-------|--------|
-| [v0.7.0](#) | 2026-03-27 | Enhanced UX & Automation | 483 | 9/9 |
-| [v0.6.0](#) | 2026-03-27 | Performance & Productivity | 448 | 13/13 |
-| [v0.5.0](#) | 2026-03-27 | Export Ecosystem | 448 | 17/12 |
-| [v0.4.0](#) | 2026-03-25 | ComfyUI Integration | 428 | 9/12 |
-| [v0.3.0](#) | 2026-03-25 | Production — EDL, Search | 339 | 16/16 |
+| Version     | Date       | Theme                      | Tests | Points |
+| ----------- | ---------- | -------------------------- | ----- | ------ |
+| [v0.7.0](#) | 2026-03-27 | Enhanced UX & Automation   | 483   | 9/9    |
+| [v0.6.0](#) | 2026-03-27 | Performance & Productivity | 448   | 13/13  |
+| [v0.5.0](#) | 2026-03-27 | Export Ecosystem           | 448   | 17/12  |
+| [v0.4.0](#) | 2026-03-25 | ComfyUI Integration        | 428   | 9/12   |
+| [v0.3.0](#) | 2026-03-25 | Production — EDL, Search   | 339   | 16/16  |
 
 ### v0.7.0 Highlights (Latest)
 
 **🔍 Enhanced Search:**
+
 - Full-text search across events, characters, environments
 - Filters: time range, mood, lighting, asset types
 - Saved presets, Ctrl+F shortcut
 
 **⌨️ Keyboard Shortcuts:**
+
 - 4 presets (Default, Vim, Blender, Adobe)
 - Click to edit, conflict detection
 - Export/Import as JSON
 
 **💾 Auto-Save & Version History:**
+
 - Configurable interval (30s - 10min)
 - 10 versions stored
 - Crash recovery

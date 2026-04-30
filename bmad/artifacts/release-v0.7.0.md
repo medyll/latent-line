@@ -13,6 +13,7 @@
 Find anything in your timeline instantly with full-text search and advanced filtering.
 
 **Features:**
+
 - **Full-text search** across events, characters, and environments
 - **Score-based ranking** with match snippets
 - **Multiple filters:**
@@ -31,6 +32,7 @@ Find anything in your timeline instantly with full-text search and advanced filt
 Customize keyboard shortcuts to match your workflow.
 
 **Features:**
+
 - **4 preset configurations:**
   - Default — Standard shortcuts
   - Vim-style — Vim-inspired navigation
@@ -58,6 +60,7 @@ Customize keyboard shortcuts to match your workflow.
 Never lose work with improved auto-save and version recovery.
 
 **Features:**
+
 - **Configurable auto-save interval:**
   - 30 seconds
   - 1 minute
@@ -73,12 +76,12 @@ Never lose work with improved auto-save and version recovery.
 
 ## Features Delivered This Sprint
 
-| Feature | Points | Status |
-|---------|--------|--------|
-| S30-01: Enhanced Search | 4 | ✅ Complete |
-| S30-02: Shortcuts Customization | 3 | ✅ Complete |
-| S30-03: Auto-Save Improvements | 2 | ✅ Complete |
-| **Sprint 30 Total** | **9** | **9 delivered** |
+| Feature                         | Points | Status          |
+| ------------------------------- | ------ | --------------- |
+| S30-01: Enhanced Search         | 4      | ✅ Complete     |
+| S30-02: Shortcuts Customization | 3      | ✅ Complete     |
+| S30-03: Auto-Save Improvements  | 2      | ✅ Complete     |
+| **Sprint 30 Total**             | **9**  | **9 delivered** |
 
 ---
 
@@ -127,12 +130,12 @@ None. This is a backward-compatible release.
 
 ## Quality Metrics
 
-| Metric | v0.6.0 | v0.7.0 | Change |
-|--------|--------|--------|--------|
-| **Unit Tests** | 448 | 483 | +35 |
-| **Type Errors** | 0 | 0 | — |
+| Metric          | v0.6.0  | v0.7.0  | Change |
+| --------------- | ------- | ------- | ------ |
+| **Unit Tests**  | 448     | 483     | +35    |
+| **Type Errors** | 0       | 0       | —      |
 | **Bundle Size** | ~115 KB | ~135 KB | +20 KB |
-| **Features** | 6 major | 9 major | +3 |
+| **Features**    | 6 major | 9 major | +3     |
 
 ---
 
@@ -141,6 +144,7 @@ None. This is a backward-compatible release.
 ### v0.8.0 Planning (Sprint 31+)
 
 **Under Consideration:**
+
 - 🔮 Timeline markers enhancement
 - 🔮 Asset usage tracking
 - 🔮 Tooltip improvements
@@ -159,6 +163,7 @@ None. This is a backward-compatible release.
 - Auto-save with version history (10 versions)
 
 **Releases Shipped (v0.1.0 → v0.7.0):**
+
 - v0.1.0: Core timeline editor
 - v0.2.0: Undo/Redo + persistence
 - v0.3.0: EDL export, global search, presentation mode
@@ -179,6 +184,7 @@ None. This is a backward-compatible release.
 ## Changelog Summary (v0.6.0 → v0.7.0)
 
 ### Added
+
 - SearchPanel component with full-text search
 - Search index for events, characters, environments
 - Filter logic with presets (time, mood, lighting, asset types)
@@ -188,12 +194,15 @@ None. This is a backward-compatible release.
 - Version history management (last 10 versions)
 
 ### Changed
+
 - None
 
 ### Fixed
+
 - None
 
 ### Removed
+
 - None
 
 ---

@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import '@medyll/css-base';
 	import '$lib/styles/app.css';
+	import '$lib/styles/workspace.css';
 	import { createPreferencesStore, PREFS_CONTEXT_KEY } from '$lib/stores/preferences.svelte';
 	import ToastManager from '$lib/components/ui/ToastManager.svelte';
 	import LanguageSelector from '$lib/components/ui/LanguageSelector.svelte';
@@ -94,15 +95,19 @@
 				onclick={() => {
 					prefs.theme = prefs.theme === 'dark' ? 'light' : 'dark';
 				}}
-				title={prefs.theme === 'dark' ? t('toolbar.toggleTheme.toLight') : t('toolbar.toggleTheme.toDark')}
-				aria-label={prefs.theme === 'dark' ? t('toolbar.toggleTheme.toLight') : t('toolbar.toggleTheme.toDark')}
+				title={prefs.theme === 'dark'
+					? t('toolbar.toggleTheme.toLight')
+					: t('toolbar.toggleTheme.toDark')}
+				aria-label={prefs.theme === 'dark'
+					? t('toolbar.toggleTheme.toLight')
+					: t('toolbar.toggleTheme.toDark')}
 				type="button"
 			>
 				{prefs.theme === 'dark' ? '☀️' : '🌙'}
 			</button>
 		</div>
 	</header>
-	
+
 	<main class="app-main">
 		{@render children()}
 	</main>
@@ -120,33 +125,35 @@
 	.gen-badge {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.35rem;
-		font-size: 0.7rem;
-		font-weight: 600;
-		padding: 3px 8px;
-		border-radius: 20px;
+		gap: var(--gap-xs);
+		font-size: var(--text-xs);
+		font-weight: var(--font-bold);
+		padding: var(--pad-xs) var(--pad-sm);
+		border-radius: var(--radius-full);
 		white-space: nowrap;
 	}
 	.gen-badge--active {
-		background: oklch(0.65 0.25 280 / 0.12);
-		color: oklch(0.75 0.2 280);
-		border: 1px solid oklch(0.65 0.25 280 / 0.3);
+		background: color-mix(in oklch, var(--color-primary) 12%, transparent);
+		color: var(--color-primary);
+		border: var(--border-width) solid color-mix(in oklch, var(--color-primary) 30%, transparent);
 	}
 	.gen-badge--done {
-		background: oklch(0.72 0.18 150 / 0.1);
-		color: oklch(0.72 0.18 150);
-		border: 1px solid oklch(0.72 0.18 150 / 0.25);
+		background: color-mix(in oklch, var(--color-success) 10%, transparent);
+		color: var(--color-success);
+		border: var(--border-width) solid color-mix(in oklch, var(--color-success) 25%, transparent);
 	}
 	.gen-spinner {
 		display: inline-block;
 		width: 8px;
 		height: 8px;
-		border: 1.5px solid oklch(0.65 0.25 280 / 0.3);
-		border-top-color: oklch(0.75 0.2 280);
-		border-radius: 50%;
-		animation: gspin 0.7s linear infinite;
+		border: 1.5px solid color-mix(in oklch, var(--color-primary) 30%, transparent);
+		border-top-color: var(--color-primary);
+		border-radius: var(--radius-full);
+		animation: gspin var(--duration-spin) linear infinite;
 	}
 	@keyframes gspin {
-		to { transform: rotate(360deg); }
+		to {
+			transform: rotate(360deg);
+		}
 	}
 </style>

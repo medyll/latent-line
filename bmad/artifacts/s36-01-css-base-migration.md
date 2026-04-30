@@ -49,10 +49,12 @@ Updated main layout to use new design system:
 ### 3. Documentation ✅
 
 **Files:**
+
 - `docs/CSS-BASE-MIGRATION.md` — Complete migration guide
 - `docs/CSS-BASE-REFERENCE.md` — Quick reference card
 
 **Migration guide includes:**
+
 - Design token reference (colors, typography, spacing, shadows, motion)
 - Component patterns with examples
 - Dark mode implementation
@@ -67,21 +69,25 @@ Updated main layout to use new design system:
 ### Design Tokens Used
 
 **Colors:**
+
 - Primary: `oklch(0.55 0.25 280)` — Purple-violet
 - Dark mode primary: `oklch(0.65 0.25 280)` — Brighter
 - All semantic colors (success, warning, critical, info)
 - Surface palette (surface, surface-alt, surface-raised, etc.)
 
 **Typography:**
+
 - Base size: `0.875rem` (14px)
 - Scale: xs (11px) → 2xl (24px)
 - Weights: normal (400), medium (500), semibold (600), bold (700)
 
 **Spacing:**
+
 - 4px grid: xs (4px) → 3xl (64px)
 - Consistent gap, padding, margin tokens
 
 **Motion:**
+
 - Fast: 100ms
 - Normal: 150ms (default)
 - Slow: 300ms
@@ -154,7 +160,7 @@ App styles in `@layer components` — overrides naturally without `!important`.
 
 ```svelte
 <div style="display:flex;align-items:center;padding:0.5rem;">
-  <button style="background:none;border:none;font-size:14px;">⚙</button>
+	<button style="background:none;border:none;font-size:14px;">⚙</button>
 </div>
 ```
 
@@ -162,7 +168,7 @@ App styles in `@layer components` — overrides naturally without `!important`.
 
 ```svelte
 <div class="flex items-center p-md">
-  <button class="icon-btn" aria-label="Settings">⚙</button>
+	<button class="icon-btn" aria-label="Settings">⚙</button>
 </div>
 ```
 
@@ -170,8 +176,8 @@ App styles in `@layer components` — overrides naturally without `!important`.
 
 ```svelte
 <div class="timeline-event" style="left: {event.time}px;">
-  <div class="font-medium">{event.name}</div>
-  <div class="text-xs text-muted">{event.duration}ms</div>
+	<div class="font-medium">{event.name}</div>
+	<div class="text-xs text-muted">{event.duration}ms</div>
 </div>
 ```
 
@@ -179,11 +185,11 @@ App styles in `@layer components` — overrides naturally without `!important`.
 
 ```svelte
 <div class="asset-card">
-  <div class="asset-preview">{asset.icon}</div>
-  <div class="asset-info">
-    <div class="asset-name">{asset.name}</div>
-    <div class="asset-meta">{asset.type}</div>
-  </div>
+	<div class="asset-preview">{asset.icon}</div>
+	<div class="asset-info">
+		<div class="asset-name">{asset.name}</div>
+		<div class="asset-meta">{asset.type}</div>
+	</div>
 </div>
 ```
 
@@ -252,12 +258,12 @@ App styles in `@layer components` — overrides naturally without `!important`.
 
 ## Risks & Mitigation
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Browser incompatibility | Low | Fallbacks provided, 100% supported users |
-| Team adoption | Low | Documentation + examples provided |
-| CSS conflicts | Low | Layer architecture prevents conflicts |
-| Performance regression | Low | Minimal bundle increase (+3KB) |
+| Risk                    | Impact | Mitigation                               |
+| ----------------------- | ------ | ---------------------------------------- |
+| Browser incompatibility | Low    | Fallbacks provided, 100% supported users |
+| Team adoption           | Low    | Documentation + examples provided        |
+| CSS conflicts           | Low    | Layer architecture prevents conflicts    |
+| Performance regression  | Low    | Minimal bundle increase (+3KB)           |
 
 ---
 

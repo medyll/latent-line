@@ -23,22 +23,22 @@ export interface VersionEntry {
 export function addVersion(model: Model, label?: string): void {
 	try {
 		const history = getHistory();
-		
+
 		const entry: VersionEntry = {
 			timestamp: Date.now(),
 			date: new Date().toISOString(),
 			model: JSON.parse(JSON.stringify(model)),
 			label
 		};
-		
+
 		// Add to beginning (newest first)
 		history.unshift(entry);
-		
+
 		// Limit to MAX_VERSIONS
 		if (history.length > MAX_VERSIONS) {
 			history.splice(MAX_VERSIONS);
 		}
-		
+
 		localStorage.setItem(VERSION_KEY, JSON.stringify(history));
 	} catch {
 		// Ignore storage errors
@@ -108,7 +108,7 @@ export function clearHistory(): void {
  */
 export function timeAgo(timestamp: number): string {
 	const seconds = Math.floor((Date.now() - timestamp) / 1000);
-	
+
 	if (seconds < 60) return 'Just now';
 	if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
 	if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;

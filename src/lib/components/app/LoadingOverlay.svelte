@@ -20,7 +20,13 @@
 		<div class="spinner" aria-hidden="true"></div>
 		<p class="loading-message">{message}</p>
 		{#if progress !== undefined}
-			<div class="progress-bar" role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
+			<div
+				class="progress-bar"
+				role="progressbar"
+				aria-valuenow={progress}
+				aria-valuemin="0"
+				aria-valuemax="100"
+			>
 				<div class="progress-fill" style="width: {progress}%"></div>
 			</div>
 			<span class="progress-text">{Math.round(progress)}%</span>

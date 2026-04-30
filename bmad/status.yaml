@@ -282,8 +282,8 @@ libraries:
     version: ^1.2.3
     purpose: UI component primitives
     maturity: production
-  - name: @medyll/css-base
-    version: ^0.1.4
+  - name: '"@medyll/css-base"'
+    version: ^0.6.0
     purpose: Custom CSS framework, design tokens
     maturity: production
   - name: clsx

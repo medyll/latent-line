@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { applyFilters, getFilterPresets, saveFilterPreset, loadFilterPresets, deleteFilterPreset } from './search-filters';
+import {
+	applyFilters,
+	getFilterPresets,
+	saveFilterPreset,
+	loadFilterPresets,
+	deleteFilterPreset
+} from './search-filters';
 import type { TimelineEvent } from '$lib/model/model-types';
 
 const testEvents: TimelineEvent[] = [

@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-	getTooltipText,
-	registerShortcuts,
-	getAllShortcuts
-} from '$lib/utils/tooltip-registry';
+import { getTooltipText, registerShortcuts, getAllShortcuts } from '$lib/utils/tooltip-registry';
 
 describe('getTooltipText', () => {
 	it('returns label with shortcut for known actions', () => {

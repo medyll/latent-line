@@ -10,11 +10,7 @@
 		overscan?: number;
 	}
 
-	let {
-		events = [],
-		estimateHeight = 80,
-		overscan = 5
-	}: Props = $props();
+	let { events = [], estimateHeight = 80, overscan = 5 }: Props = $props();
 
 	const selectionStore = getContext<Set<number> | null>(SELECTION_STORE_KEY);
 
@@ -28,15 +24,9 @@
 
 	// Calculate visible range
 	const visibleRange = $derived(() => {
-		const startIndex = Math.max(
-			0,
-			Math.floor(scrollOffset / estimateHeight) - overscan
-		);
+		const startIndex = Math.max(0, Math.floor(scrollOffset / estimateHeight) - overscan);
 		const visibleCount = Math.ceil(containerHeight / estimateHeight);
-		const endIndex = Math.min(
-			events.length,
-			startIndex + visibleCount + overscan * 2
-		);
+		const endIndex = Math.min(events.length, startIndex + visibleCount + overscan * 2);
 
 		return { startIndex, endIndex };
 	});
@@ -69,26 +59,15 @@
 	}
 </script>
 
-<div
-	bind:this={scrollContainer}
-	class="virtual-timeline"
-	on:scroll={handleScroll}
->
+<div bind:this={scrollContainer} class="virtual-timeline" on:scroll={handleScroll}>
 	<!-- Spacer to maintain scroll height -->
 	<div class="virtual-spacer" style="height: {totalSize}px" />
 
 	<!-- Virtual items -->
 	<div class="virtual-items" style="transform: translateY(0)">
 		{#each virtualItems as { event, index, top } (event.time)}
-			<div
-				class="virtual-item"
-				style="transform: translateY({top}px)"
-			>
-				<TimelineEventCard
-					{event}
-					selected={isSelected(event.time)}
-					compact
-				/>
+			<div class="virtual-item" style="transform: translateY({top}px)">
+				<TimelineEventCard {event} selected={isSelected(event.time)} compact />
 			</div>
 		{/each}
 	</div>

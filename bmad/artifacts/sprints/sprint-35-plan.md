@@ -22,9 +22,11 @@ Sprint 35 adds **professional export formats** for Non-Linear Editing (NLE) soft
 **Priority:** P1
 
 #### Description
+
 Export timeline as AAF (Advanced Authoring Format) for professional NLE import.
 
 #### Features
+
 - AAF file generation
 - Video tracks (events as clips)
 - Audio tracks (BGM, SFX, dialogue)
@@ -34,6 +36,7 @@ Export timeline as AAF (Advanced Authoring Format) for professional NLE import.
 - Resolution configuration
 
 #### Acceptance Criteria
+
 - [ ] AAF file generated and downloadable
 - [ ] Imports in DaVinci Resolve 18+
 - [ ] Imports in Adobe Premiere Pro
@@ -46,6 +49,7 @@ Export timeline as AAF (Advanced Authoring Format) for professional NLE import.
 #### Technical Design
 
 **New Files:**
+
 ```
 src/lib/utils/aaf-export.ts           (~250 lines)
 src/lib/utils/timecode-utils.ts       (~100 lines)
@@ -53,29 +57,31 @@ src/lib/components/app/AafExportModal.svelte   (~120 lines)
 ```
 
 **AAF Structure:**
+
 ```typescript
 interface AafExportOptions {
-  frameRate: 24 | 25 | 29.97 | 30 | 50 | 60;
-  resolution: '1080p' | '4K' | 'custom';
-  customWidth?: number;
-  customHeight?: number;
-  includeAudio: boolean;
-  includeMarkers: boolean;
-  includeMetadata: boolean;
+	frameRate: 24 | 25 | 29.97 | 30 | 50 | 60;
+	resolution: '1080p' | '4K' | 'custom';
+	customWidth?: number;
+	customHeight?: number;
+	includeAudio: boolean;
+	includeMarkers: boolean;
+	includeMetadata: boolean;
 }
 
 interface AafClip {
-  eventId: string;
-  startTimecode: string; // HH:MM:SS:FF
-  duration: string;
-  videoTrack: number;
-  audioTracks: number[];
-  markers: AafMarker[];
-  metadata: Record<string, string>;
+	eventId: string;
+	startTimecode: string; // HH:MM:SS:FF
+	duration: string;
+	videoTrack: number;
+	audioTracks: number[];
+	markers: AafMarker[];
+	metadata: Record<string, string>;
 }
 ```
 
 **Timecode Utilities:**
+
 ```typescript
 // timecode-utils.ts
 export function msToTimecode(ms: number, frameRate: number): string;
@@ -84,12 +90,10 @@ export function framesToTimecode(frames: number, frameRate: number): string;
 ```
 
 **AAF Generation:**
+
 ```typescript
 // aaf-export.ts
-export async function generateAaf(
-  model: Model,
-  options: AafExportOptions
-): Promise<Blob>;
+export async function generateAaf(model: Model, options: AafExportOptions): Promise<Blob>;
 
 // Uses aaf-asm library or custom XML-based AAF
 ```
@@ -99,18 +103,21 @@ export async function generateAaf(
 **Week 1: Core Export**
 
 **Day 1-2: Timecode & Utils**
+
 - [ ] Create timecode-utils.ts
 - [ ] msToTimecode() function
 - [ ] timecodeToMs() function
 - [ ] Unit tests (4+)
 
 **Day 3-4: AAF Generator**
+
 - [ ] Create aaf-export.ts
 - [ ] Clip generation logic
 - [ ] Track mapping
 - [ ] Timecode embedding
 
 **Day 5: Audio Tracks**
+
 - [ ] Audio lane export
 - [ ] BGM/SFX/dialogue separation
 - [ ] Audio timecode sync
@@ -118,17 +125,20 @@ export async function generateAaf(
 **Week 2: UI & Testing**
 
 **Day 6-7: Export Modal**
+
 - [ ] Create AafExportModal.svelte
 - [ ] Options form (frame rate, resolution)
 - [ ] Preview before export
 - [ ] Download trigger
 
 **Day 8-9: Markers & Metadata**
+
 - [ ] Export markers as AAF markers
 - [ ] Embed event notes as metadata
 - [ ] Character names in metadata
 
 **Day 10: Testing**
+
 - [ ] Unit tests (2+)
 - [ ] Import test in DaVinci Resolve
 - [ ] Import test in Premiere Pro
@@ -142,9 +152,11 @@ export async function generateAaf(
 **Priority:** P2
 
 #### Description
+
 Export timeline as FCPX XML for Mac editors.
 
 #### Features
+
 - FCPX 10.6 XML format
 - Event → clip mapping
 - Audio lanes as separate tracks
@@ -153,6 +165,7 @@ Export timeline as FCPX XML for Mac editors.
 - Project settings (resolution, frame rate)
 
 #### Acceptance Criteria
+
 - [ ] Valid FCPX XML 1.10 format
 - [ ] Imports in Final Cut Pro 10.6+
 - [ ] Clips with correct timecodes
@@ -163,12 +176,14 @@ Export timeline as FCPX XML for Mac editors.
 #### Technical Design
 
 **New Files:**
+
 ```
 src/lib/utils/fcpx-export.ts          (~200 lines)
 src/lib/components/app/FcpxExportModal.svelte   (~100 lines)
 ```
 
 **FCPX XML Structure:**
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xmeml>
@@ -202,12 +217,10 @@ src/lib/components/app/FcpxExportModal.svelte   (~100 lines)
 ```
 
 **Export Function:**
+
 ```typescript
 // fcpx-export.ts
-export function generateFcpxXml(
-  model: Model,
-  options: FcpxExportOptions
-): string;
+export function generateFcpxXml(model: Model, options: FcpxExportOptions): string;
 
 export function downloadFcpxXml(xml: string, filename: string): void;
 ```
@@ -215,22 +228,26 @@ export function downloadFcpxXml(xml: string, filename: string): void;
 #### Implementation Plan
 
 **Day 1-2: XML Generator**
+
 - [ ] Create fcpx-export.ts
 - [ ] XML structure builder
 - [ ] Clip mapping
 - [ ] Track generation
 
 **Day 3: Audio & Transitions**
+
 - [ ] Audio track export
 - [ ] Cut transitions
 - [ ] Fade in/out
 
 **Day 4: Markers & UI**
+
 - [ ] Marker export
 - [ ] FcpxExportModal component
 - [ ] Unit tests (5+)
 
 **Day 5: Testing**
+
 - [ ] Import test in Final Cut Pro
 - [ ] Validate XML schema
 - [ ] Fix compatibility issues
@@ -243,9 +260,11 @@ export function downloadFcpxXml(xml: string, filename: string): void;
 **Priority:** P2
 
 #### Description
+
 Export timeline as Premiere Pro project via JSON/XML.
 
 #### Features
+
 - Premiere project format (XML-based)
 - Sequence structure
 - Clip references with paths
@@ -253,6 +272,7 @@ Export timeline as Premiere Pro project via JSON/XML.
 - Markers
 
 #### Acceptance Criteria
+
 - [ ] Premiere-compatible XML export
 - [ ] Imports in Premiere Pro 2023+
 - [ ] Sequence with clips
@@ -262,12 +282,14 @@ Export timeline as Premiere Pro project via JSON/XML.
 #### Technical Design
 
 **New Files:**
+
 ```
 src/lib/utils/premiere-export.ts      (~180 lines)
 src/lib/components/app/PremiereExportModal.svelte   (~90 lines)
 ```
 
 **Premiere XML Structure:**
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xmeml>
@@ -292,15 +314,18 @@ src/lib/components/app/PremiereExportModal.svelte   (~90 lines)
 #### Implementation Plan
 
 **Day 1: XML Generator**
+
 - [ ] Create premiere-export.ts
 - [ ] XML structure
 - [ ] Clip mapping
 
 **Day 2: Audio & Markers**
+
 - [ ] Audio track export
 - [ ] Marker export
 
 **Day 3: UI & Tests**
+
 - [ ] PremiereExportModal
 - [ ] Unit tests (4+)
 - [ ] Import test in Premiere
@@ -318,17 +343,20 @@ src/lib/components/app/PremiereExportModal.svelte   (~90 lines)
 ## Testing Plan
 
 ### Unit Tests (15 total)
+
 - timecode-utils.test.ts (6 tests)
 - aaf-export.test.ts (4 tests)
 - fcpx-export.test.ts (3 tests)
 - premiere-export.test.ts (2 tests)
 
 ### Integration Tests (3 total)
+
 - aaf-import-resolve.spec.ts
 - fcpx-import-test.spec.ts
 - premiere-import-test.spec.ts
 
 ### Manual QA
+
 - [ ] Import AAF in DaVinci Resolve
 - [ ] Import AAF in Premiere Pro
 - [ ] Import FCPX XML in Final Cut Pro
@@ -356,6 +384,7 @@ src/lib/components/app/PremiereExportModal.svelte   (~90 lines)
 ### v0.10.0 — Professional Export
 
 **New Features:**
+
 - 🎬 **AAF Export** — Professional format for DaVinci Resolve & Premiere
 - 🍎 **Final Cut Pro XML** — Native FCPX import with markers
 - 📺 **Premiere Pro Export** — Direct Premiere project compatibility
@@ -364,12 +393,14 @@ src/lib/components/app/PremiereExportModal.svelte   (~90 lines)
 - 📍 **Marker Export** — Timeline markers in all formats
 
 **Export Options:**
+
 - Frame rate: 24, 25, 29.97, 30, 50, 60 fps
 - Resolution: 1080p, 4K, custom
 - Include/exclude audio tracks
 - Include/exclude markers
 
 **Workflow:**
+
 1. File → Export → Select format (AAF/FCPX/Premiere)
 2. Configure options
 3. Download

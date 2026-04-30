@@ -29,8 +29,8 @@ pnpm start
 ## Configuration
 
 | Env Var | Default | Description |
-|---------|---------|-------------|
-| `PORT` | `8080` | Server port |
+| ------- | ------- | ----------- |
+| `PORT`  | `8080`  | Server port |
 
 ## Connection
 
@@ -46,26 +46,26 @@ All messages are JSON with this structure:
 
 ```json
 {
-  "type": "join|leave|update|sync|presence|error|heartbeat|ack",
-  "roomId": "string",
-  "userId": "string",
-  "payload": {},
-  "timestamp": 1234567890,
-  "id": "optional_unique_id"
+	"type": "join|leave|update|sync|presence|error|heartbeat|ack",
+	"roomId": "string",
+	"userId": "string",
+	"payload": {},
+	"timestamp": 1234567890,
+	"id": "optional_unique_id"
 }
 ```
 
 ### Message Types
 
-| Type | Direction | Description |
-|------|-----------|-------------|
-| `join` | Client → Server | Join a room with user info |
-| `leave` | Client → Server | Leave a room |
-| `update` | Client → Server | Send model patch |
-| `presence` | Server → Client | List of users in room |
-| `ack` | Server → Client | Acknowledge message |
-| `error` | Server → Client | Error occurred |
-| `heartbeat` | Both | Keep-alive ping/pong |
+| Type        | Direction       | Description                |
+| ----------- | --------------- | -------------------------- |
+| `join`      | Client → Server | Join a room with user info |
+| `leave`     | Client → Server | Leave a room               |
+| `update`    | Client → Server | Send model patch           |
+| `presence`  | Server → Client | List of users in room      |
+| `ack`       | Server → Client | Acknowledge message        |
+| `error`     | Server → Client | Error occurred             |
+| `heartbeat` | Both            | Keep-alive ping/pong       |
 
 ## Tests
 

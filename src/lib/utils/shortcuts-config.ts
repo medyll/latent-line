@@ -20,31 +20,31 @@ export const DEFAULT_SHORTCUTS: ShortcutConfig = {
 	'file.save': 'Ctrl+S',
 	'file.export': 'Ctrl+E',
 	'file.import': 'Ctrl+I',
-	
+
 	// Editing
 	'edit.undo': 'Ctrl+Z',
 	'edit.redo': 'Ctrl+Y',
 	'edit.duplicate': 'Ctrl+D',
 	'edit.delete': 'Delete',
 	'edit.select-all': 'Ctrl+A',
-	
+
 	// Playback
 	'playback.play-pause': 'Space',
 	'playback.stop': 'Escape',
 	'playback.go-to-start': 'Home',
 	'playback.go-to-end': 'End',
-	
+
 	// Navigation
 	'nav.search': 'Ctrl+F',
 	'nav.zoom-in': 'Ctrl+=',
 	'nav.zoom-out': 'Ctrl+-',
 	'nav.reset-zoom': 'Ctrl+0',
-	
+
 	// View
 	'view.toggle-inspector': 'Ctrl+I',
 	'view.toggle-settings': 'Ctrl+,',
 	'view.toggle-help': 'F1',
-	
+
 	// Timeline
 	'timeline.add-event': 'N',
 	'timeline.split-event': 'Ctrl+K',
@@ -93,21 +93,24 @@ export const SHORTCUT_PRESETS: ShortcutPreset[] = [
  * Parse keyboard shortcut string to normalized format
  */
 export function parseShortcut(shortcut: string): string {
-	const parts = shortcut.toLowerCase().split('+').map(p => p.trim());
+	const parts = shortcut
+		.toLowerCase()
+		.split('+')
+		.map((p) => p.trim());
 	const modifiers: string[] = [];
 	const key = parts.pop();
-	
+
 	// Collect modifiers
-	parts.forEach(p => {
+	parts.forEach((p) => {
 		if (p === 'ctrl' || p === 'control') modifiers.push('Ctrl');
 		else if (p === 'alt') modifiers.push('Alt');
 		else if (p === 'shift') modifiers.push('Shift');
 		else if (p === 'meta' || p === 'cmd' || p === 'command') modifiers.push('Meta');
 	});
-	
+
 	// Normalize key
 	const normalizedKey = key ? key.charAt(0).toUpperCase() + key.slice(1) : '';
-	
+
 	return [...modifiers, normalizedKey].join('+');
 }
 
@@ -128,11 +131,11 @@ export function detectConflicts(config: ShortcutConfig): Array<{
 }> {
 	const conflicts: Array<{ action1: string; action2: string; shortcut: string }> = [];
 	const shortcutMap = new Map<string, string>();
-	
+
 	Object.entries(config).forEach(([action, shortcut]) => {
 		const normalized = parseShortcut(shortcut);
 		const existing = shortcutMap.get(normalized);
-		
+
 		if (existing) {
 			conflicts.push({
 				action1: existing,
@@ -143,7 +146,7 @@ export function detectConflicts(config: ShortcutConfig): Array<{
 			shortcutMap.set(normalized, action);
 		}
 	});
-	
+
 	return conflicts;
 }
 
@@ -185,7 +188,7 @@ export function saveShortcuts(config: ShortcutConfig): void {
  * Load preset by name
  */
 export function loadPreset(name: string): ShortcutConfig {
-	const preset = SHORTCUT_PRESETS.find(p => p.name === name);
+	const preset = SHORTCUT_PRESETS.find((p) => p.name === name);
 	if (preset) {
 		return { ...preset.shortcuts };
 	}

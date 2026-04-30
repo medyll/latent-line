@@ -51,20 +51,21 @@
 **Duration:** 2026-06-19 → 2026-07-03
 
 **Stories:**
-- S36-01 — Performance monitoring foundation — *Ready to start*
-- S36-02 — Virtual scrolling optimization — *Planned*
-- S36-03 — Bundle size reduction — *Planned*
+
+- S36-01 — Performance monitoring foundation — _Ready to start_
+- S36-02 — Virtual scrolling optimization — _Planned_
+- S36-03 — Bundle size reduction — _Planned_
 
 ### Last Completed: Sprint 35 — Advanced Export
 
 **Status:** ✅ Complete  
 **Points:** 12/12 delivered
 
-| Story | Title | Points | Status |
-|-------|-------|--------|--------|
-| S35-01 | AAF Export | 5 | ✅ Complete |
-| S35-02 | FCPX XML | 4 | ✅ Complete |
-| S35-03 | Premiere XML | 3 | ✅ Complete |
+| Story  | Title        | Points | Status      |
+| ------ | ------------ | ------ | ----------- |
+| S35-01 | AAF Export   | 5      | ✅ Complete |
+| S35-02 | FCPX XML     | 4      | ✅ Complete |
+| S35-03 | Premiere XML | 3      | ✅ Complete |
 
 **Test Coverage:** 684 tests passing (+52 new)
 
@@ -75,7 +76,7 @@
 ✅ **Dependencies:** Fresh install complete (pnpm)  
 ✅ **Unit Tests:** 684/684 passing  
 ✅ **Build System:** Vite + SvelteKit operational  
-✅ **Test Infrastructure:** Vitest + Playwright ready  
+✅ **Test Infrastructure:** Vitest + Playwright ready
 
 **Notes:** Environment was restored after detecting corrupted files. All functionality verified.
 
@@ -83,39 +84,39 @@
 
 ## Sprint History
 
-| Sprint | Theme | Points | Status |
-|--------|-------|--------|--------|
-| S35 | Advanced Export — AAF, FCPX, Premiere | 12 | ✅ Complete |
-| S34 | ComfyUI Workflow Integration | 16 | ✅ Complete |
-| S33 | Real-time Collaboration Foundation | 14 | ✅ Complete |
-| S32 | Tooltip System & UX Micro-interactions | 9 | ✅ Complete |
-| S31 | Timeline Markers & Asset Tracking | 11 | ✅ Complete |
-| S30 | Enhanced UX & Automation | 9 | ✅ Complete |
-| S29 | Performance & Productivity | 13 | ✅ Complete |
-| S28 | REST API Server & UI Integration | 17 | ✅ Complete |
-| S27 | Post-Release Hardening + Export Expansion | 9 | ✅ Complete |
-| S26 | Production Completion | 9 | ✅ Complete |
-| S25 | Production — EDL, Search, Presentation | 16 | ✅ Complete |
-| S24 | Rendu AI — Prompt Builder, Exports | 22 | ✅ Complete |
-| S23 | Collaboration — Partage, Commentaires, Versions | 18 | ✅ Complete |
-| S22 | Internationalisation — FR/EN | 12 | ✅ Complete |
-| S21 | Polish UI — Animations, Responsive | 15 | ✅ Complete |
-| S20 | Performance — Virtualisation, Code Splitting | 13 | ✅ Complete |
-| S19 | Accessibility WCAG 2.1 AA | 11 | ✅ Complete |
-| S18 | Export — Storyboard PDF, CSV, Prompts AI | 16 | ✅ Complete |
-| S17 | Timeline Avancée — Markers, Multi-sélection | 19 | ✅ Complete |
-| S16 | Preview Temps Réel — Tooltip, Miniatures | 14 | ✅ Complete |
-| S15 | Settings Persistants — Préférences, Config | 8 | ✅ Complete |
+| Sprint | Theme                                           | Points | Status      |
+| ------ | ----------------------------------------------- | ------ | ----------- |
+| S35    | Advanced Export — AAF, FCPX, Premiere           | 12     | ✅ Complete |
+| S34    | ComfyUI Workflow Integration                    | 16     | ✅ Complete |
+| S33    | Real-time Collaboration Foundation              | 14     | ✅ Complete |
+| S32    | Tooltip System & UX Micro-interactions          | 9      | ✅ Complete |
+| S31    | Timeline Markers & Asset Tracking               | 11     | ✅ Complete |
+| S30    | Enhanced UX & Automation                        | 9      | ✅ Complete |
+| S29    | Performance & Productivity                      | 13     | ✅ Complete |
+| S28    | REST API Server & UI Integration                | 17     | ✅ Complete |
+| S27    | Post-Release Hardening + Export Expansion       | 9      | ✅ Complete |
+| S26    | Production Completion                           | 9      | ✅ Complete |
+| S25    | Production — EDL, Search, Presentation          | 16     | ✅ Complete |
+| S24    | Rendu AI — Prompt Builder, Exports              | 22     | ✅ Complete |
+| S23    | Collaboration — Partage, Commentaires, Versions | 18     | ✅ Complete |
+| S22    | Internationalisation — FR/EN                    | 12     | ✅ Complete |
+| S21    | Polish UI — Animations, Responsive              | 15     | ✅ Complete |
+| S20    | Performance — Virtualisation, Code Splitting    | 13     | ✅ Complete |
+| S19    | Accessibility WCAG 2.1 AA                       | 11     | ✅ Complete |
+| S18    | Export — Storyboard PDF, CSV, Prompts AI        | 16     | ✅ Complete |
+| S17    | Timeline Avancée — Markers, Multi-sélection     | 19     | ✅ Complete |
+| S16    | Preview Temps Réel — Tooltip, Miniatures        | 14     | ✅ Complete |
+| S15    | Settings Persistants — Préférences, Config      | 8      | ✅ Complete |
 
 ---
 
 ## Artifacts Status
 
-| Artifact | Status |
-|----------|--------|
-| PRD | ✅ Complete |
+| Artifact     | Status      |
+| ------------ | ----------- |
+| PRD          | ✅ Complete |
 | Architecture | ✅ Complete |
-| Tech Spec | ✅ Complete |
+| Tech Spec    | ✅ Complete |
 
 ---
 
@@ -146,4 +147,4 @@
 
 ---
 
-*Last updated: 2026-04-17*
+_Last updated: 2026-04-17_

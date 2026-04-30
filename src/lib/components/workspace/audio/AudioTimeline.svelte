@@ -32,7 +32,9 @@
 		const lane = audioLanes.find((l) => l.id === laneId);
 		if (lane) {
 			if (!lane.soloed) {
-				audioLanes.forEach((l) => { l.soloed = l.id === laneId; });
+				audioLanes.forEach((l) => {
+					l.soloed = l.id === laneId;
+				});
 			} else {
 				lane.soloed = false;
 			}
@@ -42,7 +44,12 @@
 	function addAudioLane(asset: AudioAsset) {
 		if (!model.config.audioLanes) model.config.audioLanes = [];
 		if (!model.config.audioLanes.find((l) => l.id === asset.id)) {
-			model.config.audioLanes.push({ id: asset.id, name: asset.label || asset.id, muted: false, soloed: false });
+			model.config.audioLanes.push({
+				id: asset.id,
+				name: asset.label || asset.id,
+				muted: false,
+				soloed: false
+			});
 			loadWaveform(asset);
 		}
 	}
@@ -61,7 +68,7 @@
 			h ^= h >>> 16;
 			h = Math.imul(h, 0x45d9f3b);
 			h ^= h >>> 16;
-			return ((h >>> 0) / 0xffffffff);
+			return (h >>> 0) / 0xffffffff;
 		};
 	}
 
@@ -72,7 +79,7 @@
 		return raw.map((v, i) => {
 			const prev = raw[i - 1] ?? v;
 			const next = raw[i + 1] ?? v;
-			return (prev * 0.25 + v * 0.5 + next * 0.25);
+			return prev * 0.25 + v * 0.5 + next * 0.25;
 		});
 	}
 
@@ -166,14 +173,14 @@
 						class="ctrl-btn solo-btn {lane.soloed ? 'soloed' : ''}"
 						title="Solo (S)"
 						aria-label={`Solo ${lane.name}`}
-						aria-pressed={lane.soloed}
-					>S</button>
+						aria-pressed={lane.soloed}>S</button
+					>
 					<button
 						onclick={() => removeLane(lane.id)}
 						class="ctrl-btn remove-btn"
 						title="Retirer la piste"
-						aria-label={`Retirer ${lane.name}`}
-					>×</button>
+						aria-label={`Retirer ${lane.name}`}>×</button
+					>
 				</div>
 
 				<div class="waveform-container">
@@ -193,18 +200,27 @@
 						/>
 						<!-- Mirror bottom half -->
 						<polyline
-							points={amps.map((v, i) => {
-								const mid = 16;
-								const x = i * (200 / amps.length);
-								const h = v * mid * 0.9;
-								return `${x},${mid + h}`;
-							}).join(' ')}
+							points={amps
+								.map((v, i) => {
+									const mid = 16;
+									const x = i * (200 / amps.length);
+									const h = v * mid * 0.9;
+									return `${x},${mid + h}`;
+								})
+								.join(' ')}
 							fill="none"
 							stroke="oklch(0.65 0.25 280 / {lane.muted ? 0.15 : 0.35})"
 							stroke-width="1"
 						/>
 						<!-- Center line -->
-						<line x1="0" y1="16" x2="200" y2="16" stroke="oklch(0.65 0.25 280 / 0.15)" stroke-width="0.5" />
+						<line
+							x1="0"
+							y1="16"
+							x2="200"
+							y2="16"
+							stroke="oklch(0.65 0.25 280 / 0.15)"
+							stroke-width="0.5"
+						/>
 					</svg>
 				</div>
 			</div>

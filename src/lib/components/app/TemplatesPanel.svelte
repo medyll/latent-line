@@ -60,7 +60,8 @@
 	}
 
 	function getDescription(frame: TimelineFrame): string {
-		if (frame.prompt) return frame.prompt.length > 80 ? frame.prompt.slice(0, 78) + '…' : frame.prompt;
+		if (frame.prompt)
+			return frame.prompt.length > 80 ? frame.prompt.slice(0, 78) + '…' : frame.prompt;
 		if (frame.actors?.[0]?.action) return frame.actors[0].action;
 		return '';
 	}
@@ -97,15 +98,15 @@
 						onclick={() => applyTemplate(tpl.id)}
 						class="tpl-btn tpl-btn--apply"
 						aria-label={`Utiliser ${tpl.name}`}
-						title="Ajouter à la timeline"
-					>＋ Utiliser</button>
+						title="Ajouter à la timeline">＋ Utiliser</button
+					>
 					{#if !tpl.id.startsWith('__insp_')}
 						<button
 							onclick={() => deleteTemplate(tpl.id)}
 							class="tpl-btn tpl-btn--delete"
 							aria-label={`Supprimer ${tpl.name}`}
-							title="Supprimer"
-						>🗑</button>
+							title="Supprimer">🗑</button
+						>
 					{/if}
 				</div>
 			</div>

@@ -8,7 +8,7 @@
 import { modelSchema } from '$lib/model/model-template';
 import type { Model } from '$lib/model/model-types';
 
-export type ParseResult = 
+export type ParseResult =
 	| { success: true; model: Model }
 	| { success: false; error: string; details?: string[] };
 
@@ -39,8 +39,8 @@ export function parseImportFile(content: string, fileType: 'json' | 'yaml'): Par
 			return {
 				success: false,
 				error: 'Schema validation failed',
-				details: result.error.issues.map((issue) =>
-					`${issue.path.join('.') || '(root)'}: ${issue.message}`
+				details: result.error.issues.map(
+					(issue) => `${issue.path.join('.') || '(root)'}: ${issue.message}`
 				)
 			};
 		}
@@ -51,7 +51,7 @@ export function parseImportFile(content: string, fileType: 'json' | 'yaml'): Par
 		};
 	} catch (err) {
 		const message = err instanceof Error ? err.message : String(err);
-		
+
 		if (message.includes('JSON')) {
 			return {
 				success: false,
@@ -81,9 +81,11 @@ export function validateImportFile(model: Model): ValidationResult {
 	}
 
 	// Check for missing assets
-	if (model.assets.characters.length === 0 && 
-	    Object.keys(model.assets.environments).length === 0 &&
-	    model.assets.audio.length === 0) {
+	if (
+		model.assets.characters.length === 0 &&
+		Object.keys(model.assets.environments).length === 0 &&
+		model.assets.audio.length === 0
+	) {
 		warnings.push('No assets defined');
 	}
 
@@ -150,7 +152,7 @@ export function mergeModels(target: Model, source: Model): Model {
 	source.assets.characters.forEach((char) => {
 		let newId = char.id;
 		let counter = 1;
-		
+
 		while (existingCharIds.has(newId)) {
 			const parts = char.id.split('_');
 			const base = parts.length > 1 ? parts.slice(0, -1).join('_') : char.id;
@@ -170,7 +172,7 @@ export function mergeModels(target: Model, source: Model): Model {
 	source.assets.audio.forEach((audio) => {
 		let newId = audio.id;
 		let counter = 1;
-		
+
 		while (existingAudioIds.has(newId)) {
 			const parts = audio.id.split('_');
 			const base = parts.length > 1 ? parts.slice(0, -1).join('_') : audio.id;
@@ -190,7 +192,7 @@ export function mergeModels(target: Model, source: Model): Model {
 	Object.entries(source.assets.environments).forEach(([id, env]) => {
 		let newId = id;
 		let counter = 1;
-		
+
 		while (existingEnvIds.has(newId)) {
 			newId = `${id}_${counter}`;
 			counter++;
@@ -202,9 +204,7 @@ export function mergeModels(target: Model, source: Model): Model {
 
 	// Append timeline events
 	// Rebase times to continue from last event
-	const lastTime = merged.timeline.length > 0 
-		? Math.max(...merged.timeline.map((e) => e.time))
-		: 0;
+	const lastTime = merged.timeline.length > 0 ? Math.max(...merged.timeline.map((e) => e.time)) : 0;
 	const timeOffset = lastTime + 1000; // 1 second gap
 
 	source.timeline.forEach((event) => {
@@ -235,9 +235,7 @@ export function getModelSummary(model: Model): {
 } {
 	const sortedEvents = [...model.timeline].sort((a, b) => a.time - b.time);
 	const lastEvent = sortedEvents[sortedEvents.length - 1];
-	const totalDuration = lastEvent 
-		? lastEvent.time + (lastEvent.duration ?? 0)
-		: 0;
+	const totalDuration = lastEvent ? lastEvent.time + (lastEvent.duration ?? 0) : 0;
 
 	return {
 		projectName: model.project.name,

@@ -113,7 +113,9 @@
 			📸 Snapshots
 		</button>
 		<a
-			href="/present?model={encodeURIComponent(btoa(JSON.stringify($state.snapshot(model))))}&index=0"
+			href="/present?model={encodeURIComponent(
+				btoa(JSON.stringify($state.snapshot(model)))
+			)}&index=0"
 			target="_blank"
 			rel="noopener"
 			class="toolbar-btn toolbar-btn--screening"

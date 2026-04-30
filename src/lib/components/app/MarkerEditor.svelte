@@ -98,7 +98,8 @@
 						value={color || MARKER_COLORS[type]}
 						oninput={(e) => (color = (e.target as HTMLInputElement).value)}
 					/>
-					<span class="color-preview" style="background-color: {color || MARKER_COLORS[type]}"></span>
+					<span class="color-preview" style="background-color: {color || MARKER_COLORS[type]}"
+					></span>
 				</div>
 				<small>Default: {MARKER_COLORS[type]}</small>
 			</div>

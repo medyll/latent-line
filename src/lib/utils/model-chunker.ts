@@ -1,9 +1,9 @@
 /**
  * Model Chunking Utility
- * 
+ *
  * Enables progressive loading of large timeline models by splitting
  * events into chunks and loading them with requestIdleCallback.
- * 
+ *
  * @module model-chunker
  */
 
@@ -22,7 +22,7 @@ if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'unde
 			});
 		}, 1);
 	};
-	
+
 	(window as any).cancelIdleCallback = (handle: number) => {
 		clearTimeout(handle);
 	};
@@ -48,22 +48,25 @@ export interface LoadProgress {
 /**
  * Splits a large model into manageable chunks for progressive loading
  */
-export function chunkModel(model: { events?: any[]; [key: string]: any }, chunkSize: number = 100): ChunkedModel {
+export function chunkModel(
+	model: { events?: any[]; [key: string]: any },
+	chunkSize: number = 100
+): ChunkedModel {
 	const events = model.events || [];
 	const totalEvents = events.length;
 	const totalChunks = Math.ceil(totalEvents / chunkSize);
-	
+
 	const timelineChunks: any[][] = [];
-	
+
 	// Split events into chunks
 	for (let i = 0; i < totalEvents; i += chunkSize) {
 		const chunk = events.slice(i, i + chunkSize);
 		timelineChunks.push(chunk);
 	}
-	
+
 	// Create chunked model without events (they're in chunks)
 	const { events: _, ...modelWithoutEvents } = model;
-	
+
 	return {
 		...modelWithoutEvents,
 		project: model.project || {},
@@ -84,79 +87,77 @@ export async function loadChunks(
 	onChunkLoaded?: (progress: LoadProgress) => void
 ): Promise<any[]> {
 	const allEvents: any[][] = new Array(chunkedModel.totalChunks);
-	
+
 	return new Promise((resolve) => {
 		let currentChunk = 0;
-		
+
 		function loadNextChunk() {
 			if (currentChunk >= chunkedModel.totalChunks) {
 				// All chunks loaded
 				resolve(allEvents.flat());
 				return;
 			}
-			
-		// Check if requestIdleCallback is available
-		if (typeof requestIdleCallback !== 'undefined') {
-			// Use requestIdleCallback to load chunk when browser is idle
-			requestIdleCallback(
-				(deadline) => {
-					while (deadline.timeRemaining() > 0 && currentChunk < chunkedModel.totalChunks) {
-						// Load chunk synchronously
-						const chunkIndex = currentChunk;
-						allEvents[chunkIndex] = chunkedModel.timelineChunks[chunkIndex];
-						chunkedModel.loadedChunks++;
-						
-						// Notify progress
-						if (onChunkLoaded) {
-							const progress: LoadProgress = {
-								chunkIndex: chunkIndex,
-								totalChunks: chunkedModel.totalChunks,
-								percent: Math.round(((chunkIndex + 1) / chunkedModel.totalChunks) * 100),
-								eventsLoaded: (chunkIndex + 1) * chunkedModel.chunkSize,
-								totalEvents: chunkedModel.totalChunks * chunkedModel.chunkSize
-							};
-							onChunkLoaded(progress);
+
+			// Check if requestIdleCallback is available
+			if (typeof requestIdleCallback !== 'undefined') {
+				// Use requestIdleCallback to load chunk when browser is idle
+				requestIdleCallback(
+					(deadline) => {
+						while (deadline.timeRemaining() > 0 && currentChunk < chunkedModel.totalChunks) {
+							// Load chunk synchronously
+							const chunkIndex = currentChunk;
+							allEvents[chunkIndex] = chunkedModel.timelineChunks[chunkIndex];
+							chunkedModel.loadedChunks++;
+
+							// Notify progress
+							if (onChunkLoaded) {
+								const progress: LoadProgress = {
+									chunkIndex: chunkIndex,
+									totalChunks: chunkedModel.totalChunks,
+									percent: Math.round(((chunkIndex + 1) / chunkedModel.totalChunks) * 100),
+									eventsLoaded: (chunkIndex + 1) * chunkedModel.chunkSize,
+									totalEvents: chunkedModel.totalChunks * chunkedModel.chunkSize
+								};
+								onChunkLoaded(progress);
+							}
+
+							currentChunk++;
 						}
-						
-						currentChunk++;
+
+						// Schedule next batch if chunks remain
+						if (currentChunk < chunkedModel.totalChunks) {
+							loadNextChunk();
+						} else {
+							resolve(allEvents.flat());
+						}
+					},
+					{ timeout: 1000 } // Force execution within 1 second
+				);
+			} else {
+				// Fallback for Node.js/test environments without requestIdleCallback
+				setTimeout(() => {
+					const chunkIndex = currentChunk;
+					allEvents[chunkIndex] = chunkedModel.timelineChunks[chunkIndex];
+					chunkedModel.loadedChunks++;
+
+					if (onChunkLoaded) {
+						const progress: LoadProgress = {
+							chunkIndex: chunkIndex,
+							totalChunks: chunkedModel.totalChunks,
+							percent: Math.round(((chunkIndex + 1) / chunkedModel.totalChunks) * 100),
+							eventsLoaded: (chunkIndex + 1) * chunkedModel.chunkSize,
+							totalEvents: chunkedModel.totalChunks * chunkedModel.chunkSize
+						};
+						onChunkLoaded(progress);
 					}
-					
-					// Schedule next batch if chunks remain
-					if (currentChunk < chunkedModel.totalChunks) {
-						loadNextChunk();
-					} else {
-						resolve(allEvents.flat());
-					}
-				},
-				{ timeout: 1000 } // Force execution within 1 second
-			);
-		} else {
-			// Fallback for Node.js/test environments without requestIdleCallback
-			setTimeout(() => {
-				const chunkIndex = currentChunk;
-				allEvents[chunkIndex] = chunkedModel.timelineChunks[chunkIndex];
-				chunkedModel.loadedChunks++;
-				
-				if (onChunkLoaded) {
-					const progress: LoadProgress = {
-						chunkIndex: chunkIndex,
-						totalChunks: chunkedModel.totalChunks,
-						percent: Math.round(((chunkIndex + 1) / chunkedModel.totalChunks) * 100),
-						eventsLoaded: (chunkIndex + 1) * chunkedModel.chunkSize,
-						totalEvents: chunkedModel.totalChunks * chunkedModel.chunkSize
-					};
-					onChunkLoaded(progress);
-				}
-				
-				currentChunk++;
-				loadNextChunk();
-			}, 0);
+
+					currentChunk++;
+					loadNextChunk();
+				}, 0);
+			}
 		}
-		}
-		
+
 		// Start loading
 		loadNextChunk();
 	});
 }
-
-

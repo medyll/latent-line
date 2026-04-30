@@ -20,6 +20,7 @@ Implemented Web Worker infrastructure for offloading heavy computation to backgr
 **File:** `src/lib/utils/worker-pool.ts` (160 lines)
 
 **Features:**
+
 - `WorkerPool` class — Manages pool of workers
 - Task queue with automatic distribution
 - Per-worker availability tracking
@@ -29,11 +30,12 @@ Implemented Web Worker infrastructure for offloading heavy computation to backgr
 - Statistics tracking
 
 **API:**
+
 ```typescript
 const pool = new WorkerPool(
-  new URL('../workers/search.worker.ts', import.meta.url),
-  2, // pool size
-  'search' // worker type
+	new URL('../workers/search.worker.ts', import.meta.url),
+	2, // pool size
+	'search' // worker type
 );
 
 const result = await pool.run({ query: 'test', model });
@@ -45,6 +47,7 @@ pool.terminate();
 **File:** `src/lib/workers/search-index.worker.ts` (200 lines)
 
 **Features:**
+
 - Full-text search indexing
 - Character/environment/event indexing
 - Tag-based search
@@ -53,11 +56,13 @@ pool.terminate();
 - Query optimization
 
 **Operations:**
+
 - `index` — Build search index from model
 - `search` — Perform search on indexed data
 - `reindex` — Rebuild index with progress
 
 **Performance:**
+
 - Index 1000 events: <50ms (vs 500ms blocking)
 - Search query: <10ms
 - No main thread blocking
@@ -67,6 +72,7 @@ pool.terminate();
 **File:** `src/lib/workers/validation.worker.ts` (180 lines)
 
 **Features:**
+
 - Zod schema validation in worker
 - Business rule validation
 - Duplicate ID detection
@@ -75,10 +81,12 @@ pool.terminate();
 - Warning generation
 
 **Operations:**
+
 - `validate` — Full validation with business rules
 - `validate-quick` — Schema-only validation
 
 **Validation Rules:**
+
 - Schema compliance (Zod)
 - Unique event IDs
 - Valid asset references
@@ -91,12 +99,14 @@ pool.terminate();
 **File:** `src/lib/workers/export.worker.ts` (220 lines)
 
 **Features:**
+
 - Multiple export formats
 - Progress reporting
 - File size tracking
 - Error handling
 
 **Supported Formats:**
+
 - ✅ JSON (with pretty print option)
 - ✅ CSV (with proper escaping)
 - ✅ EDL (simplified timecode format)
@@ -131,19 +141,19 @@ pool.terminate();
 
 ```svelte
 <script lang="ts">
-  import { useSearchWorker } from '$lib/utils/use-workers';
-  
-  const searchWorker = useSearchWorker();
-  
-  async function handleSearch(query: string) {
-    await searchWorker.indexModel(model);
-    const results = await searchWorker.search(query, model);
-    console.log(`Found ${results.total} results in ${results.queryTime}ms`);
-  }
+	import { useSearchWorker } from '$lib/utils/use-workers';
+
+	const searchWorker = useSearchWorker();
+
+	async function handleSearch(query: string) {
+		await searchWorker.indexModel(model);
+		const results = await searchWorker.search(query, model);
+		console.log(`Found ${results.total} results in ${results.queryTime}ms`);
+	}
 </script>
 
 {#if searchWorker.isSearching}
-  <div>Searching...</div>
+	<div>Searching...</div>
 {/if}
 
 <input on:input={(e) => handleSearch(e.target.value)} />
@@ -153,21 +163,21 @@ pool.terminate();
 
 ```svelte
 <script lang="ts">
-  import { useValidationWorker } from '$lib/utils/use-workers';
-  
-  const validationWorker = useValidationWorker();
-  
-  async function validateModel() {
-    const result = await validationWorker.validate(model, true);
-    
-    if (!result.valid) {
-      console.error('Validation errors:', result.errors);
-    }
-    
-    if (result.warnings.length > 0) {
-      console.warn('Warnings:', result.warnings);
-    }
-  }
+	import { useValidationWorker } from '$lib/utils/use-workers';
+
+	const validationWorker = useValidationWorker();
+
+	async function validateModel() {
+		const result = await validationWorker.validate(model, true);
+
+		if (!result.valid) {
+			console.error('Validation errors:', result.errors);
+		}
+
+		if (result.warnings.length > 0) {
+			console.warn('Warnings:', result.warnings);
+		}
+	}
 </script>
 
 <button on:click={validateModel}>Validate</button>
@@ -177,30 +187,30 @@ pool.terminate();
 
 ```svelte
 <script lang="ts">
-  import { useExportWorker } from '$lib/utils/use-workers';
-  
-  const exportWorker = useExportWorker();
-  
-  async function exportToCSV() {
-    try {
-      const result = await exportWorker.exportModel('csv', model);
-      console.log(`Exported ${result.fileSize} bytes in ${result.duration}ms`);
-      
-      // Download file
-      const blob = new Blob([result.data as string], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'timeline.csv';
-      a.click();
-    } catch (error) {
-      console.error('Export failed:', error);
-    }
-  }
+	import { useExportWorker } from '$lib/utils/use-workers';
+
+	const exportWorker = useExportWorker();
+
+	async function exportToCSV() {
+		try {
+			const result = await exportWorker.exportModel('csv', model);
+			console.log(`Exported ${result.fileSize} bytes in ${result.duration}ms`);
+
+			// Download file
+			const blob = new Blob([result.data as string], { type: 'text/csv' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = 'timeline.csv';
+			a.click();
+		} catch (error) {
+			console.error('Export failed:', error);
+		}
+	}
 </script>
 
 {#if exportWorker.isExporting}
-  <div>Exporting: {exportWorker.progress}%</div>
+	<div>Exporting: {exportWorker.progress}%</div>
 {/if}
 
 <button on:click={exportToCSV}>Export CSV</button>
@@ -212,31 +222,31 @@ pool.terminate();
 
 ### Search Indexing
 
-| Model Size | Main Thread | Worker | Improvement |
-|------------|-------------|--------|-------------|
-| 100 events | 50ms | 10ms | **5x faster** |
-| 500 events | 250ms | 25ms | **10x faster** |
-| 1000 events | 500ms | 45ms | **11x faster** |
-| 5000 events | 2.5s | 200ms | **12.5x faster** |
+| Model Size  | Main Thread | Worker | Improvement      |
+| ----------- | ----------- | ------ | ---------------- |
+| 100 events  | 50ms        | 10ms   | **5x faster**    |
+| 500 events  | 250ms       | 25ms   | **10x faster**   |
+| 1000 events | 500ms       | 45ms   | **11x faster**   |
+| 5000 events | 2.5s        | 200ms  | **12.5x faster** |
 
 **Note:** Actual export time similar, but main thread stays responsive
 
 ### Validation
 
-| Model Size | Main Thread | Worker | UI Freeze |
-|------------|-------------|--------|-----------|
-| 100 events | 30ms | 5ms | None |
-| 500 events | 150ms | 20ms | None |
-| 1000 events | 300ms | 40ms | None |
-| 5000 events | 1.5s | 180ms | None |
+| Model Size  | Main Thread | Worker | UI Freeze |
+| ----------- | ----------- | ------ | --------- |
+| 100 events  | 30ms        | 5ms    | None      |
+| 500 events  | 150ms       | 20ms   | None      |
+| 1000 events | 300ms       | 40ms   | None      |
+| 5000 events | 1.5s        | 180ms  | None      |
 
 ### Export Generation
 
 | Format | 100 Events | 1000 Events | 5000 Events |
-|--------|-----------|-------------|-------------|
-| JSON | 10ms | 50ms | 250ms |
-| CSV | 15ms | 80ms | 400ms |
-| EDL | 20ms | 100ms | 500ms |
+| ------ | ---------- | ----------- | ----------- |
+| JSON   | 10ms       | 50ms        | 250ms       |
+| CSV    | 15ms       | 80ms        | 400ms       |
+| EDL    | 20ms       | 100ms       | 500ms       |
 
 All with **zero UI blocking** thanks to workers
 
@@ -244,12 +254,12 @@ All with **zero UI blocking** thanks to workers
 
 ## Browser Compatibility
 
-| Browser | Support | Notes |
-|---------|---------|-------|
-| Chrome/Edge | ✅ Full | Full Worker support |
-| Firefox | ✅ Full | Full Worker support |
-| Safari | ✅ Full | Full Worker support |
-| Mobile | ✅ Full | iOS Safari, Chrome Mobile |
+| Browser     | Support | Notes                     |
+| ----------- | ------- | ------------------------- |
+| Chrome/Edge | ✅ Full | Full Worker support       |
+| Firefox     | ✅ Full | Full Worker support       |
+| Safari      | ✅ Full | Full Worker support       |
+| Mobile      | ✅ Full | iOS Safari, Chrome Mobile |
 
 **Note:** Workers require HTTPS in production (except localhost)
 
@@ -304,6 +314,7 @@ Main Thread                    Worker Thread
 ## Files Created
 
 ### New Files (6)
+
 1. `src/lib/utils/worker-pool.ts` — Worker pool manager
 2. `src/lib/workers/search-index.worker.ts` — Search worker
 3. `src/lib/workers/validation.worker.ts` — Validation worker
@@ -316,6 +327,7 @@ Main Thread                    Worker Thread
 ## Testing Strategy
 
 ### Unit Tests
+
 **Status:** ⚠️ Limited (requires browser environment)
 
 Workers are browser-specific and cannot be easily tested in Node.js/Vitest environment. Testing should be done via:
@@ -337,11 +349,13 @@ Workers are browser-specific and cannot be easily tested in Node.js/Vitest envir
 ### Performance Testing
 
 **Tools:**
+
 - Chrome DevTools Performance tab
 - Lighthouse
 - Web Vitals
 
 **Metrics to Monitor:**
+
 - Main thread blocking time
 - Time to Interactive (TTI)
 - First Input Delay (FID)
@@ -414,25 +428,25 @@ Heavy operations now run in background threads to keep the UI responsive:
 
 ### Stories Completed
 
-| Story | Title | Points | Status |
-|-------|-------|--------|--------|
-| S36-01 | CSS-Base Migration | 5 | ✅ Conditional* |
-| S36-02 | Model Chunking | 4 | ✅ Complete |
-| S36-03 | Web Workers | 4 | ✅ Complete |
+| Story  | Title              | Points | Status           |
+| ------ | ------------------ | ------ | ---------------- |
+| S36-01 | CSS-Base Migration | 5      | ✅ Conditional\* |
+| S36-02 | Model Chunking     | 4      | ✅ Complete      |
+| S36-03 | Web Workers        | 4      | ✅ Complete      |
 
 **Total:** 13/13 points ✅
 
-*S36-01 has known ARIA issues (23/43 E2E tests failing) but visually complete
+\*S36-01 has known ARIA issues (23/43 E2E tests failing) but visually complete
 
 ### Performance Improvements
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Scroll FPS (1000 events) | 24fps | 60fps | **+150%** |
-| Time to Interactive | 2.8s | 0.1s | **96% faster** |
-| Search Index | 500ms | 45ms | **91% faster** |
-| Memory Usage | 180MB | 140MB | **-22%** |
-| UI Blocking | Yes | No | **100% eliminated** |
+| Metric                   | Before | After | Improvement         |
+| ------------------------ | ------ | ----- | ------------------- |
+| Scroll FPS (1000 events) | 24fps  | 60fps | **+150%**           |
+| Time to Interactive      | 2.8s   | 0.1s  | **96% faster**      |
+| Search Index             | 500ms  | 45ms  | **91% faster**      |
+| Memory Usage             | 180MB  | 140MB | **-22%**            |
+| UI Blocking              | Yes    | No    | **100% eliminated** |
 
 ### Next Sprint: S37 — Mobile & Responsive Experience
 

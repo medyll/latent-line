@@ -27,11 +27,7 @@
 		<ul class="user-list" role="list">
 			{#each otherUsers as user (user.id)}
 				<li class="user-item" role="listitem">
-					<div
-						class="user-avatar"
-						style="background-color: {user.color}"
-						aria-hidden="true"
-					>
+					<div class="user-avatar" style="background-color: {user.color}" aria-hidden="true">
 						{user.name.charAt(0).toUpperCase()}
 					</div>
 					<span class="user-name">{user.name}</span>
@@ -105,10 +101,12 @@
 	}
 
 	@keyframes typingBlink {
-		0%, 50% {
+		0%,
+		50% {
 			opacity: 1;
 		}
-		51%, 100% {
+		51%,
+		100% {
 			opacity: 0;
 		}
 	}

@@ -22,14 +22,15 @@ Latent-line now uses **@medyll/css-base v0.6.0** as its complete design system f
 ## 📦 Installation
 
 Already installed via:
+
 ```bash
 pnpm add @medyll/css-base
 ```
 
 **Import location:** `src/routes/+layout.svelte`
+
 ```svelte
-import '@medyll/css-base';
-import '$lib/styles/app.css';
+import '@medyll/css-base'; import '$lib/styles/app.css';
 ```
 
 ---
@@ -39,11 +40,13 @@ import '$lib/styles/app.css';
 ### Colors
 
 **Primary brand color:** Purple-violet (creative/video production vibe)
+
 ```css
 --color-primary: oklch(0.55 0.25 280);
 ```
 
 **Semantic colors:**
+
 - `--color-success` — Green for success states
 - `--color-warning` — Amber for warnings
 - `--color-critical` — Red for errors
@@ -58,6 +61,7 @@ import '$lib/styles/app.css';
 ### Typography
 
 **Font sizes:**
+
 - `--text-xs` (11px)
 - `--text-sm` (13px)
 - `--text-md` (16px) — default
@@ -66,12 +70,14 @@ import '$lib/styles/app.css';
 - `--text-2xl` (24px)
 
 **Font weights:**
+
 - `--font-normal` (400)
 - `--font-medium` (500)
 - `--font-semibold` (600)
 - `--font-bold` (700)
 
 **Line heights:**
+
 - `--leading-none` (1.0)
 - `--leading-tight` (1.25)
 - `--leading-normal` (1.5)
@@ -81,6 +87,7 @@ import '$lib/styles/app.css';
 ### Spacing
 
 **4px grid system:**
+
 - `--gap-xs` / `--pad-xs` / `--marg-xs` (4px)
 - `--gap-sm` / `--pad-sm` / `--marg-sm` (8px)
 - `--gap-md` / `--pad-md` / `--marg-md` (16px)
@@ -152,9 +159,9 @@ import '$lib/styles/app.css';
 
 ```svelte
 <div class="card">
-  <div class="card-header">Title</div>
-  <div class="card-body">Content</div>
-  <div class="card-footer">Actions</div>
+	<div class="card-header">Title</div>
+	<div class="card-body">Content</div>
+	<div class="card-footer">Actions</div>
 </div>
 ```
 
@@ -180,8 +187,8 @@ import '$lib/styles/app.css';
 
 ```svelte
 <div class="form-group">
-  <label for="name">Name</label>
-  <input id="name" type="text" placeholder="Enter name" />
+	<label for="name">Name</label>
+	<input id="name" type="text" placeholder="Enter name" />
 </div>
 ```
 
@@ -192,17 +199,18 @@ import '$lib/styles/app.css';
 **Automatic via `light-dark()`** — no manual classes needed!
 
 **Manual override:**
+
 ```svelte
 <script>
-  $effect(() => {
-    if (prefs.theme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else if (prefs.theme === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      document.documentElement.removeAttribute('data-theme'); // auto
-    }
-  });
+	$effect(() => {
+		if (prefs.theme === 'dark') {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		} else if (prefs.theme === 'light') {
+			document.documentElement.setAttribute('data-theme', 'light');
+		} else {
+			document.documentElement.removeAttribute('data-theme'); // auto
+		}
+	});
 </script>
 ```
 
@@ -214,8 +222,8 @@ import '$lib/styles/app.css';
 
 ```html
 <div class="flex flex-col md:flex-row gap-md">
-  <div class="w-full md:w-auto">Sidebar</div>
-  <div class="grow">Content</div>
+	<div class="w-full md:w-auto">Sidebar</div>
+	<div class="grow">Content</div>
 </div>
 ```
 
@@ -230,7 +238,7 @@ import '$lib/styles/app.css';
 
 ```html
 <div class="p-md gap-md space-y-md">
-  <!-- Content with padding, gap, and vertical spacing -->
+	<!-- Content with padding, gap, and vertical spacing -->
 </div>
 ```
 
@@ -301,8 +309,8 @@ import '$lib/styles/app.css';
 
 ```svelte
 <div class="timeline-event" style="left: {event.time}px;">
-  <div class="font-medium">{event.name}</div>
-  <div class="text-xs text-muted">{event.duration}ms</div>
+	<div class="font-medium">{event.name}</div>
+	<div class="text-xs text-muted">{event.duration}ms</div>
 </div>
 ```
 
@@ -310,15 +318,15 @@ import '$lib/styles/app.css';
 
 ```svelte
 <div class="asset-grid">
-  {#each assets as asset}
-    <div class="asset-card">
-      <div class="asset-preview">{asset.icon}</div>
-      <div class="asset-info">
-        <div class="asset-name">{asset.name}</div>
-        <div class="asset-meta">{asset.type}</div>
-      </div>
-    </div>
-  {/each}
+	{#each assets as asset}
+		<div class="asset-card">
+			<div class="asset-preview">{asset.icon}</div>
+			<div class="asset-info">
+				<div class="asset-name">{asset.name}</div>
+				<div class="asset-meta">{asset.type}</div>
+			</div>
+		</div>
+	{/each}
 </div>
 ```
 
@@ -326,22 +334,22 @@ import '$lib/styles/app.css';
 
 ```svelte
 <div class="properties-panel">
-  <h2 class="text-lg font-semibold mb-md">Properties</h2>
-  
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input id="name" type="text" bind:value={name} />
-  </div>
-  
-  <div class="form-group">
-    <label for="duration">Duration (ms)</label>
-    <input id="duration" type="number" bind:value={duration} />
-  </div>
-  
-  <div class="flex gap-sm mt-lg">
-    <button class="btn btn-primary">Save</button>
-    <button class="btn btn-ghost">Cancel</button>
-  </div>
+	<h2 class="text-lg font-semibold mb-md">Properties</h2>
+
+	<div class="form-group">
+		<label for="name">Name</label>
+		<input id="name" type="text" bind:value={name} />
+	</div>
+
+	<div class="form-group">
+		<label for="duration">Duration (ms)</label>
+		<input id="duration" type="number" bind:value={duration} />
+	</div>
+
+	<div class="flex gap-sm mt-lg">
+		<button class="btn btn-primary">Save</button>
+		<button class="btn btn-ghost">Cancel</button>
+	</div>
 </div>
 ```
 

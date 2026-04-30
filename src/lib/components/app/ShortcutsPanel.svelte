@@ -35,12 +35,12 @@
 
 	// Group shortcuts by category
 	const categories = $derived({
-		'File': Object.entries(shortcuts).filter(([k]) => k.startsWith('file.')),
-		'Editing': Object.entries(shortcuts).filter(([k]) => k.startsWith('edit.')),
-		'Playback': Object.entries(shortcuts).filter(([k]) => k.startsWith('playback.')),
-		'Navigation': Object.entries(shortcuts).filter(([k]) => k.startsWith('nav.')),
-		'View': Object.entries(shortcuts).filter(([k]) => k.startsWith('view.')),
-		'Timeline': Object.entries(shortcuts).filter(([k]) => k.startsWith('timeline.'))
+		File: Object.entries(shortcuts).filter(([k]) => k.startsWith('file.')),
+		Editing: Object.entries(shortcuts).filter(([k]) => k.startsWith('edit.')),
+		Playback: Object.entries(shortcuts).filter(([k]) => k.startsWith('playback.')),
+		Navigation: Object.entries(shortcuts).filter(([k]) => k.startsWith('nav.')),
+		View: Object.entries(shortcuts).filter(([k]) => k.startsWith('view.')),
+		Timeline: Object.entries(shortcuts).filter(([k]) => k.startsWith('timeline.'))
 	});
 
 	// Update conflicts when shortcuts change
@@ -88,21 +88,21 @@
 
 	function handleKeyDown(e: KeyboardEvent, action: string) {
 		e.preventDefault();
-		
+
 		const parts: string[] = [];
 		if (e.ctrlKey) parts.push('Ctrl');
 		if (e.altKey) parts.push('Alt');
 		if (e.shiftKey) parts.push('Shift');
 		if (e.metaKey) parts.push('Meta');
-		
+
 		// Add key
 		const key = e.key.toUpperCase();
 		if (!['CONTROL', 'ALT', 'SHIFT', 'META'].includes(key)) {
 			parts.push(key);
 		}
-		
+
 		const shortcut = parts.join('+');
-		
+
 		if (shortcut && editingAction === action) {
 			shortcuts[action] = shortcut;
 			stopEditing();
@@ -130,15 +130,17 @@
 	}
 
 	function getActionLabel(action: string): string {
-		return action
-			.split('.')
-			.pop()
-			?.replace(/-/g, ' ')
-			.replace(/\b\w/g, l => l.toUpperCase()) ?? action;
+		return (
+			action
+				.split('.')
+				.pop()
+				?.replace(/-/g, ' ')
+				.replace(/\b\w/g, (l) => l.toUpperCase()) ?? action
+		);
 	}
 
 	function hasConflict(action: string): boolean {
-		return conflicts.some(c => c.action1 === action || c.action2 === action);
+		return conflicts.some((c) => c.action1 === action || c.action2 === action);
 	}
 </script>
 
@@ -221,10 +223,7 @@
 										autofocus
 									/>
 								{:else}
-									<button
-										class="shortcut-btn"
-										onclick={() => startEditing(action, shortcut)}
-									>
+									<button class="shortcut-btn" onclick={() => startEditing(action, shortcut)}>
 										{formatShortcut(shortcut)}
 									</button>
 								{/if}
@@ -466,8 +465,12 @@
 	}
 
 	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	@keyframes slideUp {

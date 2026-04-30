@@ -57,6 +57,7 @@ Import timeline models from JSON files with full validation:
 Three new comprehensive documentation files:
 
 #### [USER_GUIDE.md](./docs/USER_GUIDE.md)
+
 - Getting started guide
 - Core features walkthrough
 - Import/export workflows
@@ -65,12 +66,14 @@ Three new comprehensive documentation files:
 - Troubleshooting section
 
 #### [API.md](./docs/API.md)
+
 - REST API endpoint documentation
 - Request/response formats
 - Error codes reference
 - JavaScript and Python examples
 
 #### [MODEL_SCHEMA.md](./docs/MODEL_SCHEMA.md)
+
 - Complete type definitions
 - Validation rules
 - Numeric ranges table
@@ -81,13 +84,13 @@ Three new comprehensive documentation files:
 
 ## Features Delivered This Sprint
 
-| Feature | Points | Status |
-|---------|--------|--------|
-| S28-01: REST API | 3 | ✅ Complete |
-| S28-02: ExportModal UI | 2.5 | ✅ Complete |
-| S28-03: ImportModal | 4 | ✅ Complete |
-| S28-04: Documentation | 2.5 | ✅ Complete |
-| **Sprint 28 Total** | **12** | **17 delivered** |
+| Feature                | Points | Status           |
+| ---------------------- | ------ | ---------------- |
+| S28-01: REST API       | 3      | ✅ Complete      |
+| S28-02: ExportModal UI | 2.5    | ✅ Complete      |
+| S28-03: ImportModal    | 4      | ✅ Complete      |
+| S28-04: Documentation  | 2.5    | ✅ Complete      |
+| **Sprint 28 Total**    | **12** | **17 delivered** |
 
 ---
 
@@ -121,13 +124,13 @@ Three new comprehensive documentation files:
 
 ## Quality Metrics
 
-| Metric | Value | Change from v0.4.0 |
-|--------|-------|-------------------|
-| **Unit Tests** | 448 passing | +0 |
-| **Type Errors** | 0 | -59 (100% fixed) |
-| **Lint Issues** | 0 | -43 files |
-| **Code Coverage** | 84.39% | +0.09% |
-| **Bundle Size** | ~102 KB gzipped | +15 KB |
+| Metric            | Value           | Change from v0.4.0 |
+| ----------------- | --------------- | ------------------ |
+| **Unit Tests**    | 448 passing     | +0                 |
+| **Type Errors**   | 0               | -59 (100% fixed)   |
+| **Lint Issues**   | 0               | -43 files          |
+| **Code Coverage** | 84.39%          | +0.09%             |
+| **Bundle Size**   | ~102 KB gzipped | +15 KB             |
 
 ---
 
@@ -170,6 +173,7 @@ None. This is a backward-compatible release.
 ### v0.6.0 Planning (Sprint 29+)
 
 **Under Consideration:**
+
 - 🔮 Virtual scrolling for large timelines (>500 events)
 - 🔮 Real-time collaboration (WebSocket)
 - 🔮 ComfyUI workflow integration
@@ -189,6 +193,7 @@ None. This is a backward-compatible release.
 - 0 TypeScript errors
 
 **Releases Shipped (v0.1.0 → v0.5.0):**
+
 - v0.1.0: Core timeline editor
 - v0.2.0: Undo/Redo + persistence
 - v0.3.0: EDL export, global search, presentation mode
@@ -207,6 +212,7 @@ None. This is a backward-compatible release.
 ## Changelog Summary (v0.4.0 → v0.5.0)
 
 ### Added
+
 - REST API endpoints for export/import
 - ImportModal component with drag-drop
 - Merge mode for timeline imports
@@ -214,16 +220,19 @@ None. This is a backward-compatible release.
 - README.md documentation section
 
 ### Changed
+
 - Updated Playwright config port (5173 → 5167)
 - Fixed SSR compatibility in i18n and persistence modules
 
 ### Fixed
+
 - 59 TypeScript errors → 0
 - 43 lint issues → 0
 - ImportModal radio button binding
 - Model store persistence timing
 
 ### Removed
+
 - None
 
 ---

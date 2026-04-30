@@ -50,9 +50,15 @@ export class SearchIndex {
 			const text = [
 				char.name,
 				char.voice_id ?? '',
-				char.outfits ? Object.values(char.outfits).map((o: any) => o.prompt).join(' ') : ''
-			].join(' ').toLowerCase();
-			
+				char.outfits
+					? Object.values(char.outfits)
+							.map((o: any) => o.prompt)
+							.join(' ')
+					: ''
+			]
+				.join(' ')
+				.toLowerCase();
+
 			this.characters.set(char.id, {
 				id: char.id,
 				text,
@@ -63,7 +69,7 @@ export class SearchIndex {
 		// Index environments
 		Object.entries(this.model.assets.environments).forEach(([id, env]) => {
 			const text = [env.prompt, env.ref ?? ''].join(' ').toLowerCase();
-			
+
 			this.environments.set(id, {
 				id,
 				text,
@@ -167,7 +173,7 @@ export class SearchIndex {
 
 		// Exact match bonus
 		if (text === query) score += 100;
-		
+
 		// Word boundary match
 		const wordRegex = new RegExp(`\\b${query}\\b`, 'i');
 		if (wordRegex.test(text)) score += 50;

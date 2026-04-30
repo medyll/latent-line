@@ -1,9 +1,9 @@
 /**
  * Worker Pool Manager
- * 
+ *
  * Manages a pool of Web Workers for heavy computation tasks.
  * Automatically distributes tasks across available workers.
- * 
+ *
  * @module worker-pool
  */
 

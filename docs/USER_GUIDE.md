@@ -59,12 +59,14 @@ Navigate to `http://localhost:5167` in your browser.
 The timeline is the central workspace where you build your narrative.
 
 **Key Concepts:**
+
 - **Events** — Discrete moments in time (keyframes)
 - **Time** — Measured in milliseconds from project start
 - **Duration** — How long an event lasts (in frames)
 - **Playhead** — Current playback position
 
 **Actions:**
+
 - **Add Event** — Click `+` button or press `N`
 - **Select Event** — Click on event card
 - **Delete Event** — Select event, press `Delete` or `Backspace`
@@ -76,6 +78,7 @@ The timeline is the central workspace where you build your narrative.
 Located in the left sidebar, manage all project assets:
 
 #### Characters
+
 - **ID** — Unique identifier (e.g., `char_01`)
 - **Name** — Display name
 - **Voice ID** — TTS voice selection
@@ -83,11 +86,13 @@ Located in the left sidebar, manage all project assets:
 - **Outfits** — Multiple outfit variations with prompts
 
 #### Environments
+
 - **ID** — Unique identifier (e.g., `env_01`)
 - **Prompt** — Text description for AI generation
 - **Reference** — Optional reference image URL
 
 #### Audio
+
 - **ID** — Unique identifier (e.g., `bgm_01`)
 - **URL** — Audio file location
 - **Label** — Display name
@@ -97,19 +102,23 @@ Located in the left sidebar, manage all project assets:
 When an event is selected, the right sidebar shows editable properties:
 
 #### Camera
+
 - **Zoom** — Camera zoom level (0.5–3.0)
 - **Pan** — Horizontal/vertical offset
 - **Tilt** — Camera tilt angle
 
 #### Lighting
+
 - **Type** — dusk, daylight, studio, tungsten, ambient
 - **Intensity** — 0.0–1.0
 
 #### Effects
+
 - **Bloom** — Glow effect intensity
 - **Motion Blur** — Movement blur amount
 
 #### AI Generation (ComfyUI)
+
 - **Prompt** — Positive prompt for image generation
 - **Negative Prompt** — What to avoid
 - **Settings** — Server configuration
@@ -122,17 +131,17 @@ When an event is selected, the right sidebar shows editable properties:
 
 Click the **Export** button (⬇) in the toolbar to access export options:
 
-| Format | Extension | Use Case |
-|--------|-----------|----------|
-| **YAML** | `.yaml` | Human-readable config, round-trip editing |
-| **JSON-LD** | `.jsonld` | Semantic web, RDF integration |
-| **CSV** | `.csv` | Spreadsheet import, data analysis |
-| **JSON** | `.json` | Standard data interchange |
-| **Prompts (TXT)** | `.txt` | Simple prompt list |
-| **Prompts (JSON)** | `.json` | Structured prompts with metadata |
-| **Deforum** | `.json` | Deforum AI animation format |
-| **Storyboard PDF** | `.pdf` | Visual storyboard for review |
-| **ZIP Bundle** | `.zip` | Complete project archive |
+| Format             | Extension | Use Case                                  |
+| ------------------ | --------- | ----------------------------------------- |
+| **YAML**           | `.yaml`   | Human-readable config, round-trip editing |
+| **JSON-LD**        | `.jsonld` | Semantic web, RDF integration             |
+| **CSV**            | `.csv`    | Spreadsheet import, data analysis         |
+| **JSON**           | `.json`   | Standard data interchange                 |
+| **Prompts (TXT)**  | `.txt`    | Simple prompt list                        |
+| **Prompts (JSON)** | `.json`   | Structured prompts with metadata          |
+| **Deforum**        | `.json`   | Deforum AI animation format               |
+| **Storyboard PDF** | `.pdf`    | Visual storyboard for review              |
+| **ZIP Bundle**     | `.zip`    | Complete project archive                  |
 
 ### Export Steps
 
@@ -146,15 +155,16 @@ Click the **Export** button (⬇) in the toolbar to access export options:
 Click the **Import** button in the Export modal to import a timeline:
 
 **Supported Formats:**
+
 - `.json` — Fully supported
 - `.yaml`, `.yml` — Coming soon
 
 **Import Modes:**
 
-| Mode | Behavior |
-|------|----------|
-| **Replace** | Clear current timeline, load imported file |
-| **Merge** | Append events, merge assets (auto-rename duplicates) |
+| Mode        | Behavior                                             |
+| ----------- | ---------------------------------------------------- |
+| **Replace** | Clear current timeline, load imported file           |
+| **Merge**   | Append events, merge assets (auto-rename duplicates) |
 
 **Import Process:**
 
@@ -166,12 +176,14 @@ Click the **Import** button in the Export modal to import a timeline:
 6. Click **Import**
 
 **Validation:**
+
 - Schema validation against `modelSchema` (Zod)
 - Duplicate ID detection
 - Asset reference validation
 - Timeline event validation
 
 **Error Handling:**
+
 - Invalid JSON syntax → Shows parse error
 - Schema validation failure → Lists field errors
 - Missing required fields → Highlights missing fields
@@ -183,7 +195,7 @@ Click the **Import** button in the Export modal to import a timeline:
 # Generated: 2026-03-27
 
 project:
-  name: "My Project"
+  name: 'My Project'
   fps: 24
   resolution:
     w: 1920
@@ -192,20 +204,20 @@ project:
 assets:
   characters:
     - id: char_01
-      name: "Hero"
-      voice_id: "v_male_01"
+      name: 'Hero'
+      voice_id: 'v_male_01'
       outfits:
-        default: "casual wear"
+        default: 'casual wear'
 
 timeline:
   - time: 0
     duration: 200
-    prompt: "hero walking"
+    prompt: 'hero walking'
     actor: char_01
 
 config:
-  checkpoint: "flux_dev.safetensors"
-  sampler: "euler"
+  checkpoint: 'flux_dev.safetensors'
+  sampler: 'euler'
   seed: 42
 ```
 
@@ -218,6 +230,7 @@ config:
 Generate AI images directly from timeline events.
 
 **Setup:**
+
 1. Click **🎨 ComfyUI** in toolbar
 2. Enter server URL (e.g., `http://localhost:7860`)
 3. (Optional) Add API key
@@ -225,12 +238,14 @@ Generate AI images directly from timeline events.
 5. Click **Save**
 
 **Per-Event Generation:**
+
 1. Select a timeline event
 2. Enter prompt in Properties Panel
 3. Click **Generate** button
 4. View progress and generated image
 
 **Batch Generation:**
+
 1. Click **🚀 Generate All** in toolbar
 2. All events with prompts will be generated sequentially
 3. 2-second rate limiting between requests
@@ -238,18 +253,18 @@ Generate AI images directly from timeline events.
 
 ### Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+Z` | Undo |
-| `Ctrl+Y` | Redo |
-| `Space` | Play/Pause playback |
-| `Escape` | Stop playback / Close modal |
-| `Ctrl+I` | Toggle Model Inspector |
-| `N` | New timeline event |
-| `Delete` / `Backspace` | Delete selected event |
-| `Ctrl+D` | Duplicate selected event |
-| `Ctrl+S` | Save (auto-save enabled) |
-| `Ctrl+E` | Open Export modal |
+| Shortcut               | Action                      |
+| ---------------------- | --------------------------- |
+| `Ctrl+Z`               | Undo                        |
+| `Ctrl+Y`               | Redo                        |
+| `Space`                | Play/Pause playback         |
+| `Escape`               | Stop playback / Close modal |
+| `Ctrl+I`               | Toggle Model Inspector      |
+| `N`                    | New timeline event          |
+| `Delete` / `Backspace` | Delete selected event       |
+| `Ctrl+D`               | Duplicate selected event    |
+| `Ctrl+S`               | Save (auto-save enabled)    |
+| `Ctrl+E`               | Open Export modal           |
 
 ### Model Inspector
 
@@ -268,16 +283,19 @@ Click the **⌥** button (bottom-right) to open the Model Inspector:
 ### Common Issues
 
 **"Invalid JSON syntax" on import:**
+
 - Check file encoding (must be UTF-8)
 - Validate JSON with online tool (jsonlint.com)
 - Ensure no trailing commas
 
 **"Schema validation failed":**
+
 - Check required fields: `project`, `assets`, `timeline`, `config`
 - Verify character IDs are unique
 - Ensure timeline events have `time` and `frame`
 
 **ComfyUI connection fails:**
+
 - Verify server is running
 - Check CORS settings on ComfyUI server
 - Ensure URL includes protocol (`http://` or `https://`)
@@ -295,6 +313,7 @@ Click the **⌥** button (bottom-right) to open the Model Inspector:
 ### File Formats
 
 **JSON Structure:**
+
 ```json
 {
   "project": { "name": "...", "fps": 24, "resolution": { "w": 1920, "h": 1080 } },
@@ -306,28 +325,29 @@ Click the **⌥** button (bottom-right) to open the Model Inspector:
 
 ### Resolution Presets
 
-| Name | Resolution | Aspect Ratio |
-|------|------------|--------------|
-| Square 1024 | 1024×1024 | 1:1 |
-| HD 720 | 1280×720 | 16:9 |
-| Full HD 1080 | 1920×1080 | 16:9 |
-| 4K UHD | 3840×2160 | 16:9 |
+| Name         | Resolution | Aspect Ratio |
+| ------------ | ---------- | ------------ |
+| Square 1024  | 1024×1024  | 1:1          |
+| HD 720       | 1280×720   | 16:9         |
+| Full HD 1080 | 1920×1080  | 16:9         |
+| 4K UHD       | 3840×2160  | 16:9         |
 
 ### Mood Palette
 
-| Mood | Description |
-|------|-------------|
-| `joyful` | Bright, energetic, uplifted |
+| Mood          | Description                   |
+| ------------- | ----------------------------- |
+| `joyful`      | Bright, energetic, uplifted   |
 | `melancholic` | Quietly reflective, nostalgic |
-| `anxious` | Tense, restless, alert |
-| `serene` | Calm, peaceful, clear |
-| `curious` | Inquisitive, engaged, eager |
+| `anxious`     | Tense, restless, alert        |
+| `serene`      | Calm, peaceful, clear         |
+| `curious`     | Inquisitive, engaged, eager   |
 
 ---
 
 **End of User Guide**
 
 For technical documentation, see:
+
 - [API Reference](./API.md)
 - [Model Schema](./MODEL_SCHEMA.md)
 - [Developer Guidelines](../GUIDELINES.md)

@@ -115,9 +115,7 @@
 
 	<!-- Export Button -->
 	<div class="stats-actions">
-		<button onclick={handleExport} aria-label="Export statistics as JSON">
-			Export JSON
-		</button>
+		<button onclick={handleExport} aria-label="Export statistics as JSON"> Export JSON </button>
 	</div>
 </div>
 

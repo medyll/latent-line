@@ -99,7 +99,8 @@
 			{#if hasRecovery()}
 				<div class="recovery-notice">
 					<RotateCcw size={16} />
-					<span>{history.length} version{history.length > 1 ? 's' : ''} available for recovery</span>
+					<span>{history.length} version{history.length > 1 ? 's' : ''} available for recovery</span
+					>
 				</div>
 			{/if}
 
@@ -129,16 +130,10 @@
 								{/if}
 							</div>
 							<div class="version-actions">
-								<button
-									class="btn btn-sm btn-primary"
-									onclick={() => handleRestore(index)}
-								>
+								<button class="btn btn-sm btn-primary" onclick={() => handleRestore(index)}>
 									Restore
 								</button>
-								<button
-									class="btn btn-sm btn-danger"
-									onclick={() => handleDelete(index)}
-								>
+								<button class="btn btn-sm btn-danger" onclick={() => handleDelete(index)}>
 									<Trash2 size={14} />
 								</button>
 							</div>
@@ -355,8 +350,12 @@
 	}
 
 	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	@keyframes slideUp {

@@ -33,7 +33,7 @@ function detectLocale(): string {
 // Reactive locale state - wrapped in function for SSR safety
 function createLocaleState() {
 	let _locale = detectLocale();
-	
+
 	return {
 		get value() {
 			return _locale;

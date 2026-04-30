@@ -76,11 +76,21 @@ export function useSearchWorker() {
 	}
 
 	return {
-		get isIndexing() { return isIndexing; },
-		get isSearching() { return isSearching; },
-		get index() { return index; },
-		get lastResults() { return lastResults; },
-		get error() { return error; },
+		get isIndexing() {
+			return isIndexing;
+		},
+		get isSearching() {
+			return isSearching;
+		},
+		get index() {
+			return index;
+		},
+		get lastResults() {
+			return lastResults;
+		},
+		get error() {
+			return error;
+		},
 		indexModel,
 		search,
 		destroy
@@ -157,9 +167,15 @@ export function useValidationWorker() {
 	}
 
 	return {
-		get isValidating() { return isValidating; },
-		get lastResult() { return lastResult; },
-		get error() { return error; },
+		get isValidating() {
+			return isValidating;
+		},
+		get lastResult() {
+			return lastResult;
+		},
+		get error() {
+			return error;
+		},
 		validate,
 		validateQuick,
 		destroy
@@ -219,10 +235,18 @@ export function useExportWorker() {
 	}
 
 	return {
-		get isExporting() { return isExporting; },
-		get progress() { return progress; },
-		get lastExport() { return lastExport; },
-		get error() { return error; },
+		get isExporting() {
+			return isExporting;
+		},
+		get progress() {
+			return progress;
+		},
+		get lastExport() {
+			return lastExport;
+		},
+		get error() {
+			return error;
+		},
 		exportModel,
 		destroy
 	};

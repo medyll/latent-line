@@ -106,7 +106,7 @@ export const isGenerating = derived({ subscribe: generation.subscribe }, (state)
  * Derived store: count completed generations
  */
 export const generationStats = derived({ subscribe: generation.subscribe }, (state) => {
-	let total = state.size;
+	const total = state.size;
 	let done = 0;
 	let error = 0;
 	let generating = 0;

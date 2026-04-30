@@ -12,12 +12,7 @@
 		onSelectResult?: (result: SearchResult) => void;
 	}
 
-	let {
-		open = false,
-		model,
-		onClose,
-		onSelectResult
-	}: Props = $props();
+	let { open = false, model, onClose, onSelectResult }: Props = $props();
 
 	const dispatch = createEventDispatcher<{
 		close: void;
@@ -51,7 +46,7 @@
 
 	onMount(() => {
 		filterPresets = loadFilterPresets();
-		
+
 		// Keyboard shortcut
 		function handleKeyDown(e: KeyboardEvent) {
 			if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
@@ -100,13 +95,15 @@
 	function handleSelect(result: SearchResult) {
 		dispatch('select', result);
 		onSelectResult?.(result);
-		
+
 		// Jump to event in timeline
 		if (result.type === 'event') {
 			// Emit custom event for timeline scroll
-			window.dispatchEvent(new CustomEvent('timeline-scroll-to', {
-				detail: { time: parseInt(result.id) }
-			}));
+			window.dispatchEvent(
+				new CustomEvent('timeline-scroll-to', {
+					detail: { time: parseInt(result.id) }
+				})
+			);
 		}
 	}
 
@@ -117,12 +114,12 @@
 
 	function applyFiltersToResults() {
 		if (!model) return;
-		
+
 		const filtered = applyFilters(model.timeline, filters);
 		// Filter search results based on filtered events
-		const filteredTimes = new Set(filtered.map(e => e.time));
-		searchResults = searchResults.filter(r => 
-			r.type !== 'event' || filteredTimes.has((r.data as TimelineEvent).time)
+		const filteredTimes = new Set(filtered.map((e) => e.time));
+		searchResults = searchResults.filter(
+			(r) => r.type !== 'event' || filteredTimes.has((r.data as TimelineEvent).time)
 		);
 	}
 
@@ -134,7 +131,8 @@
 	}
 
 	function getFilterCount(): number {
-		return Object.keys(filters).filter(k => filters[k as keyof FilterConfig] !== undefined).length;
+		return Object.keys(filters).filter((k) => filters[k as keyof FilterConfig] !== undefined)
+			.length;
 	}
 </script>
 
@@ -245,9 +243,7 @@
 						</div>
 					</div>
 
-					<button class="clear-filters" onclick={clearFilters}>
-						Clear all filters
-					</button>
+					<button class="clear-filters" onclick={clearFilters}> Clear all filters </button>
 				</div>
 			{/if}
 
@@ -260,10 +256,7 @@
 					</div>
 				{:else}
 					{#each searchResults.slice(0, 50) as result (result.id)}
-						<div
-							class="search-result {result.type}"
-							onclick={() => handleSelect(result)}
-						>
+						<div class="search-result {result.type}" onclick={() => handleSelect(result)}>
 							<div class="result-type">{result.type}</div>
 							<div class="result-content">
 								<div class="result-id">{result.id}</div>
@@ -520,8 +513,12 @@
 	}
 
 	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	@keyframes slideUp {

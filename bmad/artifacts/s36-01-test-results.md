@@ -15,11 +15,13 @@ CSS-Base design system successfully implemented, but E2E tests reveal accessibil
 ## Test Results
 
 ### ✅ Unit Tests — PASS
+
 - **684/684 tests passing**
 - No regressions from CSS changes
 - All component logic intact
 
 ### ✅ Visual Regression — UPDATED
+
 - Snapshots regenerated with new design
 - 4 baseline images updated:
   - HomePage-win32.png
@@ -31,11 +33,13 @@ CSS-Base design system successfully implemented, but E2E tests reveal accessibil
 ### ⚠️ E2E Tests — FAILING (23/43 passing)
 
 **Passing:**
+
 - ✅ AssetManager CRUD operations (all 6 tests)
 - ✅ Visual capture snapshots (4/4)
 - ✅ Demo test (home page h1)
 
 **Failing:**
+
 - ❌ Accessibility tests (ARIA violations)
 - ❌ Home page navigation (/app 404 errors)
 - ❌ Timeline creation/editing
@@ -55,6 +59,7 @@ CSS-Base design system successfully implemented, but E2E tests reveal accessibil
 **Source:** Multiple UI components with conflicting ARIA attributes
 
 **Affected Components:**
+
 - LanguageSelector (role="group" + aria-pressed buttons)
 - ToastManager (likely nested interactive elements)
 - AssetManager listboxes
@@ -83,12 +88,14 @@ CSS-Base design system successfully implemented, but E2E tests reveal accessibil
 ## What Works
 
 ### Design System ✅
+
 - CSS-Base tokens working correctly
 - Dark mode toggle functional
 - Responsive layout rendering
 - All component styles applying properly
 
 ### Core Functionality ✅
+
 - AssetManager CRUD operations
 - Visual snapshots capturing correctly
 - Unit tests all passing
@@ -127,6 +134,7 @@ CSS-Base design system successfully implemented, but E2E tests reveal accessibil
 The CSS-Base migration is functionally complete and visually successful, but requires accessibility fixes before full production release.
 
 **Options:**
+
 1. **Merge as-is** — Document known issues, fix in next sprint
 2. **Block merge** — Fix ARIA violations first (1-2 hours work)
 3. **Partial merge** — Merge CSS changes, keep old layout until tests pass
@@ -146,13 +154,13 @@ The CSS-Base migration is functionally complete and visually successful, but req
 
 ## Metrics
 
-| Metric | Before | After | Target |
-|--------|--------|-------|--------|
-| Unit Tests | 684 | 684 ✅ | 684 |
-| E2E Tests | 16/16 | 23/43 ⚠️ | 43/43 |
-| Visual Snapshots | 4 | 4 ✅ | 4 |
-| ARIA Violations | 0 | 99 ❌ | 0 |
-| CSS Bundle | 12KB | 15KB | <20KB |
+| Metric           | Before | After    | Target |
+| ---------------- | ------ | -------- | ------ |
+| Unit Tests       | 684    | 684 ✅   | 684    |
+| E2E Tests        | 16/16  | 23/43 ⚠️ | 43/43  |
+| Visual Snapshots | 4      | 4 ✅     | 4      |
+| ARIA Violations  | 0      | 99 ❌    | 0      |
+| CSS Bundle       | 12KB   | 15KB     | <20KB  |
 
 ---
 

@@ -27,6 +27,7 @@ pnpm run build && pnpm run preview    # Build + preview
 **CI order (strict):** lint → i18n check → typecheck → unit tests → coverage → e2e
 
 **Single test file:**
+
 ```bash
 pnpm run test:unit -- src/lib/model/model-template.test.ts
 ```
@@ -55,6 +56,7 @@ e2e/              # Playwright E2E tests (16 scenarios)
 ```
 
 **Key entrypoints:**
+
 - `src/routes/+page.svelte` — Main editor (no `app/` subdirectory)
 - `src/routes/+layout.svelte` — App shell, header, theme, prefs context
 - `src/routes/present/+page.svelte` — Presentation/screening view
@@ -66,6 +68,7 @@ e2e/              # Playwright E2E tests (16 scenarios)
 ## Critical Conventions
 
 ### Svelte 5 Rules
+
 - Use runes exclusively: `$state()`, `$props()`, `$effect()`, `$derived()`
 - **NEVER** use `$:` reactive declarations (Svelte 4 anti-pattern)
 - Prefer snippets over slots: `{@render children()}`
@@ -74,6 +77,7 @@ e2e/              # Playwright E2E tests (16 scenarios)
 - **`$derived` block form:** use `$derived.by(() => { ...; return val; })` NOT `$derived(() => {...})` — the latter makes the derived value the function itself, not its return value
 
 ### Data Model
+
 - Timeline events MUST be sorted by ascending `time` (milliseconds)
 - **`TimelineEvent` has no `id` field** — keyed by `time` (use `String(ev.time)` as string key)
 - `Character` requires `references: Reference[]` — always include even if empty array
@@ -84,6 +88,7 @@ e2e/              # Playwright E2E tests (16 scenarios)
 - Global generation state: `$lib/stores/generation.svelte` — `generation` store + `generationStats` derived
 
 ### Styling
+
 - Hybrid stack: `@medyll/css-base` tokens + Tailwind utility classes
   - `src/lib/styles/app.css` — design system overrides, oklch color tokens, layout components
   - `tailwind.config.cjs` — CSS var references + concrete `ai-purple`/`ai-teal` tokens
@@ -92,6 +97,7 @@ e2e/              # Playwright E2E tests (16 scenarios)
 - AI identity palette: `--ai-purple: oklch(0.65 0.25 280)`, `--ai-teal: oklch(0.72 0.18 195)`
 
 ### Testing
+
 - Unit tests: `src/**/*.test.ts` (Vitest, 2 tiers: client browser + server node)
 - E2E tests: `e2e/*.spec.ts` (Playwright, auto-starts dev server on 5167)
 - Visual regression: `e2e/visual-capture.spec.ts`
@@ -103,33 +109,44 @@ e2e/              # Playwright E2E tests (16 scenarios)
 ## Quirks & Gotchas
 
 ### Dev Server Port
+
 Vite config uses **5167**, not default 5173. Playwright config matches this.
 
 ### Workspace Root
+
 Monorepo with `server/` subdirectory. Main app is root; server is separate WebSocket process.
 
 ### SvelteKit Sync
+
 Run `svelte-kit sync` before typecheck if `.svelte-kit/` types are stale:
+
 ```bash
 pnpm run check  # Includes sync
 ```
 
 ### i18n Check
+
 Custom script validates EN/FR key parity:
+
 ```bash
 pnpm run check:i18n
 ```
 
 ### Browser Tests
+
 Vitest config splits tests into 2 projects:
+
 - `client`: Browser tests (`.svelte.test.ts`) with Playwright + Chromium
 - `server`: Node environment tests (everything else)
 
 ### Playwright Dev Server
+
 E2E tests auto-start dev server via `webServer` config. Do NOT run `pnpm dev` separately in CI.
 
 ### Snapshot Paths
+
 Snapshots are OS-isolated to prevent Linux/Windows conflicts:
+
 ```
 e2e/__snapshots__/{test}/{arg}-{platform}{ext}
 ```
@@ -141,6 +158,7 @@ e2e/__snapshots__/{test}/{arg}-{platform}{ext}
 **.env.local** for secrets (see `.env.example`). No hardcoded secrets.
 
 **Key config files:**
+
 - `vite.config.ts` — Test projects, browser config
 - `playwright.config.ts` — baseURL: 5167, timeout: 120s, retries: 2
 - `tsconfig.json` — Strict mode, bundler resolution
@@ -150,14 +168,14 @@ e2e/__snapshots__/{test}/{arg}-{platform}{ext}
 
 ## Existing Instruction Files
 
-| File | Purpose |
-|------|---------|
-| `README.md` | Project overview, architecture diagrams, commands |
-| `GUIDELINES.md` | Data model spec, validation rules, timeline format |
-| `.github/copilot-instructions.md` | Build/test commands, conventions |
-| `bmad/status.yaml` | Sprint progress, roadmap, test counts |
-| `docs/USER_GUIDE.md` | End-user documentation |
-| `docs/MODEL_SCHEMA.md` | Data model reference |
+| File                              | Purpose                                            |
+| --------------------------------- | -------------------------------------------------- |
+| `README.md`                       | Project overview, architecture diagrams, commands  |
+| `GUIDELINES.md`                   | Data model spec, validation rules, timeline format |
+| `.github/copilot-instructions.md` | Build/test commands, conventions                   |
+| `bmad/status.yaml`                | Sprint progress, roadmap, test counts              |
+| `docs/USER_GUIDE.md`              | End-user documentation                             |
+| `docs/MODEL_SCHEMA.md`            | Data model reference                               |
 
 ---
 
@@ -181,6 +199,7 @@ e2e/__snapshots__/{test}/{arg}-{platform}{ext}
 ## Quick Verification Checklist
 
 Before committing:
+
 - [ ] `pnpm run lint` passes
 - [ ] `pnpm run check:i18n` passes
 - [ ] `pnpm run check` (typecheck) passes

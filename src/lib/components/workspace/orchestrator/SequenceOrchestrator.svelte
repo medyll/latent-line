@@ -844,7 +844,11 @@
 				bind:value={markerEditLabel}
 				onkeydown={(e) => {
 					if (e.key === 'Enter') {
-						updateMarker(mk.id, { label: markerEditLabel, type: markerEditType, color: markerEditColor || undefined });
+						updateMarker(mk.id, {
+							label: markerEditLabel,
+							type: markerEditType,
+							color: markerEditColor || undefined
+						});
 						markerMenu = null;
 					}
 				}}
@@ -869,7 +873,11 @@
 			/>
 			<button
 				onclick={() => {
-					updateMarker(mk.id, { label: markerEditLabel, type: markerEditType, color: markerEditColor || undefined });
+					updateMarker(mk.id, {
+						label: markerEditLabel,
+						type: markerEditType,
+						color: markerEditColor || undefined
+					});
 					markerMenu = null;
 				}}
 				class="marker-menu-btn">Save</button

@@ -28,11 +28,11 @@ export function createModelStore() {
 	const history = createModelHistory();
 	const saveStatus = $state({ value: 'saved' as 'saved' | 'unsaved' | 'saving' });
 	const debouncedSave = createDebouncedSave(saveModelToLocalStorage, 500);
-	
+
 	// Chunked loading state
 	let isLoadingLarge = $state(false);
 	let loadProgress = $state<LoadProgress | null>(null);
-	let chunkSize = $state(100); // Default: 100 events per chunk
+	const chunkSize = $state(100); // Default: 100 events per chunk
 
 	let previousJson = JSON.stringify(model);
 	let isApplyingSnapshot = false;
@@ -106,7 +106,7 @@ export function createModelStore() {
 	function getMarkerAtTime(time: number, tolerance = 100): TimelineMarker | undefined {
 		return (model.markers ?? []).find((m) => Math.abs(m.time - time) < tolerance);
 	}
-	
+
 	/**
 	 * Load a large model progressively in chunks
 	 * Prevents UI freeze when loading 1000+ events
@@ -114,21 +114,21 @@ export function createModelStore() {
 	async function loadLargeModel(newModel: Model, size: number = chunkSize): Promise<void> {
 		isLoadingLarge = true;
 		loadProgress = null;
-		
+
 		// Split model into chunks
 		const chunked = chunkModel(newModel, size);
-		
+
 		// Load chunks progressively
 		const allEvents = await loadChunks(chunked, (progress) => {
 			loadProgress = progress;
 		});
-		
+
 		// Final update with all events
 		model.timeline = allEvents;
 		isLoadingLarge = false;
 		loadProgress = null;
 	}
-	
+
 	/**
 	 * Check if a model is large enough to warrant chunked loading
 	 */
@@ -136,15 +136,15 @@ export function createModelStore() {
 		return (newModel.timeline?.length || 0) > 200;
 	}
 
-	return { 
-		model, 
-		history, 
-		undo, 
-		redo, 
-		saveStatus, 
-		addMarker, 
-		updateMarker, 
-		deleteMarker, 
+	return {
+		model,
+		history,
+		undo,
+		redo,
+		saveStatus,
+		addMarker,
+		updateMarker,
+		deleteMarker,
 		getMarkerAtTime,
 		loadLargeModel,
 		isLargeModel,

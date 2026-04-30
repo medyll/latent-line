@@ -20,7 +20,7 @@
 	let newName: string = $state('');
 	let message: string = $state('');
 
-	const PRESET_LABELS = ['Rough cut', 'Director\'s cut', 'Final', 'Archive'];
+	const PRESET_LABELS = ['Rough cut', "Director's cut", 'Final', 'Archive'];
 
 	function refresh() {
 		snapshots = listSnapshots();
@@ -42,13 +42,19 @@
 	function remove(id: string) {
 		if (!confirm('Supprimer cette version ?')) return;
 		const ok = deleteSnapshot(id);
-		if (!ok) { message = 'Erreur lors de la suppression'; return; }
+		if (!ok) {
+			message = 'Erreur lors de la suppression';
+			return;
+		}
 		refresh();
 	}
 
 	function apply(id: string) {
 		const res = restoreSnapshot(id);
-		if (!res.success) { message = res.errors.join('; '); return; }
+		if (!res.success) {
+			message = res.errors.join('; ');
+			return;
+		}
 		history?.push(JSON.parse(JSON.stringify(model)));
 		const imported = res.model;
 		Object.assign(model.project, imported.project);
@@ -89,7 +95,12 @@
 </script>
 
 <div class="snapshots-overlay" onclick={onclose} role="presentation">
-	<div class="snapshots-panel" onclick={(e) => e.stopPropagation()} role="dialog" aria-label="Versions de tournage">
+	<div
+		class="snapshots-panel"
+		onclick={(e) => e.stopPropagation()}
+		role="dialog"
+		aria-label="Versions de tournage"
+	>
 		<header class="panel-header">
 			<h2 class="panel-title">Versions de tournage</h2>
 			{#if onclose}
@@ -128,10 +139,7 @@
 					{@const mood = getSnapshotMood(s)}
 					{@const scene = getSnapshotScene(s)}
 					{@const mc = getMoodColor(mood)}
-					<div
-						class="snapshot-card"
-						style={mc ? `border-left: 3px solid ${mc.border};` : ''}
-					>
+					<div class="snapshot-card" style={mc ? `border-left: 3px solid ${mc.border};` : ''}>
 						<div class="snapshot-top">
 							<div class="snapshot-info">
 								<div class="snapshot-name">{s.name}</div>
@@ -141,7 +149,12 @@
 								{/if}
 							</div>
 							{#if mc}
-								<div class="snapshot-mood" style="background:{mc.bg}; color:{mc.text}; border:1px solid {mc.border};">{mood}</div>
+								<div
+									class="snapshot-mood"
+									style="background:{mc.bg}; color:{mc.text}; border:1px solid {mc.border};"
+								>
+									{mood}
+								</div>
 							{/if}
 						</div>
 						<div class="snapshot-actions">
@@ -152,8 +165,8 @@
 								onclick={() =>
 									navigator.clipboard?.writeText(window.location.href + '?snap=' + s.id)}
 								class="action-btn"
-								title="Copier le lien"
-							>🔗</button>
+								title="Copier le lien">🔗</button
+							>
 							<button onclick={() => remove(s.id)} class="action-btn action-btn--danger">✕</button>
 						</div>
 					</div>

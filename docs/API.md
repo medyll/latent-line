@@ -24,6 +24,7 @@ Latent-line provides REST API endpoints for programmatic export and import of ti
 **Authentication:** None required (local application)
 
 **Content Types:**
+
 - Request: `application/json`
 - Response: `application/json`
 
@@ -39,12 +40,13 @@ Export a timeline model in various formats.
 
 **Query Parameters:**
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `format` | string | `yaml` | Export format (see below) |
-| `pretty` | string | `true` | Pretty-print JSON formats |
+| Parameter | Type   | Default | Description               |
+| --------- | ------ | ------- | ------------------------- |
+| `format`  | string | `yaml`  | Export format (see below) |
+| `pretty`  | string | `true`  | Pretty-print JSON formats |
 
 **Supported Formats:**
+
 - `yaml` — YAML format
 - `jsonld` — JSON-LD (semantic web)
 - `csv` — CSV spreadsheet
@@ -104,10 +106,10 @@ curl -X POST http://localhost:5167/api/export?format=yaml \
 
 ```json
 {
-  "format": "yaml",
-  "content": "# Latent-Line Timeline Export\n...",
-  "mimeType": "application/x-yaml",
-  "filename": "timeline-1234567890.yaml"
+	"format": "yaml",
+	"content": "# Latent-Line Timeline Export\n...",
+	"mimeType": "application/x-yaml",
+	"filename": "timeline-1234567890.yaml"
 }
 ```
 
@@ -125,7 +127,7 @@ Import and validate a timeline model from JSON.
 
 ```typescript
 {
-  json: string        // JSON string of the model
+	json: string; // JSON string of the model
 }
 ```
 
@@ -173,13 +175,13 @@ curl -X POST http://localhost:5167/api/import \
 
 ```json
 {
-  "success": true,
-  "model": {
-    "project": { "name": "Test", "fps": 24, "resolution": { "w": 1024, "h": 1024 } },
-    "assets": { "characters": [], "environments": {}, "audio": [] },
-    "timeline": [],
-    "config": {}
-  }
+	"success": true,
+	"model": {
+		"project": { "name": "Test", "fps": 24, "resolution": { "w": 1024, "h": 1024 } },
+		"assets": { "characters": [], "environments": {}, "audio": [] },
+		"timeline": [],
+		"config": {}
+	}
 }
 ```
 
@@ -187,14 +189,14 @@ curl -X POST http://localhost:5167/api/import \
 
 ## Error Codes
 
-| Code | HTTP Status | Description |
-|------|-------------|-------------|
-| `MISSING_MODEL` | 400 | Request body missing `model` field |
-| `INVALID_MODEL` | 422 | Model failed schema validation |
-| `UNSUPPORTED_FORMAT` | 400 | Requested export format not supported |
-| `PARSE_ERROR` | 400 | Invalid JSON syntax in import |
-| `EXPORT_ERROR` | 500 | Internal error during export |
-| `IMPORT_ERROR` | 500 | Internal error during import |
+| Code                 | HTTP Status | Description                           |
+| -------------------- | ----------- | ------------------------------------- |
+| `MISSING_MODEL`      | 400         | Request body missing `model` field    |
+| `INVALID_MODEL`      | 422         | Model failed schema validation        |
+| `UNSUPPORTED_FORMAT` | 400         | Requested export format not supported |
+| `PARSE_ERROR`        | 400         | Invalid JSON syntax in import         |
+| `EXPORT_ERROR`       | 500         | Internal error during export          |
+| `IMPORT_ERROR`       | 500         | Internal error during import          |
 
 ---
 
@@ -206,16 +208,16 @@ curl -X POST http://localhost:5167/api/import \
 
 ```javascript
 const model = {
-  project: { name: 'My Project', fps: 24, resolution: { w: 1024, h: 1024 } },
-  assets: { characters: [], environments: {}, audio: [] },
-  timeline: [],
-  config: {}
+	project: { name: 'My Project', fps: 24, resolution: { w: 1024, h: 1024 } },
+	assets: { characters: [], environments: {}, audio: [] },
+	timeline: [],
+	config: {}
 };
 
 const response = await fetch('/api/export?format=yaml', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ model })
+	method: 'POST',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ model })
 });
 
 const result = await response.json();
@@ -228,16 +230,16 @@ console.log(result.content); // YAML string
 const jsonString = JSON.stringify(model);
 
 const response = await fetch('/api/import', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ json: jsonString })
+	method: 'POST',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ json: jsonString })
 });
 
 const result = await response.json();
 if (result.success) {
-  console.log('Import successful:', result.model);
+	console.log('Import successful:', result.model);
 } else {
-  console.error('Import failed:', result.warnings);
+	console.error('Import failed:', result.warnings);
 }
 ```
 
@@ -296,18 +298,18 @@ For complete model schema documentation, see [MODEL_SCHEMA.md](./MODEL_SCHEMA.md
 
 ```json
 {
-  "project": {
-    "name": "Untitled",
-    "fps": 24,
-    "resolution": { "w": 1024, "h": 1024 }
-  },
-  "assets": {
-    "characters": [],
-    "environments": {},
-    "audio": []
-  },
-  "timeline": [],
-  "config": {}
+	"project": {
+		"name": "Untitled",
+		"fps": 24,
+		"resolution": { "w": 1024, "h": 1024 }
+	},
+	"assets": {
+		"characters": [],
+		"environments": {},
+		"audio": []
+	},
+	"timeline": [],
+	"config": {}
 }
 ```
 
@@ -343,5 +345,6 @@ For browser-based API access from a different origin:
 **End of API Reference**
 
 For user documentation, see:
+
 - [User Guide](./USER_GUIDE.md)
 - [Model Schema](./MODEL_SCHEMA.md)

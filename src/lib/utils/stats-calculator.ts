@@ -43,9 +43,7 @@ export function calculateStats(model: Model): TimelineStats {
 	// Calculate total duration
 	const maxTime = events.reduce((max, ev) => Math.max(max, ev.time), 0);
 	const lastEvent = events.find((ev) => ev.time === maxTime);
-	const totalDuration = lastEvent
-		? maxTime + (lastEvent.duration ?? 24)
-		: 0;
+	const totalDuration = lastEvent ? maxTime + (lastEvent.duration ?? 24) : 0;
 
 	// Character screen time
 	const characterScreenTime = new Map<string, number>();
@@ -91,24 +89,16 @@ export function calculateStats(model: Model): TimelineStats {
 	const markerCount = model.markers?.length ?? 0;
 
 	// Average event duration
-	const totalEventDuration = events.reduce(
-		(sum, ev) => sum + (ev.duration ?? 24),
-		0
-	);
+	const totalEventDuration = events.reduce((sum, ev) => sum + (ev.duration ?? 24), 0);
 	const averageEventDuration = totalEvents > 0 ? totalEventDuration / totalEvents : 0;
 
 	// Camera movement count
 	const cameraMovementCount = events.filter(
-		(ev) =>
-			ev.frame.camera?.zoom ||
-			ev.frame.camera?.pan ||
-			ev.frame.camera?.tilt
+		(ev) => ev.frame.camera?.zoom || ev.frame.camera?.pan || ev.frame.camera?.tilt
 	).length;
 
 	// FX count
-	const fxCount = events.filter(
-		(ev) => ev.frame.fx?.bloom || ev.frame.fx?.motion_blur
-	).length;
+	const fxCount = events.filter((ev) => ev.frame.fx?.bloom || ev.frame.fx?.motion_blur).length;
 
 	return {
 		totalEvents,

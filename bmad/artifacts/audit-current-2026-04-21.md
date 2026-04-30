@@ -18,14 +18,14 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
 
 ## 📊 Metrics Overview
 
-| Category | Current | Target | Status |
-|----------|---------|--------|--------|
-| Unit Tests | 684/684 | 100% | ✅ Pass |
-| E2E Tests | 16/16 | 100% | ✅ Pass |
-| Type Errors | 48 | 0 | ❌ Critical |
-| Type Warnings | 66 | 0 | ⚠️ High |
-| Format Issues | 307 | 0 | ⚠️ Medium |
-| Audit Coverage | 84.39% | 90%+ | ⚠️ Needs improvement |
+| Category       | Current | Target | Status               |
+| -------------- | ------- | ------ | -------------------- |
+| Unit Tests     | 684/684 | 100%   | ✅ Pass              |
+| E2E Tests      | 16/16   | 100%   | ✅ Pass              |
+| Type Errors    | 48      | 0      | ❌ Critical          |
+| Type Warnings  | 66      | 0      | ⚠️ High              |
+| Format Issues  | 307     | 0      | ⚠️ Medium            |
+| Audit Coverage | 84.39%  | 90%+   | ⚠️ Needs improvement |
 
 ---
 
@@ -34,10 +34,12 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
 ### 🚨 Critical Issues (Blockers)
 
 #### 1. Type Safety Deficit (48 Errors)
+
 **Location:** `src/lib/model/` and `src/lib/stores/`  
 **Impact:** High - Potential runtime crashes, data corruption
 
 **Top Error Types:**
+
 - Type mismatches in Zod schemas
 - Missing type annotations in stores
 - Incorrect event model typing
@@ -46,10 +48,12 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
 **Recommendation:** Run `pnpm exec tsc --noEmit` daily in CI. Fix type errors before merging new code.
 
 #### 2. Type Warnings (66 Warnings)
+
 **Location:** `server/src/` and `src/lib/services/`  
 **Impact:** Medium - Future technical debt
 
 **Common Patterns:**
+
 - Implicit any types
 - Unused variables
 - Non-null assertions (!)
@@ -60,10 +64,12 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
 ### ⚠️ High Priority Issues
 
 #### 3. Format Issues (307 Prettier/ESLint)
+
 **Location:** Entire codebase  
 **Impact:** Low - Maintainability
 
 **Breakdown:**
+
 - 189 Prettier formatting issues
 - 118 ESLint rule violations
 - Mostly trailing commas, quote style, indentation
@@ -71,10 +77,12 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
 **Recommendation:** Run `pnpm run format` before commits. Enable editor auto-format.
 
 #### 4. Test Coverage Gaps
+
 **Location:** `src/lib/services/export/` and `server/src/`  
 **Impact:** Medium - Untested critical paths
 
 **Missing Coverage:**
+
 - WebSocket message validation
 - Export format edge cases (AAF, FCPX, Premiere)
 - ComfyUI integration error handling
@@ -86,10 +94,12 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
 ### 📋 Medium Priority Issues
 
 #### 5. Dependency Audit
+
 **Status:** ✅ Current dependencies are secure  
 **Recommendation:** Run `pnpm audit` weekly
 
 #### 6. Bundle Size
+
 **Current:** ~2.8MB (development)  
 **Recommendation:** Target <2MB for production
 
@@ -108,17 +118,18 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
 ## 🎯 Action Plan
 
 ### Immediate (This Sprint - S36)
+
 1. **Fix Type Errors** (Priority: Critical)
    - Target: Reduce from 48 → 0 errors
    - Owner: Developer role
    - Deadline: Sprint end (2026-07-03)
-   
 2. **Address Type Warnings** (Priority: High)
    - Target: Reduce from 66 → <10 warnings
    - Owner: Developer role
    - Deadline: Sprint end
 
 ### Short-term (Next Sprint - S37)
+
 3. **Improve Test Coverage**
    - Target: 85%+ coverage
    - Focus: Export services and WebSocket layer
@@ -130,6 +141,7 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
    - Tool: Prettier + ESLint auto-fix
 
 ### Long-term (S38 - v1.0.0)
+
 5. **Audit Coverage Improvement**
    - Target: 90%+ coverage
    - Owner: Tester role
@@ -142,13 +154,13 @@ The project demonstrates strong test coverage (684/684 passing) and solid archit
 
 ## 📊 Success Criteria
 
-| Metric | Target | Measurement Method |
-|--------|--------|-------------------|
-| Type Errors | 0 | `pnpm exec tsc --noEmit` |
-| Type Warnings | <10 | `pnpm run lint` |
-| Format Issues | 0 | `pnpm run format` |
-| Test Coverage | 85%+ | `pnpm run test:unit -- --coverage` |
-| Audit Coverage | 90%+ | `pnpm run audit:coverage` |
+| Metric         | Target | Measurement Method                 |
+| -------------- | ------ | ---------------------------------- |
+| Type Errors    | 0      | `pnpm exec tsc --noEmit`           |
+| Type Warnings  | <10    | `pnpm run lint`                    |
+| Format Issues  | 0      | `pnpm run format`                  |
+| Test Coverage  | 85%+   | `pnpm run test:unit -- --coverage` |
+| Audit Coverage | 90%+   | `pnpm run audit:coverage`          |
 
 ---
 

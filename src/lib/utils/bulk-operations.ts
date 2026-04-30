@@ -16,20 +16,15 @@ export interface BulkOperationResult {
 /**
  * Delete multiple events from timeline
  */
-export function bulkDelete(
-	model: Model,
-	times: number[]
-): BulkOperationResult {
+export function bulkDelete(model: Model, times: number[]): BulkOperationResult {
 	try {
 		const newModel = structuredClone(model);
 		const originalCount = newModel.timeline.length;
-		
-		newModel.timeline = newModel.timeline.filter(
-			(event) => !times.includes(event.time)
-		);
-		
+
+		newModel.timeline = newModel.timeline.filter((event) => !times.includes(event.time));
+
 		const affectedCount = originalCount - newModel.timeline.length;
-		
+
 		return {
 			success: true,
 			affectedCount,
@@ -54,24 +49,22 @@ export function bulkDuplicate(
 ): BulkOperationResult {
 	try {
 		const newModel = structuredClone(model);
-		
+
 		// Find events to duplicate
-		const eventsToDuplicate = newModel.timeline.filter((event) =>
-			times.includes(event.time)
-		);
-		
+		const eventsToDuplicate = newModel.timeline.filter((event) => times.includes(event.time));
+
 		// Create duplicates with offset time
 		const duplicates: TimelineEvent[] = eventsToDuplicate.map((event) => ({
 			...structuredClone(event),
 			time: event.time + offsetMs
 		}));
-		
+
 		// Add duplicates to timeline
 		newModel.timeline.push(...duplicates);
-		
+
 		// Sort by time
 		newModel.timeline.sort((a, b) => a.time - b.time);
-		
+
 		return {
 			success: true,
 			affectedCount: duplicates.length,
@@ -89,14 +82,10 @@ export function bulkDuplicate(
 /**
  * Move multiple events in time
  */
-export function bulkMove(
-	model: Model,
-	times: number[],
-	deltaMs: number
-): BulkOperationResult {
+export function bulkMove(model: Model, times: number[], deltaMs: number): BulkOperationResult {
 	try {
 		const newModel = structuredClone(model);
-		
+
 		// Move selected events
 		newModel.timeline = newModel.timeline.map((event) => {
 			if (times.includes(event.time)) {
@@ -107,10 +96,10 @@ export function bulkMove(
 			}
 			return event;
 		});
-		
+
 		// Sort by time
 		newModel.timeline.sort((a, b) => a.time - b.time);
-		
+
 		return {
 			success: true,
 			affectedCount: times.length,
@@ -136,7 +125,7 @@ export function bulkEdit(
 	try {
 		const newModel = structuredClone(model);
 		let affectedCount = 0;
-		
+
 		newModel.timeline = newModel.timeline.map((event) => {
 			if (times.includes(event.time)) {
 				affectedCount++;
@@ -150,7 +139,7 @@ export function bulkEdit(
 			}
 			return event;
 		});
-		
+
 		return {
 			success: true,
 			affectedCount,

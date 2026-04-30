@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { parseImportFile, validateImportFile, mergeModels, getModelSummary } from '$lib/utils/import-parser';
+	import {
+		parseImportFile,
+		validateImportFile,
+		mergeModels,
+		getModelSummary
+	} from '$lib/utils/import-parser';
 	import type { Model } from '$lib/model/model-types';
 	import { X, Upload, AlertCircle, CheckCircle, FileJson, Replace, GitMerge } from '@lucide/svelte';
 
@@ -17,7 +22,12 @@
 
 	let fileContent = $state('');
 	let fileName = $state('');
-	let parseResult = $state<{ success: boolean; model?: Model; error?: string; details?: string[] } | null>(null);
+	let parseResult = $state<{
+		success: boolean;
+		model?: Model;
+		error?: string;
+		details?: string[];
+	} | null>(null);
 	let importMode = $state<'replace' | 'merge'>('replace');
 	let isDragging = $state(false);
 
@@ -64,7 +74,7 @@
 	function readFile(file: File) {
 		fileName = file.name;
 		const fileType = file.name.endsWith('.yaml') || file.name.endsWith('.yml') ? 'yaml' : 'json';
-		
+
 		const reader = new FileReader();
 		reader.onload = (e) => {
 			const content = e.target?.result as string;
@@ -88,7 +98,7 @@
 		try {
 			const raw = JSON.parse(content);
 			const result = parseImportFile(content, 'json');
-			
+
 			if (result.success) {
 				parseResult = {
 					success: true,
@@ -155,12 +165,7 @@
 						Drag and drop a JSON file here, or
 						<label class="file-link">
 							browse
-							<input
-								type="file"
-								accept=".json,.yaml,.yml"
-								hidden
-								onchange={handleFileSelect}
-							/>
+							<input type="file" accept=".json,.yaml,.yml" hidden onchange={handleFileSelect} />
 						</label>
 					</p>
 					<p class="dropzone-hint">Supports .json files (YAML coming soon)</p>
@@ -214,7 +219,9 @@
 							</dd>
 
 							<dt>Timeline</dt>
-							<dd>{summary?.eventCount} events ({Math.round((summary?.totalDuration || 0) / 1000)}s)</dd>
+							<dd>
+								{summary?.eventCount} events ({Math.round((summary?.totalDuration || 0) / 1000)}s)
+							</dd>
 						</dl>
 					</div>
 
@@ -222,14 +229,9 @@
 					{#if currentModel}
 						<div class="import-mode">
 							<h3 class="mode-title">Import Mode</h3>
-							
+
 							<label class="mode-option">
-								<input
-									type="radio"
-									name="import-mode"
-									value="replace"
-									bind:group={importMode}
-								/>
+								<input type="radio" name="import-mode" value="replace" bind:group={importMode} />
 								<div class="mode-card">
 									<Replace size={20} />
 									<div class="mode-info">
@@ -240,17 +242,14 @@
 							</label>
 
 							<label class="mode-option">
-								<input
-									type="radio"
-									name="import-mode"
-									value="merge"
-									bind:group={importMode}
-								/>
+								<input type="radio" name="import-mode" value="merge" bind:group={importMode} />
 								<div class="mode-card">
 									<GitMerge size={20} />
 									<div class="mode-info">
 										<span class="mode-name">Merge</span>
-										<span class="mode-desc">Append events, merge assets (auto-rename duplicates)</span>
+										<span class="mode-desc"
+											>Append events, merge assets (auto-rename duplicates)</span
+										>
 									</div>
 								</div>
 							</label>
@@ -261,14 +260,8 @@
 
 			<!-- Footer -->
 			<div class="modal-footer">
-				<button class="btn btn-secondary" onclick={handleClose}>
-					Cancel
-				</button>
-				<button
-					class="btn btn-primary"
-					disabled={!parseResult?.success}
-					onclick={handleImport}
-				>
+				<button class="btn btn-secondary" onclick={handleClose}> Cancel </button>
+				<button class="btn btn-primary" disabled={!parseResult?.success} onclick={handleImport}>
 					{importMode === 'replace' ? 'Import (Replace)' : 'Import (Merge)'}
 				</button>
 			</div>
@@ -462,7 +455,7 @@
 		cursor: pointer;
 	}
 
-	.mode-option input[type="radio"] {
+	.mode-option input[type='radio'] {
 		display: none;
 	}
 
@@ -548,8 +541,12 @@
 	}
 
 	@keyframes fadeIn {
-		from { opacity: 0; }
-		to { opacity: 1; }
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 
 	@keyframes slideUp {

@@ -1,6 +1,6 @@
 /**
  * Validation Worker
- * 
+ *
  * Handles Zod schema validation in a background thread.
  * Prevents UI freeze when validating large models.
  */
@@ -75,7 +75,9 @@ function validateModel(task: ValidationTask): ValidationResult {
 				const prev = task.model.timeline[i - 1];
 				const curr = task.model.timeline[i];
 				if (curr.time < prev.time) {
-					warnings.push(`Timeline not sorted: event ${curr.id} (time: ${curr.time}) comes after event ${prev.id} (time: ${prev.time})`);
+					warnings.push(
+						`Timeline not sorted: event ${curr.id} (time: ${curr.time}) comes after event ${prev.id} (time: ${prev.time})`
+					);
 				}
 			}
 		}
@@ -114,14 +116,16 @@ function validateModel(task: ValidationTask): ValidationResult {
 		};
 	} catch (error) {
 		const duration = Math.round(performance.now() - startTime);
-		
+
 		return {
 			valid: false,
-			errors: [{
-				path: 'root',
-				message: error instanceof Error ? error.message : 'Unknown validation error',
-				code: 'validation_error'
-			}],
+			errors: [
+				{
+					path: 'root',
+					message: error instanceof Error ? error.message : 'Unknown validation error',
+					code: 'validation_error'
+				}
+			],
 			warnings: [],
 			validatedAt: Date.now(),
 			duration
@@ -130,7 +134,7 @@ function validateModel(task: ValidationTask): ValidationResult {
 }
 
 // Handle messages from main thread
-self.onmessage = function(e: MessageEvent) {
+self.onmessage = function (e: MessageEvent) {
 	const { type, data, taskId } = e.data;
 
 	try {
@@ -150,16 +154,18 @@ self.onmessage = function(e: MessageEvent) {
 		} else if (type === 'validate-quick') {
 			// Quick validation (schema only, no business rules)
 			const quickResult = modelSchema.safeParse(data.model);
-			
+
 			self.postMessage({
 				type: 'result',
 				taskId,
 				data: {
 					valid: quickResult.success,
-					errors: quickResult.success ? [] : quickResult.error.errors.map((err: any) => ({
-						path: err.path.join('.'),
-						message: err.message
-					})),
+					errors: quickResult.success
+						? []
+						: quickResult.error.errors.map((err: any) => ({
+								path: err.path.join('.'),
+								message: err.message
+							})),
 					warnings: [],
 					validatedAt: Date.now(),
 					duration: 0

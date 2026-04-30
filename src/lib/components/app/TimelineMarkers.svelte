@@ -46,7 +46,8 @@
 			class:marker-beat={marker.type === 'beat'}
 			class:marker-note={marker.type === 'note'}
 			class:marker-cue={marker.type === 'cue'}
-			style="left: {msToPixels(marker.time)}px; border-left-color: {marker.color ?? MARKER_COLORS[marker.type]}"
+			style="left: {msToPixels(marker.time)}px; border-left-color: {marker.color ??
+				MARKER_COLORS[marker.type]}"
 			role="listitem"
 			tabindex="0"
 			aria-label="{marker.label} at {formatTime(marker.time)}"
@@ -60,7 +61,10 @@
 			}}
 			oncontextmenu={(e) => handleContextMenu(marker, e)}
 		>
-			<span class="marker-flag" style="background-color: {marker.color ?? MARKER_COLORS[marker.type]}">
+			<span
+				class="marker-flag"
+				style="background-color: {marker.color ?? MARKER_COLORS[marker.type]}"
+			>
 				{marker.label}
 			</span>
 		</div>

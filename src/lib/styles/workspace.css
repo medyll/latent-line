@@ -1,6 +1,6 @@
 /**
  * Application Shell Layout
- * CSS4 Nesting and Grid Subgrid implementation
+ * Using @medyll/css-base v0.6.0 tokens
  */
 @layer components {
 	.app-shell {
@@ -10,21 +10,21 @@
 			'sidebar main';
 		grid-template-rows: auto 1fr;
 		grid-template-columns: auto 1fr;
-		height: 100vh;
+		height: 100dvh;
 		width: 100vw;
 		overflow: clip;
 
 		/* Top navigation bar */
 		& .shell-header {
 			grid-area: header;
-			height: 48px;
+			height: var(--header-height);
 			border-bottom: var(--border-width) solid var(--color-border);
 		}
 
 		/* Left navigation sidebar */
 		& .shell-sidebar {
 			grid-area: sidebar;
-			width: 260px;
+			width: var(--sidebar-width);
 			border-right: var(--border-width) solid var(--color-border);
 			display: flex;
 			flex-direction: column;
@@ -43,30 +43,30 @@
 				position: sticky;
 
 				& .header-title {
-					font-size: 1.1rem;
-					font-weight: 700;
+					font-size: var(--text-lg);
+					font-weight: var(--font-bold);
 				}
 			}
 
 			/* Shared layout for tiles and list items */
 			& .columns {
 				display: grid;
-				grid-template-columns: 24px 1fr auto auto auto;
+				grid-template-columns: var(--icon-size-md) 1fr auto auto auto;
 				align-items: center;
-				gap: 0.75rem;
+				gap: var(--gap-sm);
 				width: 100%;
 			}
 
 			/* Standalone navigational tile */
 			& .sidebar-tile {
 				margin: 0 var(--marg-sm);
-				padding: 0.75rem;
+				padding: var(--pad-md);
 				border-radius: var(--radius-md);
 				cursor: pointer;
 				transition: background var(--transition-slow);
 
 				&:hover {
-					background: color-mix(in srgb, var(--color-text) 5%, transparent);
+					background: color-mix(in oklch, var(--color-text) 5%, transparent);
 				}
 
 				& .tile-content {
@@ -74,12 +74,12 @@
 					flex-direction: column;
 
 					& .tile-label {
-						font-size: 0.9rem;
-						font-weight: 500;
+						font-size: var(--text-sm);
+						font-weight: var(--font-medium);
 					}
 					& .tile-meta {
-						font-size: 0.7rem;
-						opacity: 0.6;
+						font-size: var(--text-xs);
+						color: var(--color-text-muted);
 					}
 				}
 			}
@@ -93,15 +93,15 @@
 				}
 				& .group-title {
 					display: block;
-					font-weight: 600;
-					font-size: 0.85rem;
+					font-weight: var(--font-semibold);
+					font-size: var(--text-xs);
 					text-transform: uppercase;
-					letter-spacing: 0.03em;
+					letter-spacing: var(--tracking-wide);
 				}
 				& .group-subtitle {
 					display: block;
-					font-size: 0.8rem;
-					opacity: 0.6;
+					font-size: var(--text-xs);
+					color: var(--color-text-muted);
 				}
 			}
 
@@ -110,11 +110,11 @@
 				border: none;
 				color: inherit;
 				cursor: pointer;
-				padding: 2px;
-				opacity: 0.6;
+				padding: var(--pad-xs);
+				color: var(--color-text-muted);
 
 				&:hover {
-					opacity: 1;
+					color: var(--color-text);
 				}
 				&.btn-trash:hover {
 					color: var(--color-critical);
@@ -151,11 +151,9 @@
 				flex-direction: column;
 				overflow: hidden;
 
-				/* Scrollable grid with resizable height */
-
 				/* Bottom timeline panel */
 				& .timeline-panel {
-					border-top: 2px solid var(--color-border-strong);
+					border-top: var(--border-width) solid var(--color-border-strong);
 					display: flex;
 					flex-direction: column;
 					resize: vertical;
@@ -195,12 +193,12 @@
 									transition: background var(--transition-fast);
 
 									&.selected {
-										background: color-mix(in srgb, var(--color-primary) 15%, var(--color-surface));
+										background: color-mix(in oklch, var(--color-primary) 15%, var(--color-surface));
 										border-color: var(--color-primary);
 										font-weight: var(--font-semibold);
 									}
 									&:hover:not(.selected) {
-										background: var(--color-surface-2);
+										background: var(--color-surface-hover);
 									}
 								}
 							}
@@ -213,7 +211,7 @@
 			& .status-bar {
 				height: 24px;
 				border-top: var(--border-width) solid var(--color-border);
-				padding: 0 0.75rem;
+				padding: 0 var(--pad-sm);
 				display: flex;
 				align-items: center;
 			}
@@ -252,18 +250,18 @@
 	& p {
 		font-size: var(--text-sm);
 		font-weight: var(--font-medium);
-		margin-bottom: 0.25rem;
+		margin-bottom: var(--gap-xs);
 	}
 	& small {
 		font-size: var(--text-xs);
-		opacity: 0.7;
+		color: var(--color-text-muted);
 	}
 }
 
 .menu-list {
 	list-style: none;
 	padding: 0;
-	margin: 0.75rem 0 0 0;
+	margin: var(--gap-sm) 0 0 0;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -280,7 +278,7 @@
 		gap: var(--gutter-sm);
 
 		&:hover {
-			background: color-mix(in srgb, var(--color-text) 5%, transparent);
+			background: color-mix(in oklch, var(--color-text) 5%, transparent);
 			anchor-name: --menu-anchor;
 		}
 
@@ -290,17 +288,17 @@
 			overflow: hidden;
 
 			& .info-light {
-				font-size: 0.7rem;
-				opacity: 0.5;
+				font-size: var(--text-xs);
+				color: var(--color-text-muted);
 			}
 			& .info-main {
-				font-size: 0.85rem;
+				font-size: var(--text-sm);
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				overflow: hidden;
 			}
 			& .item-chip {
-				font-size: 0.7rem;
+				font-size: var(--text-xs);
 				background: var(--color-primary);
 				padding: 1px 5px;
 				border-radius: var(--radius-full);
@@ -313,11 +311,9 @@
 	& .item-info-tip {
 		position-anchor: --menu-item-anchor;
 		position: absolute;
-		z-index: 1000;
+		z-index: var(--z-dropdown);
 		left: anchor(right);
 		top: anchor(bottom);
-		/*opacity: 0;
-		pointer-events: none; */
 	}
 }
 
@@ -325,8 +321,8 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 1.25rem;
-	height: 1.25rem;
+	width: var(--icon-size-sm);
+	height: var(--icon-size-sm);
 	border-radius: var(--radius-full);
 	background: var(--color-primary-muted);
 	color: var(--color-primary);
@@ -339,8 +335,8 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 1.25rem;
-	height: 1.25rem;
+	width: var(--icon-size-sm);
+	height: var(--icon-size-sm);
 	padding: 0;
 	background: transparent;
 	border: none;
@@ -378,14 +374,14 @@
 	&.selected {
 		border-color: var(--color-primary);
 		border-width: 2px;
-		background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
+		background: color-mix(in oklch, var(--color-primary) 8%, var(--color-surface));
 	}
 	&:hover:not(.selected) {
 		box-shadow: var(--shadow-md);
 	}
 
 	& .card-title {
-		font-weight: 500;
+		font-weight: var(--font-medium);
 	}
 	& .card-media {
 		width: 100%;
@@ -409,7 +405,7 @@
 
 	& .card-meta-details {
 		display: grid;
-		gap: 2px;
+		gap: var(--gap-xs);
 		font-size: var(--text-xs);
 	}
 
@@ -417,17 +413,15 @@
 		text-box-trim: trim-both;
 		display: grid;
 		grid-template-columns: 1.5rem 1fr;
-		gap: 2px;
+		gap: var(--gap-xs);
 		font-size: var(--text-xs);
 		text-wrap: balance;
-		/* Target the first column (2n+1) */
 		& > *:nth-child(2n + 1) {
-			place-self: center; /* Center horizontally and vertically within the 1.5rem cell */
+			place-self: center;
 		}
 
-		/* Target the second column (2n+2) if vertical alignment is needed */
 		& > *:nth-child(2n + 2) {
-			align-self: center; /* Ensure text stays vertically aligned with the icon */
+			align-self: center;
 		}
 	}
 }
@@ -480,11 +474,11 @@ select {
 
 /* Panel transitions */
 .panel-enter {
-	animation: panelSlideIn 200ms ease-out;
+	animation: panelSlideIn var(--duration-normal) ease-out;
 }
 
 .panel-exit {
-	animation: panelSlideOut 150ms ease-in forwards;
+	animation: panelSlideOut var(--transition-normal) forwards;
 }
 
 @keyframes panelSlideIn {
@@ -512,34 +506,34 @@ select {
 /* Card hover effects */
 .card-hover {
 	transition:
-		transform 150ms ease,
-		box-shadow 150ms ease;
+		transform var(--transition-normal) ease,
+		box-shadow var(--transition-normal) ease;
 }
 
 .card-hover:hover {
 	transform: scale(1.02);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	box-shadow: var(--shadow-md);
 }
 
 /* Button press effect */
 .btn-press {
-	transition: transform 100ms ease;
+	transition: transform var(--transition-fast) ease;
 }
 
 .btn-press:active {
-	transform: scale(0.95);
+	transform: scale(0.97);
 }
 
 /* Smooth playhead movement */
 .playhead {
-	transition: left 100ms linear;
+	transition: left var(--transition-fast) linear;
 }
 
 /* List item transitions */
 .list-item {
 	transition:
-		background-color 150ms ease,
-		transform 150ms ease;
+		background-color var(--transition-normal) ease,
+		transform var(--transition-normal) ease;
 }
 
 .list-item:hover {
@@ -548,7 +542,7 @@ select {
 
 /* Fade in animation for new elements */
 .fade-in {
-	animation: fadeIn 200ms ease-out;
+	animation: fadeIn var(--duration-normal) ease-out;
 }
 
 @keyframes fadeIn {
@@ -562,7 +556,7 @@ select {
 
 /* Slide in from bottom */
 .slide-up {
-	animation: slideUp 200ms ease-out;
+	animation: slideUp var(--duration-normal) ease-out;
 }
 
 @keyframes slideUp {

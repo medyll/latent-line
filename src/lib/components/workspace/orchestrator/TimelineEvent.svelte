@@ -112,7 +112,9 @@
 
 <div
 	bind:this={cardEl}
-	class="asset-card shadow-md transition-all {selectedLocal ? 'selected' : ''} {hasImage ? 'ai-generated' : ''}"
+	class="asset-card shadow-md transition-all {selectedLocal ? 'selected' : ''} {hasImage
+		? 'ai-generated'
+		: ''}"
 	data-testid={`timeline-event-${item.id}`}
 	data-ai-generated={hasImage ? 'true' : undefined}
 	role="button"

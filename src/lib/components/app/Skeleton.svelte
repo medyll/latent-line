@@ -34,7 +34,12 @@
 		aria-label="Loading"
 	></div>
 {:else if variant === 'text'}
-	<div class="skeleton-text" style="height: {lineHeight}" aria-busy="true" aria-label="Loading"></div>
+	<div
+		class="skeleton-text"
+		style="height: {lineHeight}"
+		aria-busy="true"
+		aria-label="Loading"
+	></div>
 {:else}
 	<div
 		class="skeleton-line"

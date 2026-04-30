@@ -33,7 +33,12 @@
 					frame: {
 						prompt: firstPrompt.trim(),
 						actors: selectedMood
-							? [{ id: model.assets.characters[0]?.id ?? 'hero', speech: { text: '', mood: selectedMood as any } }]
+							? [
+									{
+										id: model.assets.characters[0]?.id ?? 'hero',
+										speech: { text: '', mood: selectedMood as any }
+									}
+								]
 							: []
 					}
 				});
@@ -159,7 +164,9 @@
 		display: flex;
 		flex-direction: column;
 		gap: 28px;
-		box-shadow: 0 0 0 1px oklch(0.65 0.25 280 / 0.2), 0 24px 48px oklch(0 0 0 / 0.4);
+		box-shadow:
+			0 0 0 1px oklch(0.65 0.25 280 / 0.2),
+			0 24px 48px oklch(0 0 0 / 0.4);
 	}
 
 	/* Stepper */

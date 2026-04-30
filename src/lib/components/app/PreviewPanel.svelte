@@ -121,7 +121,10 @@
 						<span class="preview-ai-badge">✦ AI</span>
 					</div>
 				{:else if moodColor}
-					<div class="preview-frame-placeholder" style="background:{moodColor.bg};border:1px solid {moodColor.border};">
+					<div
+						class="preview-frame-placeholder"
+						style="background:{moodColor.bg};border:1px solid {moodColor.border};"
+					>
 						<span style="color:{moodColor.text};opacity:0.5;font-size:1.5rem;">🎬</span>
 					</div>
 				{/if}
@@ -263,7 +266,9 @@
 		border-radius: 6px;
 		overflow: hidden;
 		margin-bottom: 0.5rem;
-		box-shadow: 0 0 0 1px oklch(0.65 0.25 280 / 0.4), 0 0 12px oklch(0.65 0.25 280 / 0.15);
+		box-shadow:
+			0 0 0 1px oklch(0.65 0.25 280 / 0.4),
+			0 0 12px oklch(0.65 0.25 280 / 0.15);
 	}
 	.preview-frame-img {
 		width: 100%;
