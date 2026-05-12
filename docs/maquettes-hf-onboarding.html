@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="color-scheme" content="light dark" />
+	<title>Latent-line — Maquette Onboarding v2.0 (Light/Dark)</title>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			/* ===== LIGHT MODE (Default) ===== */
+			--bg: oklch(1 0 0);
+			--surface: oklch(0.98 0.005 240);
+			--surface2: oklch(0.95 0.005 240);
+			--surface3: oklch(0.90 0.005 240);
+			--border: oklch(0.85 0.005 240);
+			--border2: oklch(0.75 0.005 240);
+			--text: oklch(0.15 0.01 240);
+			--text-dim: oklch(0.40 0.01 240);
+			--text-muted: oklch(0.55 0.01 240);
+			--accent: oklch(0.68 0.23 25);
+			--accent2: oklch(0.62 0.27 290);
+			--accent3: oklch(0.72 0.23 170);
+			--warning: oklch(0.75 0.2 50);
+			--success: oklch(0.72 0.23 170);
+			--info: oklch(0.65 0.2 240);
+			
+			/* Fonts */
+			--font-display: 'Bebas Neue', sans-serif;
+			--font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			--font-mono: 'DM Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+			
+			/* Spacing */
+			--radius-sm: 4px;--radius-md: 6px;--radius-lg: 8px;--radius-xl: 12px;--radius-full: 9999px;
+			--gap-xs: 4px;--gap-sm: 8px;--gap-md: 16px;--gap-lg: 24px;--gap-xl: 32px;
+			--pad-xs: 4px;--pad-sm: 8px;--pad-md: 16px;--pad-lg: 24px;
+			--border-width: 1px;
+			--transition-fast: 100ms ease;
+			--transition-normal: 150ms ease;
+			
+			/* Z-index */
+			--z-dropdown: 100;--z-sticky: 200;--z-fixed: 300;--z-modal: 400;--z-tooltip: 500;--z-toast: 600;
+		}
+
+		/* ===== DARK MODE ===== */
+		@media (prefers-color-scheme: dark) {
+			:root:not([data-theme='light']) {
+				--bg: oklch(0.22 0.01 295);
+				--surface: oklch(0.25 0.01 295);
+				--surface2: oklch(0.30 0.01 295);
+				--surface3: oklch(0.35 0.01 295);
+				--border: oklch(0.40 0.01 295);
+				--border2: oklch(0.45 0.01 295);
+				--text: oklch(0.85 0.01 295);
+				--text-dim: oklch(0.55 0.01 295);
+				--text-muted: oklch(0.35 0.01 295);
+			}
+		}
+		
+		/* Force modes */
+		[data-theme='dark'] {
+			--bg: oklch(0.22 0.01 295);
+			--surface: oklch(0.25 0.01 295);
+			--surface2: oklch(0.30 0.01 295);
+			--surface3: oklch(0.35 0.01 295);
+			--border: oklch(0.40 0.01 295);
+			--border2: oklch(0.45 0.01 295);
+			--text: oklch(0.85 0.01 295);
+			--text-dim: oklch(0.55 0.01 295);
+			--text-muted: oklch(0.35 0.01 295);
+			color-scheme: dark;
+		}
+		[data-theme='light'] {
+			--bg: oklch(1 0 0);
+			--surface: oklch(0.98 0.005 240);
+			--surface2: oklch(0.95 0.005 240);
+			--surface3: oklch(0.90 0.005 240);
+			--border: oklch(0.85 0.005 240);
+			--border2: oklch(0.75 0.005 240);
+			--text: oklch(0.15 0.01 240);
+			--text-dim: oklch(0.40 0.01 240);
+			--text-muted: oklch(0.55 0.01 240);
+			color-scheme: light;
+		}
+
+		/* Surfaces spécialisées */
+		:root {
+			--surface-hover: color-mix(in oklch, var(--text) 5%, transparent);
+			--surface-active: color-mix(in oklch, var(--text) 8%, transparent);
+		}
+		[data-theme='light'], :root:not([data-theme]) {
+			--surface-overlay: oklch(0.98 0.005 240);
+			--surface-sunken: oklch(0.95 0.005 240);
+		}
+		[data-theme='dark'] {
+			--surface-overlay: oklch(0.08 0.01 295);
+			--surface-sunken: oklch(0.055 0.01 295);
+		}
+
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			font-family: var(--font-sans);
+			background: var(--bg);
+			color: var(--text);
+			font-size: 15px;
+			line-height: 1.6;
+			min-height: 100dvh;
+			margin: 0;
+			padding: 0;
+		}
+
+		/* ===== THEME TOGGLE ===== */
+		#theme-toggle {
+			width: 40px; height: 40px;
+			border: none; background: transparent;
+			cursor: pointer; color: var(--text-muted);
+			border-radius: var(--radius-md);
+			transition: all var(--transition-fast);
+			display: flex; align-items: center; justify-content: center;
+		}
+		#theme-toggle:hover { color: var(--text); background: var(--surface2); }
+		#theme-toggle svg { width: 20px; height: 20px; stroke-width: 2; }
+
+		/* ===== HEADER ===== */
+		header {
+			position: sticky;
+			top: 0;
+			z-index: var(--z-fixed);
+			background: var(--surface);
+			backdrop-filter: blur(12px);
+			border-bottom: var(--border-width) solid var(--border);
+			padding: var(--gap-md) var(--gap-lg);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+		}
+		.nav-brand {
+			font-family: var(--font-display);
+			font-size: 20px;
+			letter-spacing: 2px;
+			color: var(--accent2);
+		}
+		.nav-title {
+			font-size: 14px;
+			color: var(--text-dim);
+		}
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-md);
+		}
+
+		/* ===== FULL WIDTH LAYOUT ===== */
+		/* Plus de container restreint - tout prend 100% */
+		.section { padding: var(--gap-xl) 0; width: 100%; }
+
+		/* ===== EMPTY SHELL ===== */
+		.empty-shell {
+			background: var(--surface);
+			border-radius: var(--radius-xl);
+			border: var(--border-width) solid var(--border);
+			overflow: hidden;
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		.empty-header {
+			padding: var(--gap-lg);
+			text-align: center;
+			border-bottom: var(--border-width) solid var(--border);
+		}
+		.empty-brand {
+			font-family: var(--font-display);
+			font-size: 32px;
+			letter-spacing: 2px;
+			color: var(--accent2);
+		}
+		.empty-tagline {
+			font-family: var(--font-mono);
+			font-size: 11px;
+			letter-spacing: 0.15em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			margin-top: 4px;
+		}
+		.empty-hero {
+			padding: var(--gap-xl);
+			text-align: center;
+			position: relative;
+			overflow: hidden;
+		}
+		
+		/* Hero Glow Effects */
+		.hero-glow {
+			position: absolute;
+			top: -50px;
+			left: -100px;
+			width: 400px;
+			height: 400px;
+			background: radial-gradient(circle, color-mix(in oklch, var(--accent2) 12%, transparent) 0%, transparent 70%);
+			pointer-events: none;
+		}
+		.hero-glow2 {
+			position: absolute;
+			bottom: -80px;
+			right: -100px;
+			width: 500px;
+			height: 400px;
+			background: radial-gradient(circle, color-mix(in oklch, var(--accent3) 8%, transparent) 0%, transparent 70%);
+			pointer-events: none;
+		}
+		
+		.hero-title {
+			font-family: var(--font-display);
+			font-size: clamp(48px, 8vw, 84px);
+			letter-spacing: 2px;
+			color: var(--text);
+			line-height: 0.9;
+			margin-bottom: var(--gap-md);
+			position: relative;
+			z-index: 1;
+		}
+		.hero-title .accent {
+			color: var(--accent2);
+		}
+		.hero-subtitle {
+			font-size: 18px;
+			color: var(--text-dim);
+			max-width: 560px;
+			margin: 0 auto var(--gap-xl);
+			line-height: 1.7;
+			position: relative;
+			z-index: 1;
+		}
+		.empty-actions {
+			display: flex;
+			gap: var(--gap-md);
+			justify-content: center;
+			flex-wrap: wrap;
+			position: relative;
+			z-index: 1;
+		}
+		.empty-btn {
+			background: var(--surface2);
+			border: var(--border-width) solid var(--border);
+			color: var(--text);
+			padding: var(--gap-sm) var(--gap-lg);
+			font-family: var(--font-sans);
+			font-size: 13px;
+			border-radius: var(--radius-md);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: var(--gap-xs);
+		}
+		.empty-btn:hover {
+			background: var(--surface3);
+			border-color: var(--border2);
+		}
+		.empty-btn.primary {
+			background: var(--accent2);
+			border-color: var(--accent2);
+			color: white;
+		}
+		.empty-btn.primary:hover {
+			background: color-mix(in oklch, var(--accent2) 90%, transparent);
+			box-shadow: 0 4px 16px color-mix(in oklch, var(--accent2) 30%, transparent);
+		}
+		.empty-btn svg { width: 16px; height: 16px; }
+
+		/* ===== TEMPLATES SECTION ===== */
+		.templates-section {
+			padding: var(--gap-xl);
+			padding-top: 0;
+			border-top: var(--border-width) solid var(--border);
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		.templates-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: var(--gap-md);
+		}
+		.templates-title {
+			font-family: var(--font-display);
+			font-size: 12px;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			color: var(--text-muted);
+		}
+		.templates-link {
+			font-family: var(--font-mono);
+			font-size: 11px;
+			color: var(--accent2);
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			gap: 4px;
+			transition: opacity var(--transition-fast);
+		}
+		.templates-link:hover { opacity: 0.8; }
+		.templates-link svg { width: 12px; height: 12px; }
+		.templates-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			gap: var(--gap-md);
+		}
+		.template-card {
+			background: var(--surface);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-lg);
+			cursor: pointer;
+			transition: all var(--transition-normal);
+			overflow: hidden;
+		}
+		.template-card:hover {
+			border-color: var(--border2);
+			transform: translateY(-4px);
+			box-shadow: 0 8px 24px color-mix(in oklch, var(--text-muted) 20%, transparent);
+		}
+		.template-image {
+			width: 100%;
+			aspect-ratio: 16/9;
+			object-fit: cover;
+			position: relative;
+		}
+		.template-overlay {
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			padding: var(--gap-md);
+			opacity: 0;
+			transition: opacity var(--transition-normal);
+		}
+		.template-card:hover .template-overlay { opacity: 1; }
+		.template-label {
+			font-family: var(--font-display);
+			font-size: 14px;
+			letter-spacing: 1px;
+			color: white;
+			text-transform: uppercase;
+		}
+		.template-meta {
+			font-family: var(--font-mono);
+			font-size: 11px;
+			color: var(--text-dim);
+			margin-top: 2px;
+		}
+
+		/* ===== FEATURES SECTION ===== */
+		.features-section {
+			padding: var(--gap-xl);
+			padding-top: 0;
+			border-top: var(--border-width) solid var(--border);
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		.features-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+			gap: var(--gap-lg);
+		}
+		.feature-item {
+			text-align: center;
+		}
+		.feature-icon {
+			width: 48px;
+			height: 48px;
+			background: var(--surface2);
+			border-radius: var(--radius-md);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto var(--gap-sm);
+			transition: all var(--transition-fast);
+		}
+		.feature-icon svg {
+			width: 24px;
+			height: 24px;
+		}
+		.feature-item:hover .feature-icon {
+			background: color-mix(in oklch, var(--accent2) 10%, var(--surface2));
+			transform: translateY(-2px);
+		}
+		.feature-title {
+			font-size: 14px;
+			color: var(--text);
+			margin-bottom: 4px;
+		}
+		.feature-desc {
+			font-size: 13px;
+			color: var(--text-dim);
+			line-height: 1.5;
+		}
+
+		/* ===== LEGEND ===== */
+		.legend {
+			margin-top: var(--gap-xl);
+			padding: var(--gap-lg);
+			background: var(--surface2);
+			border-radius: var(--radius-lg);
+			border: var(--border-width) solid var(--border);
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		.legend-title {
+			font-family: var(--font-display);
+			font-size: 12px;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			margin-bottom: var(--gap-sm);
+		}
+		.legend-list {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: var(--gap-md);
+		}
+		.legend-item {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 13px;
+			color: var(--text);
+		}
+		.legend-color {
+			width: 12px;
+			height: 12px;
+			border-radius: 2px;
+		}
+
+		/* ===== SCROLLBAR ===== */
+		::-webkit-scrollbar { width: 8px; height: 8px; }
+		::-webkit-scrollbar-track { background: var(--surface2); }
+		::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+		::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+		/* ===== FOCUS & SELECTION ===== */
+		:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+		::selection { background: color-mix(in oklch, var(--accent2) 30%, transparent); color: var(--text); }
+
+		/* ===== ANIMATIONS ===== */
+		.fade-in { animation: fadeIn var(--transition-normal) ease-out; }
+		@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+		/* ===== RESPONSIVE ===== */
+		@media (max-width: 768px) {
+			.templates-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+			.features-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+			.empty-shell { border-radius: 0; }
+			.hero-glow, .hero-glow2 { display: none; }
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div style="display:flex;align-items:center;">
+			<span class="nav-brand">LATENT</span>
+			<span class="nav-title">Maquette Onboarding v2.0 — Light/Dark Theme</span>
+		</div>
+		<div class="header-right">
+			<button id="theme-toggle" title="Changer de thème">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+					<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+				</svg>
+			</button>
+		</div>
+	</header>
+	
+	<div style="width:100%;">
+		<section class="section">
+			<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;max-width:1200px;margin-left:auto;margin-right:auto;">
+				<span style="font-family:var(--font-display);font-size:20px;letter-spacing:1px;color:var(--accent2);">02</span>
+				<h2 style="font-family:var(--font-display);font-size:clamp(24px,3vw,36px);letter-spacing:1px;color:var(--text);">ONBOARDING</h2>
+				<span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Premier lancement</span>
+			</div>
+			<p style="color:var(--text-dim);margin-bottom:24px;max-width:720px;max-width:1200px;margin-left:auto;margin-right:auto;">État vide avec galerie d'inspiration et templates visuels pour guider l'utilisateur. Interface FULL WIDTH avec thème adaptatif.</p>
+
+			<div class="empty-shell">
+				<div class="empty-header">
+					<div class="empty-brand">LATENT</div>
+					<p class="empty-tagline">Studio de création narrative AI</p>
+				</div>
+
+				<div class="empty-hero">
+					<div class="hero-glow"></div>
+					<div class="hero-glow2"></div>
+					<div style="position:relative;z-index:1;">
+						<h1 class="hero-title">
+							CRÉEZ DES<br>
+							<span class="accent">HISTOIRES</span>
+							<span style="color:var(--accent3);">VISUELLES</span>
+						</h1>
+						<p class="hero-subtitle">
+							Transformez vos idées en films AI génératifs. Un studio complet pour monteurs amateurs et professionnels.
+						</p>
+						<div class="empty-actions">
+							<a href="#" class="empty-btn primary">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5l7 7-7 7-7-7 7-7z"/><path d="M12 19v-4"/><path d="M5 12H19"/></svg>
+								Nouveau projet
+							</a>
+							<a href="#" class="empty-btn">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+								Ouvrir un template
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="templates-section">
+					<div class="templates-header">
+						<h3 class="templates-title">Templates populaires</h3>
+						<a href="#" class="templates-link">Voir tous <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+					</div>
+					<div class="templates-grid">
+						<div class="template-card fade-in" style="animation-delay:0ms;">
+							<div class="template-image" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent2) 30%, transparent) 0%,color-mix(in oklch, var(--accent) 20%, transparent) 100%);"></div>
+							<div class="template-overlay">
+								<div class="template-label">Mystère & Suspense</div>
+								<div class="template-meta">3 shots · 2 personnages</div>
+							</div>
+						</div>
+						<div class="template-card fade-in" style="animation-delay:50ms;">
+							<div class="template-image" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent3) 30%, transparent) 0%,color-mix(in oklch, var(--accent2) 20%, transparent) 100%);"></div>
+							<div class="template-overlay">
+								<div class="template-label">Amour & Romance</div>
+								<div class="template-meta">4 shots · 2 personnages</div>
+							</div>
+						</div>
+						<div class="template-card fade-in" style="animation-delay:100ms;">
+							<div class="template-image" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent) 30%, transparent) 0%,color-mix(in oklch, var(--warning) 20%, transparent) 100%);"></div>
+							<div class="template-overlay">
+								<div class="template-label">Aventure Épique</div>
+								<div class="template-meta">5 shots · 4 personnages</div>
+							</div>
+						</div>
+						<div class="template-card fade-in" style="animation-delay:150ms;">
+							<div class="template-image" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent3) 20%, transparent) 0%,color-mix(in oklch, var(--accent2) 15%, transparent) 100%);"></div>
+							<div class="template-overlay">
+								<div class="template-label">Sci-Fi Futuriste</div>
+								<div class="template-meta">6 shots · 3 personnages</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="features-section">
+					<div class="features-grid">
+						<div class="feature-item fade-in" style="animation-delay:0ms;">
+							<div class="feature-icon" style="background:color-mix(in oklch, var(--accent2) 10%, var(--surface2));"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+							<h4 class="feature-title">Scénarimage visuel</h4>
+							<p class="feature-desc">Organisez vos shots sur un canvas infini</p>
+						</div>
+						<div class="feature-item fade-in" style="animation-delay:50ms;">
+							<div class="feature-icon" style="background:color-mix(in oklch, var(--accent3) 10%, var(--surface2));"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent3)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="8" r="3"/><path d="M12 16v4"/><path d="M5 12H19"/></svg></div>
+							<h4 class="feature-title">Génération inline</h4>
+							<p class="feature-desc">Générez directement depuis l'éditeur</p>
+						</div>
+						<div class="feature-item fade-in" style="animation-delay:100ms;">
+							<div class="feature-icon" style="background:color-mix(in oklch, var(--accent) 10%, var(--surface2));"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+							<h4 class="feature-title">Casting complet</h4>
+							<p class="feature-desc">Gérez personnages et tenues</p>
+						</div>
+						<div class="feature-item fade-in" style="animation-delay:150ms;">
+							<div class="feature-icon" style="background:color-mix(in oklch, var(--warning) 10%, var(--surface2));"><svg viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+							<h4 class="feature-title">Export multi-format</h4>
+							<p class="feature-desc">FCPX, Premiere, CogVideo...</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="legend">
+				<h4 class="legend-title">📌 ÉLÉMENTS CLÉS</h4>
+				<div class="legend-list">
+					<div class="legend-item"><div class="legend-color" style="background:var(--accent2);"></div><span>Terminologie studio (Casting, Scénarimage, Régie)</span></div>
+					<div class="legend-item"><div class="legend-color" style="background:var(--accent3);"></div><span>Templates visuels avec thumbnails</span></div>
+					<div class="legend-item"><div class="legend-color" style="background:var(--accent);"></div><span>CTA claire et visible (Nouveau projet)</span></div>
+					<div class="legend-item"><div class="legend-color" style="background:var(--warning);"></div><span>Galerie d'inspiration pour l'onboarding</span></div>
+					<div class="legend-item"><div class="legend-color" style="background:var(--bg);border:1px solid var(--border);"></div><span>Full Width Layout adaptatif</span></div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<footer style="padding:var(--gap-xl);text-align:center;border-top:var(--border-width) solid var(--border);color:var(--text-muted);font-size:12px;width:100%;">
+		<div style="margin-bottom:var(--gap-sm);">Latent-line — Maquette Onboarding v2.0 · Style CapCut AI Studio · Avril 2026</div>
+		<div><a href="../brand-spec.md" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Brand Spec v2.0</a>·<a href="ux-audit-2026-04.md" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Audit UX</a>·<a href="maquettes-hf-editor.html" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Maquette Éditeur</a>·<a href="maquettes-hf-screening.html" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Maquette Projection</a></div>
+	</footer>
+
+	<script>
+		// ===== THEME TOGGLE =====
+		const THEME_KEY = 'latent-line-theme';
+		
+		function getPreferredTheme() {
+			const stored = localStorage.getItem(THEME_KEY);
+			if (stored) return stored;
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		
+		function applyTheme(theme) {
+			const html = document.documentElement;
+			
+			if (theme === 'system') {
+				html.removeAttribute('data-theme');
+			} else {
+				html.setAttribute('data-theme', theme);
+			}
+			
+			const meta = document.querySelector('meta[name="color-scheme"]');
+			if (meta) {
+				meta.content = theme === 'dark' ? 'dark' : 'light';
+			}
+			
+			const toggle = document.getElementById('theme-toggle');
+			if (toggle) {
+				const svg = toggle.querySelector('svg');
+				if (svg) {
+					svg.innerHTML = theme === 'dark' 
+						? '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" fill="none"/>'
+						: '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" fill="none"/>';
+				}
+			}
+		}
+		
+		function toggleTheme() {
+			const html = document.documentElement;
+			const current = html.getAttribute('data-theme') || 
+				(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+			const next = current === 'dark' ? 'light' : 'dark';
+			localStorage.setItem(THEME_KEY, next);
+			applyTheme(next);
+		}
+		
+		applyTheme(getPreferredTheme());
+		
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			if (!localStorage.getItem(THEME_KEY) || localStorage.getItem(THEME_KEY) === 'system') {
+				applyTheme(e.matches ? 'dark' : 'light');
+			}
+		});
+		
+		document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+	</script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latent Line - Demo Interactive v6</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#ffffff;--surface:#f6f8fa;--surface-hover:#f3f4f6;--surface-2:#e5e7eb;--fg:#1f2328;--fg-muted:#656d76;--fg-subtle:#8c959f;--border:#d0d7de;--border-subtle:#e5e7eb;--accent:#7c3aed;--accent-subtle:rgba(124,58,237,0.1);--success:#1a7f37;--warning:#9a6700;--danger:#cf222e;--font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;--radius-sm:6px;--radius-md:8px;--radius-lg:12px;--shadow-sm:0 1px 2px rgba(31,35,40,0.04);--shadow-md:0 3px 6px rgba(31,35,40,0.08);--sidebar-width:260px;--sidebar-collapsed:48px;--header-height:52px;--toolbar-height:44px;--timeline-height:260px}
+[data-theme="dark"]{--bg:#0d1117;--surface:#161b22;--surface-hover:#1c2128;--surface-2:#30363d;--fg:#c9d1d9;--fg-muted:#8b949e;--fg-subtle:#6e7681;--border:#30363d;--border-subtle:#21262d;--accent:#a371f7;--accent-subtle:rgba(163,113,247,0.15)}
+body{font-family:var(--font-body);background:var(--bg);color:var(--fg);overflow:hidden;height:100vh}
+.app-header{height:var(--header-height);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0}
+.header-left,.header-right{display:flex;align-items:center;gap:8px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;color:var(--fg)}
+.logo-icon{width:26px;height:26px;background:var(--accent);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:white;font-size:14px}
+.nav-btn{padding:6px 12px;border-radius:var(--radius-sm);border:none;background:transparent;color:var(--fg-muted);font-size:13px;cursor:pointer;font-weight:500}
+.nav-btn:hover{background:var(--surface-hover);color:var(--fg)}
+.nav-btn.active{background:var(--accent-subtle);color:var(--accent)}
+.theme-toggle{width:32px;height:32px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px}
+.theme-toggle:hover{background:var(--surface-hover)}
+.toolbar{height:var(--toolbar-height);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:8px;flex-shrink:0}
+.tool-btn{padding:5px 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--fg);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.tool-btn:hover{background:var(--surface-hover)}
+.tool-btn.primary{background:var(--accent);color:white;border-color:var(--accent)}
+.tool-sep{width:1px;height:20px;background:var(--border);margin:0 4px}
+.save-indicator{font-size:12px;color:var(--success);margin-left:auto}
+.app-body{display:flex;flex:1;overflow:hidden;height:calc(100vh - var(--header-height) - var(--toolbar-height))}
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.sidebar{width:var(--sidebar-width);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:width .2s;overflow:hidden}
+.sidebar.collapsed{width:var(--sidebar-collapsed)}
+.sidebar.collapsed .sidebar-content{opacity:0;pointer-events:none}
+.sidebar-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sidebar-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--fg-muted)}
+.sidebar-toggle{width:24px;height:24px;border:none;background:transparent;cursor:pointer;color:var(--fg-muted);font-size:12px}
+.sidebar-content{padding:12px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;flex:1;transition:opacity .2s}
+.search-box{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--fg);font-size:12px}
+.search-box::placeholder{color:var(--fg-subtle)}
+.sidebar-section{display:flex;flex-direction:column;gap:6px}
+.section-header{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--fg-muted)}
+.section-add{width:18px;height:18px;border:none;background:transparent;cursor:pointer;color:var(--fg-muted);font-size:14px;line-height:1}
+.asset-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--radius-sm);cursor:pointer;font-size:12px}
+.asset-item:hover{background:var(--surface-hover)}
+.asset-avatar{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:white;flex-shrink:0}
+.asset-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asset-actions{display:flex;gap:2px;opacity:0}
+.asset-item:hover .asset-actions{opacity:1}
+.asset-action{width:20px;height:20px;border:none;background:transparent;cursor:pointer;color:var(--fg-muted);font-size:11px;border-radius:3px}
+.asset-action:hover{background:var(--surface-2)}
+.template-card{padding:10px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg);cursor:pointer}
+.template-card:hover{border-color:var(--accent)}
+.template-title{font-size:12px;font-weight:600;margin-bottom:4px}
+.template-tags{display:flex;gap:4px;flex-wrap:wrap}
+.template-tag{font-size:10px;padding:2px 6px;border-radius:10px;background:var(--surface-2);color:var(--fg-muted)}
+.scenarimage{flex:1;overflow-y:auto;padding:16px;background:var(--bg)}
+.scenarimage-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.scenarimage-title{font-size:14px;font-weight:600}
+.shot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.shot-card{border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--surface);overflow:hidden;cursor:pointer;transition:box-shadow .15s,border-color .15s;position:relative}
+.shot-card:hover{box-shadow:var(--shadow-md);border-color:var(--accent)}
+.shot-card.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-subtle)}
+.shot-card.dragging{opacity:.5}
+.shot-card-header{padding:10px 12px 6px;display:flex;align-items:center;justify-content:space-between}
+.shot-frame-num{font-size:11px;font-weight:600;color:var(--fg-muted);font-variant-numeric:tabular-nums}
+.shot-badges{display:flex;gap:4px}
+.shot-badge{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:white}
+.shot-image{width:100%;height:140px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.shot-image img{width:100%;height:100%;object-fit:cover}
+.shot-ai-badge{position:absolute;top:6px;right:6px;padding:2px 6px;border-radius:10px;background:var(--accent);color:white;font-size:10px;font-weight:600}
+.shot-body{padding:10px 12px}
+.shot-dialogue{font-size:12px;line-height:1.5;color:var(--fg);font-style:italic;margin-bottom:6px}
+.shot-action{font-size:11px;color:var(--fg-muted);line-height:1.4;margin-bottom:6px}
+.shot-footer{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.shot-mood{display:flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:10px}
+.shot-time{font-size:11px;color:var(--fg-subtle);font-variant-numeric:tabular-nums}
+.timeline{height:var(--timeline-height);background:var(--surface);border-top:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.timeline-header{height:28px;display:flex;align-items:center;padding:0 12px;border-bottom:1px solid var(--border);gap:8px}
+.timeline-ruler{height:24px;background:var(--bg);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.timeline-ruler-mark{position:absolute;top:0;bottom:0;border-left:1px solid var(--border-subtle);padding-left:4px;font-size:10px;color:var(--fg-subtle);display:flex;align-items:center}
+.timeline-tracks{flex:1;overflow-x:auto;overflow-y:hidden;position:relative;padding:8px 0}
+.timeline-track{height:40px;position:relative;margin-bottom:4px}
+.timeline-marker{position:absolute;top:-20px;padding:2px 6px;font-size:10px;font-weight:600;background:var(--accent-subtle);color:var(--accent);border-radius:3px;transform:translateX(-50%)}
+.timeline-event{position:absolute;top:4px;height:32px;background:var(--accent-subtle);border:1px solid var(--accent);border-radius:var(--radius-sm);display:flex;align-items:center;padding:0 8px;font-size:11px;cursor:pointer;overflow:hidden;white-space:nowrap;min-width:40px}
+.timeline-event:hover{background:var(--accent);color:white}
+.timeline-event.selected{background:var(--accent);color:white}
+.timeline-resize-handle{position:absolute;top:0;bottom:0;width:6px;cursor:col-resize}
+.timeline-resize-handle.left{left:0}
+.timeline-resize-handle.right{right:0}
+.playhead{position:absolute;top:0;bottom:0;width:2px;background:var(--danger);z-index:10;pointer-events:none}
+.playhead::before{content:'';position:absolute;top:-4px;left:-3px;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid var(--danger)}
+.waveform{height:40px;display:flex;align-items:flex-end;gap:1px;padding:0 12px}
+.waveform-bar{flex:1;background:var(--accent);opacity:.5;border-radius:1px;min-height:2px}
+.timeline-controls{height:40px;display:flex;align-items:center;padding:0 12px;gap:8px;border-top:1px solid var(--border)}
+.tl-btn{width:28px;height:28px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px}
+.tl-btn:hover{background:var(--surface-hover)}
+.tl-time{font-size:12px;font-variant-numeric:tabular-nums;color:var(--fg);font-family:ui-monospace,Menlo,monospace;min-width:120px}
+.tl-zoom{display:flex;align-items:center;gap:6px;margin-left:auto}
+.tl-zoom-slider{width:80px}
+.screen{display:none !important}
+.screen.active{display:flex !important}
+.screen-editor{flex-direction:column}
+.screen-assets{flex-direction:column;padding:24px;gap:24px;overflow-y:auto}
+.screen-home{flex-direction:column;padding:24px;gap:24px;overflow-y:auto}
+.screen-screening{position:fixed;inset:0;background:#000;z-index:100;align-items:center;justify-content:center}
+.screen-settings{flex-direction:column;padding:24px;gap:24px;overflow-y:auto;max-width:800px;margin:0 auto;width:100%}
+.assets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.asset-card{border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;background:var(--surface)}
+.asset-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.asset-card-title{font-size:14px;font-weight:600}
+.asset-card-meta{font-size:12px;color:var(--fg-muted)}
+.home-hero{text-align:center;padding:40px 24px}
+.home-hero h1{font-size:32px;margin-bottom:12px}
+.home-hero p{font-size:16px;color:var(--fg-muted);margin-bottom:24px}
+.home-cta{display:inline-flex;gap:12px}
+.btn{padding:10px 20px;border-radius:var(--radius-md);border:1px solid var(--border);background:var(--surface);color:var(--fg);font-size:14px;cursor:pointer;font-weight:500}
+.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}
+.templates-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.screening-video{width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:24px;position:relative}
+.screening-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:24px}
+.screening-header{display:flex;justify-content:space-between;align-items:flex-start}
+.screening-watermark{padding:4px 10px;background:rgba(124,58,237,0.8);color:white;border-radius:var(--radius-sm);font-size:12px;font-weight:600}
+.screening-timecode{font-family:ui-monospace,Menlo,monospace;font-size:14px;color:rgba(255,255,255,0.8)}
+.screening-controls{display:flex;align-items:center;gap:12px}
+.scr-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.5);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.scr-progress{flex:1;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;cursor:pointer}
+.scr-progress-fill{height:100%;background:var(--accent);border-radius:2px;width:0%}
+.close-screening{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,0.6);color:white;cursor:pointer;font-size:16px;z-index:10}
+.settings-section{border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;background:var(--surface)}
+.settings-title{font-size:16px;font-weight:600;margin-bottom:16px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-subtle)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:13px}
+.setting-desc{font-size:11px;color:var(--fg-muted)}
+.setting-control{display:flex;align-items:center;gap:8px}
+input[type="text"],input[type="number"],select{padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--fg);font-size:13px}
+.shot-editor-panel{position:fixed;top:var(--header-height);right:0;bottom:0;width:380px;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .25s ease;z-index:50;display:flex;flex-direction:column}
+.shot-editor-panel.open{transform:translateX(0)}
+.editor-panel-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.editor-panel-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:12px;font-weight:600;color:var(--fg-muted);text-transform:uppercase;letter-spacing:.5px}
+.form-input,.form-textarea,.form-select{padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--fg);font-size:13px;font-family:inherit}
+.form-textarea{min-height:80px;resize:vertical}
+.form-actions{display:flex;gap:8px;padding:16px;border-top:1px solid var(--border)}
+.form-actions .btn{flex:1}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius-lg);width:480px;max-width:90vw;max-height:80vh;overflow:hidden;display:flex;flex-direction:column}
+.modal-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-body{padding:16px;overflow-y:auto;flex:1}
+.modal-footer{padding:16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+.export-option{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:8px;cursor:pointer}
+.export-option:hover{border-color:var(--accent)}
+.export-option input{margin:0}
+.export-icon{width:32px;height:32px;border-radius:var(--radius-sm);background:var(--surface-2);display:flex;align-items:center;justify-content:center;font-size:14px}
+.export-info{flex:1}
+.export-name{font-size:13px;font-weight:500}
+.export-desc{font-size:11px;color:var(--fg-muted)}
+.drag-preview{position:fixed;pointer-events:none;z-index:1000;opacity:.9;transform:rotate(3deg)}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-subtle)}
+</style>
+</head>
+<body>
+<header class="app-header"><div class="header-left"><div class="logo"><div class="logo-icon">LL</div><span>Latent Line</span></div><div style="width:1px;height:24px;background:var(--border);margin:0 8px"></div><button class="nav-btn active" data-screen="editor">Éditeur</button><button class="nav-btn" data-screen="assets">Assets</button><button class="nav-btn" data-screen="home">Accueil</button><button class="nav-btn" data-screen="screening">Projection</button><button class="nav-btn" data-screen="settings">Paramètres</button></div><div class="header-right"><button class="theme-toggle" id="themeToggle" title="Ctrl+K">🌙</button></div></header>
+<div class="toolbar"><button class="tool-btn primary" id="newShotBtn">+ Nouveau</button><button class="tool-btn" id="importBtn">Importer</button><button class="tool-btn" id="exportBtn">Exporter</button><div class="tool-sep"></div><button class="tool-btn">Versions</button><button class="tool-btn">Captures</button><div class="tool-sep"></div><button class="tool-btn" id="screeningBtn">▶ Projection</button><span class="save-indicator" id="saveIndicator">✓ Sauvegardé</span></div>
+<div class="app-body">
+<aside class="sidebar" id="sidebar"><div class="sidebar-header"><span class="sidebar-title">Bibliothèque</span><button class="sidebar-toggle" id="sidebarToggle">◀</button></div><div class="sidebar-content"><input type="text" class="search-box" placeholder="Search assets..." id="assetSearch"><div class="sidebar-section"><div class="section-header"><span>Characters</span><button class="section-add">+</button></div><div class="asset-item" data-type="character" data-id="lea"><div class="asset-avatar" style="background:#7c3aed">LM</div><span class="asset-name">Léa Marchand</span><div class="asset-actions"><button class="asset-action">✎</button><button class="asset-action">🗑</button></div></div><div class="asset-item" data-type="character" data-id="victor"><div class="asset-avatar" style="background:#3b82f6">VA</div><span class="asset-name">Victor Aumont</span><div class="asset-actions"><button class="asset-action">✎</button><button class="asset-action">🗑</button></div></div><div class="asset-item" data-type="character" data-id="mara"><div class="asset-avatar" style="background:#06b6d4">M</div><span class="asset-name">Mara</span><div class="asset-actions"><button class="asset-action">✎</button><button class="asset-action">🗑</button></div></div></div><div class="sidebar-section"><div class="section-header"><span>Environments</span><button class="section-add">+</button></div><div class="asset-item" data-type="environment" data-id="phare-ext"><div class="asset-avatar" style="background:#f59e0b">P</div><span class="asset-name">Phare extérieur</span></div><div class="asset-item" data-type="environment" data-id="phare-int"><div class="asset-avatar" style="background:#10b981">P</div><span class="asset-name">Phare intérieur</span></div></div><div class="sidebar-section"><div class="section-header"><span>Templates</span></div><div class="template-card" data-template="confrontation"><div class="template-title">Confrontation nocturne</div><div class="template-tags"><span class="template-tag">tense</span><span class="template-tag">noir</span></div></div><div class="template-card" data-template="revelation"><div class="template-title">Révélation douce</div><div class="template-tags"><span class="template-tag">soft</span><span class="template-tag">daylight</span></div></div><div class="template-card" data-template="chase"><div class="template-title">Poursuite urbaine</div><div class="template-tags"><span class="template-tag">action</span><span class="template-tag">neon</span></div></div></div></div></aside>
+<div class="main-content">
+<div class="screen screen-editor active" id="screen-editor"><div class="scenarimage" id="scenarimage"><div class="scenarimage-header"><span class="scenarimage-title">Scénarimage — 8 shots</span><div style="display:flex;gap:8px"><button class="tool-btn" id="generateAllBtn">✨ Generate All</button></div></div><div class="shot-grid" id="shotGrid"></div></div><div class="timeline" id="timeline"><div class="timeline-header"><span style="font-size:11px;font-weight:600;color:var(--fg-muted)">Timeline</span><span style="font-size:11px;color:var(--fg-subtle);margin-left:auto">Scènes: 1A-3A</span></div><div class="timeline-ruler" id="timelineRuler"></div><div class="timeline-tracks" id="timelineTracks"><div class="timeline-track" id="timelineTrack"></div></div><div class="waveform" id="waveform"></div><div class="timeline-controls"><button class="tl-btn" id="playBtn">▶</button><button class="tl-btn" id="stopBtn">■</button><span class="tl-time" id="currentTime">00:00.000</span><span style="color:var(--fg-subtle);font-size:12px">/</span><span style="color:var(--fg-muted);font-size:12px;font-family:ui-monospace,Menlo,monospace">00:30.000</span><div class="tl-zoom"><button class="tl-btn" id="zoomOut">-</button><input type="range" class="tl-zoom-slider" id="zoomSlider" min="0.5" max="5" step="0.5" value="1"><span id="zoomValue" style="font-size:11px;min-width:28px">1×</span><button class="tl-btn" id="zoomIn">+</button><button class="tl-btn" id="zoomReset">⤢</button></div></div></div></div>
+<div class="screen screen-assets" id="screen-assets"><h2 style="font-size:20px;font-weight:600">Bibliothèque d'assets</h2><div><div style="display:flex;gap:8px;margin-bottom:16px"><button class="nav-btn active" style="font-size:12px">Tous</button><button class="nav-btn" style="font-size:12px">Personnages</button><button class="nav-btn" style="font-size:12px">Environnements</button><button class="nav-btn" style="font-size:12px">Props</button></div><div class="assets-grid" id="assetsGrid"></div></div></div>
+<div class="screen screen-home" id="screen-home"><div class="home-hero"><h1>Latent Line</h1><p>Production visuelle assistée par IA — de l'idée à l'image en un clic</p><div class="home-cta"><button class="btn primary" onclick="switchScreen('editor')">Nouveau projet</button><button class="btn">Ouvrir un projet</button></div></div><div><h3 style="font-size:16px;font-weight:600;margin-bottom:16px">Templates</h3><div class="templates-grid" id="homeTemplates"></div></div></div>
+<div class="screen screen-screening" id="screen-screening"><button class="close-screening" id="closeScreening">✕</button><div class="screening-video" id="screeningVideo"><span>▶ Lecture en cours...</span><div class="screening-overlay"><div class="screening-header"><div class="screening-watermark">✨ AI Generated</div><div class="screening-timecode" id="screeningTimecode">00:00:00:00</div></div><div class="screening-controls"><button class="scr-btn" id="scrPlay">▶</button><button class="scr-btn">⏮</button><div class="scr-progress" id="scrProgress"><div class="scr-progress-fill" id="scrProgressFill"></div></div><button class="scr-btn">⏭</button><button class="scr-btn">⛶</button></div></div></div></div>
+<div class="screen screen-settings" id="screen-settings"><h2 style="font-size:20px;font-weight:600">Paramètres</h2><div class="settings-section"><div class="settings-title">Apparence</div><div class="setting-row"><div><div class="setting-label">Thème</div><div class="setting-desc">Clair, sombre ou système</div></div><select id="themeSelect"><option value="system">Système</option><option value="light">Clair</option><option value="dark" selected>Sombre</option></select></div><div class="setting-row"><div><div class="setting-label">Couleur d'accent AI</div><div class="setting-desc">Personnalise la couleur violette</div></div><input type="color" id="accentColor" value="#7c3aed" style="width:40px;height:28px;border:none;border-radius:var(--radius-sm);cursor:pointer"></div></div><div class="settings-section"><div class="settings-title">Backend IA</div><div class="setting-row"><div><div class="setting-label">URL ComfyUI</div><div class="setting-desc">Adresse du serveur de génération</div></div><input type="text" value="http://127.0.0.1:8188" style="width:200px"></div><div class="setting-row"><div><div class="setting-label">Modèle par défaut</div></div><select><option>SDXL 1.0</option><option>Flux.1-dev</option><option>SD 1.5</option></select></div></div><div class="settings-section"><div class="settings-title">Raccourcis clavier</div><div class="setting-row"><div class="setting-label">Lecture / Pause</div><span style="font-family:ui-monospace,monospace;font-size:12px;padding:2px 8px;background:var(--surface-2);border-radius:4px">Espace</span></div><div class="setting-row"><div class="setting-label">Basculer le thème</div><span style="font-family:ui-monospace,monospace;font-size:12px;padding:2px 8px;background:var(--surface-2);border-radius:4px">Ctrl + K</span></div><div class="setting-row"><div class="setting-label">Changer d'écran</div><span style="font-family:ui-monospace,monospace;font-size:12px;padding:2px 8px;background:var(--surface-2);border-radius:4px">Alt + 1-5</span></div></div></div>
+</div>
+</div>
+<div class="shot-editor-panel" id="shotEditorPanel"><div class="editor-panel-header"><span style="font-size:14px;font-weight:600">Éditer le shot</span><button style="border:none;background:transparent;cursor:pointer;font-size:16px;color:var(--fg-muted)" id="closeShotEditor">✕</button></div><div class="editor-panel-body"><div class="form-group"><label class="form-label">Titre</label><input type="text" class="form-input" id="editShotTitle"></div><div class="form-group"><label class="form-label">Action</label><textarea class="form-textarea" id="editShotDesc" placeholder="Describe the action..."></textarea></div><div class="form-group"><label class="form-label">Dialogue</label><textarea class="form-textarea" id="editShotDialogue" placeholder="Character dialogue..."></textarea></div><div class="form-group"><label class="form-label">Durée (sec)</label><input type="number" class="form-input" id="editShotDuration" step="0.5" min="0.5"></div><div class="form-group"><label class="form-label">Mood</label><select class="form-select" id="editShotMood"><option value="tense">tense</option><option value="anxious">anxious</option><option value="serene">serene</option><option value="joyful">joyful</option><option value="mysterious">mysterious</option></select></div><div class="form-group"><label class="form-label">Personnages</label><div style="display:flex;flex-wrap:wrap;gap:6px"><label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--surface-2);border-radius:12px;font-size:12px;cursor:pointer"><input type="checkbox" checked> Léa Marchand</label><label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--surface-2);border-radius:12px;font-size:12px;cursor:pointer"><input type="checkbox"> Victor Aumont</label><label style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--surface-2);border-radius:12px;font-size:12px;cursor:pointer"><input type="checkbox"> Mara</label></div></div></div><div class="form-actions"><button class="btn" id="cancelShotEdit">Annuler</button><button class="btn primary" id="saveShotEdit">Sauvegarder</button></div></div>
+<div class="modal-overlay" id="exportModal"><div class="modal"><div class="modal-header"><span style="font-size:16px;font-weight:600">Exporter le projet</span><button style="border:none;background:transparent;cursor:pointer;font-size:18px;color:var(--fg-muted)" id="closeExportModal">✕</button></div><div class="modal-body"><label class="export-option"><input type="radio" name="exportFormat" value="yaml" checked><div class="export-icon">📄</div><div class="export-info"><div class="export-name">YAML</div><div class="export-desc">Structure complète du projet</div></div></label><label class="export-option"><input type="radio" name="exportFormat" value="json"><div class="export-icon">🗂️</div><div class="export-info"><div class="export-name">JSON</div><div class="export-desc">Format machine-readable</div></div></label><label class="export-option"><input type="radio" name="exportFormat" value="pdf"><div class="export-icon">📑</div><div class="export-info"><div class="export-name">PDF Storyboard</div><div class="export-desc">Planches imprimables</div></div></label><label class="export-option"><input type="radio" name="exportFormat" value="edl"><div class="export-icon">🎬</div><div class="export-info"><div class="export-name">EDL</div><div class="export-desc">Edit Decision List pour Premiere</div></div></label><label class="export-option"><input type="radio" name="exportFormat" value="zip"><div class="export-icon">🗜️</div><div class="export-info"><div class="export-name">ZIP Images</div><div class="export-desc">Toutes les images générées</div></div></label></div><div class="modal-footer"><button class="btn" id="cancelExport">Annuler</button><button class="btn primary" id="confirmExport">Exporter</button></div></div></div>
+<script>
+const characters=[{id:'lea',name:'Léa Marchand',initials:'LM',color:'#7c3aed'},{id:'victor',name:'Victor Aumont',initials:'VA',color:'#3b82f6'},{id:'mara',name:'Mara',initials:'M',color:'#06b6d4'}];
+const moodColors={tense:'#ef4444',anxious:'#f59e0b',serene:'#10b981',joyful:'#3b82f6',mysterious:'#8b5cf6'};
+const moodEmojis={tense:'🔥',anxious:'⚡',serene:'🌊',joyful:'☀️',mysterious:'🌑'};
+const moodBg={tense:'rgba(239,68,68,0.1)',anxious:'rgba(245,158,11,0.1)',serene:'rgba(16,185,129,0.1)',joyful:'rgba(59,130,246,0.1)',mysterious:'rgba(139,92,246,0.1)'};
+let shots=[
+{id:'shot-1',frame:0,title:'Arrivée au phare',duration:4,action:'walking against wind towards lighthouse, coat flapping',dialogue:'',mood:'tense',characters:['lea'],aiGenerated:true,image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=225&fit=crop'},
+{id:'shot-2',frame:48,title:'La porte lourde',duration:3,action:'pushing heavy iron door, rust flakes falling',dialogue:'',mood:'anxious',characters:['lea'],aiGenerated:false,image:'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=225&fit=crop'},
+{id:'shot-3',frame:96,title:'Confrontation',duration:6,action:'Victor standing by window, backlit',dialogue:"Victor. Tu as ce que j'ai demandé ?",mood:'tense',characters:['victor','lea'],aiGenerated:true,image:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=225&fit=crop'},
+{id:'shot-4',frame:192,title:'Révélation',duration:5,action:'sliding envelope across table',dialogue:'Tout est là. Noms, dates, comptes offshore.',mood:'anxious',characters:['victor'],aiGenerated:false,image:'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=225&fit=crop'},
+{id:'shot-5',frame:288,title:'Mara apparaît',duration:4,action:'descending spiral stairs, dress flowing',dialogue:'',mood:'serene',characters:['mara'],aiGenerated:true,image:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=225&fit=crop'},
+{id:'shot-6',frame:336,title:'La menace',duration:5,action:'holding envelope, finger on seal',dialogue:"Cette enveloppe ne vous appartient pas, inspectrice.",mood:'serene',characters:['mara','lea'],aiGenerated:true,image:'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=225&fit=crop'},
+{id:'shot-7',frame:432,title:'Le départ',duration:3,action:'running down corridor, rain through broken window',dialogue:'',mood:'tense',characters:['lea'],aiGenerated:false,image:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=225&fit=crop'},
+{id:'shot-8',frame:480,title:'Phare dans la nuit',duration:4,action:'lighthouse beam sweeping across stormy sea',dialogue:'',mood:'mysterious',characters:[],aiGenerated:true,image:'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=225&fit=crop'}
+];
+const markers=[{time:0,label:'1A'},{time:96,label:'2A'},{time:288,label:'3A'}];
+let selectedShotId=null;let dragSrc=null;let zoom=1;let isPlaying=false;let currentTime=0;let playbackInterval=null;
+const shotGrid=document.getElementById('shotGrid');const timelineTrack=document.getElementById('timelineTrack');const timelineRuler=document.getElementById('timelineRuler');const waveform=document.getElementById('waveform');const playBtn=document.getElementById('playBtn');const currentTimeEl=document.getElementById('currentTime');const zoomSlider=document.getElementById('zoomSlider');const zoomValue=document.getElementById('zoomValue');const sidebar=document.getElementById('sidebar');const sidebarToggle=document.getElementById('sidebarToggle');const shotEditorPanel=document.getElementById('shotEditorPanel');const exportModal=document.getElementById('exportModal');
+function formatTime(t){const m=Math.floor(t/60);const s=Math.floor(t%60);const ms=Math.floor((t%1)*1000);return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(ms).padStart(3,'0')}`}
+function formatSMPTE(t){const h=Math.floor(t/3600);const m=Math.floor((t%3600)/60);const s=Math.floor(t%60);const f=Math.floor((t%1)*24);return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}:${String(f).padStart(2,'0')}`}
+function getChar(id){return characters.find(c=>c.id===id)}
+function renderShots(){shotGrid.innerHTML='';shots.forEach((shot,idx)=>{const card=document.createElement('div');card.className='shot-card'+(shot.id===selectedShotId?' selected':'');card.draggable=true;card.dataset.id=shot.id;card.dataset.index=idx;
+card.innerHTML=`<div class="shot-card-header"><span class="shot-frame-num">Frame ${shot.frame}</span><div class="shot-badges">${shot.characters.map(cid=>{const c=getChar(cid);return c?`<div class="shot-badge" style="background:${c.color}">${c.initials}</div>`:''}).join('')}${shot.aiGenerated?'<div class="shot-badge" style="background:var(--accent);font-size:8px">AI</div>':''}</div></div><div class="shot-image">${shot.image?`<img src="${shot.image}" alt="" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\\'color:var(--fg-subtle);font-size:12px\\'>Image</span>'">`:''}${shot.aiGenerated?'<div class="shot-ai-badge">✨ AI</div>':''}</div><div class="shot-body">${shot.dialogue?`<div class="shot-dialogue">"${shot.dialogue}"</div>`:''}${shot.action?`<div class="shot-action">${shot.action}</div>`:''}<div class="shot-footer"><span class="shot-mood" style="background:${moodBg[shot.mood]||moodBg.tense};color:${moodColors[shot.mood]||moodColors.tense}">${moodEmojis[shot.mood]||''} ${shot.mood}</span><span class="shot-time">${shot.duration}s</span></div></div>`;
+card.addEventListener('click',()=>{selectedShotId=shot.id;renderShots();renderTimeline();document.querySelectorAll('.timeline-event').forEach(e=>e.classList.toggle('selected',e.dataset.id===shot.id));});
+card.addEventListener('dblclick',()=>openShotEditor(shot.id));
+card.addEventListener('dragstart',e=>{dragSrc=card;card.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+card.addEventListener('dragend',()=>{card.classList.remove('dragging');document.querySelectorAll('.shot-card').forEach(c=>c.style.borderTop='');});
+card.addEventListener('dragover',e=>{e.preventDefault();if(card!==dragSrc)card.style.borderTop='2px solid var(--accent)';});
+card.addEventListener('dragleave',()=>{card.style.borderTop='';});
+card.addEventListener('drop',e=>{e.preventDefault();if(!dragSrc||dragSrc===card)return;const fromIdx=+dragSrc.dataset.index;const toIdx=+card.dataset.index;const [moved]=shots.splice(fromIdx,1);shots.splice(toIdx,0,moved);recalcFrames();renderShots();renderTimeline();});
+shotGrid.appendChild(card);});}
+function recalcFrames(){let frame=0;shots.forEach(s=>{s.frame=frame;frame+=Math.round(s.duration*12);});}
+function renderTimeline(){const totalDuration=shots.reduce((a,s)=>a+s.duration,0);const pxPerSec=30*zoom;const trackWidth=Math.max(timelineTrack.parentElement.clientWidth,totalDuration*pxPerSec+100);timelineTrack.style.width=trackWidth+'px';timelineTrack.innerHTML='';
+markers.forEach(m=>{const el=document.createElement('div');el.className='timeline-marker';el.style.left=(m.time*pxPerSec)+'px';el.textContent=m.label;timelineTrack.appendChild(el);});
+let t=0;shots.forEach(shot=>{const el=document.createElement('div');el.className='timeline-event'+(shot.id===selectedShotId?' selected':'');el.style.left=(t*pxPerSec)+'px';el.style.width=(shot.duration*pxPerSec)+'px';el.dataset.id=shot.id;el.innerHTML=`<div class="timeline-resize-handle left"></div><span style="overflow:hidden;text-overflow:ellipsis">${shot.title}</span><div class="timeline-resize-handle right"></div>`;
+el.addEventListener('click',()=>{selectedShotId=shot.id;renderShots();renderTimeline();});
+timelineTrack.appendChild(el);t+=shot.duration;});
+const playhead=document.createElement('div');playhead.className='playhead';playhead.id='playhead';playhead.style.left=(currentTime*pxPerSec)+'px';timelineTrack.appendChild(playhead);
+renderRuler(totalDuration,pxPerSec);}
+function renderRuler(total,pxPerSec){timelineRuler.innerHTML='';const step=Math.max(1,Math.floor(5/zoom));for(let i=0;i<=total+step;i+=step){const m=document.createElement('div');m.className='timeline-ruler-mark';m.style.left=(i*pxPerSec)+'px';m.textContent=i+'s';timelineRuler.appendChild(m);}}
+function updatePlayhead(){const ph=document.getElementById('playhead');if(ph){const pxPerSec=30*zoom;ph.style.left=(currentTime*pxPerSec)+'px';}}
+function renderWaveform(){waveform.innerHTML='';for(let i=0;i<100;i++){const bar=document.createElement('div');bar.className='waveform-bar';const h=10+Math.random()*90;bar.style.height=h+'%';waveform.appendChild(bar);}}
+function renderAssets(){const grid=document.getElementById('assetsGrid');grid.innerHTML='';characters.forEach(c=>{const card=document.createElement('div');card.className='asset-card';card.innerHTML=`<div class="asset-card-header"><div class="asset-avatar" style="background:${c.color};width:36px;height:36px;font-size:14px">${c.initials}</div><div><div class="asset-card-title">${c.name}</div><div class="asset-card-meta">Personnage principal</div></div></div><div style="font-size:12px;color:var(--fg-muted);line-height:1.5">Protagoniste du récit. Apparaît dans les scènes 1A, 2A et 3A.</div>`;grid.appendChild(card);});}
+function renderHomeTemplates(){const grid=document.getElementById('homeTemplates');grid.innerHTML='';const templates=[{title:'Confrontation nocturne',tags:['tense','noir'],desc:'Deux personnages face à face dans un éclairage dramatique'},{title:'Révélation douce',tags:['soft','daylight'],desc:'Moment d\'intimité à la lumière naturelle'},{title:'Poursuite urbaine',tags:['action','neon'],desc:'Course-poursuite dans les rues la nuit'},{title:'Mystère isolé',tags:['mysterious','fog'],desc:'Personnage seul dans un paysage brumeux'},{title:'Rêverie onirique',tags:['serene','abstract'],desc:'Séquence fluide et surréaliste'},{title:'Tension bureaucratique',tags:['anxious','interior'],desc:'Échange tendu dans un bureau austère'}];
+templates.forEach(t=>{const card=document.createElement('div');card.className='template-card';card.style.padding='16px';card.innerHTML=`<div class="template-title" style="font-size:14px">${t.title}</div><div style="font-size:12px;color:var(--fg-muted);margin:8px 0">${t.desc}</div><div class="template-tags">${t.tags.map(tag=>`<span class="template-tag">${tag}</span>`).join('')}</div>`;grid.appendChild(card);});}
+function openShotEditor(id){const shot=shots.find(s=>s.id===id);if(!shot)return;document.getElementById('editShotTitle').value=shot.title;document.getElementById('editShotDesc').value=shot.action||'';document.getElementById('editShotDialogue').value=shot.dialogue||'';document.getElementById('editShotDuration').value=shot.duration;document.getElementById('editShotMood').value=shot.mood;shotEditorPanel.classList.add('open');}
+function togglePlayback(){isPlaying=!isPlaying;playBtn.textContent=isPlaying?'⏸':'▶';if(isPlaying){playbackInterval=setInterval(()=>{currentTime+=0.1;if(currentTime>30){currentTime=0;isPlaying=false;playBtn.textContent='▶';clearInterval(playbackInterval);}updatePlayhead();currentTimeEl.textContent=formatTime(currentTime);document.getElementById('screeningTimecode').textContent=formatSMPTE(currentTime);document.getElementById('scrProgressFill').style.width=((currentTime/30)*100)+'%';},100);}else{clearInterval(playbackInterval);}}
+function switchScreen(name){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById('screen-'+name);if(el)el.classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const btn=document.querySelector('[data-screen="'+name+'"]');if(btn)btn.classList.add('active');}
+document.querySelectorAll('.nav-btn').forEach(btn=>{btn.addEventListener('click',()=>{switchScreen(btn.dataset.screen);});});
+sidebarToggle.addEventListener('click',()=>{sidebar.classList.toggle('collapsed');sidebarToggle.textContent=sidebar.classList.contains('collapsed')?'▶':'◀';});
+document.getElementById('closeShotEditor').addEventListener('click',()=>shotEditorPanel.classList.remove('open'));
+document.getElementById('cancelShotEdit').addEventListener('click',()=>shotEditorPanel.classList.remove('open'));
+document.getElementById('saveShotEdit').addEventListener('click',()=>{if(selectedShotId){const shot=shots.find(s=>s.id===selectedShotId);if(shot){shot.title=document.getElementById('editShotTitle').value;shot.action=document.getElementById('editShotDesc').value;shot.dialogue=document.getElementById('editShotDialogue').value;shot.duration=parseFloat(document.getElementById('editShotDuration').value);shot.mood=document.getElementById('editShotMood').value;recalcFrames();renderShots();renderTimeline();}}shotEditorPanel.classList.remove('open');});
+document.getElementById('exportBtn').addEventListener('click',()=>exportModal.classList.add('active'));
+document.getElementById('closeExportModal').addEventListener('click',()=>exportModal.classList.remove('active'));
+document.getElementById('cancelExport').addEventListener('click',()=>exportModal.classList.remove('active'));
+document.getElementById('confirmExport').addEventListener('click',()=>{const fmt=document.querySelector('input[name="exportFormat"]:checked').value;alert('Export '+fmt.toUpperCase()+' démarré !');exportModal.classList.remove('active');});
+document.getElementById('screeningBtn').addEventListener('click',()=>switchScreen('screening'));
+document.getElementById('closeScreening').addEventListener('click',()=>switchScreen('editor'));
+const themeToggle=document.getElementById('themeToggle');const themeSelect=document.getElementById('themeSelect');
+function setTheme(theme){if(theme==='system'){const pd=window.matchMedia('(prefers-color-scheme: dark)').matches;document.body.setAttribute('data-theme',pd?'dark':'light');themeToggle.textContent=pd?'🌙':'☀️';}else{document.body.setAttribute('data-theme',theme);themeToggle.textContent=theme==='dark'?'🌙':'☀️';}localStorage.setItem('theme',theme);if(themeSelect)themeSelect.value=theme;}
+const savedTheme=localStorage.getItem('theme')||'dark';setTheme(savedTheme);
+themeToggle.addEventListener('click',()=>{const ct=document.body.getAttribute('data-theme');setTheme(ct==='dark'?'light':'dark');});
+if(themeSelect)themeSelect.addEventListener('change',e=>setTheme(e.target.value));
+document.getElementById('accentColor').addEventListener('input',e=>{document.documentElement.style.setProperty('--accent',e.target.value);document.documentElement.style.setProperty('--accent-subtle',e.target.value+'1a');});
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='k'){e.preventDefault();const ct=document.body.getAttribute('data-theme');setTheme(ct==='dark'?'light':'dark');}if(e.key===' '&&document.getElementById('screen-editor').classList.contains('active')){e.preventDefault();togglePlayback();}if(e.altKey){const map={'1':'editor','2':'assets','3':'home','4':'screening','5':'settings'};if(map[e.key]){e.preventDefault();switchScreen(map[e.key]);}}});
+zoomSlider.addEventListener('input',e=>{zoom=parseFloat(e.target.value);zoomValue.textContent=zoom.toFixed(1)+'×';renderTimeline();});
+document.getElementById('zoomOut').addEventListener('click',()=>{zoom=Math.max(0.5,zoom-0.5);zoomSlider.value=zoom;zoomValue.textContent=zoom.toFixed(1)+'×';renderTimeline();});
+document.getElementById('zoomIn').addEventListener('click',()=>{zoom=Math.min(5,zoom+0.5);zoomSlider.value=zoom;zoomValue.textContent=zoom.toFixed(1)+'×';renderTimeline();});
+document.getElementById('zoomReset').addEventListener('click',()=>{zoom=1;zoomSlider.value=zoom;zoomValue.textContent='1×';renderTimeline();});
+playBtn.addEventListener('click',togglePlayback);
+document.getElementById('stopBtn').addEventListener('click',()=>{isPlaying=false;currentTime=0;playBtn.textContent='▶';clearInterval(playbackInterval);updatePlayhead();currentTimeEl.textContent=formatTime(currentTime);});
+document.getElementById('newShotBtn').addEventListener('click',()=>{const id='shot-'+(shots.length+1);shots.push({id,frame:0,title:'Nouveau shot',duration:3,action:'',dialogue:'',mood:'tense',characters:[],aiGenerated:false,image:''});recalcFrames();renderShots();renderTimeline();});
+document.getElementById('generateAllBtn').addEventListener('click',()=>{shots.forEach(s=>s.aiGenerated=true);renderShots();renderTimeline();});
+renderShots();renderTimeline();renderWaveform();renderAssets();renderHomeTemplates();
+window.addEventListener('resize',()=>renderTimeline());
+</script>
+</body>
+</html>

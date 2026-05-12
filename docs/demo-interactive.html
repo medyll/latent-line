@@ -1,0 +1,1570 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="color-scheme" content="light dark" />
+	<title>Latent-line — Demo Interactive v3.0</title>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			/* ===== LIGHT MODE (Default) ===== */
+			--bg: oklch(1 0 0);
+			--surface: oklch(0.98 0.005 240);
+			--surface2: oklch(0.95 0.005 240);
+			--surface3: oklch(0.90 0.005 240);
+			--border: oklch(0.85 0.005 240);
+			--border2: oklch(0.75 0.005 240);
+			--text: oklch(0.15 0.01 240);
+			--text-dim: oklch(0.40 0.01 240);
+			--text-muted: oklch(0.55 0.01 240);
+			--accent: oklch(0.68 0.23 25);
+			--accent2: oklch(0.62 0.27 290);
+			--accent3: oklch(0.72 0.23 170);
+			--warning: oklch(0.75 0.2 50);
+			--success: oklch(0.72 0.23 170);
+			--info: oklch(0.65 0.2 240);
+			
+			/* Fonts */
+			--font-display: 'Bebas Neue', sans-serif;
+			--font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			--font-mono: 'DM Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+			
+			/* Spacing */
+			--radius-sm: 4px;--radius-md: 6px;--radius-lg: 8px;--radius-xl: 12px;--radius-full: 9999px;
+			--gap-xs: 4px;--gap-sm: 8px;--gap-md: 16px;--gap-lg: 24px;--gap-xl: 32px;
+			--pad-xs: 4px;--pad-sm: 8px;--pad-md: 16px;--pad-lg: 24px;
+			--border-width: 1px;
+			--transition-fast: 100ms ease;
+			--transition-normal: 150ms ease;
+			
+			/* Z-index */
+			--z-dropdown: 100;--z-sticky: 200;--z-fixed: 300;--z-modal: 400;--z-tooltip: 500;--z-toast: 600;
+		}
+
+		/* ===== DARK MODE ===== */
+		@media (prefers-color-scheme: dark) {
+			:root:not([data-theme='light']) {
+				--bg: oklch(0.22 0.01 295);
+				--surface: oklch(0.25 0.01 295);
+				--surface2: oklch(0.30 0.01 295);
+				--surface3: oklch(0.35 0.01 295);
+				--border: oklch(0.40 0.01 295);
+				--border2: oklch(0.45 0.01 295);
+				--text: oklch(0.85 0.01 295);
+				--text-dim: oklch(0.55 0.01 295);
+				--text-muted: oklch(0.35 0.01 295);
+			}
+		}
+		
+		/* Force modes */
+		[data-theme='dark'] {
+			--bg: oklch(0.22 0.01 295);
+			--surface: oklch(0.25 0.01 295);
+			--surface2: oklch(0.30 0.01 295);
+			--surface3: oklch(0.35 0.01 295);
+			--border: oklch(0.40 0.01 295);
+			--border2: oklch(0.45 0.01 295);
+			--text: oklch(0.85 0.01 295);
+			--text-dim: oklch(0.55 0.01 295);
+			--text-muted: oklch(0.35 0.01 295);
+			color-scheme: dark;
+		}
+		[data-theme='light'] {
+			--bg: oklch(1 0 0);
+			--surface: oklch(0.98 0.005 240);
+			--surface2: oklch(0.95 0.005 240);
+			--surface3: oklch(0.90 0.005 240);
+			--border: oklch(0.85 0.005 240);
+			--border2: oklch(0.75 0.005 240);
+			--text: oklch(0.15 0.01 240);
+			--text-dim: oklch(0.40 0.01 240);
+			--text-muted: oklch(0.55 0.01 240);
+			color-scheme: light;
+		}
+
+		/* Surfaces specialisees */
+		:root {
+			--surface-hover: color-mix(in oklch, var(--text) 5%, transparent);
+			--surface-active: color-mix(in oklch, var(--text) 8%, transparent);
+		}
+		[data-theme='light'], :root:not([data-theme]) {
+			--surface-overlay: oklch(0.98 0.005 240);
+			--surface-sunken: oklch(0.95 0.005 240);
+		}
+		[data-theme='dark'] {
+			--surface-overlay: oklch(0.08 0.01 295);
+			--surface-sunken: oklch(0.055 0.01 295);
+		}
+
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			font-family: var(--font-sans);
+			background: var(--bg);
+			color: var(--text);
+			font-size: 15px;
+			line-height: 1.6;
+			min-height: 100dvh;
+			margin: 0;
+			padding: 0;
+		}
+
+		/* ===== THEME TOGGLE ===== */
+		#theme-toggle {
+			width: 40px; height: 40px;
+			border: none; background: transparent;
+			cursor: pointer; color: var(--text-muted);
+			border-radius: var(--radius-md);
+			transition: all var(--transition-fast);
+			display: flex; align-items: center; justify-content: center;
+		}
+		#theme-toggle:hover { color: var(--text); background: var(--surface2); }
+		#theme-toggle svg { width: 20px; height: 20px; stroke-width: 2; }
+
+		/* ===== HEADER ===== */
+		header {
+			position: sticky;
+			top: 0;
+			z-index: var(--z-fixed);
+			background: var(--surface);
+			backdrop-filter: blur(12px);
+			border-bottom: var(--border-width) solid var(--border);
+			padding: var(--gap-md) var(--gap-lg);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+		}
+		.nav-brand {
+			font-family: var(--font-display);
+			font-size: 20px;
+			letter-spacing: 2px;
+			color: var(--accent2);
+		}
+		.nav-title {
+			font-size: 14px;
+			color: var(--text-dim);
+		}
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-md);
+		}
+
+		/* NAVIGATION TABS */
+		.nav-tabs {
+			display: flex;
+			gap: var(--gap-xs);
+			margin-left: var(--gap-lg);
+		}
+		.nav-tab {
+			font-family: var(--font-sans);
+			font-size: 13px;
+			font-weight: 500;
+			color: var(--text-muted);
+			background: transparent;
+			border: none;
+			padding: var(--pad-xs) var(--pad-md);
+			border-radius: var(--radius-sm);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			white-space: nowrap;
+		}
+		.nav-tab:hover { color: var(--text); background: var(--surface2); }
+		.nav-tab.active {
+			color: var(--accent2);
+			background: color-mix(in oklch, var(--accent2) 10%, var(--surface2));
+		}
+		.nav-tab-icon { width: 14px; height: 14px; stroke-width: 1.5; vertical-align: middle; margin-right: 4px; }
+
+		/* ===== MAIN LAYOUT ===== */
+		.main-container {
+			width: 100%;
+			min-height: calc(100dvh - 60px);
+			display: grid;
+			grid-template-rows: auto 1fr;
+			grid-template-columns: 1fr;
+		}
+
+		/* ===== SCREEN CONTENT ===== */
+		.screen {
+			display: none;
+			width: 100%;
+			min-height: 100%;
+		}
+		.screen.active { display: block; }
+
+		/* ===== EDITOR SCREEN (Horizontal Split) ===== */
+		.editor-wrapper {
+			display: grid;
+			grid-template-rows: minmax(0, 1fr) minmax(0, 35%);
+			grid-template-columns: 1fr;
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+			border-bottom: var(--border-width) solid var(--border);
+		}
+
+		/* TOOLBAR */
+		.editor-toolbar {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-xs);
+			padding: 0 var(--gap-md);
+			height: 40px;
+			border-bottom: var(--border-width) solid var(--border);
+			flex-shrink: 0;
+			background: var(--surface);
+			width: 100%;
+		}
+		.toolbar-btn {
+			font-size: 12px;
+			color: var(--text-muted);
+			background: none;
+			border: none;
+			padding: 0 var(--pad-sm);
+			border-radius: var(--radius-sm);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			display: inline-flex;
+			align-items: center;
+			gap: var(--gap-xs);
+			height: 32px;
+		}
+		.toolbar-btn:hover { background: var(--surface2); color: var(--text); }
+		.toolbar-btn svg { width: 14px; height: 14px; stroke-width: 1.5; }
+		.toolbar-divider { width: 1px; height: 20px; background: var(--border); margin: 0 var(--gap-xs); }
+		.toolbar-status {
+			margin-left: auto;
+			font-family: var(--font-mono);
+			font-size: 11px;
+			color: var(--text-muted);
+			padding: 0 var(--pad-sm);
+			background: var(--surface2);
+			border-radius: var(--radius-sm);
+		}
+
+		/* SCÉNARIMAGE (Top Section - Full Width) */
+		.scenarimage-section {
+			position: relative;
+			min-height: 0;
+			overflow: auto;
+			padding: var(--gap-md);
+			background: var(--bg);
+		}
+		.scenarimage-header {
+			position: sticky;
+			top: 0;
+			z-index: var(--z-sticky);
+			background: var(--bg);
+			padding: var(--gap-sm) var(--gap-md);
+			border-bottom: var(--border-width) solid var(--border);
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin: 0 calc(-1 * var(--gap-md));
+			margin-bottom: var(--gap-md);
+		}
+		.scenarimage-title {
+			font-family: var(--font-display);
+			font-size: 14px;
+			letter-spacing: 1px;
+			color: var(--text);
+			text-transform: uppercase;
+		}
+		.scenarimage-count {
+			font-family: var(--font-mono);
+			font-size: 10px;
+			color: var(--text-muted);
+		}
+		.scenarimage-actions { display: flex; gap: var(--gap-xs); margin-left: auto; }
+		.scenarimage-action-btn {
+			background: none;
+			border: none;
+			color: var(--text-muted);
+			cursor: pointer;
+			padding: var(--pad-xs);
+			border-radius: var(--radius-sm);
+			transition: all var(--transition-fast);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.scenarimage-action-btn:hover { color: var(--text); background: var(--surface2); }
+		.scenarimage-action-btn svg { width: 14px; height: 14px; }
+
+		/* Shot Grid - BIG CARDS */
+		.scenarimage-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			grid-auto-rows: min-content;
+			gap: var(--gap-lg);
+			min-width: 100%;
+			width: 100%;
+			padding-bottom: var(--gap-xl);
+		}
+		
+		/* Shot Cards - BIG */
+		.shot-card {
+			background: var(--surface);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-lg);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			position: relative;
+			overflow: hidden;
+			min-width: 280px;
+		}
+		.shot-card:hover { 
+			border-color: var(--border2); 
+			transform: translateY(-2px); 
+			box-shadow: 0 8px 24px color-mix(in oklch, var(--text-muted) 15%, transparent); 
+		}
+		.shot-card.selected { 
+			border-color: var(--accent2); 
+			background: color-mix(in oklch, var(--accent2) 8%, var(--surface));
+			box-shadow: 0 0 0 2px var(--accent2);
+		}
+		.shot-card.ai-generated { border-left: 4px solid var(--accent2); }
+		
+		.mood-indicator {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 3px;
+			border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+		}
+		.mood-joyful { background: var(--accent3); }
+		.mood-melancholic { background: var(--accent2); }
+		.mood-anxious { background: var(--accent); }
+		.mood-tense { background: var(--warning); }
+		.mood-serene { background: var(--accent3); opacity: 0.7; }
+		
+		.shot-thumbnail {
+			width: 100%;
+			aspect-ratio: 16/9;
+			position: relative;
+			overflow: hidden;
+			background: linear-gradient(135deg, var(--surface2) 0%, var(--surface3) 100%);
+		}
+		.shot-thumbnail img {
+			width: 100%; 
+			height: 100%; 
+			object-fit: cover;
+		}
+		.shot-thumbnail-placeholder {
+			width: 100%; height: 100%;
+			display: flex; align-items: center; justify-content: center;
+			padding: var(--pad-md);
+			text-align: center;
+			font-family: var(--font-mono);
+			font-size: 13px;
+			color: var(--text-muted);
+			word-break: break-word;
+			background: linear-gradient(135deg, var(--surface2), var(--surface3));
+		}
+		.shot-ai-badge {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			background: var(--accent2);
+			color: white;
+			font-family: var(--font-mono);
+			font-size: 10px;
+			font-weight: 700;
+			padding: 4px 8px;
+			border-radius: var(--radius-sm);
+			letter-spacing: 0.5px;
+			z-index: 10;
+		}
+		.shot-content { padding: var(--gap-md); }
+		.shot-time { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); margin-bottom: var(--gap-xs); }
+		.shot-label { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: var(--gap-xs); }
+		.shot-actors { display: flex; flex-wrap: wrap; gap: var(--gap-xs); margin-top: var(--gap-xs); }
+		.actor-chip {
+			display: inline-block;
+			background: var(--surface2);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-full);
+			padding: 4px 10px;
+			font-family: var(--font-mono);
+			font-size: 11px;
+			color: var(--text-muted);
+		}
+
+		/* TIMELINE SECTION (Bottom - Docked) */
+		.timeline-section {
+			position: relative;
+			min-height: 0;
+			overflow: hidden;
+			background: var(--surface);
+			border-top: var(--border-width) solid var(--border);
+			display: grid;
+			grid-template-rows: auto auto 1fr auto;
+			grid-template-columns: 1fr;
+		}
+		
+		.timeline-toolbar {
+			padding: var(--gap-sm) var(--gap-md);
+			display: flex;
+			align-items: center;
+			gap: var(--gap-sm);
+			border-bottom: var(--border-width) solid var(--border);
+			background: var(--surface);
+		}
+		
+		.timeline-grid {
+			position: relative;
+			min-height: 0;
+			overflow: auto;
+			padding: var(--gap-sm) var(--gap-md);
+			padding-bottom: calc(var(--gap-xl) + 40px);
+		}
+		
+		/* Timeline Track */
+		.timeline-track {
+			position: relative;
+			height: 120px;
+			background: var(--surface2);
+			border-radius: var(--radius-md);
+			overflow: hidden;
+		}
+		
+		.timeline-ruler {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 30px;
+			background: var(--surface3);
+			border-bottom: var(--border-width) solid var(--border);
+			border-radius: var(--radius-md) var(--radius-md) 0 0;
+		}
+		
+		.timeline-ruler-marks {
+			display: flex;
+			height: 100%;
+			align-items: center;
+			padding: 0 var(--gap-md);
+			gap: var(--gap-lg);
+			font-family: var(--font-mono);
+			font-size: 10px;
+			color: var(--text-muted);
+		}
+		.timeline-ruler-mark {
+			position: relative;
+			width: 1px;
+			height: 8px;
+			background: var(--border);
+		}
+		.timeline-ruler-mark::before {
+			content: attr(data-time);
+			position: absolute;
+			top: -20px;
+			left: -50%;
+			font-size: 10px;
+			color: var(--text-muted);
+			white-space: nowrap;
+		}
+		
+		.timeline-events {
+			position: absolute;
+			top: 30px;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			padding: var(--gap-sm);
+			padding-bottom: 0;
+			display: flex;
+			align-items: flex-start;
+			gap: var(--gap-sm);
+			overflow-x: auto;
+			overflow-y: hidden;
+		}
+		
+		.timeline-event {
+			flex-shrink: 0;
+			width: 180px;
+			padding: var(--gap-xs);
+			background: var(--surface);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-sm);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			position: relative;
+		}
+		.timeline-event:hover {
+			border-color: var(--border2);
+			background: var(--surface-hover);
+		}
+		.timeline-event.selected {
+			border-color: var(--accent2);
+			background: color-mix(in oklch, var(--accent2) 15%, var(--surface));
+		}
+		.timeline-event.ai-generated { border-left: 3px solid var(--accent2); }
+		
+		.timeline-event-time {
+			font-family: var(--font-mono);
+			font-size: 10px;
+			color: var(--text-muted);
+			margin-bottom: var(--gap-xs);
+		}
+		.timeline-event-label {
+			font-size: 12px;
+			font-weight: 500;
+			color: var(--text);
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin-bottom: var(--gap-xs);
+		}
+		.timeline-event-thumb {
+			width: 100%;
+			aspect-ratio: 16/9;
+			background: var(--surface3);
+			border-radius: var(--radius-sm);
+			overflow: hidden;
+		}
+		.timeline-event-thumb img {
+			width: 100%; height: 100%; object-fit: cover;
+		}
+		
+		/* Audio Tracks */
+		.audio-tracks {
+			position: relative;
+			height: 80px;
+			padding: var(--gap-sm) var(--gap-md);
+			border-top: var(--border-width) solid var(--border);
+			background: var(--surface2);
+			overflow: hidden;
+		}
+		
+		.audio-track {
+			position: absolute;
+			top: 50%;
+			left: var(--gap-md);
+			right: var(--gap-md);
+			transform: translateY(-50%);
+			height: 20px;
+			background: var(--surface);
+			border-radius: var(--radius-full);
+			overflow: hidden;
+		}
+		
+		/* Waveform */
+		.waveform {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 1px;
+			padding: 2px 0;
+		}
+		.waveform-bar {
+			flex: 1;
+			max-width: 2px;
+			background: var(--accent3);
+			border-radius: 1px;
+			opacity: 0.5;
+			transition: opacity 0.2s;
+			animation: waveformPulse 1.5s ease-in-out infinite;
+		}
+		.waveform-bar:nth-child(odd) { opacity: 0.3; height: 60%; }
+		.waveform-bar:hover { opacity: 1; }
+		
+		@keyframes waveformPulse {
+			0%, 100% { opacity: 0.5; }
+			50% { opacity: 0.8; }
+		}
+		
+		/* Controls */
+		.timeline-controls {
+			padding: var(--gap-sm) var(--gap-md);
+			border-top: var(--border-width) solid var(--border);
+			background: var(--surface);
+			display: flex;
+			align-items: center;
+			gap: var(--gap-md);
+		}
+		
+		.playback-controls {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-sm);
+		}
+		.play-btn, .stop-btn {
+			width: 36px;
+			height: 36px;
+			border: none;
+			background: var(--surface2);
+			border-radius: var(--radius-full);
+			cursor: pointer;
+			color: var(--text);
+			transition: all var(--transition-fast);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 16px;
+		}
+		.play-btn:hover, .stop-btn:hover {
+			background: var(--accent2);
+			color: white;
+		}
+		.time-display {
+			font-family: var(--font-mono);
+			font-size: 13px;
+			color: var(--text-dim);
+			min-width: 100px;
+			text-align: center;
+		}
+		.zoom-controls {
+			margin-left: auto;
+			display: flex;
+			align-items: center;
+			gap: var(--gap-xs);
+			font-size: 12px;
+			color: var(--text-muted);
+		}
+		.zoom-controls span { font-family: var(--font-mono); }
+		.zoom-slider {
+			width: 120px;
+			height: 4px;
+			background: var(--surface2);
+			border-radius: 2px;
+			-webkit-appearance: none;
+			appearance: none;
+			cursor: pointer;
+		}
+		.zoom-slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 14px;
+			height: 14px;
+			background: var(--accent2);
+			border-radius: 50%;
+			cursor: pointer;
+		}
+
+		/* ===== ONBOARDING SCREEN ===== */
+		.onboarding-wrapper {
+			width: 100%;
+			min-height: 100%;
+			padding: var(--gap-xl);
+			max-width: 1400px;
+			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+		
+		.hero-section {
+			flex: 1;
+			min-height: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: var(--gap-xl);
+			padding: var(--gap-xl);
+		}
+		
+		.hero-icon {
+			width: 120px;
+			height: 120px;
+			background: linear-gradient(135deg, var(--accent2), var(--accent3));
+			border-radius: var(--radius-xl);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-family: var(--font-display);
+			font-size: 48px;
+			letter-spacing: 4px;
+			box-shadow: 0 16px 48px color-mix(in oklch, var(--accent2) 30%, transparent);
+		}
+		
+		.hero-title {
+			font-family: var(--font-display);
+			font-size: clamp(48px, 8vw, 80px);
+			letter-spacing: 4px;
+			color: var(--text);
+			line-height: 1.1;
+		}
+		.hero-subtitle {
+			font-size: clamp(18px, 3vw, 24px);
+			color: var(--text-dim);
+			max-width: 600px;
+		}
+		
+		.hero-cta {
+			margin-top: var(--gap-lg);
+		}
+		
+		.cta-btn {
+			background: linear-gradient(135deg, var(--accent2), var(--accent3));
+			color: white;
+			border: none;
+			border-radius: var(--radius-lg);
+			padding: var(--gap-sm) var(--gap-xl);
+			font-family: var(--font-sans);
+			font-size: 16px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			cursor: pointer;
+			transition: all var(--transition-normal);
+			box-shadow: 0 4px 20px color-mix(in oklch, var(--accent2) 25%, transparent);
+		}
+		.cta-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 32px color-mix(in oklch, var(--accent2) 35%, transparent);
+		}
+		
+		.templates-section {
+			width: 100%;
+			padding: var(--gap-xl);
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		
+		.templates-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: var(--gap-lg);
+			width: 100%;
+		}
+		
+		.template-card {
+			background: var(--surface);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-lg);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			position: relative;
+			overflow: hidden;
+		}
+		.template-card:hover {
+			border-color: var(--border2);
+			transform: translateY(-4px);
+			box-shadow: 0 8px 24px color-mix(in oklch, var(--text-muted) 15%, transparent);
+		}
+		
+		.template-thumbnail {
+			width: 100%;
+			aspect-ratio: 16/10;
+			background: linear-gradient(135deg, var(--surface2), var(--surface3));
+			position: relative;
+			overflow: hidden;
+		}
+		.template-thumbnail img {
+			width: 100%; height: 100%; object-fit: cover;
+		}
+		.template-badge {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			background: var(--accent2);
+			color: white;
+			font-family: var(--font-mono);
+			font-size: 10px;
+			padding: 4px 8px;
+			border-radius: var(--radius-sm);
+		}
+		.template-content { padding: var(--gap-md); }
+		.template-title {
+			font-size: 14px;
+			font-weight: 600;
+			color: var(--text);
+			margin-bottom: var(--gap-xs);
+		}
+		.template-desc {
+			font-size: 13px;
+			color: var(--text-dim);
+			margin-bottom: var(--gap-sm);
+		}
+		.template-meta {
+			display: flex;
+			gap: var(--gap-sm);
+			font-family: var(--font-mono);
+			font-size: 11px;
+			color: var(--text-muted);
+		}
+
+		/* ===== SCREENING SCREEN ===== */
+		.screening-wrapper {
+			width: 100%;
+			min-height: 100dvh;
+			background: #000;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		.screening-canvas {
+			flex: 1;
+			min-height: 0;
+			position: relative;
+			overflow: hidden;
+			background: #111;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.screening-image {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			filter: blur(2px);
+			animation: screeningPulse 3s ease-in-out infinite;
+		}
+		
+		@keyframes screeningPulse {
+			0%, 100% { filter: blur(2px) brightness(0.8); }
+			50% { filter: blur(1px) brightness(1.0); }
+		}
+		
+		.screening-overlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%);
+		}
+		
+		.screening-header {
+			position: absolute;
+			top: var(--gap-lg);
+			left: var(--gap-lg);
+			right: var(--gap-lg);
+			z-index: 10;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			color: white;
+		}
+		
+		.screening-title {
+			font-family: var(--font-display);
+			font-size: 36px;
+			letter-spacing: 2px;
+			color: var(--accent2);
+		}
+		.screening-watermark {
+			font-family: var(--font-mono);
+			font-size: 12px;
+			color: rgba(255,255,255,0.5);
+			letter-spacing: 1px;
+		}
+		
+		.screening-timeline {
+			position: absolute;
+			bottom: var(--gap-xl);
+			left: var(--gap-lg);
+			right: var(--gap-lg);
+			z-index: 10;
+			height: 60px;
+			background: rgba(0,0,0,0.6);
+			border-radius: var(--radius-lg);
+			padding: var(--gap-sm);
+			display: flex;
+			align-items: center;
+			gap: var(--gap-md);
+		}
+		
+		.screening-progress {
+			flex: 1;
+			height: 4px;
+			background: rgba(255,255,255,0.2);
+			border-radius: 2px;
+			position: relative;
+			overflow: hidden;
+		}
+		.screening-progress-fill {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100%;
+			width: 35%;
+			background: linear-gradient(90deg, var(--accent2), var(--accent3));
+			border-radius: 2px;
+			animation: progressFill 2s linear infinite;
+		}
+		@keyframes progressFill {
+			0% { width: 0%; }
+			100% { width: 100%; }
+		}
+		
+		.screening-time {
+			font-family: var(--font-mono);
+			font-size: 14px;
+			color: white;
+			min-width: 100px;
+			text-align: center;
+		}
+		
+		.screening-controls {
+			display: flex;
+			gap: var(--gap-sm);
+		}
+		.screening-controls button {
+			width: 40px;
+			height: 40px;
+			border: none;
+			background: rgba(255,255,255,0.1);
+			border-radius: var(--radius-full);
+			color: white;
+			cursor: pointer;
+			font-size: 18px;
+			transition: all var(--transition-fast);
+		}
+		.screening-controls button:hover {
+			background: var(--accent2);
+		}
+
+		/* ===== SCROLLBAR ===== */
+		::-webkit-scrollbar { width: 8px; height: 8px; }
+		::-webkit-scrollbar-track { background: var(--surface2); }
+		::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+		::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+		/* ===== FOCUS & SELECTION ===== */
+		:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+		::selection { background: color-mix(in oklch, var(--accent2) 30%, transparent); color: var(--text); }
+
+		/* ===== ANIMATIONS ===== */
+		.fade-in { animation: fadeIn var(--transition-normal) ease-out; }
+		@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+		/* ===== RESPONSIVE ===== */
+		@media (max-width: 1200px) {
+			.scenarimage-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+			.timeline-event { width: 160px; }
+		}
+		@media (max-width: 900px) {
+			.editor-wrapper { grid-template-rows: 1fr minmax(0, 45%); }
+			.scenarimage-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+			.timeline-event { width: 140px; }
+			.timeline-event-label { font-size: 11px; }
+		}
+		@media (max-width: 768px) {
+			.editor-wrapper { grid-template-rows: 1fr minmax(0, 55%); }
+			.scenarimage-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--gap-md); }
+			.timeline-event { width: 120px; }
+		}
+		@media (max-width: 600px) {
+			.scenarimage-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--gap-sm); }
+			.timeline-event { width: 100px; }
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div style="display:flex;align-items:center;">
+			<span class="nav-brand">LATENT</span>
+			<span class="nav-title">Demo Interactive v3.0</span>
+		</div>
+		<div class="header-right">
+			<div class="nav-tabs">
+				<button class="nav-tab active" data-screen="editor">
+					<svg class="nav-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+					Éditeur
+				</button>
+				<button class="nav-tab" data-screen="onboarding">
+					<svg class="nav-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+					Onboarding
+				</button>
+				<button class="nav-tab" data-screen="screening">
+					<svg class="nav-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+					Projection
+				</button>
+			</div>
+			<button id="theme-toggle" title="Changer de thème">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+					<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+				</svg>
+			</button>
+		</div>
+	</header>
+	
+	<div class="main-container">
+		<!-- EDITOR SCREEN -->
+		<div id="screen-editor" class="screen active">
+			<div class="editor-wrapper">
+				<div class="editor-toolbar">
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Projet</button>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouveau</button>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exporter</button>
+					<span class="toolbar-divider"></span>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>Versions</button>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Réglages AI</button>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/><path d="M12 6v6l4 2"/></svg>Préférences</button>
+					<span class="toolbar-status">✓ Sauvegardé · 12:34</span>
+				</div>
+
+				<!-- SCÉNARIMAGE SECTION (Top - Full Width) -->
+				<div class="scenarimage-section">
+					<div class="scenarimage-header">
+						<div style="display:flex;align-items:center;gap:8px;">
+							<h3 class="scenarimage-title">Scénarimage</h3>
+							<span class="scenarimage-count">12 shots</span>
+						</div>
+						<div class="scenarimage-actions">
+							<button class="scenarimage-action-btn" title="Compact">⊟</button>
+							<button class="scenarimage-action-btn" title="Ajouter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+							<button class="scenarimage-action-btn" title="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+						</div>
+					</div>
+					<div class="scenarimage-grid">
+						<!-- Shot 1 -->
+						<div class="shot-card ai-generated fade-in" style="animation-delay:0ms;">
+							<div class="mood-indicator mood-joyful"></div>
+							<div class="shot-thumbnail">
+								<div class="shot-thumbnail-placeholder" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent3) 30%, transparent) 0%,color-mix(in oklch, var(--accent2) 30%, transparent) 100%);">
+									<img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=225&fit=crop" alt="Cinematic sunset" style="width:100%;height:100%;object-fit:cover;opacity:0.8;" onerror="this.style.display='none'">
+									<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:24px;color:var(--accent2);">001</span>
+								</div>
+								<div class="shot-ai-badge">AI</div>
+							</div>
+							<div class="shot-content">
+								<div class="shot-time">00:00.000</div>
+								<div class="shot-label">Sunset introduction</div>
+								<div class="shot-actors"><span class="actor-chip">Aelita</span><span class="actor-chip">Jeremias</span></div>
+							</div>
+						</div>
+						
+						<!-- Shot 2 -->
+						<div class="shot-card fade-in" style="animation-delay:50ms;">
+							<div class="mood-indicator mood-melancholic"></div>
+							<div class="shot-thumbnail">
+								<div class="shot-thumbnail-placeholder">
+									<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=225&fit=crop" alt="Dialogue scene" style="width:100%;height:100%;object-fit:cover;opacity:0.8;" onerror="this.style.display='none'">
+									<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:24px;color:var(--accent2);">002</span>
+								</div>
+							</div>
+							<div class="shot-content">
+								<div class="shot-time">00:04.500</div>
+								<div class="shot-label">Whispering secrets</div>
+								<div class="shot-actors"><span class="actor-chip">Aelita</span></div>
+							</div>
+						</div>
+						
+						<!-- Shot 3 - SELECTED -->
+						<div class="shot-card selected ai-generated fade-in" style="animation-delay:100ms;">
+							<div class="mood-indicator mood-tense"></div>
+							<div class="shot-thumbnail">
+								<div class="shot-thumbnail-placeholder" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent) 30%, transparent) 0%,color-mix(in oklch, var(--warning) 30%, transparent) 100%);">
+									<img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=225&fit=crop" alt="Action sequence" style="width:100%;height:100%;object-fit:cover;opacity:0.8;" onerror="this.style.display='none'">
+									<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:24px;color:white;">003</span>
+								</div>
+								<div class="shot-ai-badge">AI</div>
+							</div>
+							<div class="shot-content">
+								<div class="shot-time">00:08.250</div>
+								<div class="shot-label">The chase begins</div>
+								<div class="shot-actors"><span class="actor-chip">Marcus</span></div>
+							</div>
+						</div>
+						
+						<!-- Shot 4 -->
+						<div class="shot-card fade-in" style="animation-delay:150ms;">
+							<div class="mood-indicator mood-serene"></div>
+							<div class="shot-thumbnail">
+								<div class="shot-thumbnail-placeholder">
+									<img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=225&fit=crop" alt="Wide landscape" style="width:100%;height:100%;object-fit:cover;opacity:0.8;" onerror="this.style.display='none'">
+									<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:24px;color:var(--accent3);">004</span>
+								</div>
+							</div>
+							<div class="shot-content">
+								<div class="shot-time">00:12.000</div>
+								<div class="shot-label">Revealing the truth</div>
+								<div class="shot-actors"><span class="actor-chip">Sophie</span></div>
+							</div>
+						</div>
+						
+						<!-- Shot 5 -->
+						<div class="shot-card ai-generated fade-in" style="animation-delay:200ms;">
+							<div class="mood-indicator mood-anxious"></div>
+							<div class="shot-thumbnail">
+								<div class="shot-thumbnail-placeholder" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent2) 40%, transparent) 0%,color-mix(in oklch, var(--accent) 40%, transparent) 100%);">
+									<img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=225&fit=crop" alt="Climax moment" style="width:100%;height:100%;object-fit:cover;opacity:0.8;" onerror="this.style.display='none'">
+									<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:24px;color:var(--accent2);">005</span>
+								</div>
+								<div class="shot-ai-badge">AI</div>
+							</div>
+							<div class="shot-content">
+								<div class="shot-time">00:15.750</div>
+								<div class="shot-label">Final confrontation</div>
+								<div class="shot-actors"><span class="actor-chip">Aelita</span><span class="actor-chip">Marcus</span></div>
+							</div>
+						</div>
+						
+						<!-- Shot 6 -->
+						<div class="shot-card fade-in" style="animation-delay:250ms;">
+							<div class="mood-indicator mood-joyful"></div>
+							<div class="shot-thumbnail">
+								<div class="shot-thumbnail-placeholder">
+									<img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&h=225&fit=crop" alt="Resolution" style="width:100%;height:100%;object-fit:cover;opacity:0.8;" onerror="this.style.display='none'">
+									<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:24px;color:var(--accent3);">006</span>
+								</div>
+							</div>
+							<div class="shot-content">
+								<div class="shot-time">00:19.500</div>
+								<div class="shot-label">Peace restored</div>
+							</div>
+						</div>
+						
+						<!-- Shot 7 -->
+						<div class="shot-card ai-generated fade-in" style="animation-delay:300ms;">
+							<div class="mood-indicator mood-melancholic"></div>
+							<div class="shot-thumbnail">
+								<div class="shot-thumbnail-placeholder" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent2) 30%, transparent) 0%,color-mix(in oklch, var(--accent3) 30%, transparent) 100%);">
+									<img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=225&fit=crop" alt="Moonlit scene" style="width:100%;height:100%;object-fit:cover;opacity:0.8;" onerror="this.style.display='none'">
+									<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:24px;color:var(--accent2);">007</span>
+								</div>
+								<div class="shot-ai-badge">AI</div>
+							</div>
+							<div class="shot-content">
+								<div class="shot-time">00:24.250</div>
+								<div class="shot-label">Night reflection</div>
+								<div class="shot-actors"><span class="actor-chip">Aelita</span></div>
+							</div>
+						</div>
+						
+						<!-- Shot 8 -->
+						<div class="shot-card fade-in" style="animation-delay:350ms;">
+							<div class="mood-indicator mood-serene"></div>
+							<div class="shot-thumbnail">
+								<div class="shot-thumbnail-placeholder">
+									<img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=400&h=225&fit=crop" alt="Serene ending" style="width:100%;height:100%;object-fit:cover;opacity:0.8;" onerror="this.style.display='none'">
+									<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:24px;color:var(--accent3);">008</span>
+								</div>
+							</div>
+							<div class="shot-content">
+								<div class="shot-time">00:28.000</div>
+								<div class="shot-label">New beginnings</div>
+								<div class="shot-actors"><span class="actor-chip">All</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- TIMELINE SECTION (Bottom - Docked) -->
+				<div class="timeline-section">
+					<div class="timeline-toolbar">
+						<div style="display:flex;align-items:center;gap:8px;">
+							<span style="font-family:var(--font-display);font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);">Timeline</span>
+							<span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);">24fps · 1920×1080</span>
+						</div>
+						<div style="margin-left:auto;display:flex;gap:var(--gap-xs);">
+							<button class="toolbar-btn" title="Zoom in">+</button>
+							<button class="toolbar-btn" title="Zoom out">−</button>
+							<button class="toolbar-btn" title="Fit">⟲</button>
+						</div>
+					</div>
+					
+					<div class="timeline-grid">
+						<div class="timeline-track">
+							<div class="timeline-ruler">
+								<div class="timeline-ruler-marks">
+									<div class="timeline-ruler-mark" data-time="00:00"></div>
+									<div class="timeline-ruler-mark" data-time="05:00"></div>
+									<div class="timeline-ruler-mark" data-time="10:00"></div>
+									<div class="timeline-ruler-mark" data-time="15:00"></div>
+									<div class="timeline-ruler-mark" data-time="20:00"></div>
+									<div class="timeline-ruler-mark" data-time="25:00"></div>
+								</div>
+							</div>
+							<div class="timeline-events">
+								<!-- Events -->
+								<div class="timeline-event ai-generated" style="margin-left:0%;">
+									<div class="timeline-event-time">00:00.000</div>
+									<div class="timeline-event-label">Sunset intro</div>
+									<div class="timeline-event-thumb">
+										<img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=112&fit=crop" alt="" onerror="this.style.display='none'">
+									</div>
+								</div>
+								<div class="timeline-event" style="margin-left:15%;">
+									<div class="timeline-event-time">00:04.500</div>
+									<div class="timeline-event-label">Whispering</div>
+									<div class="timeline-event-thumb">
+										<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=112&fit=crop" alt="" onerror="this.style.display='none'">
+									</div>
+								</div>
+								<div class="timeline-event selected ai-generated" style="margin-left:32%;">
+									<div class="timeline-event-time">00:08.250</div>
+									<div class="timeline-event-label">Chase begins</div>
+									<div class="timeline-event-thumb">
+										<img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&h=112&fit=crop" alt="" onerror="this.style.display='none'">
+									</div>
+								</div>
+								<div class="timeline-event" style="margin-left:48%;">
+									<div class="timeline-event-time">00:12.000</div>
+									<div class="timeline-event-label">Truth</div>
+									<div class="timeline-event-thumb">
+										<img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200&h=112&fit=crop" alt="" onerror="this.style.display='none'">
+									</div>
+								</div>
+								<div class="timeline-event ai-generated" style="margin-left:62%;">
+									<div class="timeline-event-time">00:15.750</div>
+									<div class="timeline-event-label">Confrontation</div>
+									<div class="timeline-event-thumb">
+										<img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200&h=112&fit=crop" alt="" onerror="this.style.display='none'">
+									</div>
+								</div>
+								<div class="timeline-event" style="margin-left:78%;">
+									<div class="timeline-event-time">00:19.500</div>
+									<div class="timeline-event-label">Peace</div>
+									<div class="timeline-event-thumb">
+										<img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=200&h=112&fit=crop" alt="" onerror="this.style.display='none'">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="audio-tracks">
+						<div class="audio-track">
+							<div class="waveform">
+								<div class="waveform-bar" style="height:40%;"></div><div class="waveform-bar" style="height:80%;"></div><div class="waveform-bar" style="height:60%;"></div><div class="waveform-bar" style="height:90%;"></div><div class="waveform-bar" style="height:50%;"></div><div class="waveform-bar" style="height:85%;"></div><div class="waveform-bar" style="height:70%;"></div><div class="waveform-bar" style="height:95%;"></div><div class="waveform-bar" style="height:65%;"></div><div class="waveform-bar" style="height:75%;"></div><div class="waveform-bar" style="height:45%;"></div><div class="waveform-bar" style="height:80%;"></div><div class="waveform-bar" style="height:55%;"></div><div class="waveform-bar" style="height:70%;"></div><div class="waveform-bar" style="height:90%;"></div><div class="waveform-bar" style="height:60%;"></div>
+							</div>
+							<div style="position:absolute;left:35%;top:50%;transform:translate(-50%,-50%);width:8px;height:8px;background:var(--accent3);border-radius:50%;"></div>
+						</div>
+					</div>
+					
+					<div class="timeline-controls">
+						<div class="playback-controls">
+							<button class="play-btn" title="Lecture">▶</button>
+							<button class="stop-btn" title="Stop">■</button>
+							<span class="time-display">00:08.250 / 00:28.750</span>
+						</div>
+						<div class="zoom-controls">
+							<span>Zoom</span>
+							<input type="range" min="0.5" max="8" step="0.5" value="2" class="zoom-slider">
+							<span>2.0×</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ONBOARDING SCREEN -->
+		<div id="screen-onboarding" class="screen">
+			<div class="onboarding-wrapper">
+				<section class="hero-section">
+					<div class="hero-icon">LL</div>
+					<h1 class="hero-title">LATENT LINE</h1>
+					<p class="hero-subtitle">Orchestrez vos scènes IA avec précision. Créez, éditez, exportez des timelines validées pour vos pipelines de rendu.</p>
+					<div class="hero-cta">
+						<button class="cta-btn" onclick="switchScreen('editor')">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;vertical-align:middle;margin-right:8px;">
+								<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+							Nouveau Projet
+						</button>
+						<button class="cta-btn" style="background:transparent;color:var(--text);border:1px solid var(--border);box-shadow:none;" onclick="alert('Import à venir...')">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;vertical-align:middle;margin-right:8px;">
+								<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+							Ouvrir Projet
+						</button>
+					</div>
+				</section>
+				
+				<section class="templates-section">
+					<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--gap-lg);">
+						<div>
+							<h2 style="font-family:var(--font-display);font-size:20px;letter-spacing:1px;text-transform:uppercase;color:var(--text);">Modèles de départ</h2>
+							<p style="color:var(--text-dim);margin-top:4px;">Choisissez un modèle pour commencer rapidement</p>
+						</div>
+						<button class="toolbar-btn" onclick="alert('Plus à venir...')">Voir tout</button>
+					</div>
+					<div class="templates-grid">
+						<div class="template-card" onclick="switchScreen('editor')">
+							<div class="template-thumbnail" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent2) 30%, transparent),color-mix(in oklch, var(--accent3) 30%, transparent));">
+								<img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=250&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover;opacity:0.7;" onerror="this.style.display='none'">
+								<div class="template-badge">AI</div>
+							</div>
+							<div class="template-content">
+								<div class="template-title">Démo Cinématique</div>
+								<div class="template-desc">Scène complète avec personnages, environnement et audio</div>
+								<div class="template-meta"><span>8 shots</span><span>3 personnages</span><span>2 décors</span></div>
+							</div>
+						</div>
+						<div class="template-card" onclick="switchScreen('editor')">
+							<div class="template-thumbnail" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent3) 30%, transparent),color-mix(in oklch, var(--accent2) 30%, transparent));">
+								<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover;opacity:0.7;" onerror="this.style.display='none'">
+							</div>
+							<div class="template-content">
+								<div class="template-title">Dialogue Simple</div>
+								<div class="template-desc">Deux personnages en conversation</div>
+								<div class="template-meta"><span>2 shots</span><span>2 personnages</span><span>1 décor</span></div>
+							</div>
+						</div>
+						<div class="template-card" onclick="switchScreen('editor')">
+							<div class="template-thumbnail" style="background:linear-gradient(135deg,color-mix(in oklch, var(--warning) 30%, transparent),color-mix(in oklch, var(--accent) 30%, transparent));">
+								<img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=250&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover;opacity:0.7;" onerror="this.style.display='none'">
+								<div class="template-badge">AI</div>
+							</div>
+							<div class="template-content">
+								<div class="template-title">Scène d'Action</div>
+								<div class="template-desc">Séquence dynamique avec mouvements de caméra</div>
+								<div class="template-meta"><span>4 shots</span><span>1 personnage</span><span>1 décor</span></div>
+							</div>
+						</div>
+						<div class="template-card" onclick="switchScreen('editor')">
+							<div class="template-thumbnail" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent) 20%, transparent),color-mix(in oklch, var(--warning) 20%, transparent));">
+								<img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=250&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover;opacity:0.7;" onerror="this.style.display='none'">
+							</div>
+							<div class="template-content">
+								<div class="template-title">Scène de Tension</div>
+								<div class="template-desc">Ambiance dramatique avec éclairage studio</div>
+								<div class="template-meta"><span>3 shots</span><span>2 personnages</span><span>1 décor</span></div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+
+		<!-- SCREENING SCREEN -->
+		<div id="screen-screening" class="screen">
+			<div class="screening-wrapper">
+				<div class="screening-canvas">
+					<img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&h=1080&fit=crop" alt="Projection" class="screening-image" onerror="this.style.display='none'">
+					<div class="screening-overlay"></div>
+					<div class="screening-header">
+						<h2 class="screening-title">The Chase Begins</h2>
+						<div style="font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.7);">00:08.250 · 24fps · 1920×1080</div>
+						<div class="screening-watermark">LATENT LINE · AI GENERATED</div>
+					</div>
+					<div class="screening-timeline">
+						<div class="screening-progress">
+							<div class="screening-progress-fill"></div>
+						</div>
+						<div class="screening-time">00:08.250 / 00:28.750</div>
+						<div class="screening-controls">
+							<button title="Précédent">⏮</button>
+							<button title="Lecture">▶</button>
+							<button title="Pause">⏸</button>
+							<button title="Suivant">⏭</button>
+							<button title="Plein écran">⛶</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer style="padding:var(--gap-xl);text-align:center;border-top:var(--border-width) solid var(--border);color:var(--text-muted);font-size:12px;width:100%;">
+		<div style="margin-bottom:var(--gap-sm);">Latent-line — Demo Interactive v3.0 · Avril 2026</div>
+		<div>
+			<a href="../brand-spec.md" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Brand Spec</a>
+			·
+			<a href="ux-audit-2026-04.md" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Audit UX</a>
+			·
+			<a href="maquettes-hf-editor.html" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Maquettes v2</a>
+		</div>
+	</footer>
+
+	<script>
+		// ===== THEME TOGGLE - FIXED VERSION =====
+		const THEME_KEY = 'latent-line-theme';
+		
+		function getPreferredTheme() {
+			const stored = localStorage.getItem(THEME_KEY);
+			if (stored) return stored;
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		
+		function applyTheme(theme) {
+			const html = document.documentElement;
+			
+			if (theme === 'system') {
+				html.removeAttribute('data-theme');
+			} else {
+				html.setAttribute('data-theme', theme);
+			}
+			
+			// Update meta color-scheme
+			const meta = document.querySelector('meta[name="color-scheme"]');
+			if (meta) {
+				meta.content = theme === 'dark' ? 'dark light' : 'light dark';
+			}
+			
+			// Update toggle button icon
+			const toggle = document.getElementById('theme-toggle');
+			if (toggle) {
+				const svg = toggle.querySelector('svg');
+				if (svg) {
+					svg.innerHTML = theme === 'dark' 
+						? '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" fill="none"/>'
+						: '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" fill="none'/>';
+				}
+			}
+		}
+		
+		function toggleTheme() {
+			const html = document.documentElement;
+			const current = html.getAttribute('data-theme') || 
+				(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+			const next = current === 'dark' ? 'light' : 'dark';
+			localStorage.setItem(THEME_KEY, next);
+			applyTheme(next);
+		}
+		
+		// Initialize theme
+		applyTheme(getPreferredTheme());
+		
+		// Listen to system theme changes
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			if (!localStorage.getItem(THEME_KEY) || localStorage.getItem(THEME_KEY) === 'system') {
+				applyTheme(e.matches ? 'dark' : 'light');
+			}
+		});
+		
+		// Attach theme toggle click handler
+		document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+
+		// ===== SCREEN NAVIGATION =====
+		function switchScreen(screenName) {
+			// Update nav tabs
+			document.querySelectorAll('.nav-tab').forEach(tab => {
+				tab.classList.remove('active');
+				if (tab.dataset.screen === screenName) {
+					tab.classList.add('active');
+				}
+			});
+			
+			// Update screens
+			document.querySelectorAll('.screen').forEach(screen => {
+				screen.classList.remove('active');
+			});
+			
+			const targetScreen = document.getElementById('screen-' + screenName);
+			if (targetScreen) {
+				targetScreen.classList.add('active');
+				// Scroll to top of screen
+				targetScreen.scrollTop = 0;
+			}
+			
+			// Update URL hash
+			history.pushState(null, '', '#' + screenName);
+		}
+		
+		// Initialize from URL hash
+		window.addEventListener('DOMContentLoaded', () => {
+			const hash = window.location.hash.substring(1);
+			if (hash && ['editor', 'onboarding', 'screening'].includes(hash)) {
+				switchScreen(hash);
+			}
+		});
+		
+		// Handle browser back/forward
+		window.addEventListener('popstate', () => {
+			const hash = window.location.hash.substring(1);
+			if (hash && ['editor', 'onboarding', 'screening'].includes(hash)) {
+				switchScreen(hash);
+			} else {
+				switchScreen('editor');
+			}
+		});
+		
+		// ===== KEYBOARD SHORTCUTS =====
+		document.addEventListener('keydown', (e) => {
+			// Ctrl/Cmd + K: Toggle theme
+			if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+				e.preventDefault();
+				toggleTheme();
+			}
+			// Number keys 1-3: Switch screens
+			if (e.key >= '1' && e.key <= '3') {
+				e.preventDefault();
+				const screens = ['editor', 'onboarding', 'screening'];
+				switchScreen(screens[parseInt(e.key) - 1]);
+			}
+		});
+		
+		// ===== PLAYBACK CONTROLS =====
+		let isPlaying = false;
+		let currentTime = 8.25; // seconds
+		const totalTime = 28.75; // seconds
+		
+		function formatTime(seconds) {
+			const mins = Math.floor(seconds / 60);
+			const secs = (seconds % 60).toFixed(2);
+			return mins.toString().padStart(2, '0') + ':' + secs.padStart(5, '0');
+		}
+		
+		function updatePlaybackTime() {
+			document.querySelectorAll('.time-display').forEach(el => {
+				el.textContent = formatTime(currentTime) + ' / ' + formatTime(totalTime);
+			});
+			
+			// Update screening progress
+			const progress = document.querySelector('.screening-progress-fill');
+			if (progress) {
+				progress.style.width = ((currentTime / totalTime) * 100) + '%';
+			}
+		}
+		
+		document.querySelectorAll('.play-btn').forEach(btn => {
+			btn.addEventListener('click', () => {
+				if (!isPlaying) {
+					isPlaying = true;
+					btn.innerHTML = '⏸';
+					const interval = setInterval(() => {
+						currentTime = Math.min(currentTime + 0.1, totalTime);
+						updatePlaybackTime();
+						if (currentTime >= totalTime) {
+							clearInterval(interval);
+							isPlaying = false;
+							btn.innerHTML = '▶';
+							currentTime = 0;
+							updatePlaybackTime();
+						}
+					}, 100);
+					
+					// Store interval for cleanup
+					btn._interval = interval;
+				}
+			});
+		});
+		
+		document.querySelectorAll('.stop-btn').forEach(btn => {
+			btn.addEventListener('click', () => {
+				isPlaying = false;
+				currentTime = 0;
+				updatePlaybackTime();
+				
+				// Stop play button animation
+				document.querySelectorAll('.play-btn').forEach(pbtn => {
+					if (pbtn._interval) {
+						clearInterval(pbtn._interval);
+						pbtn._interval = null;
+					}
+					pbtn.innerHTML = '▶';
+				});
+			});
+		});
+		
+		// ===== SHOT SELECTION =====
+		document.querySelectorAll('.shot-card, .timeline-event').forEach(card => {
+			card.addEventListener('click', () => {
+				// Remove selected class from all
+				document.querySelectorAll('.shot-card, .timeline-event').forEach(c => {
+					c.classList.remove('selected');
+				});
+				// Add to clicked
+				card.classList.add('selected');
+			});
+		});
+		
+		// Initialize with first shot selected
+		updatePlaybackTime();
+	</script>
+</body>
+</html>

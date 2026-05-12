@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Latent-line — Demo v4.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff; --surface: #f6f8fa; --surface-elevated: #ffffff; --surface-sunken: #f3f4f6;
+  --border: #d1d5db; --border-subtle: #e5e7eb; --text: #111827; --text-secondary: #4b5563; --text-muted: #9ca3af;
+  --accent: #7c3aed; --accent-hover: #6d28d9; --accent-subtle: rgba(124, 58, 237, 0.1);
+  --font-display: 'Bebas Neue', sans-serif; --font-body: 'DM Sans', system-ui, sans-serif; --font-mono: 'DM Mono', monospace;
+  --radius: 6px; --radius-lg: 8px;
+}
+[data-theme="dark"] {
+  --bg: #0f0f13; --surface: #1a1a24; --surface-elevated: #242430; --surface-sunken: #13131a;
+  --border: #2a2a3a; --border-subtle: #1f1f2e; --text: #f3f4f6; --text-secondary: #a1a1aa; --text-muted: #6b7280;
+  --accent: #a78bfa; --accent-hover: #c4b5fd; --accent-subtle: rgba(167, 139, 250, 0.15);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); font-size: 14px; transition: background .25s, color .25s; }
+.app { display: flex; flex-direction: column; height: 100vh; width: 100vw; }
+header { flex-shrink: 0; height: 56px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+.brand { font-family: var(--font-display); font-size: 24px; letter-spacing: 3px; color: var(--accent); }
+nav { display: flex; gap: 4px; margin-left: 20px; }
+.nav-btn { padding: 6px 12px; font-size: 13px; font-weight: 500; color: var(--text-secondary); background: transparent; border: none; border-radius: var(--radius); cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 6px; }
+.nav-btn:hover { color: var(--text); background: var(--surface-elevated); }
+.nav-btn.active { color: var(--accent); background: var(--accent-subtle); }
+.nav-btn svg { width: 16px; height: 16px; }
+.theme-toggle { width: 36px; height: 36px; border: 1px solid var(--border); background: var(--surface-elevated); border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+.theme-toggle:hover { color: var(--text); border-color: var(--accent); }
+main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.screen { display: none; flex-direction: column; height: 100%; width: 100%; }
+.screen.active { display: flex; }
+.toolbar { flex-shrink: 0; height: 44px; background: var(--surface-sunken); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; padding: 0 16px; }
+.toolbar-btn { padding: 6px 12px; font-size: 12px; color: var(--text-secondary); background: transparent; border: none; border-radius: 4px; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 6px; }
+.toolbar-btn:hover { color: var(--text); background: var(--surface); }
+.toolbar-btn svg { width: 14px; height: 14px; }
+.toolbar-divider { width: 1px; height: 20px; background: var(--border); }
+.spacer { flex: 1; }
+.status-badge { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); padding: 4px 8px; background: var(--surface); border-radius: 4px; border: 1px solid var(--border-subtle); }
+.scenarimage { flex: 1; display: flex; flex-direction: column; min-height: 0; background: var(--bg); }
+.scenarimage-header { flex-shrink: 0; height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.scenarimage-title { font-family: var(--font-display); font-size: 18px; letter-spacing: 2px; text-transform: uppercase; }
+.scenarimage-count { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-left: 12px; padding: 2px 8px; background: var(--surface-sunken); border-radius: 999px; border: 1px solid var(--border); }
+.actions { display: flex; gap: 8px; }
+.action-btn { width: 32px; height: 32px; border: 1px solid var(--border); background: var(--surface-elevated); border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+.action-btn:hover { color: var(--text); border-color: var(--accent); background: var(--accent-subtle); }
+.action-btn svg { width: 16px; height: 16px; }
+.shot-grid { flex: 1; overflow-y: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; align-content: start; }
+.shot-card { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: all .15s; position: relative; }
+.shot-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+[data-theme="dark"] .shot-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.shot-card.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-subtle); }
+.shot-card.ai::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-hover)); z-index: 10; }
+.shot-thumb { width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden; background: var(--surface-sunken); }
+.shot-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .25s; }
+.shot-card:hover .shot-thumb img { transform: scale(1.03); }
+.shot-badge { position: absolute; top: 8px; right: 8px; background: var(--accent); color: white; font-family: var(--font-mono); font-size: 9px; font-weight: 600; padding: 3px 6px; border-radius: 4px; }
+.shot-num { position: absolute; bottom: 8px; left: 8px; font-family: var(--font-display); font-size: 28px; color: rgba(255,255,255,0.9); text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.shot-info { padding: 12px; }
+.shot-time { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+.shot-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.actors { display: flex; flex-wrap: wrap; gap: 6px; }
+.actor { font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary); padding: 3px 8px; background: var(--surface-sunken); border-radius: 999px; border: 1px solid var(--border); }
+.timeline { flex-shrink: 0; height: 320px; display: flex; flex-direction: column; background: var(--surface); border-top: 1px solid var(--border); }
+.timeline-header { flex-shrink: 0; height: 40px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; background: var(--surface-sunken); border-bottom: 1px solid var(--border); }
+.timeline-title { font-family: var(--font-display); font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); }
+.timeline-meta { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-left: 12px; }
+.zoom { display: flex; gap: 8px; }
+.zoom button { width: 28px; height: 28px; border: 1px solid var(--border); background: var(--surface-elevated); border-radius: 4px; cursor: pointer; color: var(--text-secondary); }
+.zoom button:hover { color: var(--text); border-color: var(--accent); }
+.timeline-track { flex: 1; overflow-x: auto; overflow-y: hidden; padding: 16px; position: relative; }
+.timeline-events { display: flex; gap: 12px; min-width: max-content; }
+.t-event { width: 160px; flex-shrink: 0; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: all .15s; }
+.t-event:hover { transform: translateY(-2px); border-color: var(--text-muted); }
+.t-event.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-subtle); }
+.t-event.ai { border-left: 3px solid var(--accent); }
+.t-event-thumb { width: 100%; aspect-ratio: 16/9; background: var(--surface-sunken); overflow: hidden; }
+.t-event-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.t-event-info { padding: 8px 10px; }
+.t-event-time { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+.t-event-label { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.audio { height: 50px; background: var(--surface-sunken); border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; padding: 0 16px; }
+.audio-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); width: 50px; }
+.waveform { flex: 1; height: 28px; display: flex; align-items: center; gap: 2px; }
+.waveform span { flex: 1; max-width: 3px; background: var(--accent); border-radius: 1px; opacity: .6; }
+.playhead { position: absolute; left: 30%; top: 0; bottom: 0; width: 2px; background: var(--accent); pointer-events: none; }
+.playhead::before { content: ''; position: absolute; top: 0; left: -4px; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; }
+.timeline-controls { flex-shrink: 0; height: 56px; background: var(--surface-elevated); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+.playback { display: flex; align-items: center; gap: 12px; }
+.play-btn { width: 40px; height: 40px; border: 1px solid var(--border); background: var(--surface); border-radius: 50%; cursor: pointer; color: var(--text); font-size: 14px; }
+.play-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+.time { font-family: var(--font-mono); font-size: 14px; }
+.time .cur { color: var(--accent); font-weight: 600; }
+.time .sep { color: var(--text-muted); margin: 0 4px; }
+.time .tot { color: var(--text-secondary); }
+.tl-tools { display: flex; gap: 8px; }
+.tl-tools button { padding: 6px 12px; font-size: 12px; color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; }
+.tl-tools button:hover { border-color: var(--accent); color: var(--text); }
+.onboarding { overflow-y: auto; padding: 60px 40px; }
+.hero { text-align: center; max-width: 800px; margin: 0 auto 60px; }
+.hero-logo { width: 100px; height: 100px; background: linear-gradient(135deg, var(--accent), var(--accent-hover)); border-radius: var(--radius-lg); margin: 0 auto 32px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 48px; color: white; letter-spacing: 4px; box-shadow: 0 16px 48px rgba(124,58,237,0.3); }
+.hero h1 { font-family: var(--font-display); font-size: clamp(48px, 10vw, 80px); letter-spacing: 6px; margin-bottom: 16px; }
+.hero p { font-size: 18px; color: var(--text-secondary); max-width: 500px; margin: 0 auto 32px; line-height: 1.6; }
+.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn { padding: 12px 24px; font-size: 14px; font-weight: 600; border-radius: var(--radius); cursor: pointer; transition: all .15s; border: none; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(124,58,237,0.3); }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.templates { max-width: 1200px; margin: 0 auto; }
+.templates h2 { font-family: var(--font-display); font-size: 20px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; }
+.template-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.template { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: all .15s; }
+.template:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); border-color: var(--accent); }
+[data-theme="dark"] .template:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
+.template-thumb { width: 100%; aspect-ratio: 16/10; background: var(--surface-sunken); position: relative; overflow: hidden; }
+.template-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.template-info { padding: 16px; }
+.template-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.template-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+.template-meta { display: flex; gap: 12px; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+.screening { background: #000; position: relative; }
+.screening-canvas { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.screening-canvas img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.screening-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 20%, transparent 70%, rgba(0,0,0,0.8) 100%); pointer-events: none; }
+.screening-header { position: absolute; top: 0; left: 0; right: 0; padding: 24px; display: flex; justify-content: space-between; z-index: 10; }
+.screening-title { font-family: var(--font-display); font-size: 32px; letter-spacing: 3px; color: var(--accent); }
+.screening-watermark { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.4); }
+.screening-ui { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; z-index: 10; }
+.screening-bar { display: flex; align-items: center; gap: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); padding: 16px 20px; border-radius: var(--radius-lg); }
+.progress { flex: 1; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; width: 35%; background: var(--accent); }
+.screening-time { font-family: var(--font-mono); font-size: 14px; color: white; min-width: 120px; text-align: center; }
+.screening-btns { display: flex; gap: 8px; }
+.screening-btns button { width: 44px; height: 44px; border: none; background: rgba(255,255,255,0.1); border-radius: 50%; cursor: pointer; color: white; font-size: 16px; }
+.screening-btns button:hover { background: var(--accent); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--surface-sunken); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+* { scrollbar-width: thin; scrollbar-color: var(--border) var(--surface-sunken); }
+@media (max-width: 900px) { .shot-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; padding: 16px; } .timeline { height: 280px; } }
+@media (max-width: 600px) { .shot-grid { grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; } nav .nav-btn span { display: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div style="display:flex;align-items:center;">
+<span class="brand">LATENT</span>
+<nav>
+<button class="nav-btn active" onclick="go('editor')">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<span>Editeur</span>
+</button>
+<button class="nav-btn" onclick="go('onboarding')">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+<span>Accueil</span>
+</button>
+<button class="nav-btn" onclick="go('screening')">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+<span>Projection</span>
+</button>
+</nav>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()" title="Theme">
+<svg id="ticon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+</button>
+</header>
+
+<main>
+<!-- EDITOR -->
+<div id="editor" class="screen active">
+<div class="toolbar">
+<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Projet</button>
+<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouveau</button>
+<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exporter</button>
+<span class="toolbar-divider"></span>
+<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Reglages</button>
+<span class="spacer"></span>
+<span class="status-badge">Sauvegarde</span>
+</div>
+
+<div class="scenarimage">
+<div class="scenarimage-header">
+<div style="display:flex;align-items:center;">
+<span class="scenarimage-title">Scenarimage</span>
+<span class="scenarimage-count">12 shots</span>
+</div>
+<div class="actions">
+<button class="action-btn" title="Compact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
+<button class="action-btn" title="Ajouter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+<button class="action-btn" title="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+</div>
+</div>
+<div class="shot-grid" id="shots"></div>
+</div>
+
+<div class="timeline">
+<div class="timeline-header">
+<div style="display:flex;align-items:center;">
+<span class="timeline-title">Timeline</span>
+<span class="timeline-meta">24fps 1920x1080</span>
+</div>
+<div class="zoom">
+<button onclick="zoom(-1)">-</button>
+<button onclick="zoom(1)">+</button>
+<button onclick="zoom(0)">O</button>
+</div>
+</div>
+<div class="timeline-track">
+<div class="playhead"></div>
+<div class="timeline-events" id="timeline-events"></div>
+</div>
+<div class="audio">
+<span class="audio-label">Audio</span>
+<div class="waveform" id="waveform"></div>
+</div>
+<div class="timeline-controls">
+<div class="playback">
+<button class="play-btn" onclick="togglePlay()" id="playbtn">II</button>
+<span class="time"><span class="cur" id="curtime">00:08.250</span><span class="sep">/</span><span class="tot">00:28.750</span></span>
+</div>
+<div class="tl-tools">
+<button>Reglages AI</button>
+<button class="active">Courbe</button>
+<button>Marqueurs</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding" class="screen onboarding">
+<div class="hero">
+<div class="hero-logo">LL</div>
+<h1>LATENT LINE</h1>
+<p>Orchestrez vos scenes IA avec precision. Creez, editez, exportez des timelines validees pour vos pipelines de rendu.</p>
+<div class="hero-actions">
+<button class="btn btn-primary" onclick="go('editor')">Nouveau Projet</button>
+<button class="btn btn-secondary">Ouvrir Projet</button>
+</div>
+</div>
+<div class="templates">
+<h2>Modeles de depart</h2>
+<div class="template-grid" id="templates"></div>
+</div>
+</div>
+
+<!-- SCREENING -->
+<div id="screening" class="screen screening">
+<div class="screening-canvas">
+<img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=1920&h=1080&fit=crop" alt="Projection">
+<div class="screening-overlay"></div>
+<div class="screening-header">
+<span class="screening-title">The Chase Begins</span>
+<span class="screening-watermark">LATENT LINE AI GENERATED</span>
+</div>
+<div class="screening-ui">
+<div class="screening-bar">
+<div class="progress"><div class="progress-fill"></div></div>
+<span class="screening-time">00:08.250 / 00:28.750</span>
+<div class="screening-btns">
+<button>|&lt;</button>
+<button>II</button>
+<button>&gt;|</button>
+<button>[]</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+const THEME_KEY='ll-theme-v4';
+function getTheme(){const s=localStorage.getItem(THEME_KEY);return s?s:window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';}
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);const i=document.getElementById('ticon');if(i)i.innerHTML=t==='dark'?'<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>':'<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';}
+function toggleTheme(){const c=document.documentElement.getAttribute('data-theme')||getTheme();const n=c==='dark'?'light':'dark';applyTheme(n);localStorage.setItem(THEME_KEY,n);}
+applyTheme(getTheme());
+function go(s){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));document.getElementById(s).classList.add('active');document.querySelector(`[onclick="go('${s}')"]`).classList.add('active');}
+const shots=[
+{id:1,time:'00:00.000',label:'Sunset introduction',img:'1506905925346-21bda4d32df4',ai:true,actors:['Aelita','Jeremias']},
+{id:2,time:'00:04.500',label:'Whispering secrets',img:'1507003211169-0a1dd7228f2d',ai:false,actors:['Aelita']},
+{id:3,time:'00:08.250',label:'The chase begins',img:'1518709268805-4e9042af2176',ai:true,actors:['Marcus']},
+{id:4,time:'00:12.000',label:'Revealing truth',img:'1441974231531-c6227db76b6e',ai:false,actors:['Sophie']},
+{id:5,time:'00:15.750',label:'Final confrontation',img:'1470071459604-3b5ec3a7fe05',ai:true,actors:['Aelita','Marcus']},
+{id:6,time:'00:19.500',label:'Peace restored',img:'1501854140801-50d01698950b',ai:false,actors:[]},
+{id:7,time:'00:24.250',label:'Night reflection',img:'1469474968028-56623f02e42e',ai:true,actors:['Aelita']},
+{id:8,time:'00:28.000',label:'New beginnings',img:'1505142468610-359e7d316be0',ai:false,actors:['All']},
+];
+let selectedShot=3;
+function renderShots(){const g=document.getElementById('shots');g.innerHTML=shots.map(s=>`<div class="shot-card ${s.ai?'ai':''} ${s.id===selectedShot?'selected':''}" onclick="selectShot(${s.id})"><div class="shot-thumb"><img src="https://images.unsplash.com/photo-${s.img}?w=600&h=338&fit=crop" loading="lazy">${s.ai?'<span class="shot-badge">AI</span>':''}<span class="shot-num">${String(s.id).padStart(3,'0')}</span></div><div class="shot-info"><div class="shot-time">${s.time}</div><div class="shot-label">${s.label}</div><div class="actors">${s.actors.map(a=>`<span class="actor">${a}</span>`).join('')}</div></div></div>`).join('');}
+function selectShot(id){selectedShot=id;renderShots();renderTimeline();}
+function renderTimeline(){const t=document.getElementById('timeline-events');t.innerHTML=shots.map(s=>`<div class="t-event ${s.ai?'ai':''} ${s.id===selectedShot?'selected':''}" onclick="selectShot(${s.id})"><div class="t-event-thumb"><img src="https://images.unsplash.com/photo-${s.img}?w=200&h=112&fit=crop"></div><div class="t-event-info"><div class="t-event-time">${s.time}</div><div class="t-event-label">${s.label}</div></div></div>`).join('');}
+function renderWaveform(){const w=document.getElementById('waveform');w.innerHTML=Array(80).fill(0).map(()=>`<span style="height:${Math.max(10,Math.random()*100)}%"></span>`).join('');}
+function renderTemplates(){const tpl=[{n:'Demo Cinematique',d:'Scene complete',i:'1506905925346-21bda4d32df4'},{n:'Dialogue Simple',d:'Deux personnages',i:'1507003211169-0a1dd7228f2d'},{n:'Scene Action',d:'Sequence dynamique',i:'1518709268805-4e9042af2176'},{n:'Scene Tension',d:'Ambiance dramatique',i:'1470071459604-3b5ec3a7fe05'}];document.getElementById('templates').innerHTML=tpl.map(t=>`<div class="template" onclick="go('editor')"><div class="template-thumb"><img src="https://images.unsplash.com/photo-${t.i}?w=400&h=250&fit=crop"></div><div class="template-info"><div class="template-title">${t.n}</div><div class="template-desc">${t.d}</div></div></div>`).join('');}
+let playing=false;function togglePlay(){playing=!playing;document.getElementById('playbtn').textContent=playing?'>':'II';}
+function zoom(d){console.log('zoom',d);}
+renderShots();renderTimeline();renderWaveform();renderTemplates();
+</script>
+</body>
+</html>

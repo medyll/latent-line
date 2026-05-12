@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="color-scheme" content="light dark" />
+	<title>Latent-line — Maquette Éditeur v2.0 (Light/Dark)</title>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			/* ===== LIGHT MODE (Default) ===== */
+			--bg: oklch(1 0 0);
+			--surface: oklch(0.98 0.005 240);
+			--surface2: oklch(0.95 0.005 240);
+			--surface3: oklch(0.90 0.005 240);
+			--border: oklch(0.85 0.005 240);
+			--border2: oklch(0.75 0.005 240);
+			--text: oklch(0.15 0.01 240);
+			--text-dim: oklch(0.40 0.01 240);
+			--text-muted: oklch(0.55 0.01 240);
+			--accent: oklch(0.68 0.23 25);
+			--accent2: oklch(0.62 0.27 290);
+			--accent3: oklch(0.72 0.23 170);
+			--warning: oklch(0.75 0.2 50);
+			--success: oklch(0.72 0.23 170);
+			--info: oklch(0.65 0.2 240);
+			
+			/* Fonts */
+			--font-display: 'Bebas Neue', sans-serif;
+			--font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			--font-mono: 'DM Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+			
+			/* Spacing */
+			--radius-sm: 4px;--radius-md: 6px;--radius-lg: 8px;--radius-xl: 12px;--radius-full: 9999px;
+			--gap-xs: 4px;--gap-sm: 8px;--gap-md: 16px;--gap-lg: 24px;--gap-xl: 32px;
+			--pad-xs: 4px;--pad-sm: 8px;--pad-md: 16px;--pad-lg: 24px;
+			--border-width: 1px;
+			--transition-fast: 100ms ease;
+			--transition-normal: 150ms ease;
+			
+			/* Z-index */
+			--z-dropdown: 100;--z-sticky: 200;--z-fixed: 300;--z-modal: 400;--z-tooltip: 500;--z-toast: 600;
+		}
+
+		/* ===== DARK MODE ===== */
+		@media (prefers-color-scheme: dark) {
+			:root:not([data-theme='light']) {
+				--bg: oklch(0.22 0.01 295);
+				--surface: oklch(0.25 0.01 295);
+				--surface2: oklch(0.30 0.01 295);
+				--surface3: oklch(0.35 0.01 295);
+				--border: oklch(0.40 0.01 295);
+				--border2: oklch(0.45 0.01 295);
+				--text: oklch(0.85 0.01 295);
+				--text-dim: oklch(0.55 0.01 295);
+				--text-muted: oklch(0.35 0.01 295);
+			}
+		}
+		
+		/* Force modes */
+		[data-theme='dark'] {
+			--bg: oklch(0.22 0.01 295);
+			--surface: oklch(0.25 0.01 295);
+			--surface2: oklch(0.30 0.01 295);
+			--surface3: oklch(0.35 0.01 295);
+			--border: oklch(0.40 0.01 295);
+			--border2: oklch(0.45 0.01 295);
+			--text: oklch(0.85 0.01 295);
+			--text-dim: oklch(0.55 0.01 295);
+			--text-muted: oklch(0.35 0.01 295);
+			color-scheme: dark;
+		}
+		[data-theme='light'] {
+			--bg: oklch(1 0 0);
+			--surface: oklch(0.98 0.005 240);
+			--surface2: oklch(0.95 0.005 240);
+			--surface3: oklch(0.90 0.005 240);
+			--border: oklch(0.85 0.005 240);
+			--border2: oklch(0.75 0.005 240);
+			--text: oklch(0.15 0.01 240);
+			--text-dim: oklch(0.40 0.01 240);
+			--text-muted: oklch(0.55 0.01 240);
+			color-scheme: light;
+		}
+
+		/* Surfaces spécialisées */
+		:root {
+			--surface-hover: color-mix(in oklch, var(--text) 5%, transparent);
+			--surface-active: color-mix(in oklch, var(--text) 8%, transparent);
+		}
+		[data-theme='light'], :root:not([data-theme]) {
+			--surface-overlay: oklch(0.98 0.005 240);
+			--surface-sunken: oklch(0.95 0.005 240);
+		}
+		[data-theme='dark'] {
+			--surface-overlay: oklch(0.08 0.01 295);
+			--surface-sunken: oklch(0.055 0.01 295);
+		}
+
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			font-family: var(--font-sans);
+			background: var(--bg);
+			color: var(--text);
+			font-size: 15px;
+			line-height: 1.6;
+			min-height: 100dvh;
+			margin: 0;
+			padding: 0;
+		}
+
+		/* ===== THEME TOGGLE ===== */
+		#theme-toggle {
+			width: 40px; height: 40px;
+			border: none; background: transparent;
+			cursor: pointer; color: var(--text-muted);
+			border-radius: var(--radius-md);
+			transition: all var(--transition-fast);
+			display: flex; align-items: center; justify-content: center;
+		}
+		#theme-toggle:hover { color: var(--text); background: var(--surface2); }
+		#theme-toggle svg { width: 20px; height: 20px; stroke-width: 2; }
+
+		/* ===== HEADER ===== */
+		header {
+			position: sticky;
+			top: 0;
+			z-index: var(--z-fixed);
+			background: var(--surface);
+			backdrop-filter: blur(12px);
+			border-bottom: var(--border-width) solid var(--border);
+			padding: var(--gap-md) var(--gap-lg);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+		}
+		.nav-brand {
+			font-family: var(--font-display);
+			font-size: 20px;
+			letter-spacing: 2px;
+			color: var(--accent2);
+		}
+		.nav-title {
+			font-size: 14px;
+			color: var(--text-dim);
+		}
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-md);
+		}
+
+		/* ===== LAYOUT ===== */
+		/* FULL WIDTH - plus de container restreint */
+		.editor-shell {
+			display: grid;
+			grid-template-rows: auto 1fr;
+			height: calc(100dvh - 60px);
+			background: var(--bg);
+			width: 100%;
+		}
+		.editor-toolbar {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-xs);
+			padding: 0 var(--gap-md);
+			height: 40px;
+			border-bottom: var(--border-width) solid var(--border);
+			flex-shrink: 0;
+			background: var(--surface);
+			width: 100%;
+		}
+		.toolbar-btn {
+			font-size: 12px;
+			color: var(--text-muted);
+			background: none;
+			border: none;
+			padding: 0 var(--pad-sm);
+			border-radius: var(--radius-sm);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			display: inline-flex;
+			align-items: center;
+			gap: var(--gap-xs);
+			height: 32px;
+		}
+		.toolbar-btn:hover { background: var(--surface2); color: var(--text); }
+		.toolbar-btn svg { width: 14px; height: 14px; stroke-width: 1.5; }
+		.toolbar-divider { width: 1px; height: 20px; background: var(--border); margin: 0 var(--gap-xs); }
+		.toolbar-status {
+			margin-left: auto;
+			font-family: var(--font-mono);
+			font-size: 11px;
+			color: var(--text-muted);
+			padding: 0 var(--pad-sm);
+			background: var(--surface2);
+			border-radius: var(--radius-sm);
+		}
+
+		/* ===== PANELS (Full Width Grid) ===== */
+		.editor-panels { 
+			display: grid;
+			grid-template-columns: minmax(200px, 280px) 1fr minmax(240px, 320px);
+			flex: 1;
+			min-height: 0;
+			overflow: hidden;
+			width: 100%;
+		}
+		.panel {
+			background: var(--surface);
+			border: var(--border-width) solid var(--border);
+			overflow: auto;
+			min-height: 0;
+		}
+		.panel-left { border-right: none; }
+		.panel-main { border-left: none; border-right: none; display: flex; flex-direction: column; }
+		.panel-right { border-left: none; }
+
+		.panel-header {
+			position: sticky;
+			top: 0;
+			z-index: var(--z-sticky);
+			background: var(--surface);
+			padding: var(--gap-sm) var(--gap-md);
+			border-bottom: var(--border-width) solid var(--border);
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		.panel-title {
+			font-family: var(--font-display);
+			font-size: 14px;
+			letter-spacing: 1px;
+			color: var(--text);
+			text-transform: uppercase;
+		}
+		.panel-actions { display: flex; gap: var(--gap-xs); margin-left: auto; }
+		.panel-action-btn {
+			background: none;
+			border: none;
+			color: var(--text-muted);
+			cursor: pointer;
+			padding: var(--pad-xs);
+			border-radius: var(--radius-sm);
+			transition: all var(--transition-fast);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.panel-action-btn:hover { color: var(--text); background: var(--surface2); }
+		.panel-action-btn svg { width: 14px; height: 14px; }
+		.panel-content { flex: 1; min-height: 0; padding: var(--gap-sm); overflow: auto; }
+
+		/* ===== CASTING (Left Panel) ===== */
+		.casting-list { list-style: none; display: flex; flex-direction: column; gap: var(--gap-xs); }
+		.casting-item {
+			position: relative;
+			padding: var(--gap-sm);
+			border-radius: var(--radius-md);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			display: flex;
+			align-items: center;
+			gap: var(--gap-sm);
+		}
+		.casting-item:hover { background: var(--surface2); }
+		.casting-item.selected { 
+			background: color-mix(in oklch, var(--accent2) 10%, var(--surface));
+			border: var(--border-width) solid var(--accent2); 
+		}
+		.casting-avatar {
+			width: 36px;
+			height: 36px;
+			border-radius: var(--radius-full);
+			background: var(--surface3);
+			color: var(--accent2);
+			font-family: var(--font-display);
+			font-size: 14px;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.casting-info { flex: 1; min-width: 0; }
+		.casting-name { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+		.casting-id { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+		.casting-badge {
+			font-family: var(--font-mono);
+			font-size: 10px;
+			padding: 2px 6px;
+			border-radius: var(--radius-full);
+			background: var(--surface3);
+			color: var(--text-dim);
+			border: var(--border-width) solid var(--border);
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+		.casting-badge.used { 
+			background: color-mix(in oklch, var(--success) 15%, transparent); 
+			color: var(--success); 
+			border-color: color-mix(in oklch, var(--success) 30%, transparent); 
+		}
+		.casting-badge.orphan { 
+			background: color-mix(in oklch, var(--warning) 15%, transparent); 
+			color: var(--warning); 
+			border-color: color-mix(in oklch, var(--warning) 30%, transparent); 
+		}
+
+		/* ===== SCÉNARIMAGE (Main Panel - Full Grid) ===== */
+		.scenarimage-container { 
+			padding: var(--gap-md); 
+			min-height: 0; 
+			overflow: auto; 
+			width: 100%;
+		}
+		.scenarimage-grid { 
+			display: grid; 
+			grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
+			grid-auto-rows: min-content; 
+			gap: var(--gap-md); 
+			min-width: 100%; 
+			width: 100%;
+		}
+		
+		/* Shot Cards */
+		.shot-card {
+			background: var(--surface);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-md);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			position: relative;
+			overflow: hidden;
+		}
+		.shot-card:hover { 
+			border-color: var(--border2); 
+			transform: translateY(-2px); 
+			box-shadow: 0 4px 12px color-mix(in oklch, var(--text-muted) 20%, transparent); 
+		}
+		.shot-card.selected { 
+			border-color: var(--accent2); 
+			background: color-mix(in oklch, var(--accent2) 8%, var(--surface)); 
+			box-shadow: 0 0 0 1px var(--accent2); 
+		}
+		.shot-card.ai-generated { border-left: 3px solid var(--accent2); }
+		
+		.mood-indicator {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 2px;
+			border-radius: var(--radius-md) var(--radius-md) 0 0;
+		}
+		.mood-joyful { background: var(--accent3); }
+		.mood-melancholic { background: var(--accent2); }
+		.mood-anxious { background: var(--accent); }
+		.mood-tense { background: var(--warning); }
+		.mood-serene { background: var(--accent3); opacity: 0.7; }
+		
+		.shot-thumbnail { 
+			width: 100%; 
+			aspect-ratio: 16/9; 
+			position: relative; 
+			overflow: hidden; 
+			background: linear-gradient(135deg, var(--surface2) 0%, var(--surface3) 100%); 
+		}
+		.shot-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+		.shot-thumbnail-placeholder { 
+			width: 100%; height: 100%; 
+			display: flex; align-items: center; justify-content: center; 
+			padding: var(--pad-sm); 
+			text-align: center; 
+			font-family: var(--font-mono); 
+			font-size: 11px; 
+			color: var(--text-muted); 
+			word-break: break-word; 
+		}
+		.shot-ai-badge {
+			position: absolute;
+			top: 4px;
+			right: 4px;
+			background: var(--accent2);
+			color: white;
+			font-family: var(--font-mono);
+			font-size: 8px;
+			font-weight: 700;
+			padding: 2px 4px;
+			border-radius: 2px;
+			letter-spacing: 0.5px;
+			z-index: 10;
+		}
+		.shot-content { padding: var(--gap-sm); }
+		.shot-time { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-bottom: 2px; }
+		.shot-label { font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+		.shot-actors { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+		.actor-chip {
+			display: inline-block;
+			background: var(--surface2);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-full);
+			padding: 2px 6px;
+			font-family: var(--font-mono);
+			font-size: 10px;
+			color: var(--text-muted);
+		}
+
+		/* ===== RÉGIE (Right Panel) ===== */
+		.properties-section { margin-bottom: var(--gap-lg); padding-bottom: var(--gap-lg); border-bottom: var(--border-width) solid var(--border); }
+		.properties-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+		.properties-title {
+			font-family: var(--font-display);
+			font-size: 11px;
+			letter-spacing: 0.15em;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			margin-bottom: var(--gap-sm);
+			display: flex;
+			align-items: center;
+			gap: var(--gap-xs);
+		}
+		.properties-title svg { width: 12px; height: 12px; }
+		.properties-grid { display: grid; gap: var(--gap-sm); }
+		.property-row { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; gap: var(--gap-sm); padding: var(--pad-xs) 0; }
+		.property-label { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+		.property-value { font-size: 13px; color: var(--text); }
+		.property-control { font-size: 13px; }
+		
+		.properties-input {
+			background: var(--surface2);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-sm);
+			color: var(--text);
+			font-family: inherit;
+			font-size: 12px;
+			padding: var(--pad-xs) var(--pad-sm);
+			width: 100%;
+			transition: border-color var(--transition-fast);
+		}
+		.properties-input:hover { border-color: var(--border2); }
+		.properties-input:focus { outline: none; border-color: var(--accent2); box-shadow: 0 0 0 2px color-mix(in oklch, var(--accent2) 20%, transparent); }
+		
+		.properties-range {
+			width: 100%; height: 4px; 
+			background: var(--surface2); 
+			border-radius: 2px; 
+			cursor: pointer; 
+			-webkit-appearance: none; appearance: none;
+		}
+		.properties-range::-webkit-slider-thumb { 
+			-webkit-appearance: none; appearance: none; 
+			width: 14px; height: 14px; 
+			background: var(--accent2); 
+			border-radius: 50%; 
+			cursor: pointer; 
+			transition: transform var(--transition-fast); 
+		}
+		.properties-range::-webkit-slider-thumb:hover { transform: scale(1.2); }
+		.properties-range::-moz-range-thumb { 
+			width: 14px; height: 14px; 
+			background: var(--accent2); 
+			border: none; border-radius: 50%; 
+			cursor: pointer; 
+		}
+		
+		.properties-select {
+			background: var(--surface2);
+			border: var(--border-width) solid var(--border);
+			border-radius: var(--radius-sm);
+			color: var(--text);
+			font-family: inherit;
+			font-size: 12px;
+			padding: var(--pad-xs) var(--pad-sm);
+			cursor: pointer;
+			appearance: none;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238888a0' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 8px center;
+			padding-right: 24px;
+		}
+		.properties-select:hover { border-color: var(--border2); }
+		.properties-select:focus { outline: none; border-color: var(--accent2); box-shadow: 0 0 0 2px color-mix(in oklch, var(--accent2) 20%, transparent); }
+		
+		.generate-btn {
+			width: 100%;
+			background: linear-gradient(135deg, var(--accent2), var(--accent3));
+			color: white;
+			border: none;
+			border-radius: var(--radius-md);
+			padding: var(--gap-sm) var(--gap-md);
+			font-family: var(--font-sans);
+			font-size: 14px;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			position: relative;
+			overflow: hidden;
+		}
+		.generate-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px color-mix(in oklch, var(--accent2) 30%, transparent); }
+		.generate-btn:active { transform: translateY(0); }
+		.generate-btn::before { 
+			content: ''; position: absolute; top: 0; left: -100%; 
+			width: 100%; height: 100%; 
+			background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); 
+			transition: left 0.5s ease; 
+		}
+		.generate-btn:hover::before { left: 100%; }
+		
+		.waveform-container { height: 60px; padding: var(--gap-sm) 0; border-bottom: var(--border-width) solid var(--border); }
+		.waveform-track { width: 100%; height: 32px; position: relative; background: var(--surface2); border-radius: var(--radius-sm); overflow: hidden; }
+		.waveform-bars { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; gap: 1px; padding: 2px 0; }
+		.waveform-bar { flex: 1; max-width: 2px; background: var(--accent3); border-radius: 1px; opacity: 0.5; transition: opacity 0.2s; }
+		.waveform-bar:nth-child(odd) { opacity: 0.3; height: 60%; }
+		.waveform-bar:hover { opacity: 1; }
+
+		/* ===== SCROLLBAR ===== */
+		::-webkit-scrollbar { width: 8px; height: 8px; }
+		::-webkit-scrollbar-track { background: var(--surface2); }
+		::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+		::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+		/* ===== FOCUS & SELECTION ===== */
+		:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+		::selection { background: color-mix(in oklch, var(--accent2) 30%, transparent); color: var(--text); }
+
+		/* ===== ANIMATIONS ===== */
+		.fade-in { animation: fadeIn var(--transition-normal) ease-out; }
+		@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+		/* ===== RESPONSIVE ===== */
+		@media (max-width: 1200px) {
+			.editor-panels { grid-template-columns: minmax(180px, 240px) 1fr minmax(200px, 280px); }
+		}
+		@media (max-width: 900px) {
+			.editor-panels { 
+				grid-template-columns: 1fr; 
+				grid-template-rows: auto 1fr auto; 
+			}
+			.panel-left, .panel-right { width: 100% !important; max-height: 35vh; }
+			.scenarimage-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div style="display:flex;align-items:center;">
+			<span class="nav-brand">LATENT</span>
+			<span class="nav-title">Maquette Éditeur v2.0 — Light/Dark Theme</span>
+		</div>
+		<div class="header-right">
+			<button id="theme-toggle" title="Changer de thème">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+					<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+				</svg>
+			</button>
+		</div>
+	</header>
+	
+	<div style="width:100%;padding:0 var(--gap-lg);">
+		<section style="padding:var(--gap-xl) 0;">
+			<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+				<span style="font-family:var(--font-display);font-size:20px;letter-spacing:1px;color:var(--accent2);">01</span>
+				<h2 style="font-family:var(--font-display);font-size:clamp(24px,3vw,36px);letter-spacing:1px;color:var(--text);">ÉDITEUR</h2>
+				<span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Vue principale · Thème adaptatif</span>
+			</div>
+			<p style="color:var(--text-dim);margin-bottom:24px;max-width:720px;">Vue principale de l'éditeur avec Casting (personnages), Scénarimage (timeline), et Régie (propriétés). Interface FULL WIDTH avec thème Light/Dark.</p>
+
+			<div class="editor-shell">
+				<div class="editor-toolbar">
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Projet</button>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouveau</button>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exporter</button>
+					<span class="toolbar-divider"></span>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>Versions</button>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Projection</button>
+					<span class="toolbar-divider"></span>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Réglages AI</button>
+					<button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/><path d="M12 6v6l4 2"/></svg>Préférences</button>
+					<span class="toolbar-status">✓ Sauvegardé · 12:34</span>
+				</div>
+
+				<div class="editor-panels">
+					<aside class="panel panel-left">
+						<div class="panel-header">
+							<div style="display:flex;align-items:center;gap:8px;"><h3 class="panel-title">Casting</h3><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);">4</span></div>
+							<div class="panel-actions">
+								<button class="panel-action-btn" title="Ajouter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+								<button class="panel-action-btn" title="Rechercher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+							</div>
+						</div>
+						<div class="panel-content">
+							<ul class="casting-list">
+								<li class="casting-item selected"><div class="casting-avatar" style="background:color-mix(in oklch, var(--accent2) 20%, var(--surface));">A</div><div class="casting-info"><div class="casting-name">Aelita</div><div class="casting-id">char_001</div></div><span class="casting-badge used">5</span></li>
+								<li class="casting-item"><div class="casting-avatar" style="background:color-mix(in oklch, var(--accent3) 20%, var(--surface));">J</div><div class="casting-info"><div class="casting-name">Jeremias</div><div class="casting-id">char_002</div></div><span class="casting-badge used">3</span></li>
+								<li class="casting-item"><div class="casting-avatar" style="background:color-mix(in oklch, var(--accent) 20%, var(--surface));">S</div><div class="casting-info"><div class="casting-name">Sophie</div><div class="casting-id">char_003</div></div><span class="casting-badge orphan">○</span></li>
+								<li class="casting-item"><div class="casting-avatar" style="background:color-mix(in oklch, var(--warning) 20%, var(--surface));">M</div><div class="casting-info"><div class="casting-name">Marcus</div><div class="casting-id">char_004</div></div><span class="casting-badge used">2</span></li>
+							</ul>
+							<div style="margin-top:var(--gap-lg);padding-top:var(--gap-lg);border-top:var(--border-width) solid var(--border);"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--gap-sm);"><h4 style="font-family:var(--font-display);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);">Décors</h4><button class="panel-action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);"><div>env_sky · Ciel crépusculaire</div><div>env_forest · Forêt mystérieuse</div></div></div>
+							<div style="margin-top:var(--gap-lg);padding-top:var(--gap-lg);border-top:var(--border-width) solid var(--border);"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--gap-sm);"><h4 style="font-family:var(--font-display);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);">Bande-son</h4><button class="panel-action-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></div><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);"><div>audio_ambient · Ambience</div><div>audio_music · Soundtrack</div></div></div>
+						</div>
+					</aside>
+
+					<div class="panel panel-main">
+						<div class="panel-header">
+							<div style="display:flex;align-items:center;gap:8px;"><h3 class="panel-title">Scénarimage</h3><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);">12 shots</span></div>
+							<div class="panel-actions">
+								<button class="panel-action-btn" title="Compact">⊟</button>
+								<button class="panel-action-btn" title="Ajouter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+							</div>
+						</div>
+						<div class="panel-content" style="min-height:0;display:flex;flex-direction:column;">
+							<div class="scenarimage-container">
+								<div class="scenarimage-grid">
+									<div class="shot-card ai-generated fade-in" style="animation-delay:0ms;"><div class="mood-indicator mood-joyful"></div><div class="shot-thumbnail"><div class="shot-thumbnail-placeholder" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent3) 20%, transparent) 0%,color-mix(in oklch, var(--accent2) 20%, transparent) 100%);">Cinematic sunset</div><div class="shot-ai-badge">AI</div></div><div class="shot-content"><div class="shot-time">00:00.000</div><div class="shot-label">Sunset introduction</div><div class="shot-actors"><span class="actor-chip">Aelita</span><span class="actor-chip">Jeremias</span></div></div></div>
+									<div class="shot-card fade-in" style="animation-delay:50ms;"><div class="mood-indicator mood-melancholic"></div><div class="shot-thumbnail"><div class="shot-thumbnail-placeholder">Dialogue scene</div></div><div class="shot-content"><div class="shot-time">00:04.500</div><div class="shot-label">Whispering secrets</div><div class="shot-actors"><span class="actor-chip">Aelita</span></div></div></div>
+									<div class="shot-card selected ai-generated fade-in" style="animation-delay:100ms;"><div class="mood-indicator mood-tense"></div><div class="shot-thumbnail"><div class="shot-thumbnail-placeholder" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent) 20%, transparent) 0%,color-mix(in oklch, var(--warning) 20%, transparent) 100%);">Action sequence</div><div class="shot-ai-badge">AI</div></div><div class="shot-content"><div class="shot-time">00:08.250</div><div class="shot-label">The chase begins</div><div class="shot-actors"><span class="actor-chip">Marcus</span></div></div></div>
+									<div class="shot-card fade-in" style="animation-delay:150ms;"><div class="mood-indicator mood-serene"></div><div class="shot-thumbnail"><div class="shot-thumbnail-placeholder">Wide landscape</div></div><div class="shot-content"><div class="shot-time">00:12.000</div><div class="shot-label">Revealing the truth</div><div class="shot-actors"><span class="actor-chip">Sophie</span></div></div></div>
+									<div class="shot-card ai-generated fade-in" style="animation-delay:200ms;"><div class="mood-indicator mood-anxious"></div><div class="shot-thumbnail"><div class="shot-thumbnail-placeholder" style="background:linear-gradient(135deg,color-mix(in oklch, var(--accent2) 30%, transparent) 0%,color-mix(in oklch, var(--accent) 30%, transparent) 100%);">Climax moment</div><div class="shot-ai-badge">AI</div></div><div class="shot-content"><div class="shot-time">00:15.750</div><div class="shot-label">Final confrontation</div><div class="shot-actors"><span class="actor-chip">Aelita</span><span class="actor-chip">Marcus</span></div></div></div>
+									<div class="shot-card fade-in" style="animation-delay:250ms;"><div class="mood-indicator mood-joyful"></div><div class="shot-thumbnail"><div class="shot-thumbnail-placeholder">Resolution</div></div><div class="shot-content"><div class="shot-time">00:19.500</div><div class="shot-label">Peace restored</div></div></div>
+								</div>
+							</div>
+							<div style="margin-top:auto;padding-top:var(--gap-lg);border-top:var(--border-width) solid var(--border);"><div style="display:flex;align-items:center;gap:16px;padding:var(--gap-sm) 0;"><button style="background:none;border:none;color:var(--text-muted);cursor:pointer;padding:var(--pad-xs);font-size:14px;" title="Lecture">▶</button><button style="background:none;border:none;color:var(--text-muted);cursor:pointer;padding:var(--pad-xs);font-size:14px;" title="Stop">■</button><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);">00:08.250 / 00:24.120</span><div style="flex:1;"></div><div style="display:flex;align-items:center;gap:8px;"><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">Zoom</span><input type="range" min="1" max="8" step="0.5" value="2" style="width:120px;height:4px;background:var(--surface2);border-radius:2px;-webkit-appearance:none;appearance:none;cursor:pointer;"/><span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">2×</span></div></div><div style="display:flex;gap:0;height:40px;align-items:center;"><div style="width:3px;height:16px;background:var(--accent2);border-radius:1px;margin-left:20%;"></div><div style="flex:1;height:2px;background:var(--border);position:relative;"><div style="position:absolute;left:15%;width:12%;height:100%;background:var(--accent3);opacity:0.4;border-radius:1px;"></div><div style="position:absolute;left:28%;width:18%;height:100%;background:var(--accent2);opacity:0.5;border-radius:1px;"></div><div style="position:absolute;left:47%;width:22%;height:100%;background:var(--accent);opacity:0.4;border-radius:1px;"></div><div style="position:absolute;left:70%;width:15%;height:100%;background:var(--accent2);opacity:0.5;border-radius:1px;"></div><div style="position:absolute;left:86%;width:9%;height:100%;background:var(--accent3);opacity:0.4;border-radius:1px;"></div><div style="position:absolute;left:47%;width:2px;height:100%;background:var(--accent2);border-radius:1px;"></div></div><div style="width:3px;height:16px;background:var(--accent2);border-radius:1px;"></div></div></div>
+						</div>
+
+					<aside class="panel panel-right">
+						<div class="panel-header">
+							<div style="display:flex;align-items:center;gap:8px;"><h3 class="panel-title">Régie</h3></div>
+							<div class="panel-actions"><button class="panel-action-btn" title="Fermer">×</button></div>
+						</div>
+						<div class="panel-content">
+							<div style="margin-bottom:var(--gap-lg);"><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);margin-bottom:var(--gap-xs);">Shot 003 · 00:08.250</div><h4 style="font-size:14px;color:var(--text);margin-bottom:var(--gap-sm);">The chase begins</h4><button class="generate-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;vertical-align:middle;margin-right:6px;"><polygon points="23 7 16 12 23 17 23 7"/></svg>Tournage</button></div>
+							<div class="properties-section"><h4 class="properties-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="8" r="3"/><path d="M12 16v4"/><path d="M12 2v4"/></svg>Personnage</h4><div class="properties-grid"><div class="property-row"><label class="property-label">Id</label><div class="property-value">Marcus</div></div><div class="property-row"><label class="property-label">Tenue</label><select class="properties-select"><option>default</option><option>action</option><option>damaged</option></select></div><div class="property-row"><label class="property-label">Position</label><div class="property-value" style="font-family:var(--font-mono);">X: 0.5, Y: 0.8</div></div></div></div>
+							<div class="properties-section"><h4 class="properties-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Caméra</h4><div class="properties-grid"><div class="property-row"><label class="property-label">Zoom</label><input type="range" min="0.1" max="5" step="0.1" value="1.5" class="properties-range"><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);min-width:30px;text-align:right;">1.5</span></div><div class="property-row"><label class="property-label">Pan X</label><input type="number" step="0.1" value="0.2" class="properties-input"></div><div class="property-row"><label class="property-label">Pan Y</label><input type="number" step="0.1" value="-0.1" class="properties-input"></div><div class="property-row"><label class="property-label">Tilt</label><input type="range" min="-90" max="90" step="1" value="5" class="properties-range"><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);min-width:30px;text-align:right;">5°</span></div></div></div>
+							<div class="properties-section"><h4 class="properties-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>Éclairage</h4><div class="properties-grid"><div class="property-row"><label class="property-label">Type</label><select class="properties-select"><option>dusk</option><option>daylight</option><option selected>studio</option><option>tungsten</option><option>ambient</option></select></div><div class="property-row"><label class="property-label">Intensité</label><input type="range" min="0" max="1" step="0.01" value="0.85" class="properties-range"><span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);min-width:30px;text-align:right;">0.85</span></div></div></div>
+							<div class="waveform-container"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--gap-xs);"><h4 class="properties-title" style="margin:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9a2 2 0 0 0-2 2v3.286a2 2 0 0 0 2 2h11a1 1 0 0 0 1-1v-11a1 1 0 0 0-1-1h-2.586a1 1 0 0 1-.707-.293l-5.414-5.414z"/></svg>Bande-son</h4><div style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">audio_ambient</div></div><div class="waveform-track"><div class="waveform-bars" style="gap:1.5px;"><div class="waveform-bar" style="height:40%;opacity:0.4;"></div><div class="waveform-bar" style="height:80%;opacity:0.6;"></div><div class="waveform-bar" style="height:60%;opacity:0.5;"></div><div class="waveform-bar" style="height:90%;opacity:0.7;"></div><div class="waveform-bar" style="height:50%;opacity:0.4;"></div><div class="waveform-bar" style="height:85%;opacity:0.6;"></div><div class="waveform-bar" style="height:70%;opacity:0.5;"></div><div class="waveform-bar" style="height:95%;opacity:0.7;"></div><div class="waveform-bar" style="height:65%;opacity:0.5;"></div><div class="waveform-bar" style="height:75%;opacity:0.6;"></div><div class="waveform-bar" style="height:45%;opacity:0.4;"></div><div class="waveform-bar" style="height:80%;opacity:0.6;"></div><div class="waveform-bar" style="height:55%;opacity:0.4;"></div><div class="waveform-bar" style="height:70%;opacity:0.5;"></div><div class="waveform-bar" style="height:90%;opacity:0.7;"></div><div class="waveform-bar" style="height:60%;opacity:0.5;"></div><div class="waveform-bar" style="height:85%;opacity:0.6;"></div><div class="waveform-bar" style="height:50%;opacity:0.4;"></div><div class="waveform-bar" style="height:75%;opacity:0.6;"></div><div class="waveform-bar" style="height:40%;opacity:0.4;"></div></div><div style="position:absolute;left:35%;top:50%;transform:translate(-50%,-50%);width:8px;height:8px;background:var(--accent3);border-radius:50%;"></div></div></div>
+							<div class="properties-section"><h4 class="properties-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Notes</h4><textarea placeholder="Description du shot, intentions du réalisateur..." style="width:100%;min-height:60px;background:var(--surface2);border:var(--border-width) solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-sans);font-size:13px;padding:var(--pad-sm);resize:vertical;">Marcus entre en scène, caméra en mouvement. Éclairage dramatique avec ombres longues.</textarea></div>
+						</div>
+					</aside>
+				</div>
+			</div>
+
+			<div style="margin-top:var(--gap-xl);padding:var(--gap-lg);background:var(--surface2);border-radius:var(--radius-lg);border:var(--border-width) solid var(--border);">
+				<h4 style="font-family:var(--font-display);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--gap-sm);">📌 LÉGENDE</h4>
+				<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--gap-md);">
+					<div style="display:flex;align-items:center;gap:8px;"><div style="width:12px;height:12px;border-radius:2px;background:var(--accent2);"></div><span style="font-size:13px;color:var(--text);">Généré par AI</span></div>
+					<div style="display:flex;align-items:center;gap:8px;"><div style="width:12px;height:12px;border-radius:2px;background:var(--accent3);"></div><span style="font-size:13px;color:var(--text);">Mood Joyful</span></div>
+					<div style="display:flex;align-items:center;gap:8px;"><div style="width:12px;height:12px;border-radius:2px;background:var(--accent);"></div><span style="font-size:13px;color:var(--text);">Mood Anxious</span></div>
+					<div style="display:flex;align-items:center;gap:8px;"><div style="width:12px;height:12px;border-radius:2px;background:var(--surface2);"></div><span style="font-size:13px;color:var(--text);">Non généré</span></div>
+					<div style="display:flex;align-items:center;gap:8px;"><div style="width:12px;height:12px;border-radius:2px;background:var(--bg);border:1px solid var(--border);"></div><span style="font-size:13px;color:var(--text);">Full Width Layout</span></div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<footer style="padding:var(--gap-xl);text-align:center;border-top:var(--border-width) solid var(--border);color:var(--text-muted);font-size:12px;width:100%;">
+		<div style="margin-bottom:var(--gap-sm);">Latent-line — Maquette Éditeur v2.0 · Style CapCut AI Studio · Avril 2026</div>
+		<div><a href="../brand-spec.md" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Brand Spec v2.0</a>·<a href="ux-audit-2026-04.md" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Audit UX</a>·<a href="maquettes-hf-onboarding.html" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Onboarding</a>·<a href="maquettes-hf-screening.html" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Projection</a></div>
+	</footer>
+
+	<script>
+		// ===== THEME TOGGLE =====
+		const THEME_KEY = 'latent-line-theme';
+		
+		function getPreferredTheme() {
+			const stored = localStorage.getItem(THEME_KEY);
+			if (stored) return stored;
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		
+		function applyTheme(theme) {
+			const html = document.documentElement;
+			
+			if (theme === 'system') {
+				html.removeAttribute('data-theme');
+			} else {
+				html.setAttribute('data-theme', theme);
+			}
+			
+			// Update meta color-scheme
+			const meta = document.querySelector('meta[name="color-scheme"]');
+			if (meta) {
+				meta.content = theme === 'dark' ? 'dark' : 'light';
+			}
+			
+			// Update toggle button icon
+			const toggle = document.getElementById('theme-toggle');
+			if (toggle) {
+				const svg = toggle.querySelector('svg');
+				if (svg) {
+					svg.innerHTML = theme === 'dark' 
+						? '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" fill="none"/>'
+						: '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" fill="none"/>';
+				}
+			}
+		}
+		
+		function toggleTheme() {
+			const html = document.documentElement;
+			const current = html.getAttribute('data-theme') || 
+				(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+			const next = current === 'dark' ? 'light' : 'dark';
+			localStorage.setItem(THEME_KEY, next);
+			applyTheme(next);
+		}
+		
+		// Initialiser
+		applyTheme(getPreferredTheme());
+		
+		// Écouter les changements système
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			if (!localStorage.getItem(THEME_KEY) || localStorage.getItem(THEME_KEY) === 'system') {
+				applyTheme(e.matches ? 'dark' : 'light');
+			}
+		});
+		
+		// Attacher onclick au bouton
+		document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+	</script>
+</body>
+</html>

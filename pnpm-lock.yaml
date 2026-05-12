@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@medyll/css-base':
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: ^0.6.7
+        version: 0.6.7
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -489,8 +489,8 @@ packages:
     peerDependencies:
       svelte: ^5
 
-  '@medyll/css-base@0.6.0':
-    resolution: {integrity: sha512-yqMZPI+k38ZRhiPWb/5Mm0dDAJRSBKMS2nCU8cxmTHld8yBayyf1q2JyKY5fVgdsJZt6K4poojEfa3EAUK4/Mw==}
+  '@medyll/css-base@0.6.7':
+    resolution: {integrity: sha512-Ue+rqr9SE1kf7OwhhyU3NAJgzrq+GFltrZ2AGZtxhnEKlrBj9V7xhO8ncTj5ppQm1cauDZtscPFBeKmsam25nA==}
 
   '@modelcontextprotocol/sdk@1.28.0':
     resolution: {integrity: sha512-gmloF+i+flI8ouQK7MWW4mOwuMh4RePBuPFAEPC6+pdqyWOUMDOixb6qZ69owLJpz6XmyllCouc4t8YWO+E2Nw==}
@@ -3479,7 +3479,7 @@ snapshots:
     dependencies:
       svelte: 5.55.0
 
-  '@medyll/css-base@0.6.0': {}
+  '@medyll/css-base@0.6.7': {}
 
   '@modelcontextprotocol/sdk@1.28.0(zod@3.25.76)':
     dependencies:

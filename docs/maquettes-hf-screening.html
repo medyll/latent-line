@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="color-scheme" content="light dark" />
+	<title>Latent-line — Maquette Projection v2.0 (Light/Dark)</title>
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			/* ===== LIGHT MODE (Default) ===== */
+			--bg: oklch(1 0 0);
+			--surface: oklch(0.98 0.005 240);
+			--surface2: oklch(0.95 0.005 240);
+			--surface3: oklch(0.90 0.005 240);
+			--border: oklch(0.85 0.005 240);
+			--border2: oklch(0.75 0.005 240);
+			--text: oklch(0.15 0.01 240);
+			--text-dim: oklch(0.40 0.01 240);
+			--text-muted: oklch(0.55 0.01 240);
+			--accent: oklch(0.68 0.23 25);
+			--accent2: oklch(0.62 0.27 290);
+			--accent3: oklch(0.72 0.23 170);
+			--warning: oklch(0.75 0.2 50);
+			--success: oklch(0.72 0.23 170);
+			--info: oklch(0.65 0.2 240);
+			
+			/* Fonts */
+			--font-display: 'Bebas Neue', sans-serif;
+			--font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			--font-mono: 'DM Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+			
+			/* Spacing */
+			--radius-sm: 4px;--radius-md: 6px;--radius-lg: 8px;--radius-xl: 12px;--radius-full: 9999px;
+			--gap-xs: 4px;--gap-sm: 8px;--gap-md: 16px;--gap-lg: 24px;--gap-xl: 32px;
+			--pad-xs: 4px;--pad-sm: 8px;--pad-md: 16px;--pad-lg: 24px;
+			--border-width: 1px;
+			--transition-fast: 100ms ease;
+			--transition-normal: 150ms ease;
+			
+			/* Z-index */
+			--z-dropdown: 100;--z-sticky: 200;--z-fixed: 300;--z-modal: 400;--z-tooltip: 500;--z-toast: 600;
+		}
+
+		/* ===== DARK MODE ===== */
+		@media (prefers-color-scheme: dark) {
+			:root:not([data-theme='light']) {
+				--bg: oklch(0.22 0.01 295);
+				--surface: oklch(0.25 0.01 295);
+				--surface2: oklch(0.30 0.01 295);
+				--surface3: oklch(0.35 0.01 295);
+				--border: oklch(0.40 0.01 295);
+				--border2: oklch(0.45 0.01 295);
+				--text: oklch(0.85 0.01 295);
+				--text-dim: oklch(0.55 0.01 295);
+				--text-muted: oklch(0.35 0.01 295);
+			}
+		}
+		
+		/* Force modes */
+		[data-theme='dark'] {
+			--bg: oklch(0.22 0.01 295);
+			--surface: oklch(0.25 0.01 295);
+			--surface2: oklch(0.30 0.01 295);
+			--surface3: oklch(0.35 0.01 295);
+			--border: oklch(0.40 0.01 295);
+			--border2: oklch(0.45 0.01 295);
+			--text: oklch(0.85 0.01 295);
+			--text-dim: oklch(0.55 0.01 295);
+			--text-muted: oklch(0.35 0.01 295);
+			color-scheme: dark;
+		}
+		[data-theme='light'] {
+			--bg: oklch(1 0 0);
+			--surface: oklch(0.98 0.005 240);
+			--surface2: oklch(0.95 0.005 240);
+			--surface3: oklch(0.90 0.005 240);
+			--border: oklch(0.85 0.005 240);
+			--border2: oklch(0.75 0.005 240);
+			--text: oklch(0.15 0.01 240);
+			--text-dim: oklch(0.40 0.01 240);
+			--text-muted: oklch(0.55 0.01 240);
+			color-scheme: light;
+		}
+
+		/* Surfaces spécialisées */
+		:root {
+			--surface-hover: color-mix(in oklch, var(--text) 5%, transparent);
+			--surface-active: color-mix(in oklch, var(--text) 8%, transparent);
+		}
+		[data-theme='light'], :root:not([data-theme]) {
+			--surface-overlay: oklch(0.98 0.005 240);
+			--surface-sunken: oklch(0.95 0.005 240);
+		}
+		[data-theme='dark'] {
+			--surface-overlay: oklch(0.08 0.01 295);
+			--surface-sunken: oklch(0.055 0.01 295);
+		}
+
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		body {
+			font-family: var(--font-sans);
+			background: var(--bg);
+			color: var(--text);
+			font-size: 15px;
+			line-height: 1.6;
+			min-height: 100dvh;
+			margin: 0;
+			padding: 0;
+		}
+
+		/* ===== THEME TOGGLE ===== */
+		#theme-toggle {
+			width: 40px; height: 40px;
+			border: none; background: transparent;
+			cursor: pointer; color: var(--text-muted);
+			border-radius: var(--radius-md);
+			transition: all var(--transition-fast);
+			display: flex; align-items: center; justify-content: center;
+		}
+		#theme-toggle:hover { color: var(--text); background: var(--surface2); }
+		#theme-toggle svg { width: 20px; height: 20px; stroke-width: 2; }
+
+		/* ===== HEADER ===== */
+		header {
+			position: sticky;
+			top: 0;
+			z-index: var(--z-fixed);
+			background: var(--surface);
+			backdrop-filter: blur(12px);
+			border-bottom: var(--border-width) solid var(--border);
+			padding: var(--gap-md) var(--gap-lg);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+		}
+		.nav-brand {
+			font-family: var(--font-display);
+			font-size: 20px;
+			letter-spacing: 2px;
+			color: var(--accent2);
+		}
+		.nav-title {
+			font-size: 14px;
+			color: var(--text-dim);
+		}
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-md);
+		}
+
+		/* ===== FULL WIDTH LAYOUT ===== */
+		.section { padding: var(--gap-xl) 0; width: 100%; }
+
+		/* ===== SCREENING ===== */
+		.screening-shell {
+			background: var(--bg);
+			min-height: calc(100dvh - 60px);
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+		}
+		.screening-header {
+			position: sticky;
+			top: 0;
+			z-index: var(--z-fixed);
+			background: var(--surface);
+			backdrop-filter: blur(12px);
+			border-bottom: var(--border-width) solid var(--border);
+			padding: var(--gap-md) var(--gap-lg);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+		}
+		.screening-info { display: flex; align-items: baseline; gap: var(--gap-sm); }
+		.screening-title {
+			font-family: var(--font-display);
+			font-size: 18px;
+			letter-spacing: 2px;
+			color: var(--accent2);
+		}
+		.screening-subtitle {
+			font-size: 12px;
+			color: var(--text-muted);
+		}
+		.screening-header-actions { display: flex; align-items: center; gap: var(--gap-md); }
+		.screening-btn {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			background: var(--surface);
+			border: var(--border-width) solid var(--border);
+			color: var(--text);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.screening-btn:hover {
+			background: var(--surface2);
+			border-color: var(--border2);
+			transform: scale(1.1);
+		}
+		.screening-btn svg { width: 18px; height: 18px; stroke-width: 2; }
+
+		.screening-content {
+			flex: 1;
+			padding: var(--gap-xl);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			min-height: 0;
+			width: 100%;
+		}
+		.screening-frame {
+			width: 100%;
+			max-width: 1200px;
+			aspect-ratio: 16/9;
+			background: var(--surface2);
+			border-radius: var(--radius-lg);
+			position: relative;
+			overflow: hidden;
+			box-shadow: 0 20px 60px color-mix(in oklch, var(--text-muted) 30%, transparent);
+		}
+		.screening-frame img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		
+		/* AI Watermark */
+		.ai-watermark {
+			position: absolute;
+			bottom: 16px;
+			right: 16px;
+			background: rgba(0,0,0,0.8);
+			padding: 8px 12px;
+			border-radius: 6px;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			opacity: 0.9;
+		}
+		.ai-dot {
+			width: 8px;
+			height: 8px;
+			background: var(--accent2);
+			border-radius: 50%;
+		}
+		.ai-watermark-text {
+			font-family: var(--font-mono);
+			font-size: 10px;
+			color: white;
+			letter-spacing: 0.5px;
+		}
+		
+		/* Timecode Badge */
+		.timecode-badge {
+			position: absolute;
+			bottom: 16px;
+			left: 16px;
+			background: rgba(0,0,0,0.8);
+			padding: 8px 12px;
+			border-radius: 6px;
+		}
+		.timecode {
+			font-family: var(--font-mono);
+			font-size: 14px;
+			color: white;
+			letter-spacing: 1px;
+		}
+
+		/* Controls */
+		.screening-controls {
+			padding: var(--gap-lg);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: var(--gap-lg);
+			flex-wrap: wrap;
+			width: 100%;
+		}
+		.control-btn {
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			background: var(--surface);
+			border: var(--border-width) solid var(--border);
+			color: var(--text);
+			cursor: pointer;
+			transition: all var(--transition-fast);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.control-btn:hover {
+			background: var(--surface2);
+			border-color: var(--border2);
+			transform: scale(1.1);
+		}
+		.control-btn.play {
+			background: var(--accent2);
+			border-color: var(--accent2);
+			color: white;
+		}
+		.control-btn svg { width: 20px; height: 20px; stroke-width: 2; }
+		.progress-text {
+			font-family: var(--font-mono);
+			font-size: 12px;
+			color: var(--text-muted);
+		}
+
+		/* Mini Timeline */
+		.timeline-mini {
+			padding: 0 var(--gap-xl) var(--gap-lg);
+			width: 100%;
+		}
+		.timeline-track {
+			display: flex;
+			gap: 0;
+			height: 32px;
+			align-items: center;
+			justify-content: center;
+		}
+		.timeline-bar {
+			flex: 1;
+			height: 2px;
+			background: var(--border);
+			position: relative;
+			max-width: 800px;
+		}
+		.timeline-segment {
+			position: absolute;
+			height: 100%;
+			border-radius: 1px;
+		}
+		.timeline-position {
+			position: absolute;
+			height: 100%;
+			width: 2px;
+			background: var(--accent2);
+			border-radius: 1px;
+		}
+		.timeline-end {
+			width: 3px;
+			height: 16px;
+			background: var(--accent2);
+			border-radius: 1px;
+		}
+
+		/* ===== LEGEND ===== */
+		.legend {
+			margin-top: var(--gap-xl);
+			padding: var(--gap-lg);
+			background: var(--surface2);
+			border-radius: var(--radius-lg);
+			border: var(--border-width) solid var(--border);
+			width: 100%;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		.legend-title {
+			font-family: var(--font-display);
+			font-size: 12px;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			color: var(--text-muted);
+			margin-bottom: var(--gap-sm);
+		}
+		.legend-list {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: var(--gap-md);
+		}
+		.legend-item {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 13px;
+			color: var(--text);
+		}
+		.legend-color {
+			width: 12px;
+			height: 12px;
+			border-radius: 2px;
+		}
+
+		/* ===== SCROLLBAR ===== */
+		::-webkit-scrollbar { width: 8px; height: 8px; }
+		::-webkit-scrollbar-track { background: var(--surface2); }
+		::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+		::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+		/* ===== FOCUS & SELECTION ===== */
+		:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+		::selection { background: color-mix(in oklch, var(--accent2) 30%, transparent); color: var(--text); }
+
+		/* ===== ANIMATIONS ===== */
+		.fade-in { animation: fadeIn var(--transition-normal) ease-out; }
+		@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+	</style>
+</head>
+<body>
+	<header>
+		<div style="display:flex;align-items:center;">
+			<span class="nav-brand">LATENT</span>
+			<span class="nav-title">Maquette Projection v2.0 — Light/Dark Theme</span>
+		</div>
+		<div class="header-right">
+			<button id="theme-toggle" title="Changer de thème">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+					<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+				</svg>
+			</button>
+		</div>
+	</header>
+	
+	<div style="width:100%;">
+		<section class="section">
+			<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;max-width:1200px;margin-left:auto;margin-right:auto;">
+				<span style="font-family:var(--font-display);font-size:20px;letter-spacing:1px;color:var(--accent3);">03</span>
+				<h2 style="font-family:var(--font-display);font-size:clamp(24px,3vw,36px);letter-spacing:1px;color:var(--text);">PROJECTION</h2>
+				<span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);">Vue plein écran</span>
+			</div>
+			<p style="color:var(--text-dim);margin-bottom:24px;max-width:720px;max-width:1200px;margin-left:auto;margin-right:auto;">Mode projection pour visualiser le résultat final. Interface minimaliste avec contrôles de lecture et timeline visuelle. FULL WIDTH adaptatif.</p>
+
+			<div class="screening-shell">
+				<div class="screening-header">
+					<div class="screening-info">
+						<div class="screening-title">LATENT</div>
+						<div class="screening-subtitle">The chase begins · Projet: Goliath Spring</div>
+					</div>
+					<div class="screening-header-actions">
+						<button class="screening-btn" title="Fermer">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+						</button>
+						<button class="screening-btn" title="Plein écran">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/><line x1="12" y1="16" x2="12.01" y2="16"/><line x1="16" y1="12" x2="16" y2="12.01"/></svg>
+						</button>
+					</div>
+				</div>
+
+				<div class="screening-content">
+					<div class="screening-frame fade-in">
+						<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 675'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%231a1a28'/%3E%3Cstop offset='50%25' stop-color='%2325253a'/%3E%3Cstop offset='100%25' stop-color='%231a1a28'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='675' fill='url(%23g)'/%3E%3Ccircle cx='600' cy='337' r='200' fill='%237c3aed' opacity='0.15'/%3E%3Crect x='400' y='200' width='400' height='275' rx='20' fill='%23000' opacity='0.3'/%3E%3Ccircle cx='500' cy='250' r='15' fill='%2300d4aa' opacity='0.8'/%3E%3Ccircle cx='700' cy='250' r='15' fill='%23ff3d5a' opacity='0.8'/%3E%3Ctext x='600' y='350' font-family='Bebas Neue' font-size='48' fill='%23e8e8f0' text-anchor='middle'%3ETHE CHASE%3C/text%3E%3Ctext x='600' y='390' font-family='DM Sans' font-size='24' fill='%238888a0' text-anchor='middle'%3EBEGINS%3C/text%3E%3C/svg%3E" alt="Frame de preview" />
+						<div class="ai-watermark">
+							<div class="ai-dot"></div>
+							<span class="ai-watermark-text">AI GENERATED</span>
+						</div>
+						<div class="timecode-badge">
+							<span class="timecode">00:08.250</span>
+						</div>
+					</div>
+
+					<div class="screening-controls">
+						<button class="control-btn" title="Précédent">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="19 20 12 14 5 20"/><polyline points="19 4 12 10 5 4"/></svg>
+						</button>
+						<button class="control-btn play" title="Lecture/Pause">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+						</button>
+						<button class="control-btn" title="Suivant">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 20 12 14 19 20"/><polyline points="5 4 12 10 19 4"/></svg>
+						</button>
+						<span class="progress-text">00:08.250 / 00:24.120</span>
+						<button class="control-btn" title="Volume">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+						</button>
+						<button class="control-btn" title="Paramètres">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+						</button>
+					</div>
+
+					<div class="timeline-mini">
+						<div class="timeline-track">
+							<div class="timeline-end" style="background:var(--accent2);"></div>
+							<div class="timeline-bar">
+								<div class="timeline-segment" style="left:15%;width:12%;background:var(--accent3);opacity:0.4;"></div>
+								<div class="timeline-segment" style="left:28%;width:18%;background:var(--accent2);opacity:0.5;"></div>
+								<div class="timeline-segment" style="left:47%;width:22%;background:var(--accent);opacity:0.4;"></div>
+								<div class="timeline-segment" style="left:70%;width:15%;background:var(--accent2);opacity:0.5;"></div>
+								<div class="timeline-segment" style="left:86%;width:9%;background:var(--accent3);opacity:0.4;"></div>
+								<div class="timeline-position" style="left:47%;"></div>
+							</div>
+							<div class="timeline-end" style="background:var(--accent2);"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="legend">
+				<h4 class="legend-title">📌 ÉLÉMENTS CLÉS</h4>
+				<div class="legend-list">
+					<div class="legend-item"><div class="legend-color" style="background:var(--accent2);"></div><span>Mode plein écran disponible</span></div>
+					<div class="legend-item"><div class="legend-color" style="background:var(--accent3);"></div><span>Indicateur AI generated visible</span></div>
+					<div class="legend-item"><div class="legend-color" style="background:var(--accent);"></div><span>Timecode précis en bas à gauche</span></div>
+					<div class="legend-item"><div class="legend-color" style="background:var(--warning);"></div><span>Timeline miniature pour navigation</span></div>
+					<div class="legend-item"><div class="legend-color" style="background:var(--bg);border:1px solid var(--border);"></div><span>Full Width Layout adaptatif</span></div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<footer style="padding:var(--gap-xl);text-align:center;border-top:var(--border-width) solid var(--border);color:var(--text-muted);font-size:12px;width:100%;">
+		<div style="margin-bottom:var(--gap-sm);">Latent-line — Maquette Projection v2.0 · Style CapCut AI Studio · Avril 2026</div>
+		<div><a href="../brand-spec.md" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Brand Spec v2.0</a>·<a href="ux-audit-2026-04.md" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Audit UX</a>·<a href="maquettes-hf-editor.html" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Maquette Éditeur</a>·<a href="maquettes-hf-onboarding.html" style="color:var(--text-muted);text-decoration:none;margin:0 var(--gap-sm);">Maquette Onboarding</a></div>
+	</footer>
+
+	<script>
+		// ===== THEME TOGGLE =====
+		const THEME_KEY = 'latent-line-theme';
+		
+		function getPreferredTheme() {
+			const stored = localStorage.getItem(THEME_KEY);
+			if (stored) return stored;
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+		
+		function applyTheme(theme) {
+			const html = document.documentElement;
+			
+			if (theme === 'system') {
+				html.removeAttribute('data-theme');
+			} else {
+				html.setAttribute('data-theme', theme);
+			}
+			
+			const meta = document.querySelector('meta[name="color-scheme"]');
+			if (meta) {
+				meta.content = theme === 'dark' ? 'dark' : 'light';
+			}
+			
+			const toggle = document.getElementById('theme-toggle');
+			if (toggle) {
+				const svg = toggle.querySelector('svg');
+				if (svg) {
+					svg.innerHTML = theme === 'dark' 
+						? '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" fill="none"/>'
+						: '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" fill="none"/>';
+				}
+			}
+		}
+		
+		function toggleTheme() {
+			const html = document.documentElement;
+			const current = html.getAttribute('data-theme') || 
+				(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+			const next = current === 'dark' ? 'light' : 'dark';
+			localStorage.setItem(THEME_KEY, next);
+			applyTheme(next);
+		}
+		
+		applyTheme(getPreferredTheme());
+		
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			if (!localStorage.getItem(THEME_KEY) || localStorage.getItem(THEME_KEY) === 'system') {
+				applyTheme(e.matches ? 'dark' : 'light');
+			}
+		});
+		
+		document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+	</script>
+</body>
+</html>

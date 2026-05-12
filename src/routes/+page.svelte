@@ -234,48 +234,60 @@
 		background: var(--color-surface);
 		color: var(--color-text);
 	}
+
 	.app-toolbar {
 		display: flex;
 		align-items: center;
-		gap: 0.25rem;
-		padding: 0 0.5rem;
-		height: 24px;
+		gap: var(--gap-xs);
+		padding: 0 var(--pad-sm);
+		height: var(--status-bar-height);
 		border-bottom: var(--border-width) solid var(--color-border);
 		flex-shrink: 0;
 	}
+
 	.toolbar-btn {
 		background: none;
 		border: none;
 		cursor: pointer;
 		font-size: var(--text-xs);
 		color: var(--color-text-muted);
-		padding: 0 0.25rem;
+		padding: 0 var(--pad-xs);
 		border-radius: var(--radius-sm);
+
+		&:hover {
+			background: var(--color-surface-hover);
+			color: var(--color-text);
+		}
 	}
-	.toolbar-btn:hover {
-		background: var(--color-surface-2);
-		color: var(--color-text);
+
+	.toolbar-btn--screening {
+		text-decoration: none;
 	}
+
 	.app-panels {
 		display: flex;
 		flex: 1;
 		min-height: 0;
 		overflow: hidden;
 	}
+
 	.panel {
 		overflow: auto;
 		border: var(--border-width) solid var(--color-border);
 	}
-	/* resizable action sets explicit width via JS; these are fallback defaults */
+
+	/* JS resizable sets explicit width; these are fallback defaults */
 	.panel-left {
 		width: 220px;
 		min-width: 160px;
 		border-right: none;
 	}
+
 	.panel-main {
 		flex: 1;
 		min-width: 0;
 	}
+
 	.panel-right {
 		width: 280px;
 		min-width: 160px;
@@ -286,33 +298,20 @@
 		overflow: hidden;
 	}
 
-	/* ── Tablet (≤1024px) — 2 columns, right panel slides ── */
-	@media (max-width: 1024px) {
-		.panel-left {
-			width: 200px;
-			min-width: 160px;
-		}
-		.panel-right {
-			width: 240px;
-			min-width: 160px;
-		}
+	@media (width <= 1024px) {
+		.panel-left { width: 200px; }
+		.panel-right { width: 240px; }
 	}
 
-	/* ── Mobile (≤768px) — 1 column, stacked tabs ── */
-	@media (max-width: 768px) {
-		.app-panels {
-			flex-direction: column;
-		}
+	@media (width <= 768px) {
+		.app-panels { flex-direction: column; }
 		.panel-left {
 			width: 100%;
 			height: auto;
 			max-height: 35vh;
 			border-right: var(--border-width) solid var(--color-border);
 		}
-		.panel-main {
-			min-height: 0;
-			flex: 1;
-		}
+		.panel-main { min-height: 0; flex: 1; }
 		.panel-right {
 			width: 100%;
 			height: auto;
@@ -321,57 +320,58 @@
 		}
 	}
 
-	/* ── Small mobile (≤480px) ── */
-	@media (max-width: 480px) {
-		.panel-left {
-			max-height: 28vh;
-		}
-		.panel-right {
-			max-height: 28vh;
-		}
+	@media (width <= 480px) {
+		.panel-left  { max-height: 28vh; }
+		.panel-right { max-height: 28vh; }
 	}
+
 	.right-tabs {
 		display: flex;
 		border-bottom: var(--border-width) solid var(--color-border);
 		flex-shrink: 0;
 	}
+
 	.tab-btn {
 		flex: 1;
 		background: none;
 		border: none;
-		border-bottom: 2px solid transparent;
+		border-bottom: var(--border-width) solid transparent;
 		cursor: pointer;
 		font-size: var(--text-xs);
 		color: var(--color-text-muted);
-		padding: 0.25rem 0;
+		padding: var(--pad-xs) 0;
+
+		&.active {
+			color: var(--color-text);
+			border-bottom-color: var(--color-primary);
+		}
 	}
-	.tab-btn.active {
-		color: var(--color-text);
-		border-bottom-color: var(--color-accent, #7c3aed);
-	}
+
 	.tab-content {
 		flex: 1;
 		min-height: 0;
 		overflow: auto;
 	}
+
 	.inspector-toggle {
 		position: fixed;
-		bottom: 0.75rem;
-		right: 0.75rem;
-		z-index: 90;
-		width: 2rem;
-		height: 2rem;
+		bottom: var(--gutter-sm);
+		right: var(--gutter-sm);
+		z-index: var(--z-dropdown);
+		width: var(--icon-size-md);
+		height: var(--icon-size-md);
 		border-radius: var(--radius-full);
-		background: var(--color-surface-3);
+		background: var(--color-surface-raised);
 		border: var(--border-width) solid var(--color-border);
-		font-size: 0.9rem;
+		font-size: var(--text-sm);
 		cursor: pointer;
 		box-shadow: var(--shadow-md);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-	}
-	.inspector-toggle:hover {
-		background: var(--color-surface-2);
+
+		&:hover {
+			background: var(--color-surface-hover);
+		}
 	}
 </style>

@@ -6,7 +6,7 @@ import type { Preferences } from './preferences.svelte';
 const PREFS_KEY = 'latent-line:prefs';
 
 const DEFAULTS: Preferences = {
-	theme: 'light',
+	theme: 'system',
 	defaultZoom: 1,
 	sidebarWidth: 20,
 	language: 'en'
@@ -57,7 +57,7 @@ describe('preferences store logic', () => {
 	it('reset returns to defaults', () => {
 		let prefs = { ...DEFAULTS, theme: 'dark', language: 'fr' };
 		prefs = { ...DEFAULTS };
-		expect(prefs.theme).toBe('light');
+		expect(prefs.theme).toBe('system');
 		expect(prefs.language).toBe('en');
 	});
 
@@ -65,7 +65,7 @@ describe('preferences store logic', () => {
 		storage[PREFS_KEY] = JSON.stringify({ language: 'fr' });
 		const prefs = loadPrefs(storage);
 		expect(prefs.language).toBe('fr');
-		expect(prefs.theme).toBe('light'); // default preserved
+		expect(prefs.theme).toBe('system'); // default preserved
 	});
 
 	it('handles corrupted JSON gracefully', () => {

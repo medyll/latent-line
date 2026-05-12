@@ -27,10 +27,11 @@
 		<div class="panel-body">
 			<label class="field">
 				<span class="label">Thème</span>
-				<select bind:value={prefs.theme}>
-					<option value="light">Clair</option>
-					<option value="dark">Sombre</option>
-				</select>
+			<select bind:value={prefs.theme}>
+				<option value="light">Clair</option>
+				<option value="dark">Sombre</option>
+				<option value="system">Système</option>
+			</select>
 			</label>
 
 			<label class="field">
