@@ -149,14 +149,14 @@
 	}
 
 	const FORMATS: { id: Format; label: string }[] = [
-		{ id: 'pdf', label: '📄 PDF' },
-		{ id: 'csv', label: '📊 CSV' },
-		{ id: 'prompts-txt', label: '📝 Prompts TXT' },
-		{ id: 'prompts-json', label: '🤖 Prompts JSON' },
-		{ id: 'deforum', label: '🎞 Deforum' },
-		{ id: 'yaml', label: '📋 YAML' },
-		{ id: 'jsonld', label: '🔗 JSON-LD' },
-		{ id: 'zip', label: '📦 ZIP' }
+		{ id: 'pdf', label: 'PDF' },
+		{ id: 'csv', label: 'CSV' },
+		{ id: 'prompts-txt', label: 'Prompts TXT' },
+		{ id: 'prompts-json', label: 'Prompts JSON' },
+		{ id: 'deforum', label: 'Deforum' },
+		{ id: 'yaml', label: 'YAML' },
+		{ id: 'jsonld', label: 'JSON-LD' },
+		{ id: 'zip', label: 'ZIP' }
 	];
 </script>
 
@@ -213,14 +213,14 @@
 			<button onclick={onclose} class="btn-secondary">Annuler</button>
 			{#if (activeFormat === 'yaml' || activeFormat === 'jsonld') && copyFeedback === null}
 				<button onclick={copyToClipboard} class="btn-secondary" title="Copy to clipboard">
-					📋 Copy
+					Copy
 				</button>
 			{/if}
 			{#if copyFeedback}
 				<span class="copy-feedback">{copyFeedback}</span>
 			{/if}
 			<button onclick={doExport} class="btn-primary">
-				{activeFormat === 'pdf' ? '🖨 Imprimer / PDF' : '⬇ Télécharger'}
+				{activeFormat === 'pdf' ? 'Imprimer / PDF' : 'Télécharger'}
 			</button>
 		</footer>
 	</div>
@@ -262,7 +262,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0.5rem 0.75rem;
-		border-bottom: var(--border-width) solid var(--color-border);
+		border-bottom: var(--border-width) solid var(--border);
 		font-weight: 600;
 		font-size: var(--text-sm);
 		flex-shrink: 0;
@@ -276,24 +276,24 @@
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
-		background: var(--color-surface-2);
-		border: var(--border-width) solid var(--color-border);
+		background: var(--surface2);
+		border: var(--border-width) solid var(--border);
 		border-radius: var(--radius-sm);
 		padding: 0.25rem 0.5rem;
 		font-size: var(--text-xs);
-		color: var(--color-text);
+		color: var(--text);
 		cursor: pointer;
 		transition: all 0.2s;
 	}
 	.import-btn:hover {
-		background: var(--color-surface-3);
-		border-color: var(--color-primary);
+		background: var(--surface3);
+		border-color: var(--accent2);
 	}
 	.close-btn {
 		background: none;
 		border: none;
 		cursor: pointer;
-		color: var(--color-text-muted);
+		color: var(--text-muted);
 	}
 	.modal-body {
 		flex: 1;
@@ -310,33 +310,33 @@
 		gap: 0.25rem;
 	}
 	.fmt-tab {
-		background: var(--color-surface-2);
-		border: var(--border-width) solid var(--color-border);
+		background: var(--surface2);
+		border: var(--border-width) solid var(--border);
 		border-radius: var(--radius-sm);
 		cursor: pointer;
 		padding: 0.2rem 0.5rem;
 		font-size: var(--text-xs);
-		color: var(--color-text-muted);
+		color: var(--text-muted);
 	}
 	.fmt-tab.active {
-		background: var(--color-surface-3);
-		color: var(--color-text);
-		border-color: var(--color-accent, #7c3aed);
+		background: var(--surface3);
+		color: var(--text);
+		border-color: var(--accent2);
 	}
 	.option-row {
 		display: flex;
 		align-items: center;
 		gap: 0.4rem;
 		font-size: var(--text-xs);
-		color: var(--color-text-muted);
+		color: var(--text-muted);
 		cursor: pointer;
 	}
 	.preview-box {
 		flex: 1;
 		min-height: 0;
 		overflow: auto;
-		background: var(--color-surface-2);
-		border: var(--border-width) solid var(--color-border);
+		background: var(--surface2);
+		border: var(--border-width) solid var(--border);
 		border-radius: var(--radius-sm);
 		padding: 0.5rem;
 	}
@@ -345,12 +345,12 @@
 		font-size: var(--text-xs);
 		white-space: pre-wrap;
 		word-break: break-all;
-		color: var(--color-text);
+		color: var(--text);
 		margin: 0;
 	}
 	.modal-footer {
 		padding: 0.5rem 0.75rem;
-		border-top: var(--border-width) solid var(--color-border);
+		border-top: var(--border-width) solid var(--border);
 		display: flex;
 		justify-content: flex-end;
 		gap: 0.5rem;
@@ -359,6 +359,6 @@
 	}
 	.copy-feedback {
 		font-size: var(--text-xs);
-		color: var(--color-text-muted);
+		color: var(--text-muted);
 	}
 </style>

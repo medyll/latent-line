@@ -7,6 +7,7 @@
 	import { createPreferencesStore, PREFS_CONTEXT_KEY } from '$lib/stores/preferences.svelte';
 	import ToastManager from '$lib/components/ui/ToastManager.svelte';
 	import LanguageSelector from '$lib/components/ui/LanguageSelector.svelte';
+	import Icon from '$lib/components/ds/Icon.svelte';
 	import { locale, t } from '$lib/i18n';
 	import { validateStorageVersion } from '$lib/utils/storage-cleanup';
 	import { generationStats } from '$lib/stores/generation.svelte';
@@ -53,9 +54,9 @@
 	}
 
 	function themeIcon(mode: string) {
-		if (mode === 'dark') return '☀';
-		if (mode === 'light') return '☾';
-		return '◐';
+		if (mode === 'dark') return 'sun';
+		if (mode === 'light') return 'moon';
+		return 'sparkle';
 	}
 </script>
 
@@ -73,7 +74,7 @@
 
 		<nav class="header-nav" aria-label="Main">
 			<a href="/" class="nav-link" aria-current={undefined}>{t('timeline.title')}</a>
-			<a href="/present" class="nav-link">{t('toolbar.export')}</a>
+			<a href="/present" class="nav-link">Screening</a>
 		</nav>
 
 		<div class="header-tools">
@@ -93,7 +94,7 @@
 				aria-label={t('toolbar.preferences')}
 				type="button"
 			>
-				⚙
+				<Icon name="settings" size={18} />
 			</button>
 			<button
 				class="tool-btn theme-toggle"
@@ -102,7 +103,7 @@
 				aria-label={`Theme: ${prefs.theme}`}
 				type="button"
 			>
-				<span class="theme-icon">{themeIcon(prefs.theme)}</span>
+				<Icon name={themeIcon(prefs.theme)} size={18} />
 			</button>
 		</div>
 	</header>
@@ -168,7 +169,9 @@
 		text-decoration: none;
 		padding: var(--pad-xs) var(--pad-sm);
 		border-radius: var(--radius-md);
-		transition: color var(--transition-fast), background var(--transition-fast);
+		transition:
+			color var(--transition-fast),
+			background var(--transition-fast);
 	}
 
 	.nav-link:hover {
@@ -195,7 +198,9 @@
 		align-items: center;
 		justify-content: center;
 		font-size: var(--text-lg);
-		transition: background var(--transition-fast), color var(--transition-fast);
+		transition:
+			background var(--transition-fast),
+			color var(--transition-fast);
 	}
 
 	.tool-btn:hover {
@@ -205,14 +210,6 @@
 
 	.theme-toggle {
 		font-size: var(--text-sm);
-	}
-
-	.theme-icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 20px;
-		height: 20px;
 	}
 
 	.gen-badge {

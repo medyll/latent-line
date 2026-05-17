@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latent Line — Paramètres</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: oklch(1 0 0); --surface: oklch(0.98 0.005 240); --surface2: oklch(0.95 0.005 240); --surface3: oklch(0.9 0.005 240);
+  --border: oklch(0.85 0.005 240); --border2: oklch(0.75 0.005 240);
+  --text: oklch(0.15 0.01 240); --text-dim: oklch(0.4 0.01 240); --text-muted: oklch(0.55 0.01 240);
+  --accent2: oklch(0.62 0.27 290); --accent3: oklch(0.72 0.23 170); --warning: oklch(0.75 0.2 50); --success: oklch(0.72 0.23 170);
+  --font-display: 'Bebas Neue', sans-serif; --font-sans: 'DM Sans', -apple-system, sans-serif; --font-mono: 'DM Mono', ui-monospace, monospace;
+  --radius-xs: 2px; --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-xl: 12px;
+  --gap-xs: 4px; --gap-sm: 8px; --gap-md: 16px; --gap-lg: 24px;
+  --pad-xs: 4px; --pad-sm: 8px; --pad-md: 16px; --pad-lg: 24px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: oklch(0.22 0.01 295); --surface: oklch(0.25 0.01 295); --surface2: oklch(0.3 0.01 295); --surface3: oklch(0.35 0.01 295);
+    --border: oklch(0.4 0.01 295); --border2: oklch(0.45 0.01 295); --text: oklch(0.85 0.01 295); --text-dim: oklch(0.55 0.01 295); --text-muted: oklch(0.35 0.01 295);
+  }
+}
+[data-theme='dark'] { --bg: oklch(0.22 0.01 295); --surface: oklch(0.25 0.01 295); --surface2: oklch(0.3 0.01 295); --surface3: oklch(0.35 0.01 295); --border: oklch(0.4 0.01 295); --border2: oklch(0.45 0.01 295); --text: oklch(0.85 0.01 295); --text-dim: oklch(0.55 0.01 295); --text-muted: oklch(0.35 0.01 295); color-scheme: dark; }
+[data-theme='light'] { --bg: oklch(1 0 0); --surface: oklch(0.98 0.005 240); --surface2: oklch(0.95 0.005 240); --surface3: oklch(0.9 0.005 240); --border: oklch(0.85 0.005 240); --border2: oklch(0.75 0.005 240); --text: oklch(0.15 0.01 240); --text-dim: oklch(0.4 0.01 240); --text-muted: oklch(0.55 0.01 240); color-scheme: light; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: var(--font-sans); font-size: 13px; line-height: 1.5; color: var(--text); background: var(--bg); overflow: hidden; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+.app { display: flex; flex-direction: column; height: 100vh; width: 100vw; }
+
+.header { height: 48px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad-md); flex-shrink: 0; }
+.header-left, .header-right { display: flex; align-items: center; gap: var(--gap-md); }
+.logo { font-family: var(--font-display); font-size: 22px; letter-spacing: 1px; color: var(--accent2); display: flex; align-items: center; gap: var(--gap-sm); }
+.logo-mark { width: 24px; height: 24px; background: var(--accent2); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 11px; font-weight: 700; color: #fff; }
+.nav-tabs { display: flex; gap: var(--gap-xs); }
+.nav-tab { padding: 6px 14px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; color: var(--text-dim); transition: all .1s; }
+.nav-tab:hover { background: var(--surface2); color: var(--text); }
+.nav-tab.active { background: var(--accent2); color: #fff; }
+.theme-btn { width: 32px; height: 32px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all .1s; }
+.theme-btn:hover { background: var(--surface2); color: var(--text); }
+
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* Sidebar */
+.sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar-section { padding: var(--pad-sm) 0; border-bottom: 1px solid var(--border); }
+.sidebar-section-title { padding: 0 var(--pad-md); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--text-muted); margin-bottom: var(--gap-xs); }
+.sidebar-tab { display: flex; align-items: center; gap: var(--gap-sm); padding: 6px var(--pad-md); font-size: 12px; color: var(--text-dim); cursor: pointer; transition: all .1s; }
+.sidebar-tab:hover { background: var(--surface2); color: var(--text); }
+.sidebar-tab.active { background: var(--surface2); color: var(--text); border-left: 2px solid var(--accent2); }
+.sidebar-tab-icon { width: 18px; text-align: center; }
+
+/* Content */
+.content { flex: 1; overflow-y: auto; padding: var(--pad-lg) var(--pad-xl); max-width: 720px; margin: 0 auto; width: 100%; }
+.content-title { font-family: var(--font-display); font-size: 28px; letter-spacing: .5px; margin-bottom: var(--gap-xs); }
+.content-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: var(--gap-xl); }
+
+/* Settings section */
+.settings-section { margin-bottom: var(--gap-xl); }
+.settings-section-title { font-size: 14px; font-weight: 600; margin-bottom: var(--gap-md); padding-bottom: var(--gap-sm); border-bottom: 1px solid var(--border); }
+.settings-item { display: flex; align-items: center; justify-content: space-between; padding: var(--pad-md) 0; border-bottom: 1px solid var(--border); }
+.settings-item:first-of-type { padding-top: 0; }
+.settings-item-info { flex: 1; }
+.settings-item-label { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.settings-item-desc { font-size: 12px; color: var(--text-muted); }
+.settings-item-control { display: flex; align-items: center; gap: var(--gap-sm); }
+
+/* Toggle switch */
+.toggle { width: 40px; height: 22px; background: var(--surface3); border-radius: 11px; position: relative; cursor: pointer; transition: background .15s; border: 1px solid var(--border); }
+.toggle.on { background: var(--accent2); border-color: var(--accent2); }
+.toggle-knob { width: 16px; height: 16px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform .15s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.toggle.on .toggle-knob { transform: translateX(18px); }
+
+/* Select / Input */
+.settings-select { padding: 5px 10px; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 12px; font-family: var(--font-sans); outline: none; min-width: 140px; }
+.settings-select:focus { border-color: var(--accent2); }
+.settings-input { padding: 5px 10px; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 12px; font-family: var(--font-sans); outline: none; width: 200px; }
+.settings-input:focus { border-color: var(--accent2); }
+
+/* Shortcut row */
+.shortcut-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.shortcut-action { font-size: 13px; color: var(--text); }
+.shortcut-keys { display: flex; gap: 4px; }
+kbd { font-family: var(--font-mono); font-size: 11px; padding: 2px 6px; border-radius: var(--radius-sm); background: var(--surface2); border: 1px solid var(--border); color: var(--text-dim); }
+
+/* Color swatches */
+.color-grid { display: flex; gap: var(--gap-sm); flex-wrap: wrap; }
+.color-swatch { width: 32px; height: 32px; border-radius: var(--radius-md); border: 2px solid transparent; cursor: pointer; position: relative; }
+.color-swatch:hover { border-color: var(--text-dim); }
+.color-swatch.active { border-color: var(--text); box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent2); }
+.color-swatch::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,.5); opacity: 0; }
+.color-swatch.active::after { opacity: 1; }
+
+/* Danger zone */
+.danger-zone { border: 1px solid oklch(0.6 0.2 25); border-radius: var(--radius-lg); padding: var(--pad-md); background: oklch(0.25 0.05 25 / .1); }
+.danger-zone-title { font-size: 12px; font-weight: 600; color: oklch(0.7 0.2 50); margin-bottom: var(--gap-sm); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div class="header-left">
+      <div class="logo"><span class="logo-mark">LL</span> Latent Line</div>
+      <nav class="nav-tabs">
+        <a class="nav-tab">Éditeur</a>
+        <a class="nav-tab">Assets</a>
+        <a class="nav-tab">Accueil</a>
+        <a class="nav-tab">Projection</a>
+        <a class="nav-tab active">Paramètres</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="theme-btn" id="themeToggle" title="Changer de thème">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Paramètres</div>
+        <div class="sidebar-tab active"><span class="sidebar-tab-icon">🎨</span> Apparence</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">🖥</span> Backend ComfyUI</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">⌨</span> Raccourcis</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">🔔</span> Notifications</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">💾</span> Stockage</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Compte</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">👤</span> Profil</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">🔒</span> Sécurité</div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <section class="content">
+      <h1 class="content-title">Apparence</h1>
+      <p class="content-subtitle">Personnalisez l'interface de Latent Line selon vos préférences.</p>
+
+      <!-- Thème -->
+      <div class="settings-section">
+        <div class="settings-section-title">Thème</div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Mode sombre</div>
+            <div class="settings-item-desc">Utiliser le thème sombre par défaut</div>
+          </div>
+          <div class="settings-item-control">
+            <div class="toggle on" id="darkToggle"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Suivre le système</div>
+            <div class="settings-item-desc">Adapter automatiquement au thème du système</div>
+          </div>
+          <div class="settings-item-control">
+            <div class="toggle" id="systemToggle"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Accent principal</div>
+            <div class="settings-item-desc">Couleur utilisée pour les boutons, badges et indicateurs AI</div>
+          </div>
+          <div class="settings-item-control">
+            <div class="color-grid">
+              <div class="color-swatch active" style="background:#7c3aed"></div>
+              <div class="color-swatch" style="background:#3b82f6"></div>
+              <div class="color-swatch" style="background:#06b6d4"></div>
+              <div class="color-swatch" style="background:#10b981"></div>
+              <div class="color-swatch" style="background:#f59e0b"></div>
+              <div class="color-swatch" style="background:#ef4444"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interface -->
+      <div class="settings-section">
+        <div class="settings-section-title">Interface</div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Sidebar réduite par défaut</div>
+            <div class="settings-item-desc">Démarrer avec la sidebar latérale masquée</div>
+          </div>
+          <div class="settings-item-control">
+            <div class="toggle"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Afficher les miniatures AI</div>
+            <div class="settings-item-desc">Générer et afficher les aperçus des shots générés</div>
+          </div>
+          <div class="settings-item-control">
+            <div class="toggle on"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Langue</div>
+            <div class="settings-item-desc">Langue de l'interface utilisateur</div>
+          </div>
+          <div class="settings-item-control">
+            <select class="settings-select">
+              <option>Français</option>
+              <option>English</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Éditeur -->
+      <div class="settings-section">
+        <div class="settings-section-title">Éditeur</div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Grille par défaut</div>
+            <div class="settings-item-desc">Disposition initiale du storyboard</div>
+          </div>
+          <div class="settings-item-control">
+            <select class="settings-select">
+              <option>Grille</option>
+              <option>Liste</option>
+              <option>Timeline</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Auto-sauvegarde</div>
+            <div class="settings-item-desc">Sauvegarder automatiquement toutes les 30 secondes</div>
+          </div>
+          <div class="settings-item-control">
+            <div class="toggle on"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <div class="settings-item-label">Format d'export par défaut</div>
+            <div class="settings-item-desc">Format pré-sélectionné dans la boîte d'export</div>
+          </div>
+          <div class="settings-item-control">
+            <select class="settings-select">
+              <option>YAML</option>
+              <option>JSON</option>
+              <option>EDL</option>
+              <option>PDF</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Danger -->
+      <div class="settings-section">
+        <div class="danger-zone">
+          <div class="danger-zone-title">Zone de danger</div>
+          <div class="settings-item" style="border:none;padding:0;">
+            <div class="settings-item-info">
+              <div class="settings-item-label">Réinitialiser tous les paramètres</div>
+              <div class="settings-item-desc">Revenir aux valeurs par défaut. Cette action est irréversible.</div>
+            </div>
+            <div class="settings-item-control">
+              <button class="btn" style="border-color:oklch(0.6 0.2 25);color:oklch(0.7 0.2 50);">Réinitialiser</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+</div>
+
+<script>
+  const btn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const stored = localStorage.getItem('latent-line-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('latent-line-theme', next);
+  });
+
+  // Toggle interactions
+  document.querySelectorAll('.toggle').forEach(t => {
+    t.addEventListener('click', () => t.classList.toggle('on'));
+  });
+  document.querySelectorAll('.color-swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      document.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('active'));
+      s.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

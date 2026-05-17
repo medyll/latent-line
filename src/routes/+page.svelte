@@ -19,12 +19,10 @@
 		TEMPLATES_CONTEXT_KEY,
 		PREFS_CONTEXT_KEY
 	} from '$lib/context/keys';
-	import AssetManager from '$lib/components/workspace/assets/AssetManager.svelte';
-	import PropertiesPanel from '$lib/components/workspace/properties/PropertiesPanel.svelte';
-	import PreviewPanel from '$lib/components/app/PreviewPanel.svelte';
-	import SequenceOrchestrator from '$lib/components/workspace/orchestrator/SequenceOrchestrator.svelte';
 	import GenerateBatchButton from '$lib/components/workspace/GenerateBatchButton.svelte';
-	import { resizable } from '$lib/actions/resizable';
+	import Editor from '$lib/components/app/Editor.svelte';
+	import Button from '$lib/components/ds/Button.svelte';
+	import Icon from '$lib/components/ds/Icon.svelte';
 
 	const { model, history, undo, redo, saveStatus } = createModelStore();
 	const playback = createPlaybackStore();
@@ -53,7 +51,6 @@
 	let showExport = $state(false);
 	let showSnapshots = $state(false);
 	let showComfyUISettings = $state(false);
-	let rightTab = $state<'properties' | 'preview'>('properties');
 
 	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
 
@@ -92,87 +89,57 @@
 
 <div class="app-layout" style="height:100%;">
 	<div class="app-toolbar">
-		<button
+		<Button
+			variant="ghost"
+			size="sm"
+			icon="film"
+			label="Projet"
 			onclick={() => (showProjectConfig = true)}
-			title="Configuration projet"
-			class="toolbar-btn"
-		>
-			📋 Projet
-		</button>
-		<button
+		/>
+		<Button
+			variant="ghost"
+			size="sm"
+			icon="plus"
+			label="Nouveau"
 			onclick={() => (showNewProjectConfirm = true)}
-			title="Nouveau projet"
-			class="toolbar-btn"
-		>
-			＋ Nouveau
-		</button>
-		<button onclick={() => (showExport = true)} title="Exporter" class="toolbar-btn">
-			⬇ Export
-		</button>
-		<button onclick={() => (showSnapshots = true)} title="Snapshots" class="toolbar-btn">
-			📸 Snapshots
-		</button>
+		/>
+		<Button
+			variant="ghost"
+			size="sm"
+			icon="download"
+			label="Exporter"
+			onclick={() => (showExport = true)}
+		/>
+		<Button
+			variant="ghost"
+			size="sm"
+			icon="image"
+			label="Snapshots"
+			onclick={() => (showSnapshots = true)}
+		/>
 		<a
 			href="/present?model={encodeURIComponent(
 				btoa(JSON.stringify($state.snapshot(model)))
 			)}&index=0"
 			target="_blank"
 			rel="noopener"
-			class="toolbar-btn toolbar-btn--screening"
+			class="toolbar-link"
 			title="Ouvrir le screening"
 		>
-			▶ Screening
+			<Icon name="play" size={14} />
+			<span>Screening</span>
 		</a>
-		<button
+		<Button
+			variant="ghost"
+			size="sm"
+			icon="sparkle"
+			label="ComfyUI"
 			onclick={() => (showComfyUISettings = true)}
-			title="ComfyUI / Stable Diffusion Settings"
-			class="toolbar-btn"
-		>
-			🎨 ComfyUI
-		</button>
+		/>
 		<GenerateBatchButton {model} {prefs} />
 		<span style="margin-left:auto;"><SaveIndicator status={saveStatus.value} /></span>
 	</div>
-	<div class="app-panels">
-		<aside
-			class="panel panel-left"
-			aria-label="Asset Manager"
-			use:resizable={{ key: 'panel-left', defaultWidth: 220, min: 160, max: 480 }}
-		>
-			<AssetManager />
-		</aside>
-		<div class="panel panel-main">
-			<SequenceOrchestrator bind:selectedTime />
-		</div>
-		<aside
-			class="panel panel-right"
-			use:resizable={{ key: 'panel-right', defaultWidth: 280, min: 160, max: 500, side: 'left' }}
-		>
-			<div class="right-tabs">
-				<button
-					class="tab-btn {rightTab === 'properties' ? 'active' : ''}"
-					onclick={() => (rightTab = 'properties')}>Properties</button
-				>
-				<button
-					class="tab-btn {rightTab === 'preview' ? 'active' : ''}"
-					onclick={() => (rightTab = 'preview')}>Preview</button
-				>
-			</div>
-			<div class="tab-content">
-				{#if rightTab === 'properties'}
-					<PropertiesPanel {selectedEventId} />
-				{:else}
-					<PreviewPanel />
-				{/if}
-			</div>
-		</aside>
-	</div>
-	<button
-		class="inspector-toggle"
-		onclick={() => (showInspector = !showInspector)}
-		title="Régie (Ctrl+I)"
-		aria-label="Ouvrir la Régie">⌥</button
-	>
+	<Editor bind:selectedTime onboardingActive={showOnboarding} />
 </div>
 
 {#if showInspector}
@@ -231,8 +198,9 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		background: var(--color-surface);
-		color: var(--color-text);
+		background: var(--surface);
+		color: var(--text);
+		overflow: hidden;
 	}
 
 	.app-toolbar {
@@ -241,137 +209,43 @@
 		gap: var(--gap-xs);
 		padding: 0 var(--pad-sm);
 		height: var(--status-bar-height);
-		border-bottom: var(--border-width) solid var(--color-border);
+		border-bottom: var(--border-width) solid var(--border);
 		flex-shrink: 0;
+		overflow-x: auto;
+		scrollbar-width: none;
 	}
 
-	.toolbar-btn {
-		background: none;
-		border: none;
-		cursor: pointer;
+	.app-toolbar::-webkit-scrollbar {
+		display: none;
+	}
+
+	@media (max-width: 640px) {
+		.toolbar-link {
+			padding: 0 0.25rem;
+			font-size: 0.625rem;
+		}
+		:global(.btn) {
+			padding: 0 0.25rem;
+			font-size: 0.625rem;
+		}
+	}
+
+	.toolbar-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
 		font-size: var(--text-xs);
-		color: var(--color-text-muted);
+		color: var(--text-muted);
 		padding: 0 var(--pad-xs);
 		border-radius: var(--radius-sm);
-
-		&:hover {
-			background: var(--color-surface-hover);
-			color: var(--color-text);
-		}
-	}
-
-	.toolbar-btn--screening {
 		text-decoration: none;
+		transition:
+			background var(--transition-fast),
+			color var(--transition-fast);
 	}
 
-	.app-panels {
-		display: flex;
-		flex: 1;
-		min-height: 0;
-		overflow: hidden;
-	}
-
-	.panel {
-		overflow: auto;
-		border: var(--border-width) solid var(--color-border);
-	}
-
-	/* JS resizable sets explicit width; these are fallback defaults */
-	.panel-left {
-		width: 220px;
-		min-width: 160px;
-		border-right: none;
-	}
-
-	.panel-main {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.panel-right {
-		width: 280px;
-		min-width: 160px;
-		border-left: none;
-		flex-shrink: 0;
-		display: flex;
-		flex-direction: column;
-		overflow: hidden;
-	}
-
-	@media (width <= 1024px) {
-		.panel-left { width: 200px; }
-		.panel-right { width: 240px; }
-	}
-
-	@media (width <= 768px) {
-		.app-panels { flex-direction: column; }
-		.panel-left {
-			width: 100%;
-			height: auto;
-			max-height: 35vh;
-			border-right: var(--border-width) solid var(--color-border);
-		}
-		.panel-main { min-height: 0; flex: 1; }
-		.panel-right {
-			width: 100%;
-			height: auto;
-			max-height: 35vh;
-			border-left: var(--border-width) solid var(--color-border);
-		}
-	}
-
-	@media (width <= 480px) {
-		.panel-left  { max-height: 28vh; }
-		.panel-right { max-height: 28vh; }
-	}
-
-	.right-tabs {
-		display: flex;
-		border-bottom: var(--border-width) solid var(--color-border);
-		flex-shrink: 0;
-	}
-
-	.tab-btn {
-		flex: 1;
-		background: none;
-		border: none;
-		border-bottom: var(--border-width) solid transparent;
-		cursor: pointer;
-		font-size: var(--text-xs);
-		color: var(--color-text-muted);
-		padding: var(--pad-xs) 0;
-
-		&.active {
-			color: var(--color-text);
-			border-bottom-color: var(--color-primary);
-		}
-	}
-
-	.tab-content {
-		flex: 1;
-		min-height: 0;
-		overflow: auto;
-	}
-
-	.inspector-toggle {
-		position: fixed;
-		bottom: var(--gutter-sm);
-		right: var(--gutter-sm);
-		z-index: var(--z-dropdown);
-		width: var(--icon-size-md);
-		height: var(--icon-size-md);
-		border-radius: var(--radius-full);
-		background: var(--color-surface-raised);
-		border: var(--border-width) solid var(--color-border);
-		font-size: var(--text-sm);
-		cursor: pointer;
-		box-shadow: var(--shadow-md);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		&:hover {
-			background: var(--color-surface-hover);
-		}
+	.toolbar-link:hover {
+		background: var(--surface-hover);
+		color: var(--text);
 	}
 </style>

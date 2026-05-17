@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latent Line — Assets</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: oklch(1 0 0); --surface: oklch(0.98 0.005 240); --surface2: oklch(0.95 0.005 240); --surface3: oklch(0.9 0.005 240);
+  --border: oklch(0.85 0.005 240); --border2: oklch(0.75 0.005 240);
+  --text: oklch(0.15 0.01 240); --text-dim: oklch(0.4 0.01 240); --text-muted: oklch(0.55 0.01 240);
+  --accent2: oklch(0.62 0.27 290); --accent3: oklch(0.72 0.23 170); --warning: oklch(0.75 0.2 50); --success: oklch(0.72 0.23 170);
+  --font-display: 'Bebas Neue', sans-serif; --font-sans: 'DM Sans', -apple-system, sans-serif; --font-mono: 'DM Mono', ui-monospace, monospace;
+  --radius-xs: 2px; --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-xl: 12px; --radius-full: 9999px;
+  --gap-xs: 4px; --gap-sm: 8px; --gap-md: 16px; --gap-lg: 24px; --gap-xl: 32px;
+  --pad-xs: 4px; --pad-sm: 8px; --pad-md: 16px; --pad-lg: 24px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: oklch(0.22 0.01 295); --surface: oklch(0.25 0.01 295); --surface2: oklch(0.3 0.01 295); --surface3: oklch(0.35 0.01 295);
+    --border: oklch(0.4 0.01 295); --border2: oklch(0.45 0.01 295); --text: oklch(0.85 0.01 295); --text-dim: oklch(0.55 0.01 295); --text-muted: oklch(0.35 0.01 295);
+  }
+}
+[data-theme='dark'] { --bg: oklch(0.22 0.01 295); --surface: oklch(0.25 0.01 295); --surface2: oklch(0.3 0.01 295); --surface3: oklch(0.35 0.01 295); --border: oklch(0.4 0.01 295); --border2: oklch(0.45 0.01 295); --text: oklch(0.85 0.01 295); --text-dim: oklch(0.55 0.01 295); --text-muted: oklch(0.35 0.01 295); color-scheme: dark; }
+[data-theme='light'] { --bg: oklch(1 0 0); --surface: oklch(0.98 0.005 240); --surface2: oklch(0.95 0.005 240); --surface3: oklch(0.9 0.005 240); --border: oklch(0.85 0.005 240); --border2: oklch(0.75 0.005 240); --text: oklch(0.15 0.01 240); --text-dim: oklch(0.4 0.01 240); --text-muted: oklch(0.55 0.01 240); color-scheme: light; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: var(--font-sans); font-size: 13px; line-height: 1.5; color: var(--text); background: var(--bg); overflow: hidden; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+.app { display: flex; flex-direction: column; height: 100vh; width: 100vw; }
+
+.header { height: 48px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad-md); flex-shrink: 0; }
+.header-left, .header-right { display: flex; align-items: center; gap: var(--gap-md); }
+.logo { font-family: var(--font-display); font-size: 22px; letter-spacing: 1px; color: var(--accent2); display: flex; align-items: center; gap: var(--gap-sm); }
+.logo-mark { width: 24px; height: 24px; background: var(--accent2); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 11px; font-weight: 700; color: #fff; }
+.nav-tabs { display: flex; gap: var(--gap-xs); }
+.nav-tab { padding: 6px 14px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; color: var(--text-dim); transition: all .1s; }
+.nav-tab:hover { background: var(--surface2); color: var(--text); }
+.nav-tab.active { background: var(--accent2); color: #fff; }
+.theme-btn { width: 32px; height: 32px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all .1s; }
+.theme-btn:hover { background: var(--surface2); color: var(--text); }
+
+.btn { padding: 5px 12px; border-radius: var(--radius-md); font-size: 12px; font-weight: 500; border: 1px solid var(--border); background: var(--surface); color: var(--text); display: flex; align-items: center; gap: var(--gap-xs); transition: all .1s; }
+.btn:hover { background: var(--surface2); border-color: var(--border2); }
+.btn-primary { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.btn-primary:hover { opacity: .9; }
+.btn-sm { padding: 3px 8px; font-size: 11px; }
+
+.toolbar { height: 40px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad-md); flex-shrink: 0; }
+.toolbar-left, .toolbar-right { display: flex; align-items: center; gap: var(--gap-sm); }
+.toolbar-sep { width: 1px; height: 20px; background: var(--border); margin: 0 var(--gap-xs); }
+
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* Sidebar */
+.sidebar { width: 200px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar-section { padding: var(--pad-sm) 0; border-bottom: 1px solid var(--border); }
+.sidebar-section-title { padding: 0 var(--pad-md); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--text-muted); margin-bottom: var(--gap-xs); }
+.sidebar-tab { display: flex; align-items: center; gap: var(--gap-sm); padding: 6px var(--pad-md); font-size: 12px; color: var(--text-dim); cursor: pointer; transition: all .1s; }
+.sidebar-tab:hover { background: var(--surface2); color: var(--text); }
+.sidebar-tab.active { background: var(--surface2); color: var(--text); border-left: 2px solid var(--accent2); }
+.sidebar-tab-icon { width: 18px; text-align: center; }
+
+/* Content */
+.content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.content-header { display: flex; align-items: center; justify-content: space-between; padding: var(--pad-md); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.content-title { font-family: var(--font-display); font-size: 24px; letter-spacing: .5px; }
+.content-subtitle { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* Search bar */
+.search-bar { display: flex; gap: var(--gap-sm); padding: var(--pad-sm) var(--pad-md); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.search-input { flex: 1; padding: 6px 10px; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 12px; font-family: var(--font-sans); outline: none; }
+.search-input::placeholder { color: var(--text-muted); }
+
+/* Asset grid */
+.asset-grid { flex: 1; overflow-y: auto; padding: var(--pad-md); display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--gap-md); align-content: start; }
+
+.asset-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all .1s; }
+.asset-card:hover { border-color: var(--border2); }
+.asset-image { aspect-ratio: 1; background: var(--surface2); display: flex; align-items: center; justify-content: center; position: relative; }
+.asset-image-placeholder { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+.asset-image .badge-ai { position: absolute; top: 8px; right: 8px; }
+.asset-info { padding: var(--pad-sm) var(--pad-md) var(--pad-md); }
+.asset-name { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.asset-meta { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); }
+.asset-tags { display: flex; gap: 4px; margin-top: var(--gap-xs); flex-wrap: wrap; }
+.tag { font-size: 10px; padding: 2px 6px; border-radius: var(--radius-xs); background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+.asset-actions { display: flex; gap: var(--gap-xs); padding: 0 var(--pad-md) var(--pad-sm); }
+
+/* Detail panel */
+.detail-panel { width: 320px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden; }
+.detail-header { padding: var(--pad-md); border-bottom: 1px solid var(--border); }
+.detail-title { font-size: 14px; font-weight: 600; }
+.detail-body { flex: 1; overflow-y: auto; padding: var(--pad-md); }
+.detail-field { margin-bottom: var(--gap-md); }
+.detail-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); margin-bottom: 4px; }
+.detail-value { font-size: 13px; color: var(--text); }
+.detail-input { width: 100%; padding: 6px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 12px; font-family: var(--font-sans); outline: none; }
+.detail-input:focus { border-color: var(--accent2); }
+.detail-textarea { width: 100%; padding: 6px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 12px; font-family: var(--font-sans); outline: none; resize: vertical; min-height: 80px; }
+.detail-avatar { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #fff; margin-bottom: var(--gap-sm); }
+.detail-section { margin-bottom: var(--gap-lg); }
+.detail-section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--text-dim); margin-bottom: var(--gap-sm); padding-bottom: var(--gap-xs); border-bottom: 1px solid var(--border); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div class="header-left">
+      <div class="logo"><span class="logo-mark">LL</span> Latent Line</div>
+      <nav class="nav-tabs">
+        <a class="nav-tab">Éditeur</a>
+        <a class="nav-tab active">Assets</a>
+        <a class="nav-tab">Accueil</a>
+        <a class="nav-tab">Projection</a>
+        <a class="nav-tab">Paramètres</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="theme-btn" id="themeToggle" title="Changer de thème">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Bibliothèque</div>
+        <div class="sidebar-tab active"><span class="sidebar-tab-icon">👤</span> Personnages</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">🏞</span> Décors</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">🎭</span> Props</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">🎵</span> Audio</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">🖼</span> Images générées</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Collections</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">📁</span> Projet actuel</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">⭐</span> Favoris</div>
+        <div class="sidebar-tab"><span class="sidebar-tab-icon">🗑</span> Corbeille</div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <section class="content">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Personnages</div>
+          <div class="content-subtitle">3 personnages · 12 shots associés</div>
+        </div>
+        <div style="display:flex;gap:var(--gap-sm);">
+          <button class="btn">Importer</button>
+          <button class="btn btn-primary">+ Nouveau</button>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input type="text" class="search-input" placeholder="Rechercher un personnage, un décor...">
+        <button class="btn btn-sm">Filtrer</button>
+      </div>
+      <div class="asset-grid">
+
+        <!-- Léa Marchand -->
+        <div class="asset-card">
+          <div class="asset-image">
+            <div class="asset-image-placeholder" style="width:64px;height:64px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:700;">L</div>
+          </div>
+          <div class="asset-info">
+            <div class="asset-name">Léa Marchand</div>
+            <div class="asset-meta">@char_lea · 5 shots</div>
+            <div class="asset-tags">
+              <span class="tag">Protagoniste</span>
+              <span class="tag">Inspectrice</span>
+            </div>
+          </div>
+          <div class="asset-actions">
+            <button class="btn btn-sm" style="flex:1;justify-content:center;">Éditer</button>
+            <button class="btn btn-sm" style="flex:1;justify-content:center;">Supprimer</button>
+          </div>
+        </div>
+
+        <!-- Victor Aumont -->
+        <div class="asset-card">
+          <div class="asset-image">
+            <div class="asset-image-placeholder" style="width:64px;height:64px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:700;">V</div>
+          </div>
+          <div class="asset-info">
+            <div class="asset-name">Victor Aumont</div>
+            <div class="asset-meta">@char_victor · 4 shots</div>
+            <div class="asset-tags">
+              <span class="tag">Informateur</span>
+              <span class="tag">Mystérieux</span>
+            </div>
+          </div>
+          <div class="asset-actions">
+            <button class="btn btn-sm" style="flex:1;justify-content:center;">Éditer</button>
+            <button class="btn btn-sm" style="flex:1;justify-content:center;">Supprimer</button>
+          </div>
+        </div>
+
+        <!-- Mara -->
+        <div class="asset-card">
+          <div class="asset-image">
+            <div class="asset-image-placeholder" style="width:64px;height:64px;border-radius:50%;background:#06b6d4;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:700;">M</div>
+          </div>
+          <div class="asset-info">
+            <div class="asset-name">Mara</div>
+            <div class="asset-meta">@char_mara · 3 shots</div>
+            <div class="asset-tags">
+              <span class="tag">Antagoniste</span>
+              <span class="tag">Division Noire</span>
+            </div>
+          </div>
+          <div class="asset-actions">
+            <button class="btn btn-sm" style="flex:1;justify-content:center;">Éditer</button>
+            <button class="btn btn-sm" style="flex:1;justify-content:center;">Supprimer</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Detail Panel -->
+    <aside class="detail-panel">
+      <div class="detail-header">
+        <div style="display:flex;align-items:center;gap:var(--gap-sm);">
+          <div class="detail-avatar" style="background:#7c3aed;width:40px;height:40px;font-size:16px;">L</div>
+          <div>
+            <div class="detail-title">Léa Marchand</div>
+            <div style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);">@char_lea</div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-body">
+        <div class="detail-section">
+          <div class="detail-section-title">Informations</div>
+          <div class="detail-field">
+            <div class="detail-label">Nom complet</div>
+            <input type="text" class="detail-input" value="Léa Marchand">
+          </div>
+          <div class="detail-field">
+            <div class="detail-label">Rôle</div>
+            <input type="text" class="detail-input" value="Inspectrice de police">
+          </div>
+          <div class="detail-field">
+            <div class="detail-label">Description</div>
+            <textarea class="detail-textarea">Inspectrice tenace, obsédée par la vérité. Ne recule devant rien pour faire éclater la lumière sur les complots qu'elle découvre.</textarea>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Apparence</div>
+          <div class="detail-field">
+            <div class="detail-label">Style visuel</div>
+            <div class="asset-tags">
+              <span class="tag">Trench coat</span>
+              <span class="tag">Cheveux courts</span>
+              <span class="tag">Regard perçant</span>
+            </div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-label">Couleur associée</div>
+            <div style="display:flex;align-items:center;gap:var(--gap-sm);">
+              <div style="width:20px;height:20px;border-radius:var(--radius-sm);background:#7c3aed;border:1px solid var(--border);"></div>
+              <span style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);">#7c3aed</span>
+            </div>
+          </div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">Métadonnées</div>
+          <div class="detail-field">
+            <div class="detail-label">Shots associés</div>
+            <div class="detail-value">5 shots (Frame 0, 48, 240, 434, 528)</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-label">Créé le</div>
+            <div class="detail-value">2026-04-12 14:32</div>
+          </div>
+          <div class="detail-field">
+            <div class="detail-label">Modifié le</div>
+            <div class="detail-value">2026-05-10 09:15</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+</div>
+
+<script>
+  const btn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const stored = localStorage.getItem('latent-line-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('latent-line-theme', next);
+  });
+</script>
+
+</body>
+</html>

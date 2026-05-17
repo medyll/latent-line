@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latent Line — Exporter</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: oklch(1 0 0); --surface: oklch(0.98 0.005 240); --surface2: oklch(0.95 0.005 240); --surface3: oklch(0.9 0.005 240);
+  --border: oklch(0.85 0.005 240); --border2: oklch(0.75 0.005 240);
+  --text: oklch(0.15 0.01 240); --text-dim: oklch(0.4 0.01 240); --text-muted: oklch(0.55 0.01 240);
+  --accent2: oklch(0.62 0.27 290); --accent3: oklch(0.72 0.23 170); --warning: oklch(0.75 0.2 50); --success: oklch(0.72 0.23 170);
+  --font-display: 'Bebas Neue', sans-serif; --font-sans: 'DM Sans', -apple-system, sans-serif; --font-mono: 'DM Mono', ui-monospace, monospace;
+  --radius-xs: 2px; --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-xl: 12px;
+  --gap-xs: 4px; --gap-sm: 8px; --gap-md: 16px; --gap-lg: 24px; --gap-xl: 32px;
+  --pad-xs: 4px; --pad-sm: 8px; --pad-md: 16px; --pad-lg: 24px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: oklch(0.22 0.01 295); --surface: oklch(0.25 0.01 295); --surface2: oklch(0.3 0.01 295); --surface3: oklch(0.35 0.01 295);
+    --border: oklch(0.4 0.01 295); --border2: oklch(0.45 0.01 295); --text: oklch(0.85 0.01 295); --text-dim: oklch(0.55 0.01 295); --text-muted: oklch(0.35 0.01 295);
+  }
+}
+[data-theme='dark'] { --bg: oklch(0.22 0.01 295); --surface: oklch(0.25 0.01 295); --surface2: oklch(0.3 0.01 295); --surface3: oklch(0.35 0.01 295); --border: oklch(0.4 0.01 295); --border2: oklch(0.45 0.01 295); --text: oklch(0.85 0.01 295); --text-dim: oklch(0.55 0.01 295); --text-muted: oklch(0.35 0.01 295); color-scheme: dark; }
+[data-theme='light'] { --bg: oklch(1 0 0); --surface: oklch(0.98 0.005 240); --surface2: oklch(0.95 0.005 240); --surface3: oklch(0.9 0.005 240); --border: oklch(0.85 0.005 240); --border2: oklch(0.75 0.005 240); --text: oklch(0.15 0.01 240); --text-dim: oklch(0.4 0.01 240); --text-muted: oklch(0.55 0.01 240); color-scheme: light; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: var(--font-sans); font-size: 13px; line-height: 1.5; color: var(--text); background: var(--bg); overflow: hidden; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+.app { display: flex; flex-direction: column; height: 100vh; width: 100vw; }
+
+.header { height: 48px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad-md); flex-shrink: 0; }
+.header-left, .header-right { display: flex; align-items: center; gap: var(--gap-md); }
+.logo { font-family: var(--font-display); font-size: 22px; letter-spacing: 1px; color: var(--accent2); display: flex; align-items: center; gap: var(--gap-sm); }
+.logo-mark { width: 24px; height: 24px; background: var(--accent2); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 11px; font-weight: 700; color: #fff; }
+.nav-tabs { display: flex; gap: var(--gap-xs); }
+.nav-tab { padding: 6px 14px; border-radius: var(--radius-md); font-size: 13px; font-weight: 500; color: var(--text-dim); transition: all .1s; }
+.nav-tab:hover { background: var(--surface2); color: var(--text); }
+.nav-tab.active { background: var(--accent2); color: #fff; }
+.theme-btn { width: 32px; height: 32px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all .1s; }
+.theme-btn:hover { background: var(--surface2); color: var(--text); }
+
+.btn { padding: 5px 12px; border-radius: var(--radius-md); font-size: 12px; font-weight: 500; border: 1px solid var(--border); background: var(--surface); color: var(--text); display: flex; align-items: center; gap: var(--gap-xs); transition: all .1s; }
+.btn:hover { background: var(--surface2); border-color: var(--border2); }
+.btn-primary { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.btn-primary:hover { opacity: .9; }
+.btn-sm { padding: 3px 8px; font-size: 11px; }
+
+.main { display: flex; flex: 1; overflow: hidden; align-items: center; justify-content: center; padding: var(--pad-xl); }
+
+/* Modal */
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); width: 100%; max-width: 640px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,.3); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: var(--pad-md) var(--pad-lg); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.modal-title { font-family: var(--font-display); font-size: 20px; }
+.modal-close { width: 28px; height: 28px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 18px; }
+.modal-close:hover { background: var(--surface2); color: var(--text); }
+.modal-body { flex: 1; overflow-y: auto; padding: var(--pad-lg); }
+.modal-footer { display: flex; align-items: center; justify-content: flex-end; gap: var(--gap-sm); padding: var(--pad-md) var(--pad-lg); border-top: 1px solid var(--border); flex-shrink: 0; }
+
+/* Export options */
+.export-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap-md); }
+.export-option { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--pad-md); cursor: pointer; transition: all .1s; display: flex; flex-direction: column; gap: var(--gap-xs); }
+.export-option:hover { border-color: var(--border2); background: var(--surface2); }
+.export-option.selected { border-color: var(--accent2); box-shadow: 0 0 0 1px var(--accent2); }
+.export-icon { font-size: 20px; margin-bottom: 2px; }
+.export-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.export-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+.export-meta { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+/* Settings panel inside modal */
+.settings-group { margin-bottom: var(--gap-lg); }
+.settings-group-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--text-dim); margin-bottom: var(--gap-sm); }
+.settings-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.settings-label { font-size: 12px; color: var(--text); }
+.settings-input { padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 12px; font-family: var(--font-sans); outline: none; width: 160px; }
+.settings-input:focus { border-color: var(--accent2); }
+.settings-select { padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 12px; font-family: var(--font-sans); outline: none; }
+
+/* Checkbox */
+.checkbox { display: flex; align-items: center; gap: var(--gap-sm); cursor: pointer; }
+.checkbox-box { width: 16px; height: 16px; border-radius: var(--radius-xs); border: 1px solid var(--border2); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; flex-shrink: 0; }
+.checkbox.checked .checkbox-box { background: var(--accent2); border-color: var(--accent2); }
+.checkbox-label { font-size: 12px; color: var(--text); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div class="header-left">
+      <div class="logo"><span class="logo-mark">LL</span> Latent Line</div>
+      <nav class="nav-tabs">
+        <a class="nav-tab active">Éditeur</a>
+        <a class="nav-tab">Assets</a>
+        <a class="nav-tab">Accueil</a>
+        <a class="nav-tab">Projection</a>
+        <a class="nav-tab">Paramètres</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="theme-btn" id="themeToggle" title="Changer de thème">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Exporter le projet</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">12 shots · 3 personnages · 30.0s</div>
+        </div>
+        <button class="modal-close">×</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="settings-group">
+          <div class="settings-group-title">Format de sortie</div>
+          <div class="export-grid">
+            <div class="export-option selected">
+              <div class="export-icon">📄</div>
+              <div class="export-name">YAML</div>
+              <div class="export-desc">Structure narrative complète avec méta-données</div>
+              <div class="export-meta">.yaml · lisible · versionnable</div>
+            </div>
+            <div class="export-option">
+              <div class="export-icon">🗃</div>
+              <div class="export-name">JSON</div>
+              <div class="export-desc">Format machine pour intégration API</div>
+              <div class="export-meta">.json · structuré · parsable</div>
+            </div>
+            <div class="export-option">
+              <div class="export-icon">🎬</div>
+              <div class="export-name">EDL</div>
+              <div class="export-desc">Decision list pour montage vidéo (Premiere, DaVinci)</div>
+              <div class="export-meta">.edl · timeline · professionnel</div>
+            </div>
+            <div class="export-option">
+              <div class="export-icon">📑</div>
+              <div class="export-name">PDF</div>
+              <div class="export-desc">Document de présentation avec storyboard</div>
+              <div class="export-meta">.pdf · imprimable · partageable</div>
+            </div>
+            <div class="export-option">
+              <div class="export-icon">🖼</div>
+              <div class="export-name">ZIP Images</div>
+              <div class="export-desc">Archive de toutes les images générées</div>
+              <div class="export-meta">.zip · assets · haute résolution</div>
+            </div>
+            <div class="export-option">
+              <div class="export-icon">📝</div>
+              <div class="export-name">Prompts</div>
+              <div class="export-desc">Liste des indications AI pour chaque shot</div>
+              <div class="export-meta">.txt · batch · réutilisable</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Options</div>
+          <div class="settings-row">
+            <label class="checkbox checked">
+              <div class="checkbox-box">✓</div>
+              <span class="checkbox-label">Inclure les dialogues</span>
+            </label>
+          </div>
+          <div class="settings-row">
+            <label class="checkbox checked">
+              <div class="checkbox-box">✓</div>
+              <span class="checkbox-label">Inclure les actions et moods</span>
+            </label>
+          </div>
+          <div class="settings-row">
+            <label class="checkbox">
+              <div class="checkbox-box"></div>
+              <span class="checkbox-label">Inclure les images générées</span>
+            </label>
+          </div>
+          <div class="settings-row">
+            <label class="checkbox checked">
+              <div class="checkbox-box">✓</div>
+              <span class="checkbox-label">Inclure les références personnages</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Nom du fichier</div>
+          <div style="display:flex;gap:var(--gap-sm);">
+            <input type="text" class="settings-input" value="projet-latent-line" style="flex:1;">
+            <span style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted);padding:4px 0;">.yaml</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn">Annuler</button>
+        <button class="btn btn-primary">Exporter le projet</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const btn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const stored = localStorage.getItem('latent-line-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('latent-line-theme', next);
+  });
+
+  document.querySelectorAll('.export-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.export-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+  document.querySelectorAll('.checkbox').forEach(cb => {
+    cb.addEventListener('click', () => cb.classList.toggle('checked'));
+  });
+</script>
+
+</body>
+</html>

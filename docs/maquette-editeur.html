@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latent Line — Éditeur</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+/* ========== TOKENS ========== */
+:root {
+  --bg: oklch(1 0 0);
+  --surface: oklch(0.98 0.005 240);
+  --surface2: oklch(0.95 0.005 240);
+  --surface3: oklch(0.9 0.005 240);
+  --border: oklch(0.85 0.005 240);
+  --border2: oklch(0.75 0.005 240);
+  --text: oklch(0.15 0.01 240);
+  --text-dim: oklch(0.4 0.01 240);
+  --text-muted: oklch(0.55 0.01 240);
+  --accent: oklch(0.68 0.23 25);
+  --accent2: oklch(0.62 0.27 290);
+  --accent3: oklch(0.72 0.23 170);
+  --warning: oklch(0.75 0.2 50);
+  --success: oklch(0.72 0.23 170);
+  --info: oklch(0.65 0.2 240);
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'DM Mono', 'SF Mono', ui-monospace, monospace;
+
+  --radius-xs: 2px; --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-xl: 12px; --radius-full: 9999px;
+  --gap-xs: 4px; --gap-sm: 8px; --gap-md: 16px; --gap-lg: 24px; --gap-xl: 32px;
+  --pad-xs: 4px; --pad-sm: 8px; --pad-md: 16px; --pad-lg: 24px;
+  --border-width: 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: oklch(0.22 0.01 295);
+    --surface: oklch(0.25 0.01 295);
+    --surface2: oklch(0.3 0.01 295);
+    --surface3: oklch(0.35 0.01 295);
+    --border: oklch(0.4 0.01 295);
+    --border2: oklch(0.45 0.01 295);
+    --text: oklch(0.85 0.01 295);
+    --text-dim: oklch(0.55 0.01 295);
+    --text-muted: oklch(0.35 0.01 295);
+  }
+}
+[data-theme='dark'] {
+  --bg: oklch(0.22 0.01 295); --surface: oklch(0.25 0.01 295); --surface2: oklch(0.3 0.01 295); --surface3: oklch(0.35 0.01 295);
+  --border: oklch(0.4 0.01 295); --border2: oklch(0.45 0.01 295); --text: oklch(0.85 0.01 295); --text-dim: oklch(0.55 0.01 295); --text-muted: oklch(0.35 0.01 295);
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  --bg: oklch(1 0 0); --surface: oklch(0.98 0.005 240); --surface2: oklch(0.95 0.005 240); --surface3: oklch(0.9 0.005 240);
+  --border: oklch(0.85 0.005 240); --border2: oklch(0.75 0.005 240); --text: oklch(0.15 0.01 240); --text-dim: oklch(0.4 0.01 240); --text-muted: oklch(0.55 0.01 240);
+  color-scheme: light;
+}
+
+/* ========== RESET ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  overflow: hidden;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+/* ========== APP SHELL ========== */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ========== HEADER ========== */
+.header {
+  height: 48px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad-md);
+  flex-shrink: 0;
+}
+.header-left, .header-right { display: flex; align-items: center; gap: var(--gap-md); }
+.logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: var(--accent2);
+  display: flex; align-items: center; gap: var(--gap-sm);
+}
+.logo-mark {
+  width: 24px; height: 24px;
+  background: var(--accent2);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-sans); font-size: 11px; font-weight: 700; color: #fff;
+}
+.nav-tabs { display: flex; gap: var(--gap-xs); }
+.nav-tab {
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  transition: all .1s;
+}
+.nav-tab:hover { background: var(--surface2); color: var(--text); }
+.nav-tab.active { background: var(--accent2); color: #fff; }
+.theme-btn {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  transition: all .1s;
+}
+.theme-btn:hover { background: var(--surface2); color: var(--text); }
+
+/* ========== TOOLBAR ========== */
+.toolbar {
+  height: 40px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad-md);
+  flex-shrink: 0;
+}
+.toolbar-left, .toolbar-right { display: flex; align-items: center; gap: var(--gap-sm); }
+.btn {
+  padding: 5px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  display: flex; align-items: center; gap: var(--gap-xs);
+  transition: all .1s;
+}
+.btn:hover { background: var(--surface2); border-color: var(--border2); }
+.btn-primary { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.btn-primary:hover { opacity: .9; }
+.btn-sm { padding: 3px 8px; font-size: 11px; }
+.toolbar-sep { width: 1px; height: 20px; background: var(--border); margin: 0 var(--gap-xs); }
+.status { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+
+/* ========== MAIN LAYOUT ========== */
+.main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+  width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.sidebar-search {
+  padding: var(--pad-sm) var(--pad-md);
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-search input {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 12px;
+  font-family: var(--font-sans);
+  outline: none;
+}
+.sidebar-search input::placeholder { color: var(--text-muted); }
+.sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--pad-sm) 0;
+}
+.sidebar-section { margin-bottom: var(--gap-md); }
+.sidebar-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad-md);
+  margin-bottom: var(--gap-sm);
+}
+.sidebar-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--text-dim);
+}
+.sidebar-section-btn {
+  width: 18px; height: 18px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; line-height: 1;
+  color: var(--text-muted);
+}
+.sidebar-section-btn:hover { background: var(--surface2); color: var(--text); }
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  padding: 5px var(--pad-md);
+  cursor: pointer;
+  transition: background .1s;
+}
+.sidebar-item:hover { background: var(--surface2); }
+.sidebar-avatar {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.sidebar-name {
+  font-size: 12px;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sidebar-actions { display: none; gap: 2px; }
+.sidebar-item:hover .sidebar-actions { display: flex; }
+.sidebar-action {
+  width: 20px; height: 20px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.sidebar-action:hover { background: var(--surface3); color: var(--text); }
+
+/* ========== STORYBOARD ========== */
+.storyboard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+.storyboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--pad-sm) var(--pad-md);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.storyboard-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: .5px;
+  color: var(--text);
+}
+.storyboard-actions { display: flex; gap: var(--gap-sm); }
+.storyboard-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--pad-md);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--gap-md);
+  align-content: start;
+}
+
+/* ========== SHOT CARD ========== */
+.shot-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color .1s, box-shadow .1s;
+}
+.shot-card:hover {
+  border-color: var(--border2);
+  box-shadow: 0 0 0 1px oklch(from var(--accent2) h s l / .15), 0 4px 12px oklch(from var(--accent2) h s l / .08);
+}
+.shot-card.selected {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 1px var(--accent2), 0 0 16px oklch(from var(--accent2) h s l / .15);
+}
+.shot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--pad-sm) var(--pad-md);
+  border-bottom: 1px solid var(--border);
+}
+.shot-frame-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+.shot-badges { display: flex; gap: 4px; }
+.badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: var(--radius-xs);
+  letter-spacing: .3px;
+}
+.badge-char { color: #fff; }
+.badge-ai {
+  background: var(--accent2);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  padding: 2px 4px;
+}
+.shot-image {
+  aspect-ratio: 16 / 9;
+  background: var(--surface2);
+  position: relative;
+  overflow: hidden;
+}
+.shot-image img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.shot-image-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.shot-content {
+  padding: var(--pad-sm) var(--pad-md) var(--pad-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+.shot-range {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.shot-dialogue {
+  font-style: italic;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+  padding-left: 14px;
+  position: relative;
+}
+.shot-dialogue::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+.shot-mood {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+.mood-dot { width: 6px; height: 6px; border-radius: 50%; }
+.shot-action {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.shot-footer {
+  display: flex;
+  gap: var(--gap-xs);
+  padding: 0 var(--pad-md) var(--pad-sm);
+  margin-top: auto;
+}
+.shot-footer-icon {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Mood colors */
+.mood-anxious { color: oklch(0.7 0.18 55); }
+.mood-anxious .mood-dot { background: oklch(0.7 0.18 55); }
+.mood-tense { color: oklch(0.75 0.2 50); }
+.mood-tense .mood-dot { background: oklch(0.75 0.2 50); }
+.mood-serene { color: oklch(0.7 0.2 140); }
+.mood-serene .mood-dot { background: oklch(0.7 0.2 140); }
+.mood-joyful { color: oklch(0.72 0.23 170); }
+.mood-joyful .mood-dot { background: oklch(0.72 0.23 170); }
+.mood-melancholic { color: oklch(0.62 0.27 290); }
+.mood-melancholic .mood-dot { background: oklch(0.62 0.27 290); }
+
+/* ========== TIMELINE ========== */
+.timeline {
+  height: 200px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.timeline-toolbar {
+  height: 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad-md);
+  flex-shrink: 0;
+}
+.timeline-zoom { display: flex; align-items: center; gap: var(--gap-sm); }
+.timeline-zoom label { font-size: 11px; color: var(--text-muted); }
+.timeline-zoom input[type="range"] { width: 100px; }
+.timeline-ruler {
+  height: 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 var(--pad-md);
+  position: relative;
+  flex-shrink: 0;
+}
+.ruler-tick {
+  position: absolute;
+  bottom: 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  transform: translateX(-50%);
+}
+.ruler-tick::before {
+  content: '';
+  position: absolute;
+  bottom: 14px; left: 50%;
+  width: 1px; height: 6px;
+  background: var(--border2);
+}
+.timeline-tracks {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.timeline-markers {
+  height: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--pad-md);
+  position: relative;
+  flex-shrink: 0;
+}
+.marker {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--surface2);
+  padding: 1px 4px;
+  border-radius: var(--radius-xs);
+  transform: translateX(-50%);
+}
+.timeline-events {
+  height: 36px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--pad-md);
+  position: relative;
+  flex-shrink: 0;
+}
+.tl-event {
+  position: absolute;
+  height: 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.tl-event.ai {
+  background: oklch(from var(--accent2) h s l / .12);
+  border-color: oklch(from var(--accent2) h s l / .4);
+  color: var(--text);
+}
+.tl-event .tl-ai-icon { color: var(--accent2); font-size: 9px; }
+.timeline-waveform {
+  height: 40px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 4px var(--pad-md);
+  flex-shrink: 0;
+}
+.wave-bar {
+  flex: 1;
+  background: var(--surface3);
+  border-radius: 1px;
+  min-width: 2px;
+}
+.timeline-controls {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad-md);
+  flex-shrink: 0;
+}
+.play-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent2);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+}
+.timecode {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent2);
+  font-weight: 500;
+}
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo"><span class="logo-mark">LL</span> Latent Line</div>
+      <nav class="nav-tabs">
+        <a class="nav-tab active">Éditeur</a>
+        <a class="nav-tab">Assets</a>
+        <a class="nav-tab">Accueil</a>
+        <a class="nav-tab">Projection</a>
+        <a class="nav-tab">Paramètres</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="theme-btn" id="themeToggle" title="Changer de thème">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <button class="btn btn-primary">+ Nouveau</button>
+      <button class="btn">Importer</button>
+      <button class="btn">Exporter</button>
+      <div class="toolbar-sep"></div>
+      <button class="btn btn-sm">Versions</button>
+      <button class="btn btn-sm">Captures</button>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn btn-sm">Générer batch</button>
+      <button class="btn btn-sm">Bibliothèque</button>
+      <div class="toolbar-sep"></div>
+      <span class="status"><span class="status-dot"></span> Sauvegardé</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-search">
+        <input type="text" placeholder="Search assets...">
+      </div>
+      <div class="sidebar-scroll">
+
+        <!-- Characters -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-header">
+            <span class="sidebar-section-title">Characters</span>
+            <button class="sidebar-section-btn">+</button>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-avatar" style="background:#7c3aed">L</div>
+            <span class="sidebar-name">Léa Marchand</span>
+            <div class="sidebar-actions">
+              <button class="sidebar-action">✎</button>
+              <button class="sidebar-action">🗑</button>
+            </div>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-avatar" style="background:#3b82f6">V</div>
+            <span class="sidebar-name">Victor Aumont</span>
+            <div class="sidebar-actions">
+              <button class="sidebar-action">✎</button>
+              <button class="sidebar-action">🗑</button>
+            </div>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-avatar" style="background:#06b6d4">M</div>
+            <span class="sidebar-name">Mara</span>
+            <div class="sidebar-actions">
+              <button class="sidebar-action">✎</button>
+              <button class="sidebar-action">🗑</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Environments -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-header">
+            <span class="sidebar-section-title">Environments</span>
+            <button class="sidebar-section-btn">+</button>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-avatar" style="background:#8b5cf6; font-size:8px">A</div>
+            <span class="sidebar-name">abandoned lighthouse</span>
+            <div class="sidebar-actions">
+              <button class="sidebar-action">✎</button>
+              <button class="sidebar-action">🗑</button>
+            </div>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-avatar" style="background:#8b5cf6; font-size:8px">A</div>
+            <span class="sidebar-name">interior of abandoned lighthouse</span>
+            <div class="sidebar-actions">
+              <button class="sidebar-action">✎</button>
+              <button class="sidebar-action">🗑</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Templates -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-header">
+            <span class="sidebar-section-title">Templates</span>
+          </div>
+          <div style="padding:0 var(--pad-md);">
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-md); padding:var(--pad-sm) var(--pad-md); margin-bottom:var(--gap-sm);">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                <span style="font-size:9px;background:oklch(0.7 0.18 55);color:#fff;padding:1px 5px;border-radius:var(--radius-xs);font-weight:600;">INSPIRATION</span>
+                <span style="font-size:9px;background:var(--surface3);color:var(--text-dim);padding:1px 5px;border-radius:var(--radius-xs);">Confrontation nocturne</span>
+              </div>
+              <p style="font-size:11px;color:var(--text-muted);line-height:1.4;">Two figures facing each other under neon lights, tense atmosphere, cinematic</p>
+              <button class="btn btn-sm" style="margin-top:6px;width:100%;justify-content:center;">+ Utiliser</button>
+            </div>
+            <div style="background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-md); padding:var(--pad-sm) var(--pad-md);">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                <span style="font-size:9px;background:var(--accent2);color:#fff;padding:1px 5px;border-radius:var(--radius-xs);font-weight:600;">INSPIRATION</span>
+                <span style="font-size:9px;background:var(--surface3);color:var(--text-dim);padding:1px 5px;border-radius:var(--radius-xs);">Révélation douce</span>
+              </div>
+              <p style="font-size:11px;color:var(--text-muted);line-height:1.4;">Close-up on a face with soft golden light, emotional reveal, film grain</p>
+              <button class="btn btn-sm" style="margin-top:6px;width:100%;justify-content:center;">+ Utiliser</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- STORYBOARD -->
+    <section class="storyboard">
+      <div class="storyboard-header">
+        <h2 class="storyboard-title">Storyboard</h2>
+        <div class="storyboard-actions">
+          <button class="btn btn-sm">⊞ Grille</button>
+          <button class="btn btn-sm">☰ Liste</button>
+        </div>
+      </div>
+      <div class="storyboard-grid">
+
+        <!-- Frame 0 -->
+        <div class="shot-card selected">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 0</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#7c3aed">LM</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 0 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 0</span><span>End: 48</span></div>
+            <div class="shot-action">⚡ walking against wind, hand on lapel</div>
+            <div class="shot-mood mood-anxious"><span class="mood-dot"></span> anxious</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 48 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 48</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#7c3aed">LM</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 48 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 48</span><span>End: 96</span></div>
+            <div class="shot-action">⚡ pushing heavy door, cautious</div>
+            <div class="shot-mood mood-tense"><span class="mood-dot"></span> tense</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 96 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 96</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#3b82f6">VA</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 96 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 96</span><span>End: 144</span></div>
+            <div class="shot-action">⚡ pacing nervously, glancing at door</div>
+            <div class="shot-mood mood-anxious"><span class="mood-dot"></span> anxious</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 144 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 144</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#3b82f6">VA</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 144 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 144</span><span>End: 192</span></div>
+            <div class="shot-dialogue" style="--text-muted:var(--accent2)">"Victor. Tu as ce que j'ai demandé ?"</div>
+            <div class="shot-action">⚡ entering, scanning room</div>
+            <div class="shot-mood mood-serene"><span class="mood-dot"></span> serene</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 192 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 192</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#3b82f6">VA</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 192 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 192</span><span>End: 240</span></div>
+            <div class="shot-dialogue">"Tout est là. Noms, dates, comptes offshore."</div>
+            <div class="shot-action">⚡ reaching into jacket, pulling out envelope</div>
+            <div class="shot-mood mood-anxious"><span class="mood-dot"></span> anxious</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 240 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 240</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#7c3aed">LM</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 240 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 240</span><span>End: 288</span></div>
+            <div class="shot-action">⚡ freezing, eyes up toward staircase</div>
+            <div class="shot-mood mood-serene"><span class="mood-dot"></span> serene</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 290 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 290</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#06b6d4">M</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 290 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 290</span><span>End: 338</span></div>
+            <div class="shot-action">⚡ descending stairs slowly, hands visible, cold smile</div>
+            <div class="shot-mood mood-serene"><span class="mood-dot"></span> serene</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 336 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 336</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#06b6d4">M</span><span class="badge badge-ai">✨ AI</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 336 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 336</span><span>End: 384</span></div>
+            <div class="shot-dialogue">"Cette enveloppe ne vous appartient pas, inspectrice."</div>
+            <div class="shot-action">⚡ standing still at base of stairs, arms crossed</div>
+            <div class="shot-mood mood-serene"><span class="mood-dot"></span> serene</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 384 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 384</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#3b82f6">VA</span><span class="badge badge-ai">✨ AI</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 384 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 384</span><span>End: 432</span></div>
+            <div class="shot-dialogue">"Je sors de là !"</div>
+            <div class="shot-action">⚡ lunging toward exit door</div>
+            <div class="shot-mood mood-anxious"><span class="mood-dot"></span> anxious</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 434 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 434</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#7c3aed">LM</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 434 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 434</span><span>End: 482</span></div>
+            <div class="shot-dialogue">"Personne ne bouge."</div>
+            <div class="shot-action">⚡ drawing weapon, pointing at Mara</div>
+            <div class="shot-mood mood-tense"><span class="mood-dot"></span> tense</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 480 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 480</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#06b6d4">M</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 480 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 480</span><span>End: 528</span></div>
+            <div class="shot-dialogue">"Division Noire. Je la protège depuis six mois."</div>
+            <div class="shot-action">⚡ slowly opening jacket, revealing badge</div>
+            <div class="shot-mood mood-serene"><span class="mood-dot"></span> serene</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+        <!-- Frame 528 -->
+        <div class="shot-card">
+          <div class="shot-header">
+            <span class="shot-frame-num">Frame 528</span>
+            <div class="shot-badges"><span class="badge badge-char" style="background:#7c3aed">LM</span></div>
+          </div>
+          <div class="shot-image"><div class="shot-image-placeholder">Frame 528 — no image</div></div>
+          <div class="shot-content">
+            <div class="shot-range"><span>Start: 528</span><span>End: 600</span></div>
+            <div class="shot-action">⚡ standing, weapon holstered, looking at Mara</div>
+            <div class="shot-mood mood-melancholic"><span class="mood-dot"></span> melancholic</div>
+          </div>
+          <div class="shot-footer"><span class="shot-footer-icon">🎵</span><span class="shot-footer-icon">✨</span></div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+    <div class="timeline-toolbar">
+      <div style="display:flex;gap:4px;">
+        <button class="btn btn-sm">−</button>
+        <button class="btn btn-sm">+</button>
+        <button class="btn btn-sm">⤢</button>
+      </div>
+      <div class="timeline-zoom">
+        <label>Zoom:</label>
+        <input type="range" min="0.5" max="5" step="0.1" value="1">
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">1×</span>
+      </div>
+    </div>
+    <div class="timeline-ruler">
+      <span class="ruler-tick" style="left:0%">0</span>
+      <span class="ruler-tick" style="left:10%">60</span>
+      <span class="ruler-tick" style="left:20%">120</span>
+      <span class="ruler-tick" style="left:30%">180</span>
+      <span class="ruler-tick" style="left:40%">240</span>
+      <span class="ruler-tick" style="left:50%">300</span>
+      <span class="ruler-tick" style="left:60%">360</span>
+      <span class="ruler-tick" style="left:70%">420</span>
+      <span class="ruler-tick" style="left:80%">480</span>
+      <span class="ruler-tick" style="left:90%">540</span>
+      <span class="ruler-tick" style="left:100%">600</span>
+    </div>
+    <div class="timeline-tracks">
+      <div class="timeline-markers">
+        <span class="marker" style="left:8%">1A</span>
+        <span class="marker" style="left:24%">2A</span>
+        <span class="marker" style="left:40%">3A</span>
+        <span class="marker" style="left:56%">4A</span>
+        <span class="marker" style="left:72%">5A</span>
+        <span class="marker" style="left:88%">6A</span>
+      </div>
+      <div class="timeline-events">
+        <div class="tl-event" style="left:0%;width:8%;">Frame 0</div>
+        <div class="tl-event" style="left:8%;width:8%;">Frame 48</div>
+        <div class="tl-event" style="left:16%;width:8%;">Frame 96</div>
+        <div class="tl-event ai" style="left:24%;width:8%;"><span class="tl-ai-icon">✨</span> Frame 144</div>
+        <div class="tl-event ai" style="left:32%;width:8%;"><span class="tl-ai-icon">✨</span> Frame 192</div>
+        <div class="tl-event" style="left:40%;width:8%;">Frame 240</div>
+        <div class="tl-event" style="left:48%;width:8.2%;">Frame 290</div>
+        <div class="tl-event ai" style="left:56%;width:8%;"><span class="tl-ai-icon">✨</span> Frame 336</div>
+        <div class="tl-event ai" style="left:64%;width:8%;"><span class="tl-ai-icon">✨</span> Frame 384</div>
+        <div class="tl-event" style="left:72%;width:8%;">Frame 434</div>
+        <div class="tl-event" style="left:80%;width:8%;">Frame 480</div>
+        <div class="tl-event" style="left:88%;width:12%;">Frame 528</div>
+      </div>
+      <div class="timeline-waveform">
+        <div class="wave-bar" style="height:20%"></div>
+        <div class="wave-bar" style="height:35%"></div>
+        <div class="wave-bar" style="height:50%"></div>
+        <div class="wave-bar" style="height:80%"></div>
+        <div class="wave-bar" style="height:100%"></div>
+        <div class="wave-bar" style="height:90%"></div>
+        <div class="wave-bar" style="height:60%"></div>
+        <div class="wave-bar" style="height:40%"></div>
+        <div class="wave-bar" style="height:55%"></div>
+        <div class="wave-bar" style="height:75%"></div>
+        <div class="wave-bar" style="height:85%"></div>
+        <div class="wave-bar" style="height:45%"></div>
+        <div class="wave-bar" style="height:30%"></div>
+        <div class="wave-bar" style="height:65%"></div>
+        <div class="wave-bar" style="height:95%"></div>
+        <div class="wave-bar" style="height:70%"></div>
+        <div class="wave-bar" style="height:50%"></div>
+        <div class="wave-bar" style="height:35%"></div>
+        <div class="wave-bar" style="height:60%"></div>
+        <div class="wave-bar" style="height:80%"></div>
+        <div class="wave-bar" style="height:100%"></div>
+        <div class="wave-bar" style="height:90%"></div>
+        <div class="wave-bar" style="height:55%"></div>
+        <div class="wave-bar" style="height:40%"></div>
+        <div class="wave-bar" style="height:65%"></div>
+        <div class="wave-bar" style="height:75%"></div>
+        <div class="wave-bar" style="height:50%"></div>
+        <div class="wave-bar" style="height:35%"></div>
+        <div class="wave-bar" style="height:45%"></div>
+        <div class="wave-bar" style="height:70%"></div>
+        <div class="wave-bar" style="height:85%"></div>
+        <div class="wave-bar" style="height:60%"></div>
+        <div class="wave-bar" style="height:40%"></div>
+        <div class="wave-bar" style="height:55%"></div>
+        <div class="wave-bar" style="height:80%"></div>
+        <div class="wave-bar" style="height:95%"></div>
+        <div class="wave-bar" style="height:70%"></div>
+        <div class="wave-bar" style="height:50%"></div>
+        <div class="wave-bar" style="height:35%"></div>
+        <div class="wave-bar" style="height:60%"></div>
+        <div class="wave-bar" style="height:85%"></div>
+        <div class="wave-bar" style="height:100%"></div>
+      </div>
+    </div>
+    <div class="timeline-controls">
+      <div style="display:flex;align-items:center;gap:var(--gap-sm);">
+        <button class="play-btn">▶</button>
+        <button class="btn btn-sm">■</button>
+        <button class="btn btn-sm">⏮</button>
+        <button class="btn btn-sm">⏭</button>
+        <span class="timecode">00:00.00 / 00:30.00</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:var(--gap-sm);">
+        <span style="font-size:11px;color:var(--text-muted);">Script</span>
+        <span style="font-size:11px;color:var(--text-muted);">0 markers</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Toggle thème minimal
+  const btn = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const stored = localStorage.getItem('latent-line-theme');
+  if (stored) html.setAttribute('data-theme', stored);
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('latent-line-theme', next);
+  });
+</script>
+
+</body>
+</html>

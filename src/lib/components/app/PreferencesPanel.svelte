@@ -2,6 +2,8 @@
 	import { getContext } from 'svelte';
 	import { PREFS_CONTEXT_KEY, type Preferences } from '$lib/stores/preferences.svelte';
 	import { focusTrap } from '$lib/actions/focus-trap';
+	import Icon from '$lib/components/ds/Icon.svelte';
+	import Button from '$lib/components/ds/Button.svelte';
 
 	let { onclose }: { onclose: () => void } = $props();
 
@@ -21,17 +23,19 @@
 	>
 		<header class="panel-header">
 			<span>Préférences</span>
-			<button onclick={onclose} title="Fermer" aria-label="Fermer" class="close-btn">✕</button>
+			<button onclick={onclose} title="Fermer" aria-label="Fermer" class="close-btn">
+				<Icon name="close" size={16} />
+			</button>
 		</header>
 
 		<div class="panel-body">
 			<label class="field">
 				<span class="label">Thème</span>
-			<select bind:value={prefs.theme}>
-				<option value="light">Clair</option>
-				<option value="dark">Sombre</option>
-				<option value="system">Système</option>
-			</select>
+				<select bind:value={prefs.theme}>
+					<option value="light">Clair</option>
+					<option value="dark">Sombre</option>
+					<option value="system">Système</option>
+				</select>
 			</label>
 
 			<label class="field">
@@ -54,7 +58,7 @@
 		</div>
 
 		<footer class="panel-footer">
-			<button onclick={reset} class="btn-secondary">Réinitialiser</button>
+			<Button variant="ghost" size="sm" label="Réinitialiser" onclick={reset} />
 		</footer>
 	</div>
 </div>
@@ -81,7 +85,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0.5rem 0.75rem;
-		border-bottom: var(--border-width) solid var(--color-border);
+		border-bottom: var(--border-width) solid var(--border);
 		font-size: var(--text-sm);
 		font-weight: 600;
 	}
@@ -89,8 +93,20 @@
 		background: none;
 		border: none;
 		cursor: pointer;
-		color: var(--color-text-muted);
-		font-size: var(--text-xs);
+		color: var(--text-muted);
+		width: 28px;
+		height: 28px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-sm);
+		transition:
+			background var(--transition-fast),
+			color var(--transition-fast);
+	}
+	.close-btn:hover {
+		background: var(--surface-hover);
+		color: var(--text);
 	}
 	.panel-body {
 		display: flex;
@@ -106,12 +122,12 @@
 		font-size: var(--text-xs);
 	}
 	.label {
-		color: var(--color-text-muted);
+		color: var(--text-muted);
 		flex-shrink: 0;
 	}
 	.panel-footer {
 		padding: 0.5rem 0.75rem;
-		border-top: var(--border-width) solid var(--color-border);
+		border-top: var(--border-width) solid var(--border);
 		display: flex;
 		justify-content: flex-end;
 	}

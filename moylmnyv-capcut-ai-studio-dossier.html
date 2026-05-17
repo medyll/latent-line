@@ -1,1356 +1,2047 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CapCut AI Studio — Dossier Complet 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --surface2: #18181f;
-    --border: #252530;
-    --accent: #ff3d5a;
-    --accent2: #7c3aed;
-    --accent3: #00d4aa;
-    --text: #e8e8f0;
-    --text-dim: #8888a0;
-    --text-muted: #44445a;
-    --mono: 'DM Mono', monospace;
-    --sans: 'DM Sans', sans-serif;
-    --display: 'Bebas Neue', sans-serif;
-  }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CapCut AI Studio — Dossier Complet 2026</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--bg: #0a0a0f;
+				--surface: #111118;
+				--surface2: #18181f;
+				--border: #252530;
+				--accent: #ff3d5a;
+				--accent2: #7c3aed;
+				--accent3: #00d4aa;
+				--text: #e8e8f0;
+				--text-dim: #8888a0;
+				--text-muted: #44445a;
+				--mono: 'DM Mono', monospace;
+				--sans: 'DM Sans', sans-serif;
+				--display: 'Bebas Neue', sans-serif;
+			}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
 
-  html { scroll-behavior: smooth; }
+			html {
+				scroll-behavior: smooth;
+			}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 15px;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
+			body {
+				background: var(--bg);
+				color: var(--text);
+				font-family: var(--sans);
+				font-size: 15px;
+				line-height: 1.7;
+				overflow-x: hidden;
+			}
 
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-  }
+			/* NOISE OVERLAY */
+			body::before {
+				content: '';
+				position: fixed;
+				inset: 0;
+				background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+				pointer-events: none;
+				z-index: 0;
+			}
 
-  /* NAV */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(10,10,15,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    height: 52px;
-  }
-  .nav-logo {
-    font-family: var(--display);
-    font-size: 18px;
-    letter-spacing: 2px;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-  .nav-links {
-    display: flex;
-    gap: 1.5rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .nav-links a {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--text-dim);
-    text-decoration: none;
-    white-space: nowrap;
-    transition: color 0.2s;
-    text-transform: uppercase;
-  }
-  .nav-links a:hover { color: var(--accent); }
+			/* NAV */
+			nav {
+				position: sticky;
+				top: 0;
+				z-index: 100;
+				background: rgba(10, 10, 15, 0.92);
+				backdrop-filter: blur(12px);
+				border-bottom: 1px solid var(--border);
+				padding: 0 2rem;
+				display: flex;
+				align-items: center;
+				gap: 2rem;
+				height: 52px;
+			}
+			.nav-logo {
+				font-family: var(--display);
+				font-size: 18px;
+				letter-spacing: 2px;
+				color: var(--accent);
+				white-space: nowrap;
+			}
+			.nav-links {
+				display: flex;
+				gap: 1.5rem;
+				overflow-x: auto;
+				scrollbar-width: none;
+			}
+			.nav-links a {
+				font-family: var(--mono);
+				font-size: 11px;
+				letter-spacing: 0.08em;
+				color: var(--text-dim);
+				text-decoration: none;
+				white-space: nowrap;
+				transition: color 0.2s;
+				text-transform: uppercase;
+			}
+			.nav-links a:hover {
+				color: var(--accent);
+			}
 
-  /* HERO */
-  .hero {
-    position: relative;
-    min-height: 420px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 4rem 3rem 3rem;
-    overflow: hidden;
-    border-bottom: 1px solid var(--border);
-  }
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,61,90,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,61,90,0.06) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
-  }
-  .hero-glow {
-    position: absolute;
-    width: 600px;
-    height: 400px;
-    top: -100px;
-    right: -100px;
-    background: radial-gradient(ellipse, rgba(124,58,237,0.15) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .hero-glow2 {
-    position: absolute;
-    width: 400px;
-    height: 300px;
-    bottom: -50px;
-    left: 0;
-    background: radial-gradient(ellipse, rgba(255,61,90,0.1) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .hero-tag {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    position: relative;
-  }
-  .hero h1 {
-    font-family: var(--display);
-    font-size: clamp(52px, 8vw, 96px);
-    line-height: 0.9;
-    letter-spacing: 2px;
-    color: var(--text);
-    position: relative;
-    margin-bottom: 1.5rem;
-  }
-  .hero h1 span { color: var(--accent); }
-  .hero-meta {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text-dim);
-    display: flex;
-    gap: 2rem;
-    position: relative;
-  }
-  .hero-meta span::before { content: '—  '; color: var(--text-muted); }
+			/* HERO */
+			.hero {
+				position: relative;
+				min-height: 420px;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+				padding: 4rem 3rem 3rem;
+				overflow: hidden;
+				border-bottom: 1px solid var(--border);
+			}
+			.hero-grid {
+				position: absolute;
+				inset: 0;
+				background-image:
+					linear-gradient(rgba(255, 61, 90, 0.06) 1px, transparent 1px),
+					linear-gradient(90deg, rgba(255, 61, 90, 0.06) 1px, transparent 1px);
+				background-size: 60px 60px;
+				mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+			}
+			.hero-glow {
+				position: absolute;
+				width: 600px;
+				height: 400px;
+				top: -100px;
+				right: -100px;
+				background: radial-gradient(ellipse, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+				pointer-events: none;
+			}
+			.hero-glow2 {
+				position: absolute;
+				width: 400px;
+				height: 300px;
+				bottom: -50px;
+				left: 0;
+				background: radial-gradient(ellipse, rgba(255, 61, 90, 0.1) 0%, transparent 70%);
+				pointer-events: none;
+			}
+			.hero-tag {
+				font-family: var(--mono);
+				font-size: 11px;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				text-transform: uppercase;
+				margin-bottom: 1rem;
+				position: relative;
+			}
+			.hero h1 {
+				font-family: var(--display);
+				font-size: clamp(52px, 8vw, 96px);
+				line-height: 0.9;
+				letter-spacing: 2px;
+				color: var(--text);
+				position: relative;
+				margin-bottom: 1.5rem;
+			}
+			.hero h1 span {
+				color: var(--accent);
+			}
+			.hero-meta {
+				font-family: var(--mono);
+				font-size: 12px;
+				color: var(--text-dim);
+				display: flex;
+				gap: 2rem;
+				position: relative;
+			}
+			.hero-meta span::before {
+				content: '—  ';
+				color: var(--text-muted);
+			}
 
-  /* LAYOUT */
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
+			/* LAYOUT */
+			.container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 0 2rem;
+			}
 
-  /* SECTIONS */
-  section {
-    padding: 5rem 2rem;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-  }
+			/* SECTIONS */
+			section {
+				padding: 5rem 2rem;
+				border-bottom: 1px solid var(--border);
+				position: relative;
+			}
 
-  .section-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-  }
+			.section-label {
+				font-family: var(--mono);
+				font-size: 10px;
+				letter-spacing: 0.2em;
+				text-transform: uppercase;
+				color: var(--accent);
+				margin-bottom: 0.5rem;
+			}
 
-  h2 {
-    font-family: var(--display);
-    font-size: clamp(36px, 5vw, 56px);
-    letter-spacing: 1px;
-    line-height: 1;
-    color: var(--text);
-    margin-bottom: 2.5rem;
-  }
-  h2 .dim { color: var(--text-muted); }
+			h2 {
+				font-family: var(--display);
+				font-size: clamp(36px, 5vw, 56px);
+				letter-spacing: 1px;
+				line-height: 1;
+				color: var(--text);
+				margin-bottom: 2.5rem;
+			}
+			h2 .dim {
+				color: var(--text-muted);
+			}
 
-  h3 {
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text);
-    margin-bottom: 0.75rem;
-  }
+			h3 {
+				font-family: var(--sans);
+				font-size: 14px;
+				font-weight: 700;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+				color: var(--text);
+				margin-bottom: 0.75rem;
+			}
 
-  p { color: var(--text-dim); margin-bottom: 1rem; max-width: 72ch; }
-  p:last-child { margin-bottom: 0; }
+			p {
+				color: var(--text-dim);
+				margin-bottom: 1rem;
+				max-width: 72ch;
+			}
+			p:last-child {
+				margin-bottom: 0;
+			}
 
-  /* ARCHITECTURE DIAGRAM */
-  .arch-diagram {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 2.5rem;
-    font-family: var(--mono);
-    font-size: 12px;
-    line-height: 1.8;
-    color: var(--text-dim);
-    overflow-x: auto;
-    margin-bottom: 3rem;
-    position: relative;
-  }
-  .arch-diagram::before {
-    content: 'ARCHITECTURE';
-    position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    color: var(--text-muted);
-  }
-  .arch-hl { color: var(--accent); }
-  .arch-hl2 { color: var(--accent3); }
-  .arch-hl3 { color: var(--accent2); }
+			/* ARCHITECTURE DIAGRAM */
+			.arch-diagram {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 2px;
+				padding: 2.5rem;
+				font-family: var(--mono);
+				font-size: 12px;
+				line-height: 1.8;
+				color: var(--text-dim);
+				overflow-x: auto;
+				margin-bottom: 3rem;
+				position: relative;
+			}
+			.arch-diagram::before {
+				content: 'ARCHITECTURE';
+				position: absolute;
+				top: 1rem;
+				right: 1.5rem;
+				font-size: 9px;
+				letter-spacing: 0.2em;
+				color: var(--text-muted);
+			}
+			.arch-hl {
+				color: var(--accent);
+			}
+			.arch-hl2 {
+				color: var(--accent3);
+			}
+			.arch-hl3 {
+				color: var(--accent2);
+			}
 
-  /* FEATURE GRID */
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 3rem;
-  }
-  .feature-card {
-    background: var(--surface);
-    padding: 2rem;
-    transition: background 0.2s;
-  }
-  .feature-card:hover { background: var(--surface2); }
-  .feature-card .f-icon {
-    font-size: 22px;
-    margin-bottom: 1rem;
-    display: block;
-  }
-  .feature-card .f-tag {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent3);
-    margin-bottom: 0.5rem;
-  }
-  .feature-card h3 { font-size: 13px; margin-bottom: 0.5rem; }
-  .feature-card p { font-size: 13px; line-height: 1.6; }
+			/* FEATURE GRID */
+			.feature-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+				gap: 1px;
+				background: var(--border);
+				border: 1px solid var(--border);
+				margin-bottom: 3rem;
+			}
+			.feature-card {
+				background: var(--surface);
+				padding: 2rem;
+				transition: background 0.2s;
+			}
+			.feature-card:hover {
+				background: var(--surface2);
+			}
+			.feature-card .f-icon {
+				font-size: 22px;
+				margin-bottom: 1rem;
+				display: block;
+			}
+			.feature-card .f-tag {
+				font-family: var(--mono);
+				font-size: 9px;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				color: var(--accent3);
+				margin-bottom: 0.5rem;
+			}
+			.feature-card h3 {
+				font-size: 13px;
+				margin-bottom: 0.5rem;
+			}
+			.feature-card p {
+				font-size: 13px;
+				line-height: 1.6;
+			}
 
-  /* TECH STACK */
-  .tech-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--mono);
-    font-size: 12px;
-    margin-bottom: 3rem;
-  }
-  .tech-table th {
-    text-align: left;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--accent);
-    color: var(--text-dim);
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-  .tech-table td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-dim);
-    vertical-align: top;
-  }
-  .tech-table tr:hover td { background: var(--surface); }
-  .tech-table .layer { color: var(--accent); font-weight: 500; }
-  .tech-table .name { color: var(--text); }
-  .tech-table .note { color: var(--text-muted); font-size: 11px; }
+			/* TECH STACK */
+			.tech-table {
+				width: 100%;
+				border-collapse: collapse;
+				font-family: var(--mono);
+				font-size: 12px;
+				margin-bottom: 3rem;
+			}
+			.tech-table th {
+				text-align: left;
+				padding: 0.75rem 1rem;
+				border-bottom: 1px solid var(--accent);
+				color: var(--text-dim);
+				font-size: 10px;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+			}
+			.tech-table td {
+				padding: 0.75rem 1rem;
+				border-bottom: 1px solid var(--border);
+				color: var(--text-dim);
+				vertical-align: top;
+			}
+			.tech-table tr:hover td {
+				background: var(--surface);
+			}
+			.tech-table .layer {
+				color: var(--accent);
+				font-weight: 500;
+			}
+			.tech-table .name {
+				color: var(--text);
+			}
+			.tech-table .note {
+				color: var(--text-muted);
+				font-size: 11px;
+			}
 
-  /* MODEL SPECS */
-  .model-block {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 2rem;
-  }
-  .model-cell {
-    background: var(--surface);
-    padding: 1.5rem 2rem;
-  }
-  .model-cell .label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.5rem;
-  }
-  .model-cell .value {
-    font-size: 14px;
-    color: var(--text);
-    font-weight: 500;
-  }
-  .model-cell .value.accent { color: var(--accent); font-family: var(--mono); }
-  .model-cell .value.green { color: var(--accent3); font-family: var(--mono); }
-  .model-cell .value.purple { color: var(--accent2); font-family: var(--mono); }
+			/* MODEL SPECS */
+			.model-block {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 1px;
+				background: var(--border);
+				border: 1px solid var(--border);
+				margin-bottom: 2rem;
+			}
+			.model-cell {
+				background: var(--surface);
+				padding: 1.5rem 2rem;
+			}
+			.model-cell .label {
+				font-family: var(--mono);
+				font-size: 10px;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				color: var(--text-muted);
+				margin-bottom: 0.5rem;
+			}
+			.model-cell .value {
+				font-size: 14px;
+				color: var(--text);
+				font-weight: 500;
+			}
+			.model-cell .value.accent {
+				color: var(--accent);
+				font-family: var(--mono);
+			}
+			.model-cell .value.green {
+				color: var(--accent3);
+				font-family: var(--mono);
+			}
+			.model-cell .value.purple {
+				color: var(--accent2);
+				font-family: var(--mono);
+			}
 
-  /* DESIGN REFS */
-  .ref-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  .ref-card {
-    border: 1px solid var(--border);
-    overflow: hidden;
-    position: relative;
-    background: var(--surface);
-  }
-  .ref-visual {
-    height: 180px;
-    position: relative;
-    overflow: hidden;
-  }
-  .ref-card .ref-info {
-    padding: 1.25rem 1.5rem;
-    border-top: 1px solid var(--border);
-  }
-  .ref-card .ref-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.25rem;
-  }
-  .ref-card .ref-desc {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-family: var(--mono);
-  }
+			/* DESIGN REFS */
+			.ref-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+				gap: 1.5rem;
+				margin-bottom: 2rem;
+			}
+			.ref-card {
+				border: 1px solid var(--border);
+				overflow: hidden;
+				position: relative;
+				background: var(--surface);
+			}
+			.ref-visual {
+				height: 180px;
+				position: relative;
+				overflow: hidden;
+			}
+			.ref-card .ref-info {
+				padding: 1.25rem 1.5rem;
+				border-top: 1px solid var(--border);
+			}
+			.ref-card .ref-title {
+				font-size: 13px;
+				font-weight: 600;
+				color: var(--text);
+				margin-bottom: 0.25rem;
+			}
+			.ref-card .ref-desc {
+				font-size: 12px;
+				color: var(--text-muted);
+				font-family: var(--mono);
+			}
 
-  /* SVG MOCKUPS */
-  .ref-svg { width: 100%; height: 100%; }
+			/* SVG MOCKUPS */
+			.ref-svg {
+				width: 100%;
+				height: 100%;
+			}
 
-  /* POSITIONING */
-  .positioning-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 3rem;
-  }
-  .pos-card {
-    background: var(--surface);
-    padding: 2rem;
-    text-align: center;
-  }
-  .pos-card .competitor {
-    font-family: var(--display);
-    font-size: 22px;
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
-  }
-  .pos-card .pos-tag {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    display: block;
-  }
-  .pos-bar-wrap { height: 4px; background: var(--border); margin-bottom: 0.5rem; position: relative; }
-  .pos-bar { height: 100%; }
-  .pos-row-label { font-family: var(--mono); font-size: 10px; color: var(--text-muted); text-align: left; margin-bottom: 0.25rem; display: flex; justify-content: space-between; }
-  .capcut-pos .pos-bar { background: var(--accent); }
-  .runway-pos .pos-bar { background: var(--accent2); }
-  .sora-pos .pos-bar { background: var(--accent3); }
-  .capcut-pos .competitor { color: var(--accent); }
-  .runway-pos .competitor { color: var(--accent2); }
-  .sora-pos .competitor { color: var(--accent3); }
+			/* POSITIONING */
+			.positioning-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1px;
+				background: var(--border);
+				border: 1px solid var(--border);
+				margin-bottom: 3rem;
+			}
+			.pos-card {
+				background: var(--surface);
+				padding: 2rem;
+				text-align: center;
+			}
+			.pos-card .competitor {
+				font-family: var(--display);
+				font-size: 22px;
+				letter-spacing: 1px;
+				margin-bottom: 0.5rem;
+			}
+			.pos-card .pos-tag {
+				font-family: var(--mono);
+				font-size: 10px;
+				letter-spacing: 0.1em;
+				color: var(--text-muted);
+				text-transform: uppercase;
+				margin-bottom: 1.5rem;
+				display: block;
+			}
+			.pos-bar-wrap {
+				height: 4px;
+				background: var(--border);
+				margin-bottom: 0.5rem;
+				position: relative;
+			}
+			.pos-bar {
+				height: 100%;
+			}
+			.pos-row-label {
+				font-family: var(--mono);
+				font-size: 10px;
+				color: var(--text-muted);
+				text-align: left;
+				margin-bottom: 0.25rem;
+				display: flex;
+				justify-content: space-between;
+			}
+			.capcut-pos .pos-bar {
+				background: var(--accent);
+			}
+			.runway-pos .pos-bar {
+				background: var(--accent2);
+			}
+			.sora-pos .pos-bar {
+				background: var(--accent3);
+			}
+			.capcut-pos .competitor {
+				color: var(--accent);
+			}
+			.runway-pos .competitor {
+				color: var(--accent2);
+			}
+			.sora-pos .competitor {
+				color: var(--accent3);
+			}
 
-  /* TIMELINE */
-  .timeline {
-    position: relative;
-    padding-left: 2rem;
-    margin-bottom: 3rem;
-  }
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8px;
-    bottom: 8px;
-    width: 1px;
-    background: linear-gradient(var(--accent), var(--accent2), var(--accent3));
-  }
-  .tl-item {
-    position: relative;
-    padding: 0 0 2.5rem 1.5rem;
-  }
-  .tl-item::before {
-    content: '';
-    position: absolute;
-    left: -4px;
-    top: 8px;
-    width: 8px;
-    height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-  }
-  .tl-item.v2::before { background: var(--accent2); }
-  .tl-item.v3::before { background: var(--accent3); }
-  .tl-date {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
-  }
-  .tl-title { font-weight: 600; color: var(--text); font-size: 14px; margin-bottom: 0.25rem; }
-  .tl-desc { font-size: 13px; color: var(--text-dim); }
+			/* TIMELINE */
+			.timeline {
+				position: relative;
+				padding-left: 2rem;
+				margin-bottom: 3rem;
+			}
+			.timeline::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 8px;
+				bottom: 8px;
+				width: 1px;
+				background: linear-gradient(var(--accent), var(--accent2), var(--accent3));
+			}
+			.tl-item {
+				position: relative;
+				padding: 0 0 2.5rem 1.5rem;
+			}
+			.tl-item::before {
+				content: '';
+				position: absolute;
+				left: -4px;
+				top: 8px;
+				width: 8px;
+				height: 8px;
+				background: var(--accent);
+				border-radius: 50%;
+			}
+			.tl-item.v2::before {
+				background: var(--accent2);
+			}
+			.tl-item.v3::before {
+				background: var(--accent3);
+			}
+			.tl-date {
+				font-family: var(--mono);
+				font-size: 10px;
+				letter-spacing: 0.1em;
+				color: var(--text-muted);
+				text-transform: uppercase;
+				margin-bottom: 0.25rem;
+			}
+			.tl-title {
+				font-weight: 600;
+				color: var(--text);
+				font-size: 14px;
+				margin-bottom: 0.25rem;
+			}
+			.tl-desc {
+				font-size: 13px;
+				color: var(--text-dim);
+			}
 
-  /* PRICING */
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 3rem;
-  }
-  .price-card {
-    background: var(--surface);
-    padding: 2.5rem 2rem;
-  }
-  .price-card.featured { background: var(--surface2); }
-  .price-card .plan { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 1rem; }
-  .price-card .amount { font-family: var(--display); font-size: 48px; letter-spacing: 1px; line-height: 1; margin-bottom: 0.25rem; }
-  .price-card .billing { font-family: var(--mono); font-size: 11px; color: var(--text-muted); margin-bottom: 1.5rem; }
-  .price-card ul { list-style: none; }
-  .price-card ul li { font-size: 13px; color: var(--text-dim); padding: 0.3rem 0; display: flex; align-items: flex-start; gap: 0.5rem; }
-  .price-card ul li::before { content: '→'; color: var(--accent3); font-family: var(--mono); flex-shrink: 0; }
+			/* PRICING */
+			.pricing-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1px;
+				background: var(--border);
+				border: 1px solid var(--border);
+				margin-bottom: 3rem;
+			}
+			.price-card {
+				background: var(--surface);
+				padding: 2.5rem 2rem;
+			}
+			.price-card.featured {
+				background: var(--surface2);
+			}
+			.price-card .plan {
+				font-family: var(--mono);
+				font-size: 10px;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--text-muted);
+				margin-bottom: 1rem;
+			}
+			.price-card .amount {
+				font-family: var(--display);
+				font-size: 48px;
+				letter-spacing: 1px;
+				line-height: 1;
+				margin-bottom: 0.25rem;
+			}
+			.price-card .billing {
+				font-family: var(--mono);
+				font-size: 11px;
+				color: var(--text-muted);
+				margin-bottom: 1.5rem;
+			}
+			.price-card ul {
+				list-style: none;
+			}
+			.price-card ul li {
+				font-size: 13px;
+				color: var(--text-dim);
+				padding: 0.3rem 0;
+				display: flex;
+				align-items: flex-start;
+				gap: 0.5rem;
+			}
+			.price-card ul li::before {
+				content: '→';
+				color: var(--accent3);
+				font-family: var(--mono);
+				flex-shrink: 0;
+			}
 
-  /* RISK */
-  .risk-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 3rem;
-  }
-  .risk-card {
-    background: var(--surface);
-    padding: 1.5rem 2rem;
-    border-left: 3px solid;
-  }
-  .risk-card.high { border-color: var(--accent); }
-  .risk-card.med { border-color: #f59e0b; }
-  .risk-card.low { border-color: var(--accent3); }
-  .risk-card .r-level { font-family: var(--mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; }
-  .risk-card.high .r-level { color: var(--accent); }
-  .risk-card.med .r-level { color: #f59e0b; }
-  .risk-card.low .r-level { color: var(--accent3); }
-  .risk-card h3 { font-size: 13px; margin-bottom: 0.5rem; }
-  .risk-card p { font-size: 12px; }
+			/* RISK */
+			.risk-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+				gap: 1px;
+				background: var(--border);
+				border: 1px solid var(--border);
+				margin-bottom: 3rem;
+			}
+			.risk-card {
+				background: var(--surface);
+				padding: 1.5rem 2rem;
+				border-left: 3px solid;
+			}
+			.risk-card.high {
+				border-color: var(--accent);
+			}
+			.risk-card.med {
+				border-color: #f59e0b;
+			}
+			.risk-card.low {
+				border-color: var(--accent3);
+			}
+			.risk-card .r-level {
+				font-family: var(--mono);
+				font-size: 9px;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				margin-bottom: 0.5rem;
+			}
+			.risk-card.high .r-level {
+				color: var(--accent);
+			}
+			.risk-card.med .r-level {
+				color: #f59e0b;
+			}
+			.risk-card.low .r-level {
+				color: var(--accent3);
+			}
+			.risk-card h3 {
+				font-size: 13px;
+				margin-bottom: 0.5rem;
+			}
+			.risk-card p {
+				font-size: 12px;
+			}
 
-  /* FOOTER */
-  footer {
-    padding: 3rem 2rem;
-    border-top: 1px solid var(--border);
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
+			/* FOOTER */
+			footer {
+				padding: 3rem 2rem;
+				border-top: 1px solid var(--border);
+				font-family: var(--mono);
+				font-size: 11px;
+				color: var(--text-muted);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				flex-wrap: wrap;
+				gap: 1rem;
+			}
 
-  /* PILL */
-  .pill {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 0;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: 1px solid;
-  }
-  .pill-red { color: var(--accent); border-color: var(--accent); }
-  .pill-green { color: var(--accent3); border-color: var(--accent3); }
-  .pill-purple { color: var(--accent2); border-color: var(--accent2); }
+			/* PILL */
+			.pill {
+				display: inline-block;
+				padding: 2px 10px;
+				border-radius: 0;
+				font-family: var(--mono);
+				font-size: 10px;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				border: 1px solid;
+			}
+			.pill-red {
+				color: var(--accent);
+				border-color: var(--accent);
+			}
+			.pill-green {
+				color: var(--accent3);
+				border-color: var(--accent3);
+			}
+			.pill-purple {
+				color: var(--accent2);
+				border-color: var(--accent2);
+			}
 
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
-  @media (max-width: 768px) {
-    .two-col, .positioning-grid, .pricing-grid, .model-block { grid-template-columns: 1fr; }
-  }
+			.two-col {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 3rem;
+				align-items: start;
+			}
+			@media (max-width: 768px) {
+				.two-col,
+				.positioning-grid,
+				.pricing-grid,
+				.model-block {
+					grid-template-columns: 1fr;
+				}
+			}
 
-  /* SCROLL ANIM */
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-  }
-  .fade-in.visible {
-    opacity: 1;
-    transform: none;
-  }
-</style>
-</head>
-<body>
+			/* SCROLL ANIM */
+			.fade-in {
+				opacity: 0;
+				transform: translateY(20px);
+				transition:
+					opacity 0.5s ease,
+					transform 0.5s ease;
+			}
+			.fade-in.visible {
+				opacity: 1;
+				transform: none;
+			}
+		</style>
+	</head>
+	<body>
+		<nav>
+			<div class="nav-logo">CAPCUT AI</div>
+			<div class="nav-links">
+				<a href="#overview">Overview</a>
+				<a href="#architecture">Architecture</a>
+				<a href="#features">Features</a>
+				<a href="#models">Modèles IA</a>
+				<a href="#design">Design Refs</a>
+				<a href="#positioning">Positioning</a>
+				<a href="#timeline">Roadmap</a>
+				<a href="#pricing">Pricing</a>
+				<a href="#risks">Risques</a>
+			</div>
+		</nav>
 
-<nav>
-  <div class="nav-logo">CAPCUT AI</div>
-  <div class="nav-links">
-    <a href="#overview">Overview</a>
-    <a href="#architecture">Architecture</a>
-    <a href="#features">Features</a>
-    <a href="#models">Modèles IA</a>
-    <a href="#design">Design Refs</a>
-    <a href="#positioning">Positioning</a>
-    <a href="#timeline">Roadmap</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#risks">Risques</a>
-  </div>
-</nav>
+		<!-- HERO -->
+		<div class="hero">
+			<div class="hero-grid"></div>
+			<div class="hero-glow"></div>
+			<div class="hero-glow2"></div>
+			<div class="container">
+				<div class="hero-tag">Dossier de référence · Avril 2026</div>
+				<h1>CAPCUT <span>AI</span><br />STUDIO</h1>
+				<div class="hero-meta">
+					<span>ByteDance</span>
+					<span>Video Studio · AI Lab · Dreamina</span>
+					<span>Seedance 2.0 · Seedream 5.0</span>
+				</div>
+			</div>
+		</div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-glow2"></div>
-  <div class="container">
-    <div class="hero-tag">Dossier de référence · Avril 2026</div>
-    <h1>CAPCUT <span>AI</span><br>STUDIO</h1>
-    <div class="hero-meta">
-      <span>ByteDance</span>
-      <span>Video Studio · AI Lab · Dreamina</span>
-      <span>Seedance 2.0 · Seedream 5.0</span>
-    </div>
-  </div>
-</div>
+		<!-- OVERVIEW -->
+		<section id="overview">
+			<div class="container">
+				<div class="section-label">01 · Overview</div>
+				<h2>WHAT IT <span class="dim">IS</span></h2>
+				<div class="two-col">
+					<div>
+						<p>
+							CapCut AI Studio est le pivot stratégique de ByteDance : transformer CapCut d'un
+							éditeur vidéo timeline-based en une <strong>plateforme de création AI-native</strong>,
+							centrée sur un canvas infini.
+						</p>
+						<p>
+							Le produit fusionne deux stacks distinctes :
+							<strong>Video Studio</strong> (canvas-driven, lancé mars 2026) et
+							<strong>AI Lab / Design Agent</strong> (génération image/vidéo inline). L'ensemble est
+							propulsé par deux modèles propriétaires — Seedance 2.0 pour la vidéo, Seedream 5.0
+							pour l'image.
+						</p>
+						<p>
+							Positionnement : entre Runway (pro generative) et Adobe (full suite), avec un pricing
+							agressif free-tier ciblant la creator economy et le commerce e-commerce.
+						</p>
+					</div>
+					<div>
+						<div style="display: flex; flex-direction: column; gap: 1rem">
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									padding: 1.25rem 1.5rem;
+									background: var(--surface);
+									border: 1px solid var(--border);
+								"
+							>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text-muted)"
+									>LAUNCHED</span
+								>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text)"
+									>25 mars 2026</span
+								>
+							</div>
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									padding: 1.25rem 1.5rem;
+									background: var(--surface);
+									border: 1px solid var(--border);
+								"
+							>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text-muted)"
+									>PARENT</span
+								>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text)"
+									>ByteDance / Volcano Engine</span
+								>
+							</div>
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									padding: 1.25rem 1.5rem;
+									background: var(--surface);
+									border: 1px solid var(--border);
+								"
+							>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text-muted)"
+									>PLATFORM</span
+								>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text)"
+									>Web (primary) · Mobile · Desktop</span
+								>
+							</div>
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									padding: 1.25rem 1.5rem;
+									background: var(--surface);
+									border: 1px solid var(--border);
+								"
+							>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text-muted)"
+									>FREE CREDITS</span
+								>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--accent)"
+									>~150 / semaine</span
+								>
+							</div>
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									padding: 1.25rem 1.5rem;
+									background: var(--surface);
+									border: 1px solid var(--border);
+								"
+							>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text-muted)"
+									>MARKETS (full)</span
+								>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text)"
+									>SEA · MENA · LATAM · Afrique</span
+								>
+							</div>
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									padding: 1.25rem 1.5rem;
+									background: var(--surface);
+									border: 1px solid var(--border);
+								"
+							>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text-muted)"
+									>CLIP MAX</span
+								>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text)"
+									>15 secondes / génération</span
+								>
+							</div>
+							<div
+								style="
+									display: flex;
+									justify-content: space-between;
+									padding: 1.25rem 1.5rem;
+									background: var(--surface);
+									border: 1px solid var(--border);
+								"
+							>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--text-muted)"
+									>IMAGE MODEL RANK</span
+								>
+								<span style="font-family: var(--mono); font-size: 11px; color: var(--accent3)"
+									>#1 Artificial Analysis T2I</span
+								>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-<!-- OVERVIEW -->
-<section id="overview">
-  <div class="container">
-    <div class="section-label">01 · Overview</div>
-    <h2>WHAT IT <span class="dim">IS</span></h2>
-    <div class="two-col">
-      <div>
-        <p>CapCut AI Studio est le pivot stratégique de ByteDance : transformer CapCut d'un éditeur vidéo timeline-based en une <strong>plateforme de création AI-native</strong>, centrée sur un canvas infini.</p>
-        <p>Le produit fusionne deux stacks distinctes : <strong>Video Studio</strong> (canvas-driven, lancé mars 2026) et <strong>AI Lab / Design Agent</strong> (génération image/vidéo inline). L'ensemble est propulsé par deux modèles propriétaires — Seedance 2.0 pour la vidéo, Seedream 5.0 pour l'image.</p>
-        <p>Positionnement : entre Runway (pro generative) et Adobe (full suite), avec un pricing agressif free-tier ciblant la creator economy et le commerce e-commerce.</p>
-      </div>
-      <div>
-        <div style="display:flex;flex-direction:column;gap:1rem;">
-          <div style="display:flex;justify-content:space-between;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);">
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text-muted)">LAUNCHED</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text)">25 mars 2026</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);">
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text-muted)">PARENT</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text)">ByteDance / Volcano Engine</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);">
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text-muted)">PLATFORM</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text)">Web (primary) · Mobile · Desktop</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);">
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text-muted)">FREE CREDITS</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--accent)">~150 / semaine</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);">
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text-muted)">MARKETS (full)</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text)">SEA · MENA · LATAM · Afrique</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);">
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text-muted)">CLIP MAX</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text)">15 secondes / génération</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:1.25rem 1.5rem;background:var(--surface);border:1px solid var(--border);">
-            <span style="font-family:var(--mono);font-size:11px;color:var(--text-muted)">IMAGE MODEL RANK</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--accent3)">#1 Artificial Analysis T2I</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+		<!-- ARCHITECTURE -->
+		<section id="architecture">
+			<div class="container">
+				<div class="section-label">02 · Architecture Système</div>
+				<h2>STACK <span class="dim">LAYERS</span></h2>
 
-<!-- ARCHITECTURE -->
-<section id="architecture">
-  <div class="container">
-    <div class="section-label">02 · Architecture Système</div>
-    <h2>STACK <span class="dim">LAYERS</span></h2>
+				<div class="arch-diagram">
+					<span class="arch-hl"
+						>┌─────────────────────────────────────────────────────────────────┐</span
+					>
+					<span class="arch-hl">│ CAPCUT ECOSYSTEM │</span>
+					<span class="arch-hl"
+						>└──────────────────────────────┬──────────────────────────────────┘</span
+					>
+					│ ┌────────────────────┼────────────────────┐ ▼ ▼ ▼
+					<span class="arch-hl2"
+						>┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐</span
+					>
+					<span class="arch-hl2">│ VIDEO STUDIO │ │ CLASSIC EDITOR │ │ AI LAB │</span>
+					<span class="arch-hl2">│ (canvas-based) │ │ (timeline) │ │ (standalone) │</span>
+					<span class="arch-hl2">│ Web only │ │ Mobile+Desktop │ │ Web+Mobile │</span>
+					<span class="arch-hl2"
+						>└────────┬─────────┘ └────────┬─────────┘ └────────┬─────────┘</span
+					>
+					│ │ │ ▼ ▼ ▼
+					<span class="arch-hl3"
+						>┌─────────────────────────────────────────────────────────────────┐</span
+					>
+					<span class="arch-hl3">│ AI GENERATION LAYER │</span>
+					<span class="arch-hl3">│ │</span>
+					<span class="arch-hl3">│ Seedance 2.0 (VIDEO) Seedream 5.0 (IMAGE) │</span>
+					<span class="arch-hl3">│ → text-to-video → text-to-image │</span>
+					<span class="arch-hl3">│ → image/video/audio-to-video → image-to-image │</span>
+					<span class="arch-hl3">│ → omni reference (consistency) → style transfer │</span>
+					<span class="arch-hl3">│ → director controls → conversational refine │</span>
+					<span class="arch-hl3"
+						>└──────────────────────────────┬──────────────────────────────────┘</span
+					>
+					│ ▼
+					<span class="arch-hl"
+						>┌─────────────────────────────────────────────────────────────────┐</span
+					>
+					<span class="arch-hl">│ VOLCANO ENGINE (ByteDance infra) │</span>
+					<span class="arch-hl">│ API publique · C2PA watermarking · Safety guardrails │</span>
+					<span class="arch-hl"
+						>└─────────────────────────────────────────────────────────────────┘</span
+					>
+					│ ┌───────────────┴───────────────┐ ▼ ▼
+					<span class="arch-hl2">┌───────────────────────┐ ┌───────────────────────┐</span>
+					<span class="arch-hl2">│ TIKTOK (distribution)│ │ DREAMINA (pro layer) │</span>
+					<span class="arch-hl2">│ cross-promotion │ │ same models, more │</span>
+					<span class="arch-hl2">│ optimized export │ │ granular controls │</span>
+					<span class="arch-hl2">└───────────────────────┘ └───────────────────────┘</span>
+				</div>
 
-    <div class="arch-diagram">
-<span class="arch-hl">┌─────────────────────────────────────────────────────────────────┐</span>
-<span class="arch-hl">│  CAPCUT ECOSYSTEM                                               │</span>
-<span class="arch-hl">└──────────────────────────────┬──────────────────────────────────┘</span>
-                               │
-          ┌────────────────────┼────────────────────┐
-          ▼                    ▼                    ▼
-<span class="arch-hl2">┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐</span>
-<span class="arch-hl2">│  VIDEO STUDIO    │  │  CLASSIC EDITOR  │  │  AI LAB          │</span>
-<span class="arch-hl2">│  (canvas-based)  │  │  (timeline)      │  │  (standalone)    │</span>
-<span class="arch-hl2">│  Web only        │  │  Mobile+Desktop  │  │  Web+Mobile      │</span>
-<span class="arch-hl2">└────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘</span>
-         │                    │                    │
-         ▼                    ▼                    ▼
-<span class="arch-hl3">┌─────────────────────────────────────────────────────────────────┐</span>
-<span class="arch-hl3">│  AI GENERATION LAYER                                            │</span>
-<span class="arch-hl3">│                                                                 │</span>
-<span class="arch-hl3">│  Seedance 2.0 (VIDEO)            Seedream 5.0 (IMAGE)          │</span>
-<span class="arch-hl3">│  → text-to-video                 → text-to-image               │</span>
-<span class="arch-hl3">│  → image/video/audio-to-video    → image-to-image              │</span>
-<span class="arch-hl3">│  → omni reference (consistency)  → style transfer              │</span>
-<span class="arch-hl3">│  → director controls             → conversational refine       │</span>
-<span class="arch-hl3">└──────────────────────────────┬──────────────────────────────────┘</span>
-                               │
-                               ▼
-<span class="arch-hl">┌─────────────────────────────────────────────────────────────────┐</span>
-<span class="arch-hl">│  VOLCANO ENGINE (ByteDance infra)                               │</span>
-<span class="arch-hl">│  API publique · C2PA watermarking · Safety guardrails           │</span>
-<span class="arch-hl">└─────────────────────────────────────────────────────────────────┘</span>
-                               │
-               ┌───────────────┴───────────────┐
-               ▼                               ▼
-<span class="arch-hl2">┌───────────────────────┐       ┌───────────────────────┐</span>
-<span class="arch-hl2">│  TIKTOK (distribution)│       │  DREAMINA (pro layer) │</span>
-<span class="arch-hl2">│  cross-promotion      │       │  same models, more    │</span>
-<span class="arch-hl2">│  optimized export     │       │  granular controls    │</span>
-<span class="arch-hl2">└───────────────────────┘       └───────────────────────┘</span>
-    </div>
+				<div class="section-label" style="margin-top: 3rem">VIDEO STUDIO — Flux de création</div>
+				<div class="arch-diagram" style="margin-top: 1rem">
+					IDEATION CHARACTER STORYBOARD GENERATION POLISH EXPORT │ │ │ │ │ │ ▼ ▼ ▼ ▼ ▼ ▼
+					<span class="arch-hl">AI Agent </span> <span class="arch-hl2">Design &amp; </span>
+					<span class="arch-hl3">Visual map </span> <span class="arch-hl">Seedance 2.0</span>
+					<span class="arch-hl2">Obj removal </span> <span class="arch-hl3">4K / ratio </span>
+					<span class="arch-hl">write/struct</span> <span class="arch-hl2">lock chars </span>
+					<span class="arch-hl3">per card </span> <span class="arch-hl">per card </span>
+					<span class="arch-hl2">BG change </span> <span class="arch-hl3">direct DL </span>
+					<span class="arch-hl">brainstorm </span> <span class="arch-hl2">omni ref </span>
+					<span class="arch-hl3">Canvas/ </span> <span class="arch-hl">≤15s clip </span>
+					<span class="arch-hl2">motion track</span> <span class="arch-hl3">TikTok opt </span>
+					<span class="arch-hl2">consistency </span> <span class="arch-hl3">Storyboard/ </span>
+					<span class="arch-hl">multi-modal </span> <span class="arch-hl2">audio adj </span>
+					<span class="arch-hl3">Auto-gen </span> <span class="arch-hl">input </span>
+				</div>
+			</div>
+		</section>
 
-    <div class="section-label" style="margin-top:3rem">VIDEO STUDIO — Flux de création</div>
-    <div class="arch-diagram" style="margin-top:1rem">
- IDEATION       CHARACTER       STORYBOARD      GENERATION      POLISH          EXPORT
-    │               │               │               │               │               │
-    ▼               ▼               ▼               ▼               ▼               ▼
-<span class="arch-hl">AI Agent    </span>  <span class="arch-hl2">Design &amp;    </span>  <span class="arch-hl3">Visual map  </span>  <span class="arch-hl">Seedance 2.0</span>  <span class="arch-hl2">Obj removal </span>  <span class="arch-hl3">4K / ratio  </span>
-<span class="arch-hl">write/struct</span>  <span class="arch-hl2">lock chars  </span>  <span class="arch-hl3">per card    </span>  <span class="arch-hl">per card    </span>  <span class="arch-hl2">BG change   </span>  <span class="arch-hl3">direct DL   </span>
-<span class="arch-hl">brainstorm  </span>  <span class="arch-hl2">omni ref    </span>  <span class="arch-hl3">Canvas/     </span>  <span class="arch-hl">≤15s clip   </span>  <span class="arch-hl2">motion track</span>  <span class="arch-hl3">TikTok opt  </span>
-            <span class="arch-hl2">consistency </span>  <span class="arch-hl3">Storyboard/ </span>  <span class="arch-hl">multi-modal </span>  <span class="arch-hl2">audio adj   </span>                
-                          <span class="arch-hl3">Auto-gen    </span>  <span class="arch-hl">input       </span>                                
-    </div>
-  </div>
-</section>
+		<!-- FEATURES -->
+		<section id="features">
+			<div class="container">
+				<div class="section-label">03 · Fonctionnalités</div>
+				<h2>FEATURE <span class="dim">MAP</span></h2>
 
-<!-- FEATURES -->
-<section id="features">
-  <div class="container">
-    <div class="section-label">03 · Fonctionnalités</div>
-    <h2>FEATURE <span class="dim">MAP</span></h2>
+				<div
+					style="
+						font-family: var(--mono);
+						font-size: 11px;
+						color: var(--accent);
+						letter-spacing: 0.1em;
+						text-transform: uppercase;
+						margin-bottom: 1.5rem;
+					"
+				>
+					VIDEO STUDIO
+				</div>
+				<div class="feature-grid">
+					<div class="feature-card">
+						<span class="f-icon">⬚</span>
+						<div class="f-tag">Canvas</div>
+						<h3>Infinite Canvas</h3>
+						<p>
+							Workspace sans timeline. Remplace Premiere Pro par un whiteboard Miro-like. Chaque
+							card = un shot indépendant, promptable séparément. Non-linéaire par design.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">◉</span>
+						<div class="f-tag">Consistency</div>
+						<h3>Omni Reference</h3>
+						<p>
+							Ancrage visuel cross-shot : personnages, style guide, références de scènes précédentes
+							injectés dans le pipeline de génération. Résout le drift entre clips.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">⟿</span>
+						<div class="f-tag">Génération</div>
+						<h3>AI Agent (Ideation)</h3>
+						<p>
+							Agent intégré qui brainstorme, rédige le script, structure en actes. Sortie :
+							storyboard prêt à générer. Évite le passage par un LLM externe.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">◈</span>
+						<div class="f-tag">3 Project Types</div>
+						<h3>Canvas / Storyboard / Auto</h3>
+						<p>
+							Canvas Project : libre. Storyboard Project : séquencé avec arcs narratifs.
+							Auto-Generated Project : input script → output vidéo complète en un click.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">▣</span>
+						<div class="f-tag">Multi-modal</div>
+						<h3>Seedance 2.0 Inputs</h3>
+						<p>
+							Jusqu'à 9 images + 3 vidéos + 3 audios en référence simultanée. Director-level
+							controls : lighting, camera movement, character consistency.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">◎</span>
+						<div class="f-tag">Post-gen</div>
+						<h3>Toolkit Intégré</h3>
+						<p>
+							Object removal, background change, motion tracking, audio adjustment — sans quitter le
+							canvas. Full editing loop dans une seule interface.
+						</p>
+					</div>
+				</div>
 
-    <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;">VIDEO STUDIO</div>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <span class="f-icon">⬚</span>
-        <div class="f-tag">Canvas</div>
-        <h3>Infinite Canvas</h3>
-        <p>Workspace sans timeline. Remplace Premiere Pro par un whiteboard Miro-like. Chaque card = un shot indépendant, promptable séparément. Non-linéaire par design.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">◉</span>
-        <div class="f-tag">Consistency</div>
-        <h3>Omni Reference</h3>
-        <p>Ancrage visuel cross-shot : personnages, style guide, références de scènes précédentes injectés dans le pipeline de génération. Résout le drift entre clips.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">⟿</span>
-        <div class="f-tag">Génération</div>
-        <h3>AI Agent (Ideation)</h3>
-        <p>Agent intégré qui brainstorme, rédige le script, structure en actes. Sortie : storyboard prêt à générer. Évite le passage par un LLM externe.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">◈</span>
-        <div class="f-tag">3 Project Types</div>
-        <h3>Canvas / Storyboard / Auto</h3>
-        <p>Canvas Project : libre. Storyboard Project : séquencé avec arcs narratifs. Auto-Generated Project : input script → output vidéo complète en un click.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">▣</span>
-        <div class="f-tag">Multi-modal</div>
-        <h3>Seedance 2.0 Inputs</h3>
-        <p>Jusqu'à 9 images + 3 vidéos + 3 audios en référence simultanée. Director-level controls : lighting, camera movement, character consistency.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">◎</span>
-        <div class="f-tag">Post-gen</div>
-        <h3>Toolkit Intégré</h3>
-        <p>Object removal, background change, motion tracking, audio adjustment — sans quitter le canvas. Full editing loop dans une seule interface.</p>
-      </div>
-    </div>
+				<div
+					style="
+						font-family: var(--mono);
+						font-size: 11px;
+						color: var(--accent);
+						letter-spacing: 0.1em;
+						text-transform: uppercase;
+						margin-bottom: 1.5rem;
+						margin-top: 3rem;
+					"
+				>
+					AI LAB / DESIGN AGENT
+				</div>
+				<div class="feature-grid">
+					<div class="feature-card">
+						<span class="f-icon">✦</span>
+						<div class="f-tag">Image Gen</div>
+						<h3>Seedream 5.0 Design</h3>
+						<p>
+							Chat-style prompt interface. Text-to-image + image-to-image. Génère posters, ads,
+							logos, covers en secondes. #1 Artificial Analysis Text-to-Image Leaderboard.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">⟲</span>
+						<div class="f-tag">Conversational</div>
+						<h3>Iterative Refinement</h3>
+						<p>
+							Affinage en langage naturel post-génération : "Keep the character but change the
+							background to sunset". Pas de re-prompt complet nécessaire.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">◐</span>
+						<div class="f-tag">Commerce</div>
+						<h3>Commerce Pro</h3>
+						<p>
+							URL-to-Video (Shopify link → promo vidéo). AI Model Try-On (vêtements sur avatars).
+							Batch product visuals. ~26–30$/mois, cible e-commerce / dropshippers.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">⧉</span>
+						<div class="f-tag">AI Core Tools</div>
+						<h3>Auto captions · AutoCut · TTS</h3>
+						<p>
+							Features les plus utilisées en 2025. AutoCut assemble les clips en clean edits. Voice
+							filter + TTS pour narration sans setup complexe. Lip sync natif.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">◫</span>
+						<div class="f-tag">Try-On</div>
+						<h3>AI Try-On &amp; Avatar</h3>
+						<p>
+							100+ avatars digitaux. Clone d'avatar personnalisé via upload vidéo courte. Génère du
+							voiceover sans apparaître à caméra. Fashion product without photoshoot.
+						</p>
+					</div>
+					<div class="feature-card">
+						<span class="f-icon">⟁</span>
+						<div class="f-tag">Safety</div>
+						<h3>C2PA + Guardrails</h3>
+						<p>
+							Watermarking cryptographique C2PA embedded dans chaque vidéo générée. Blocage real
+							faces / IP protégée. Conformité pro-active aux régulations à venir.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
 
-    <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;margin-top:3rem;">AI LAB / DESIGN AGENT</div>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <span class="f-icon">✦</span>
-        <div class="f-tag">Image Gen</div>
-        <h3>Seedream 5.0 Design</h3>
-        <p>Chat-style prompt interface. Text-to-image + image-to-image. Génère posters, ads, logos, covers en secondes. #1 Artificial Analysis Text-to-Image Leaderboard.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">⟲</span>
-        <div class="f-tag">Conversational</div>
-        <h3>Iterative Refinement</h3>
-        <p>Affinage en langage naturel post-génération : "Keep the character but change the background to sunset". Pas de re-prompt complet nécessaire.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">◐</span>
-        <div class="f-tag">Commerce</div>
-        <h3>Commerce Pro</h3>
-        <p>URL-to-Video (Shopify link → promo vidéo). AI Model Try-On (vêtements sur avatars). Batch product visuals. ~26–30$/mois, cible e-commerce / dropshippers.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">⧉</span>
-        <div class="f-tag">AI Core Tools</div>
-        <h3>Auto captions · AutoCut · TTS</h3>
-        <p>Features les plus utilisées en 2025. AutoCut assemble les clips en clean edits. Voice filter + TTS pour narration sans setup complexe. Lip sync natif.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">◫</span>
-        <div class="f-tag">Try-On</div>
-        <h3>AI Try-On &amp; Avatar</h3>
-        <p>100+ avatars digitaux. Clone d'avatar personnalisé via upload vidéo courte. Génère du voiceover sans apparaître à caméra. Fashion product without photoshoot.</p>
-      </div>
-      <div class="feature-card">
-        <span class="f-icon">⟁</span>
-        <div class="f-tag">Safety</div>
-        <h3>C2PA + Guardrails</h3>
-        <p>Watermarking cryptographique C2PA embedded dans chaque vidéo générée. Blocage real faces / IP protégée. Conformité pro-active aux régulations à venir.</p>
-      </div>
-    </div>
-  </div>
-</section>
+		<!-- MODELS -->
+		<section id="models">
+			<div class="container">
+				<div class="section-label">04 · Socle Technologique</div>
+				<h2>MODÈLES <span class="dim">IA</span></h2>
 
-<!-- MODELS -->
-<section id="models">
-  <div class="container">
-    <div class="section-label">04 · Socle Technologique</div>
-    <h2>MODÈLES <span class="dim">IA</span></h2>
+				<div
+					style="
+						font-family: var(--mono);
+						font-size: 11px;
+						color: var(--accent);
+						letter-spacing: 0.1em;
+						text-transform: uppercase;
+						margin-bottom: 1.5rem;
+					"
+				>
+					SEEDANCE 2.0 — Vidéo
+				</div>
+				<div class="model-block">
+					<div class="model-cell">
+						<div class="label">Type</div>
+						<div class="value">Text-to-Video + Image/Video/Audio-to-Video</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Architecture</div>
+						<div class="value accent">Unified multi-modal (Volcano Engine)</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Max inputs simultanés</div>
+						<div class="value green">9 images · 3 vidéos · 3 audios</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Output max</div>
+						<div class="value">15 secondes / clip · 4K (Pro)</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Spécialités</div>
+						<div class="value">Multi-shot narrative continuity · Lip sync · Immersive A/V</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Director controls</div>
+						<div class="value accent">Lighting · Camera movement · Character consistency</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Safety</div>
+						<div class="value">C2PA watermark cryptographique · Blocage real faces</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Distribution API</div>
+						<div class="value green">Volcano Engine API (global) · CapCut · Dreamina</div>
+					</div>
+				</div>
 
-    <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;">SEEDANCE 2.0 — Vidéo</div>
-    <div class="model-block">
-      <div class="model-cell">
-        <div class="label">Type</div>
-        <div class="value">Text-to-Video + Image/Video/Audio-to-Video</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Architecture</div>
-        <div class="value accent">Unified multi-modal (Volcano Engine)</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Max inputs simultanés</div>
-        <div class="value green">9 images · 3 vidéos · 3 audios</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Output max</div>
-        <div class="value">15 secondes / clip · 4K (Pro)</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Spécialités</div>
-        <div class="value">Multi-shot narrative continuity · Lip sync · Immersive A/V</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Director controls</div>
-        <div class="value accent">Lighting · Camera movement · Character consistency</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Safety</div>
-        <div class="value">C2PA watermark cryptographique · Blocage real faces</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Distribution API</div>
-        <div class="value green">Volcano Engine API (global) · CapCut · Dreamina</div>
-      </div>
-    </div>
+				<div
+					style="
+						font-family: var(--mono);
+						font-size: 11px;
+						color: var(--accent);
+						letter-spacing: 0.1em;
+						text-transform: uppercase;
+						margin-bottom: 1.5rem;
+						margin-top: 3rem;
+					"
+				>
+					SEEDREAM 5.0 — Image
+				</div>
+				<div class="model-block">
+					<div class="model-cell">
+						<div class="label">Type</div>
+						<div class="value">Text-to-Image + Image-to-Image</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Benchmark</div>
+						<div class="value accent">#1 Artificial Analysis Text-to-Image Leaderboard</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Spécialités</div>
+						<div class="value">Complex layouts · Typography · Multi-element compositions</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Interface</div>
+						<div class="value green">Chat-style conversational refinement</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Améliorations v5</div>
+						<div class="value">Small font rendering · Semantic depth · Style transfer</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Web-aware</div>
+						<div class="value accent">Intègre contexte web pour trending aesthetics</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Commercial</div>
+						<div class="value green">Oui — produits, ads, branding, e-commerce</div>
+					</div>
+					<div class="model-cell">
+						<div class="label">Disponibilité</div>
+						<div class="value">CapCut · Dreamina (plus granular controls)</div>
+					</div>
+				</div>
 
-    <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;margin-top:3rem;">SEEDREAM 5.0 — Image</div>
-    <div class="model-block">
-      <div class="model-cell">
-        <div class="label">Type</div>
-        <div class="value">Text-to-Image + Image-to-Image</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Benchmark</div>
-        <div class="value accent">#1 Artificial Analysis Text-to-Image Leaderboard</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Spécialités</div>
-        <div class="value">Complex layouts · Typography · Multi-element compositions</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Interface</div>
-        <div class="value green">Chat-style conversational refinement</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Améliorations v5</div>
-        <div class="value">Small font rendering · Semantic depth · Style transfer</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Web-aware</div>
-        <div class="value accent">Intègre contexte web pour trending aesthetics</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Commercial</div>
-        <div class="value green">Oui — produits, ads, branding, e-commerce</div>
-      </div>
-      <div class="model-cell">
-        <div class="label">Disponibilité</div>
-        <div class="value">CapCut · Dreamina (plus granular controls)</div>
-      </div>
-    </div>
+				<div
+					style="
+						font-family: var(--mono);
+						font-size: 11px;
+						color: var(--accent);
+						letter-spacing: 0.1em;
+						text-transform: uppercase;
+						margin-bottom: 1.5rem;
+						margin-top: 3rem;
+					"
+				>
+					TECH STACK COMPLET
+				</div>
+				<table class="tech-table">
+					<thead>
+						<tr>
+							<th>Couche</th>
+							<th>Technologie / Service</th>
+							<th>Rôle</th>
+							<th>Note</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="layer">Foundation infra</td>
+							<td class="name">Volcano Engine (ByteDance)</td>
+							<td>Cloud compute, API, model hosting</td>
+							<td class="note">API publique depuis 2026</td>
+						</tr>
+						<tr>
+							<td class="layer">Video generation</td>
+							<td class="name">Dreamina Seedance 2.0</td>
+							<td>Text/image/video/audio → video</td>
+							<td class="note">Concurrent : Runway Gen-3, Kling, Sora</td>
+						</tr>
+						<tr>
+							<td class="layer">Image generation</td>
+							<td class="name">Dreamina Seedream 5.0</td>
+							<td>Text/image → high-res image</td>
+							<td class="note">#1 T2I benchmark</td>
+						</tr>
+						<tr>
+							<td class="layer">Canvas UI</td>
+							<td class="name">Browser-based infinite canvas</td>
+							<td>Paradigme "Miro vidéo"</td>
+							<td class="note">Web only pour Video Studio</td>
+						</tr>
+						<tr>
+							<td class="layer">AI Agent</td>
+							<td class="name">Integrated LLM (non divulgué)</td>
+							<td>Ideation, scripting, storyboard</td>
+							<td class="note">Probablement modèle ByteDance interne</td>
+						</tr>
+						<tr>
+							<td class="layer">Safety / provenance</td>
+							<td class="name">C2PA (Coalition for Content Provenance)</td>
+							<td>Watermark cryptographique fichier</td>
+							<td class="note">Standard ouvert, metadata signée</td>
+						</tr>
+						<tr>
+							<td class="layer">Distribution US</td>
+							<td class="name">Joint venture Oracle (données US)</td>
+							<td>Data sovereignty compliance</td>
+							<td class="note">Post-ban scare janv. 2025</td>
+						</tr>
+						<tr>
+							<td class="layer">Export / integration</td>
+							<td class="name">TikTok · Direct download · 4K</td>
+							<td>Output multi-canal</td>
+							<td class="note">4K = Pro tier uniquement</td>
+						</tr>
+						<tr>
+							<td class="layer">Commerce layer</td>
+							<td class="name">Commerce Pro API (Shopify etc.)</td>
+							<td>URL → vidéo produit automatique</td>
+							<td class="note">B2B, ~26-30$/mois</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
 
-    <div style="font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;margin-top:3rem;">TECH STACK COMPLET</div>
-    <table class="tech-table">
-      <thead>
-        <tr>
-          <th>Couche</th>
-          <th>Technologie / Service</th>
-          <th>Rôle</th>
-          <th>Note</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="layer">Foundation infra</td>
-          <td class="name">Volcano Engine (ByteDance)</td>
-          <td>Cloud compute, API, model hosting</td>
-          <td class="note">API publique depuis 2026</td>
-        </tr>
-        <tr>
-          <td class="layer">Video generation</td>
-          <td class="name">Dreamina Seedance 2.0</td>
-          <td>Text/image/video/audio → video</td>
-          <td class="note">Concurrent : Runway Gen-3, Kling, Sora</td>
-        </tr>
-        <tr>
-          <td class="layer">Image generation</td>
-          <td class="name">Dreamina Seedream 5.0</td>
-          <td>Text/image → high-res image</td>
-          <td class="note">#1 T2I benchmark</td>
-        </tr>
-        <tr>
-          <td class="layer">Canvas UI</td>
-          <td class="name">Browser-based infinite canvas</td>
-          <td>Paradigme "Miro vidéo"</td>
-          <td class="note">Web only pour Video Studio</td>
-        </tr>
-        <tr>
-          <td class="layer">AI Agent</td>
-          <td class="name">Integrated LLM (non divulgué)</td>
-          <td>Ideation, scripting, storyboard</td>
-          <td class="note">Probablement modèle ByteDance interne</td>
-        </tr>
-        <tr>
-          <td class="layer">Safety / provenance</td>
-          <td class="name">C2PA (Coalition for Content Provenance)</td>
-          <td>Watermark cryptographique fichier</td>
-          <td class="note">Standard ouvert, metadata signée</td>
-        </tr>
-        <tr>
-          <td class="layer">Distribution US</td>
-          <td class="name">Joint venture Oracle (données US)</td>
-          <td>Data sovereignty compliance</td>
-          <td class="note">Post-ban scare janv. 2025</td>
-        </tr>
-        <tr>
-          <td class="layer">Export / integration</td>
-          <td class="name">TikTok · Direct download · 4K</td>
-          <td>Output multi-canal</td>
-          <td class="note">4K = Pro tier uniquement</td>
-        </tr>
-        <tr>
-          <td class="layer">Commerce layer</td>
-          <td class="name">Commerce Pro API (Shopify etc.)</td>
-          <td>URL → vidéo produit automatique</td>
-          <td class="note">B2B, ~26-30$/mois</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+		<!-- DESIGN REFERENCES -->
+		<section id="design">
+			<div class="container">
+				<div class="section-label">05 · Références Design</div>
+				<h2>DESIGN <span class="dim">LANGUAGE</span></h2>
+				<p>
+					CapCut AI Studio opère une rupture visuelle nette par rapport aux éditeurs traditionnels.
+					Les références ci-dessous cartographient les influences et patterns identifiables dans
+					l'interface.
+				</p>
 
-<!-- DESIGN REFERENCES -->
-<section id="design">
-  <div class="container">
-    <div class="section-label">05 · Références Design</div>
-    <h2>DESIGN <span class="dim">LANGUAGE</span></h2>
-    <p>CapCut AI Studio opère une rupture visuelle nette par rapport aux éditeurs traditionnels. Les références ci-dessous cartographient les influences et patterns identifiables dans l'interface.</p>
+				<div class="ref-grid" style="margin-top: 2rem">
+					<!-- Canvas paradigm -->
+					<div class="ref-card">
+						<div class="ref-visual">
+							<svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+								<rect width="280" height="180" fill="#111118" />
+								<!-- Grid dots -->
+								<pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+									<circle cx="10" cy="10" r="0.8" fill="#252530" />
+								</pattern>
+								<rect width="280" height="180" fill="url(#dots)" />
+								<!-- Cards floating -->
+								<rect x="20" y="20" width="90" height="55" rx="2" fill="#18181f" stroke="#252530" />
+								<rect x="24" y="24" width="82" height="32" rx="1" fill="#ff3d5a" opacity="0.15" />
+								<rect x="24" y="60" width="40" height="3" rx="1" fill="#252530" />
+								<rect x="24" y="67" width="28" height="2" rx="1" fill="#1a1a22" />
+								<!-- Card 2 -->
+								<rect
+									x="120"
+									y="40"
+									width="90"
+									height="55"
+									rx="2"
+									fill="#18181f"
+									stroke="#7c3aed"
+									stroke-opacity="0.5"
+								/>
+								<rect x="124" y="44" width="82" height="32" rx="1" fill="#7c3aed" opacity="0.1" />
+								<rect x="124" y="80" width="40" height="3" rx="1" fill="#252530" />
+								<!-- Card 3 -->
+								<rect
+									x="65"
+									y="95"
+									width="90"
+									height="55"
+									rx="2"
+									fill="#18181f"
+									stroke="#00d4aa"
+									stroke-opacity="0.4"
+								/>
+								<rect x="69" y="99" width="82" height="32" rx="1" fill="#00d4aa" opacity="0.08" />
+								<!-- Connection lines -->
+								<line
+									x1="110"
+									y1="47"
+									x2="120"
+									y2="67"
+									stroke="#ff3d5a"
+									stroke-opacity="0.3"
+									stroke-dasharray="3,3"
+								/>
+								<line
+									x1="165"
+									y1="95"
+									x2="155"
+									y2="95"
+									stroke="#7c3aed"
+									stroke-opacity="0.3"
+									stroke-dasharray="3,3"
+								/>
+								<!-- Label -->
+								<text
+									x="235"
+									y="170"
+									font-family="monospace"
+									font-size="9"
+									fill="#44445a"
+									text-anchor="end"
+								>
+									INFINITE CANVAS
+								</text>
+							</svg>
+						</div>
+						<div class="ref-info">
+							<div class="ref-title">Canvas-First Paradigm</div>
+							<div class="ref-desc">Référence : Miro · FigJam · Framer Canvas</div>
+						</div>
+					</div>
 
-    <div class="ref-grid" style="margin-top:2rem">
+					<!-- Card-based generation -->
+					<div class="ref-card">
+						<div class="ref-visual">
+							<svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+								<rect width="280" height="180" fill="#111118" />
+								<!-- Card with prompt input -->
+								<rect
+									x="20"
+									y="20"
+									width="240"
+									height="140"
+									rx="3"
+									fill="#18181f"
+									stroke="#252530"
+								/>
+								<!-- Prompt bar -->
+								<rect
+									x="30"
+									y="130"
+									width="180"
+									height="22"
+									rx="2"
+									fill="#0a0a0f"
+									stroke="#252530"
+								/>
+								<text x="38" y="145" font-family="monospace" font-size="9" fill="#44445a">
+									cinematic sunrise over tokyo...
+								</text>
+								<rect x="218" y="130" width="34" height="22" rx="2" fill="#ff3d5a" opacity="0.9" />
+								<text
+									x="235"
+									y="145"
+									font-family="monospace"
+									font-size="9"
+									fill="white"
+									text-anchor="middle"
+								>
+									GEN
+								</text>
+								<!-- Generated content placeholder -->
+								<rect x="30" y="30" width="220" height="90" rx="2" fill="#0d0d14" />
+								<!-- Gradient cinematic -->
+								<defs>
+									<linearGradient id="cg" x1="0%" y1="0%" x2="0%" y2="100%">
+										<stop offset="0%" stop-color="#ff6b35" stop-opacity="0.4" />
+										<stop offset="50%" stop-color="#7c3aed" stop-opacity="0.2" />
+										<stop offset="100%" stop-color="#00d4aa" stop-opacity="0.3" />
+									</linearGradient>
+								</defs>
+								<rect x="30" y="30" width="220" height="90" rx="2" fill="url(#cg)" />
+								<!-- City silhouette -->
+								<rect x="40" y="90" width="8" height="30" fill="#0a0a0f" opacity="0.8" />
+								<rect x="52" y="82" width="12" height="38" fill="#0a0a0f" opacity="0.8" />
+								<rect x="68" y="88" width="6" height="32" fill="#0a0a0f" opacity="0.8" />
+								<rect x="78" y="75" width="15" height="45" fill="#0a0a0f" opacity="0.8" />
+								<rect x="97" y="85" width="10" height="35" fill="#0a0a0f" opacity="0.8" />
+								<text
+									x="250"
+									y="170"
+									font-family="monospace"
+									font-size="9"
+									fill="#44445a"
+									text-anchor="end"
+								>
+									PROMPT → CLIP
+								</text>
+							</svg>
+						</div>
+						<div class="ref-info">
+							<div class="ref-title">Card-Based Generation</div>
+							<div class="ref-desc">Pattern : Midjourney · Runway · Pika</div>
+						</div>
+					</div>
 
-      <!-- Canvas paradigm -->
-      <div class="ref-card">
-        <div class="ref-visual">
-          <svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
-            <rect width="280" height="180" fill="#111118"/>
-            <!-- Grid dots -->
-            <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-              <circle cx="10" cy="10" r="0.8" fill="#252530"/>
-            </pattern>
-            <rect width="280" height="180" fill="url(#dots)"/>
-            <!-- Cards floating -->
-            <rect x="20" y="20" width="90" height="55" rx="2" fill="#18181f" stroke="#252530"/>
-            <rect x="24" y="24" width="82" height="32" rx="1" fill="#ff3d5a" opacity="0.15"/>
-            <rect x="24" y="60" width="40" height="3" rx="1" fill="#252530"/>
-            <rect x="24" y="67" width="28" height="2" rx="1" fill="#1a1a22"/>
-            <!-- Card 2 -->
-            <rect x="120" y="40" width="90" height="55" rx="2" fill="#18181f" stroke="#7c3aed" stroke-opacity="0.5"/>
-            <rect x="124" y="44" width="82" height="32" rx="1" fill="#7c3aed" opacity="0.1"/>
-            <rect x="124" y="80" width="40" height="3" rx="1" fill="#252530"/>
-            <!-- Card 3 -->
-            <rect x="65" y="95" width="90" height="55" rx="2" fill="#18181f" stroke="#00d4aa" stroke-opacity="0.4"/>
-            <rect x="69" y="99" width="82" height="32" rx="1" fill="#00d4aa" opacity="0.08"/>
-            <!-- Connection lines -->
-            <line x1="110" y1="47" x2="120" y2="67" stroke="#ff3d5a" stroke-opacity="0.3" stroke-dasharray="3,3"/>
-            <line x1="165" y1="95" x2="155" y2="95" stroke="#7c3aed" stroke-opacity="0.3" stroke-dasharray="3,3"/>
-            <!-- Label -->
-            <text x="235" y="170" font-family="monospace" font-size="9" fill="#44445a" text-anchor="end">INFINITE CANVAS</text>
-          </svg>
-        </div>
-        <div class="ref-info">
-          <div class="ref-title">Canvas-First Paradigm</div>
-          <div class="ref-desc">Référence : Miro · FigJam · Framer Canvas</div>
-        </div>
-      </div>
+					<!-- Dark pro tool UI -->
+					<div class="ref-card">
+						<div class="ref-visual">
+							<svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+								<rect width="280" height="180" fill="#0a0a0f" />
+								<!-- Left panel -->
+								<rect x="0" y="0" width="60" height="180" fill="#111118" />
+								<!-- Icons in left panel -->
+								<rect x="18" y="18" width="24" height="24" rx="2" fill="#ff3d5a" opacity="0.15" />
+								<rect x="21" y="21" width="18" height="18" rx="1" fill="#ff3d5a" opacity="0.3" />
+								<rect x="18" y="52" width="24" height="24" rx="2" fill="#18181f" />
+								<rect x="18" y="86" width="24" height="24" rx="2" fill="#18181f" />
+								<rect x="18" y="120" width="24" height="24" rx="2" fill="#18181f" />
+								<!-- Main area -->
+								<rect x="60" y="0" width="220" height="24" fill="#0d0d14" stroke-width="0" />
+								<rect x="65" y="8" width="50" height="8" rx="2" fill="#18181f" />
+								<rect x="120" y="8" width="40" height="8" rx="2" fill="#18181f" />
+								<!-- Tabs -->
+								<rect x="65" y="8" width="50" height="8" rx="2" fill="#ff3d5a" opacity="0.2" />
+								<rect x="66" y="22" width="50" height="2" fill="#ff3d5a" />
+								<!-- Timeline at bottom -->
+								<rect x="60" y="150" width="220" height="30" fill="#111118" />
+								<rect x="65" y="157" width="200" height="8" rx="1" fill="#18181f" />
+								<!-- Clip blocks on timeline -->
+								<rect x="65" y="157" width="45" height="8" rx="1" fill="#ff3d5a" opacity="0.4" />
+								<rect x="112" y="157" width="30" height="8" rx="1" fill="#7c3aed" opacity="0.4" />
+								<rect x="144" y="157" width="60" height="8" rx="1" fill="#00d4aa" opacity="0.3" />
+								<!-- Playhead -->
+								<line x1="150" y1="150" x2="150" y2="180" stroke="#ff3d5a" stroke-width="1" />
+								<!-- Main preview -->
+								<rect x="70" y="30" width="190" height="115" rx="2" fill="#0d0d14" />
+								<rect x="70" y="30" width="190" height="115" rx="2" fill="#7c3aed" opacity="0.05" />
+								<text
+									x="250"
+									y="170"
+									font-family="monospace"
+									font-size="9"
+									fill="#44445a"
+									text-anchor="end"
+								>
+									PRO EDITOR
+								</text>
+							</svg>
+						</div>
+						<div class="ref-info">
+							<div class="ref-title">Dark Pro Editor UI</div>
+							<div class="ref-desc">Référence : Davinci Resolve · Adobe Premiere</div>
+						</div>
+					</div>
 
-      <!-- Card-based generation -->
-      <div class="ref-card">
-        <div class="ref-visual">
-          <svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
-            <rect width="280" height="180" fill="#111118"/>
-            <!-- Card with prompt input -->
-            <rect x="20" y="20" width="240" height="140" rx="3" fill="#18181f" stroke="#252530"/>
-            <!-- Prompt bar -->
-            <rect x="30" y="130" width="180" height="22" rx="2" fill="#0a0a0f" stroke="#252530"/>
-            <text x="38" y="145" font-family="monospace" font-size="9" fill="#44445a">cinematic sunrise over tokyo...</text>
-            <rect x="218" y="130" width="34" height="22" rx="2" fill="#ff3d5a" opacity="0.9"/>
-            <text x="235" y="145" font-family="monospace" font-size="9" fill="white" text-anchor="middle">GEN</text>
-            <!-- Generated content placeholder -->
-            <rect x="30" y="30" width="220" height="90" rx="2" fill="#0d0d14"/>
-            <!-- Gradient cinematic -->
-            <defs>
-              <linearGradient id="cg" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#ff6b35" stop-opacity="0.4"/>
-                <stop offset="50%" stop-color="#7c3aed" stop-opacity="0.2"/>
-                <stop offset="100%" stop-color="#00d4aa" stop-opacity="0.3"/>
-              </linearGradient>
-            </defs>
-            <rect x="30" y="30" width="220" height="90" rx="2" fill="url(#cg)"/>
-            <!-- City silhouette -->
-            <rect x="40" y="90" width="8" height="30" fill="#0a0a0f" opacity="0.8"/>
-            <rect x="52" y="82" width="12" height="38" fill="#0a0a0f" opacity="0.8"/>
-            <rect x="68" y="88" width="6" height="32" fill="#0a0a0f" opacity="0.8"/>
-            <rect x="78" y="75" width="15" height="45" fill="#0a0a0f" opacity="0.8"/>
-            <rect x="97" y="85" width="10" height="35" fill="#0a0a0f" opacity="0.8"/>
-            <text x="250" y="170" font-family="monospace" font-size="9" fill="#44445a" text-anchor="end">PROMPT → CLIP</text>
-          </svg>
-        </div>
-        <div class="ref-info">
-          <div class="ref-title">Card-Based Generation</div>
-          <div class="ref-desc">Pattern : Midjourney · Runway · Pika</div>
-        </div>
-      </div>
+					<!-- Conversational AI -->
+					<div class="ref-card">
+						<div class="ref-visual">
+							<svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+								<rect width="280" height="180" fill="#111118" />
+								<!-- Chat bubbles -->
+								<rect
+									x="20"
+									y="20"
+									width="160"
+									height="32"
+									rx="16"
+									fill="#18181f"
+									stroke="#252530"
+								/>
+								<text x="36" y="32" font-family="monospace" font-size="9" fill="#8888a0">
+									Generate a cinematic poster
+								</text>
+								<text x="36" y="44" font-family="monospace" font-size="9" fill="#8888a0">
+									with neon reflections...
+								</text>
+								<!-- AI response -->
+								<rect
+									x="50"
+									y="65"
+									width="210"
+									height="26"
+									rx="13"
+									fill="#ff3d5a"
+									opacity="0.15"
+									stroke="#ff3d5a"
+									stroke-opacity="0.3"
+								/>
+								<text x="65" y="82" font-family="monospace" font-size="9" fill="#ff3d5a">
+									Here are 4 variations →
+								</text>
+								<!-- Generated thumbnails -->
+								<rect x="20" y="102" width="52" height="52" rx="3" fill="#0a0a0f" />
+								<rect x="20" y="102" width="52" height="52" rx="3" fill="#ff3d5a" opacity="0.1" />
+								<rect x="76" y="102" width="52" height="52" rx="3" fill="#0a0a0f" />
+								<rect x="76" y="102" width="52" height="52" rx="3" fill="#7c3aed" opacity="0.15" />
+								<rect x="132" y="102" width="52" height="52" rx="3" fill="#0a0a0f" />
+								<rect x="132" y="102" width="52" height="52" rx="3" fill="#00d4aa" opacity="0.1" />
+								<rect x="188" y="102" width="52" height="52" rx="3" fill="#0a0a0f" />
+								<rect x="188" y="102" width="52" height="52" rx="3" fill="#f59e0b" opacity="0.1" />
+								<!-- Stars -->
+								<circle cx="46" cy="128" r="14" fill="#ff3d5a" opacity="0.08" />
+								<circle cx="102" cy="128" r="14" fill="#7c3aed" opacity="0.08" />
+								<text
+									x="250"
+									y="170"
+									font-family="monospace"
+									font-size="9"
+									fill="#44445a"
+									text-anchor="end"
+								>
+									CHAT-STYLE GEN
+								</text>
+							</svg>
+						</div>
+						<div class="ref-info">
+							<div class="ref-title">Conversational Generation</div>
+							<div class="ref-desc">Pattern : ChatGPT · Claude · Gemini UI</div>
+						</div>
+					</div>
 
-      <!-- Dark pro tool UI -->
-      <div class="ref-card">
-        <div class="ref-visual">
-          <svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
-            <rect width="280" height="180" fill="#0a0a0f"/>
-            <!-- Left panel -->
-            <rect x="0" y="0" width="60" height="180" fill="#111118"/>
-            <!-- Icons in left panel -->
-            <rect x="18" y="18" width="24" height="24" rx="2" fill="#ff3d5a" opacity="0.15"/>
-            <rect x="21" y="21" width="18" height="18" rx="1" fill="#ff3d5a" opacity="0.3"/>
-            <rect x="18" y="52" width="24" height="24" rx="2" fill="#18181f"/>
-            <rect x="18" y="86" width="24" height="24" rx="2" fill="#18181f"/>
-            <rect x="18" y="120" width="24" height="24" rx="2" fill="#18181f"/>
-            <!-- Main area -->
-            <rect x="60" y="0" width="220" height="24" fill="#0d0d14" stroke-width="0"/>
-            <rect x="65" y="8" width="50" height="8" rx="2" fill="#18181f"/>
-            <rect x="120" y="8" width="40" height="8" rx="2" fill="#18181f"/>
-            <!-- Tabs -->
-            <rect x="65" y="8" width="50" height="8" rx="2" fill="#ff3d5a" opacity="0.2"/>
-            <rect x="66" y="22" width="50" height="2" fill="#ff3d5a"/>
-            <!-- Timeline at bottom -->
-            <rect x="60" y="150" width="220" height="30" fill="#111118"/>
-            <rect x="65" y="157" width="200" height="8" rx="1" fill="#18181f"/>
-            <!-- Clip blocks on timeline -->
-            <rect x="65" y="157" width="45" height="8" rx="1" fill="#ff3d5a" opacity="0.4"/>
-            <rect x="112" y="157" width="30" height="8" rx="1" fill="#7c3aed" opacity="0.4"/>
-            <rect x="144" y="157" width="60" height="8" rx="1" fill="#00d4aa" opacity="0.3"/>
-            <!-- Playhead -->
-            <line x1="150" y1="150" x2="150" y2="180" stroke="#ff3d5a" stroke-width="1"/>
-            <!-- Main preview -->
-            <rect x="70" y="30" width="190" height="115" rx="2" fill="#0d0d14"/>
-            <rect x="70" y="30" width="190" height="115" rx="2" fill="#7c3aed" opacity="0.05"/>
-            <text x="250" y="170" font-family="monospace" font-size="9" fill="#44445a" text-anchor="end">PRO EDITOR</text>
-          </svg>
-        </div>
-        <div class="ref-info">
-          <div class="ref-title">Dark Pro Editor UI</div>
-          <div class="ref-desc">Référence : Davinci Resolve · Adobe Premiere</div>
-        </div>
-      </div>
+					<!-- Commerce UI -->
+					<div class="ref-card">
+						<div class="ref-visual">
+							<svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+								<rect width="280" height="180" fill="#111118" />
+								<!-- Product card -->
+								<rect
+									x="20"
+									y="20"
+									width="110"
+									height="140"
+									rx="3"
+									fill="#18181f"
+									stroke="#252530"
+								/>
+								<rect x="25" y="25" width="100" height="70" rx="2" fill="#0a0a0f" />
+								<!-- Product shape -->
+								<rect x="45" y="35" width="60" height="50" rx="8" fill="#252530" />
+								<rect x="50" y="40" width="50" height="40" rx="6" fill="#7c3aed" opacity="0.2" />
+								<rect x="25" y="100" width="70" height="6" rx="1" fill="#252530" />
+								<rect x="25" y="110" width="50" height="4" rx="1" fill="#1a1a22" />
+								<rect x="25" y="120" width="80" height="22" rx="2" fill="#ff3d5a" opacity="0.15" />
+								<text
+									x="65"
+									y="135"
+									font-family="monospace"
+									font-size="9"
+									fill="#ff3d5a"
+									text-anchor="middle"
+								>
+									URL → VIDEO
+								</text>
+								<!-- Arrow -->
+								<text
+									x="148"
+									y="100"
+									font-family="monospace"
+									font-size="16"
+									fill="#252530"
+									text-anchor="middle"
+								>
+									→
+								</text>
+								<!-- Video result -->
+								<rect
+									x="158"
+									y="20"
+									width="100"
+									height="140"
+									rx="3"
+									fill="#18181f"
+									stroke="#00d4aa"
+									stroke-opacity="0.4"
+								/>
+								<rect x="163" y="25" width="90" height="100" rx="2" fill="#0a0a0f" />
+								<rect x="163" y="25" width="90" height="100" rx="2" fill="#00d4aa" opacity="0.05" />
+								<!-- Play button -->
+								<circle
+									cx="208"
+									cy="75"
+									r="18"
+									fill="#00d4aa"
+									opacity="0.1"
+									stroke="#00d4aa"
+									stroke-opacity="0.3"
+								/>
+								<polygon points="203,67 203,83 220,75" fill="#00d4aa" opacity="0.6" />
+								<rect x="163" y="130" width="60" height="6" rx="1" fill="#252530" />
+								<rect x="163" y="140" width="40" height="4" rx="1" fill="#1a1a22" />
+								<text
+									x="250"
+									y="170"
+									font-family="monospace"
+									font-size="9"
+									fill="#44445a"
+									text-anchor="end"
+								>
+									COMMERCE PRO
+								</text>
+							</svg>
+						</div>
+						<div class="ref-info">
+							<div class="ref-title">Commerce Automation</div>
+							<div class="ref-desc">Pattern : Shopify · HeyGen Commerce · Creatify</div>
+						</div>
+					</div>
 
-      <!-- Conversational AI -->
-      <div class="ref-card">
-        <div class="ref-visual">
-          <svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
-            <rect width="280" height="180" fill="#111118"/>
-            <!-- Chat bubbles -->
-            <rect x="20" y="20" width="160" height="32" rx="16" fill="#18181f" stroke="#252530"/>
-            <text x="36" y="32" font-family="monospace" font-size="9" fill="#8888a0">Generate a cinematic poster</text>
-            <text x="36" y="44" font-family="monospace" font-size="9" fill="#8888a0">with neon reflections...</text>
-            <!-- AI response -->
-            <rect x="50" y="65" width="210" height="26" rx="13" fill="#ff3d5a" opacity="0.15" stroke="#ff3d5a" stroke-opacity="0.3"/>
-            <text x="65" y="82" font-family="monospace" font-size="9" fill="#ff3d5a">Here are 4 variations →</text>
-            <!-- Generated thumbnails -->
-            <rect x="20" y="102" width="52" height="52" rx="3" fill="#0a0a0f"/>
-            <rect x="20" y="102" width="52" height="52" rx="3" fill="#ff3d5a" opacity="0.1"/>
-            <rect x="76" y="102" width="52" height="52" rx="3" fill="#0a0a0f"/>
-            <rect x="76" y="102" width="52" height="52" rx="3" fill="#7c3aed" opacity="0.15"/>
-            <rect x="132" y="102" width="52" height="52" rx="3" fill="#0a0a0f"/>
-            <rect x="132" y="102" width="52" height="52" rx="3" fill="#00d4aa" opacity="0.1"/>
-            <rect x="188" y="102" width="52" height="52" rx="3" fill="#0a0a0f"/>
-            <rect x="188" y="102" width="52" height="52" rx="3" fill="#f59e0b" opacity="0.1"/>
-            <!-- Stars -->
-            <circle cx="46" cy="128" r="14" fill="#ff3d5a" opacity="0.08"/>
-            <circle cx="102" cy="128" r="14" fill="#7c3aed" opacity="0.08"/>
-            <text x="250" y="170" font-family="monospace" font-size="9" fill="#44445a" text-anchor="end">CHAT-STYLE GEN</text>
-          </svg>
-        </div>
-        <div class="ref-info">
-          <div class="ref-title">Conversational Generation</div>
-          <div class="ref-desc">Pattern : ChatGPT · Claude · Gemini UI</div>
-        </div>
-      </div>
+					<!-- Safety / provenance -->
+					<div class="ref-card">
+						<div class="ref-visual">
+							<svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+								<rect width="280" height="180" fill="#111118" />
+								<!-- Watermark concept -->
+								<rect x="40" y="25" width="200" height="110" rx="3" fill="#0a0a0f" />
+								<rect x="40" y="25" width="200" height="110" rx="3" fill="#7c3aed" opacity="0.04" />
+								<!-- Video frame lines -->
+								<rect x="45" y="30" width="190" height="100" rx="2" fill="#0d0d14" />
+								<!-- C2PA badge -->
+								<rect
+									x="150"
+									y="100"
+									width="80"
+									height="22"
+									rx="2"
+									fill="#0a0a0f"
+									stroke="#7c3aed"
+									stroke-opacity="0.5"
+								/>
+								<text x="157" y="115" font-family="monospace" font-size="8" fill="#7c3aed">
+									C2PA · AI-GENERATED
+								</text>
+								<!-- Shield icon area -->
+								<polygon
+									points="120,40 140,33 160,40 160,65 140,75 120,65"
+									fill="#7c3aed"
+									opacity="0.1"
+									stroke="#7c3aed"
+									stroke-opacity="0.4"
+								/>
+								<text
+									x="140"
+									y="60"
+									font-family="monospace"
+									font-size="14"
+									fill="#7c3aed"
+									text-anchor="middle"
+								>
+									🔐
+								</text>
+								<!-- Metadata lines -->
+								<rect x="50" y="140" width="100" height="5" rx="1" fill="#18181f" />
+								<rect x="50" y="149" width="160" height="5" rx="1" fill="#18181f" />
+								<rect x="50" y="158" width="80" height="5" rx="1" fill="#18181f" />
+								<rect x="50" y="140" width="40" height="5" rx="1" fill="#7c3aed" opacity="0.3" />
+								<rect x="50" y="149" width="65" height="5" rx="1" fill="#7c3aed" opacity="0.2" />
+								<text
+									x="250"
+									y="170"
+									font-family="monospace"
+									font-size="9"
+									fill="#44445a"
+									text-anchor="end"
+								>
+									C2PA PROVENANCE
+								</text>
+							</svg>
+						</div>
+						<div class="ref-info">
+							<div class="ref-title">Provenance & Safety Layer</div>
+							<div class="ref-desc">Standard : C2PA · Adobe Content Credentials</div>
+						</div>
+					</div>
+				</div>
 
-      <!-- Commerce UI -->
-      <div class="ref-card">
-        <div class="ref-visual">
-          <svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
-            <rect width="280" height="180" fill="#111118"/>
-            <!-- Product card -->
-            <rect x="20" y="20" width="110" height="140" rx="3" fill="#18181f" stroke="#252530"/>
-            <rect x="25" y="25" width="100" height="70" rx="2" fill="#0a0a0f"/>
-            <!-- Product shape -->
-            <rect x="45" y="35" width="60" height="50" rx="8" fill="#252530"/>
-            <rect x="50" y="40" width="50" height="40" rx="6" fill="#7c3aed" opacity="0.2"/>
-            <rect x="25" y="100" width="70" height="6" rx="1" fill="#252530"/>
-            <rect x="25" y="110" width="50" height="4" rx="1" fill="#1a1a22"/>
-            <rect x="25" y="120" width="80" height="22" rx="2" fill="#ff3d5a" opacity="0.15"/>
-            <text x="65" y="135" font-family="monospace" font-size="9" fill="#ff3d5a" text-anchor="middle">URL → VIDEO</text>
-            <!-- Arrow -->
-            <text x="148" y="100" font-family="monospace" font-size="16" fill="#252530" text-anchor="middle">→</text>
-            <!-- Video result -->
-            <rect x="158" y="20" width="100" height="140" rx="3" fill="#18181f" stroke="#00d4aa" stroke-opacity="0.4"/>
-            <rect x="163" y="25" width="90" height="100" rx="2" fill="#0a0a0f"/>
-            <rect x="163" y="25" width="90" height="100" rx="2" fill="#00d4aa" opacity="0.05"/>
-            <!-- Play button -->
-            <circle cx="208" cy="75" r="18" fill="#00d4aa" opacity="0.1" stroke="#00d4aa" stroke-opacity="0.3"/>
-            <polygon points="203,67 203,83 220,75" fill="#00d4aa" opacity="0.6"/>
-            <rect x="163" y="130" width="60" height="6" rx="1" fill="#252530"/>
-            <rect x="163" y="140" width="40" height="4" rx="1" fill="#1a1a22"/>
-            <text x="250" y="170" font-family="monospace" font-size="9" fill="#44445a" text-anchor="end">COMMERCE PRO</text>
-          </svg>
-        </div>
-        <div class="ref-info">
-          <div class="ref-title">Commerce Automation</div>
-          <div class="ref-desc">Pattern : Shopify · HeyGen Commerce · Creatify</div>
-        </div>
-      </div>
+				<div
+					style="
+						margin-top: 2rem;
+						padding: 2rem;
+						background: var(--surface);
+						border: 1px solid var(--border);
+					"
+				>
+					<div class="section-label" style="margin-bottom: 1rem">
+						DESIGN LANGUAGE — Principes identifiables
+					</div>
+					<div
+						style="
+							display: grid;
+							grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+							gap: 1.5rem;
+						"
+					>
+						<div>
+							<h3 style="color: var(--accent)">Spatial</h3>
+							<p style="font-size: 13px">
+								Canvas infini = espace sans contrainte. Rupture avec le paradigme temporel linéaire.
+								Spatialité = liberté créative non-linéaire.
+							</p>
+						</div>
+						<div>
+							<h3 style="color: var(--accent2)">Densité contrôlée</h3>
+							<p style="font-size: 13px">
+								UI dark, haute densité informationnelle dans les panels, espace généreux dans le
+								canvas central. Hiérarchie claire pro → amateur.
+							</p>
+						</div>
+						<div>
+							<h3 style="color: var(--accent3)">Card-as-unit</h3>
+							<p style="font-size: 13px">
+								Chaque shot = une card indépendante promptable. Unité atomique de création. Pattern
+								emprunté au design system Figma / Notion.
+							</p>
+						</div>
+						<div>
+							<h3 style="color: var(--accent)">Gradient AI glow</h3>
+							<p style="font-size: 13px">
+								Éléments AI-générés marqués par un halo coloré (purple/teal). Signal visuel clair :
+								humain vs AI-generated. Pattern émergent industrie.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-      <!-- Safety / provenance -->
-      <div class="ref-card">
-        <div class="ref-visual">
-          <svg class="ref-svg" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
-            <rect width="280" height="180" fill="#111118"/>
-            <!-- Watermark concept -->
-            <rect x="40" y="25" width="200" height="110" rx="3" fill="#0a0a0f"/>
-            <rect x="40" y="25" width="200" height="110" rx="3" fill="#7c3aed" opacity="0.04"/>
-            <!-- Video frame lines -->
-            <rect x="45" y="30" width="190" height="100" rx="2" fill="#0d0d14"/>
-            <!-- C2PA badge -->
-            <rect x="150" y="100" width="80" height="22" rx="2" fill="#0a0a0f" stroke="#7c3aed" stroke-opacity="0.5"/>
-            <text x="157" y="115" font-family="monospace" font-size="8" fill="#7c3aed">C2PA · AI-GENERATED</text>
-            <!-- Shield icon area -->
-            <polygon points="120,40 140,33 160,40 160,65 140,75 120,65" fill="#7c3aed" opacity="0.1" stroke="#7c3aed" stroke-opacity="0.4"/>
-            <text x="140" y="60" font-family="monospace" font-size="14" fill="#7c3aed" text-anchor="middle">🔐</text>
-            <!-- Metadata lines -->
-            <rect x="50" y="140" width="100" height="5" rx="1" fill="#18181f"/>
-            <rect x="50" y="149" width="160" height="5" rx="1" fill="#18181f"/>
-            <rect x="50" y="158" width="80" height="5" rx="1" fill="#18181f"/>
-            <rect x="50" y="140" width="40" height="5" rx="1" fill="#7c3aed" opacity="0.3"/>
-            <rect x="50" y="149" width="65" height="5" rx="1" fill="#7c3aed" opacity="0.2"/>
-            <text x="250" y="170" font-family="monospace" font-size="9" fill="#44445a" text-anchor="end">C2PA PROVENANCE</text>
-          </svg>
-        </div>
-        <div class="ref-info">
-          <div class="ref-title">Provenance & Safety Layer</div>
-          <div class="ref-desc">Standard : C2PA · Adobe Content Credentials</div>
-        </div>
-      </div>
+		<!-- POSITIONING -->
+		<section id="positioning">
+			<div class="container">
+				<div class="section-label">06 · Positionnement Compétitif</div>
+				<h2>VS <span class="dim">LANDSCAPE</span></h2>
 
-    </div>
+				<div class="positioning-grid">
+					<div class="pos-card capcut-pos">
+						<div class="competitor">CAPCUT</div>
+						<span class="pos-tag">Video Studio · AI Lab</span>
+						<div class="pos-row-label"><span>Accessibilité</span><span>95%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 95%"></div></div>
+						<div class="pos-row-label"><span>Génération vidéo</span><span>85%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 85%"></div></div>
+						<div class="pos-row-label"><span>Commerce B2B</span><span>90%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 90%"></div></div>
+						<div class="pos-row-label"><span>Pro controls</span><span>65%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 65%"></div></div>
+						<div class="pos-row-label"><span>Free tier</span><span>95%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 95%"></div></div>
+						<p style="margin-top: 1rem; font-size: 12px; text-align: left">
+							Full stack creator → commerce. Free tier agressif. Distribution TikTok intégrée.
+						</p>
+					</div>
+					<div class="pos-card runway-pos">
+						<div class="competitor">RUNWAY</div>
+						<span class="pos-tag">Gen-3 Alpha · Editor</span>
+						<div class="pos-row-label"><span>Accessibilité</span><span>60%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 60%"></div></div>
+						<div class="pos-row-label"><span>Génération vidéo</span><span>92%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 92%"></div></div>
+						<div class="pos-row-label"><span>Commerce B2B</span><span>30%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 30%"></div></div>
+						<div class="pos-row-label"><span>Pro controls</span><span>92%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 92%"></div></div>
+						<div class="pos-row-label"><span>Free tier</span><span>40%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 40%"></div></div>
+						<p style="margin-top: 1rem; font-size: 12px; text-align: left">
+							Cible film/pro. Qualité génération supérieure. Pricing élevé, courbe d'apprentissage
+							steep.
+						</p>
+					</div>
+					<div class="pos-card sora-pos">
+						<div class="competitor">SORA</div>
+						<span class="pos-tag">OpenAI · ChatGPT</span>
+						<div class="pos-row-label"><span>Accessibilité</span><span>75%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 75%"></div></div>
+						<div class="pos-row-label"><span>Génération vidéo</span><span>90%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 90%"></div></div>
+						<div class="pos-row-label"><span>Commerce B2B</span><span>20%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 20%"></div></div>
+						<div class="pos-row-label"><span>Pro controls</span><span>75%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 75%"></div></div>
+						<div class="pos-row-label"><span>Free tier</span><span>30%</span></div>
+						<div class="pos-bar-wrap"><div class="pos-bar" style="width: 30%"></div></div>
+						<p style="margin-top: 1rem; font-size: 12px; text-align: left">
+							Standalone generation sans editing suite. ChatGPT Plus requis. Pas d'écosystème
+							distribution.
+						</p>
+					</div>
+				</div>
 
-    <div style="margin-top:2rem;padding:2rem;background:var(--surface);border:1px solid var(--border);">
-      <div class="section-label" style="margin-bottom:1rem">DESIGN LANGUAGE — Principes identifiables</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;">
-        <div>
-          <h3 style="color:var(--accent)">Spatial</h3>
-          <p style="font-size:13px">Canvas infini = espace sans contrainte. Rupture avec le paradigme temporel linéaire. Spatialité = liberté créative non-linéaire.</p>
-        </div>
-        <div>
-          <h3 style="color:var(--accent2)">Densité contrôlée</h3>
-          <p style="font-size:13px">UI dark, haute densité informationnelle dans les panels, espace généreux dans le canvas central. Hiérarchie claire pro → amateur.</p>
-        </div>
-        <div>
-          <h3 style="color:var(--accent3)">Card-as-unit</h3>
-          <p style="font-size:13px">Chaque shot = une card indépendante promptable. Unité atomique de création. Pattern emprunté au design system Figma / Notion.</p>
-        </div>
-        <div>
-          <h3 style="color:var(--accent)">Gradient AI glow</h3>
-          <p style="font-size:13px">Éléments AI-générés marqués par un halo coloré (purple/teal). Signal visuel clair : humain vs AI-generated. Pattern émergent industrie.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+				<div style="padding: 2rem; background: var(--surface); border: 1px solid var(--border)">
+					<div class="section-label" style="margin-bottom: 1rem">DIFFÉRENCIATEUR CLÉ</div>
+					<p>
+						CapCut est le seul acteur combinant
+						<strong
+							>génération AI + édition full-suite + distribution native TikTok + commerce
+							e-commerce</strong
+						>
+						dans un même produit free-tier. Le canvas Video Studio est une innovation UX sans
+						équivalent direct. La faiblesse : restriction géographique de Seedance 2.0 (pas EU/US
+						pour l'instant).
+					</p>
+				</div>
+			</div>
+		</section>
 
-<!-- POSITIONING -->
-<section id="positioning">
-  <div class="container">
-    <div class="section-label">06 · Positionnement Compétitif</div>
-    <h2>VS <span class="dim">LANDSCAPE</span></h2>
+		<!-- TIMELINE -->
+		<section id="timeline">
+			<div class="container">
+				<div class="section-label">07 · Roadmap & Historique</div>
+				<h2>ÉVOLUTION <span class="dim">DU PRODUIT</span></h2>
+				<div class="timeline">
+					<div class="tl-item">
+						<div class="tl-date">2020 — Lancement</div>
+						<div class="tl-title">CapCut v1 — Timeline Editor</div>
+						<div class="tl-desc">
+							Éditeur mobile ByteDance. Succès viral sur TikTok. Interface timeline classique.
+							Templates, effets, musique intégrée.
+						</div>
+					</div>
+					<div class="tl-item v2">
+						<div class="tl-date">2022–2023</div>
+						<div class="tl-title">Web Platform + Première IA</div>
+						<div class="tl-desc">
+							Expansion web et desktop. Ajout AI: Auto captions, AutoCut, TTS, Voice filter — les
+							features les plus utilisées en 2025. Lancement AI Lab (béta).
+						</div>
+					</div>
+					<div class="tl-item v3">
+						<div class="tl-date">Janvier 2025</div>
+						<div class="tl-title">Ban scare US + restructuration</div>
+						<div class="tl-desc">
+							Menace de ban lié à la loi Foreign Adversary App. Transition vers JV Oracle pour le
+							marché US. Bifurcation "CapCut US" / international. Seedance 1.0 lancé puis paused.
+						</div>
+					</div>
+					<div class="tl-item">
+						<div class="tl-date">2025 — Commerce</div>
+						<div class="tl-title">Commerce Pro + Seedream 4.0→5.0</div>
+						<div class="tl-desc">
+							Tier B2B ~26-30$/mois. URL-to-Video, AI Try-On, commercial licensing. Seedream 5.0
+							classé #1 benchmark T2I. AI Lab stabilisé. Billions de projets créés sur l'année.
+						</div>
+					</div>
+					<div class="tl-item v2">
+						<div class="tl-date">25 mars 2026</div>
+						<div class="tl-title">VIDEO STUDIO — Canvas Era</div>
+						<div class="tl-desc">
+							Lancement Video Studio (web). Seedance 2.0 intégré. Infinite canvas, omni reference,
+							AI agent idéation. 3 project types. Disponible SEA/MENA/LATAM/Afrique. 150
+							crédits/semaine gratuits.
+						</div>
+					</div>
+					<div class="tl-item v3">
+						<div class="tl-date">Prochaine étape</div>
+						<div class="tl-title">Expansion géographique + Durée clips</div>
+						<div class="tl-desc">
+							Extension EU/US (IP concerns à résoudre). Clips &gt;15s. Collaboration temps-réel sur
+							canvas. Inputs multi-modal élargis. API Volcano Engine publique déjà disponible pour
+							intégrations tiers.
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-    <div class="positioning-grid">
-      <div class="pos-card capcut-pos">
-        <div class="competitor">CAPCUT</div>
-        <span class="pos-tag">Video Studio · AI Lab</span>
-        <div class="pos-row-label"><span>Accessibilité</span><span>95%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:95%"></div></div>
-        <div class="pos-row-label"><span>Génération vidéo</span><span>85%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:85%"></div></div>
-        <div class="pos-row-label"><span>Commerce B2B</span><span>90%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:90%"></div></div>
-        <div class="pos-row-label"><span>Pro controls</span><span>65%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:65%"></div></div>
-        <div class="pos-row-label"><span>Free tier</span><span>95%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:95%"></div></div>
-        <p style="margin-top:1rem;font-size:12px;text-align:left">Full stack creator → commerce. Free tier agressif. Distribution TikTok intégrée.</p>
-      </div>
-      <div class="pos-card runway-pos">
-        <div class="competitor">RUNWAY</div>
-        <span class="pos-tag">Gen-3 Alpha · Editor</span>
-        <div class="pos-row-label"><span>Accessibilité</span><span>60%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:60%"></div></div>
-        <div class="pos-row-label"><span>Génération vidéo</span><span>92%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:92%"></div></div>
-        <div class="pos-row-label"><span>Commerce B2B</span><span>30%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:30%"></div></div>
-        <div class="pos-row-label"><span>Pro controls</span><span>92%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:92%"></div></div>
-        <div class="pos-row-label"><span>Free tier</span><span>40%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:40%"></div></div>
-        <p style="margin-top:1rem;font-size:12px;text-align:left">Cible film/pro. Qualité génération supérieure. Pricing élevé, courbe d'apprentissage steep.</p>
-      </div>
-      <div class="pos-card sora-pos">
-        <div class="competitor">SORA</div>
-        <span class="pos-tag">OpenAI · ChatGPT</span>
-        <div class="pos-row-label"><span>Accessibilité</span><span>75%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:75%"></div></div>
-        <div class="pos-row-label"><span>Génération vidéo</span><span>90%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:90%"></div></div>
-        <div class="pos-row-label"><span>Commerce B2B</span><span>20%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:20%"></div></div>
-        <div class="pos-row-label"><span>Pro controls</span><span>75%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:75%"></div></div>
-        <div class="pos-row-label"><span>Free tier</span><span>30%</span></div>
-        <div class="pos-bar-wrap"><div class="pos-bar" style="width:30%"></div></div>
-        <p style="margin-top:1rem;font-size:12px;text-align:left">Standalone generation sans editing suite. ChatGPT Plus requis. Pas d'écosystème distribution.</p>
-      </div>
-    </div>
+		<!-- PRICING -->
+		<section id="pricing">
+			<div class="container">
+				<div class="section-label">08 · Pricing</div>
+				<h2>TIERS <span class="dim">&amp; ACCÈS</span></h2>
+				<div class="pricing-grid">
+					<div class="price-card">
+						<div class="plan">Free</div>
+						<div class="amount" style="color: var(--text)">$0</div>
+						<div class="billing">pour toujours</div>
+						<ul>
+							<li>~150 crédits génération / semaine</li>
+							<li>Video Studio (canvas, storyboard)</li>
+							<li>Seedance 2.0 (marchés éligibles)</li>
+							<li>Seedream 5.0 AI Design</li>
+							<li>Auto captions, AutoCut, TTS</li>
+							<li>Export jusqu'à 1080p</li>
+							<li>Watermark sur certains exports</li>
+						</ul>
+					</div>
+					<div class="price-card featured" style="border-top: 2px solid var(--accent)">
+						<div class="plan">Pro</div>
+						<div class="amount" style="color: var(--accent)">~$10</div>
+						<div class="billing">/ mois (estimation)</div>
+						<ul>
+							<li>Crédits génératio étendus</li>
+							<li>Export 4K</li>
+							<li>Sans watermark</li>
+							<li>Accès prioritaire nouveaux modèles</li>
+							<li>AI Lab features avancées</li>
+							<li>Storage cloud étendu</li>
+						</ul>
+					</div>
+					<div class="price-card" style="border-top: 2px solid var(--accent3)">
+						<div class="plan">Commerce Pro</div>
+						<div class="amount" style="color: var(--accent3)">$26–30</div>
+						<div class="billing">/ mois</div>
+						<ul>
+							<li>URL-to-Video (Shopify etc.)</li>
+							<li>AI Model Try-On</li>
+							<li>Commercial music licensing</li>
+							<li>Batch product visuals</li>
+							<li>Avatars commerciaux</li>
+							<li>Cible : dropshippers, e-commerce</li>
+						</ul>
+					</div>
+				</div>
+				<p style="font-size: 12px; color: var(--text-muted); font-family: var(--mono)">
+					* Pricing Pro estimatif — varie selon marché et historique. Commerce Pro ~26-30$/mois
+					confirmé.
+				</p>
+			</div>
+		</section>
 
-    <div style="padding:2rem;background:var(--surface);border:1px solid var(--border);">
-      <div class="section-label" style="margin-bottom:1rem">DIFFÉRENCIATEUR CLÉ</div>
-      <p>CapCut est le seul acteur combinant <strong>génération AI + édition full-suite + distribution native TikTok + commerce e-commerce</strong> dans un même produit free-tier. Le canvas Video Studio est une innovation UX sans équivalent direct. La faiblesse : restriction géographique de Seedance 2.0 (pas EU/US pour l'instant).</p>
-    </div>
-  </div>
-</section>
+		<!-- RISKS -->
+		<section id="risks">
+			<div class="container">
+				<div class="section-label">09 · Risques &amp; Limites</div>
+				<h2>RISQUES <span class="dim">&amp; WATCH POINTS</span></h2>
+				<div class="risk-grid">
+					<div class="risk-card high">
+						<div class="r-level">🔴 Élevé</div>
+						<h3>Restriction géographique Seedance 2.0</h3>
+						<p>
+							Pas EU/US pour l'instant (IP enforcement). Bloque l'accès à la feature principale pour
+							les marchés principaux. Délai d'expansion inconnu.
+						</p>
+					</div>
+					<div class="risk-card high">
+						<div class="r-level">🔴 Élevé</div>
+						<h3>Contexte réglementaire ByteDance US</h3>
+						<p>
+							JV Oracle en cours. Loi Foreign Adversary App toujours active. Risque de nouvelles
+							restrictions sur le marché US influençant l'adoption globale.
+						</p>
+					</div>
+					<div class="risk-card med">
+						<div class="r-level">🟡 Modéré</div>
+						<h3>Limite 15s / clip</h3>
+						<p>
+							Content long-form impossible sans assemblage manuel de clips courts. Frein pour usage
+							film/narrative sérieux. Runway et Sora vont au-delà.
+						</p>
+					</div>
+					<div class="risk-card med">
+						<div class="r-level">🟡 Modéré</div>
+						<h3>Propriété intellectuelle générée</h3>
+						<p>
+							C2PA watermark embarqué dans tous les outputs. Statut légal du contenu AI-généré en
+							évolution rapide dans toutes les juridictions.
+						</p>
+					</div>
+					<div class="risk-card med">
+						<div class="r-level">🟡 Modéré</div>
+						<h3>Dépendance Volcano Engine</h3>
+						<p>
+							Toute l'IA repose sur l'infra ByteDance. Pas d'alternative si restriction ou
+							changement de policy. API publique mitige partiellement.
+						</p>
+					</div>
+					<div class="risk-card low">
+						<div class="r-level">🟢 Faible</div>
+						<h3>Free tier credits conversion</h3>
+						<p>
+							150 crédits/semaine suffisants pour tester mais limite la production à scale.
+							Conversion free→Pro non encore prouvée à grande échelle.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
 
-<!-- TIMELINE -->
-<section id="timeline">
-  <div class="container">
-    <div class="section-label">07 · Roadmap & Historique</div>
-    <h2>ÉVOLUTION <span class="dim">DU PRODUIT</span></h2>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-date">2020 — Lancement</div>
-        <div class="tl-title">CapCut v1 — Timeline Editor</div>
-        <div class="tl-desc">Éditeur mobile ByteDance. Succès viral sur TikTok. Interface timeline classique. Templates, effets, musique intégrée.</div>
-      </div>
-      <div class="tl-item v2">
-        <div class="tl-date">2022–2023</div>
-        <div class="tl-title">Web Platform + Première IA</div>
-        <div class="tl-desc">Expansion web et desktop. Ajout AI: Auto captions, AutoCut, TTS, Voice filter — les features les plus utilisées en 2025. Lancement AI Lab (béta).</div>
-      </div>
-      <div class="tl-item v3">
-        <div class="tl-date">Janvier 2025</div>
-        <div class="tl-title">Ban scare US + restructuration</div>
-        <div class="tl-desc">Menace de ban lié à la loi Foreign Adversary App. Transition vers JV Oracle pour le marché US. Bifurcation "CapCut US" / international. Seedance 1.0 lancé puis paused.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-date">2025 — Commerce</div>
-        <div class="tl-title">Commerce Pro + Seedream 4.0→5.0</div>
-        <div class="tl-desc">Tier B2B ~26-30$/mois. URL-to-Video, AI Try-On, commercial licensing. Seedream 5.0 classé #1 benchmark T2I. AI Lab stabilisé. Billions de projets créés sur l'année.</div>
-      </div>
-      <div class="tl-item v2">
-        <div class="tl-date">25 mars 2026</div>
-        <div class="tl-title">VIDEO STUDIO — Canvas Era</div>
-        <div class="tl-desc">Lancement Video Studio (web). Seedance 2.0 intégré. Infinite canvas, omni reference, AI agent idéation. 3 project types. Disponible SEA/MENA/LATAM/Afrique. 150 crédits/semaine gratuits.</div>
-      </div>
-      <div class="tl-item v3">
-        <div class="tl-date">Prochaine étape</div>
-        <div class="tl-title">Expansion géographique + Durée clips</div>
-        <div class="tl-desc">Extension EU/US (IP concerns à résoudre). Clips &gt;15s. Collaboration temps-réel sur canvas. Inputs multi-modal élargis. API Volcano Engine publique déjà disponible pour intégrations tiers.</div>
-      </div>
-    </div>
-  </div>
-</section>
+		<footer>
+			<span>CAPCUT AI STUDIO — Dossier de référence · Avril 2026</span>
+			<span
+				>Sources : capcut.com · nofilmschool.com · mindstudio.ai · mlq.ai · aibase.com ·
+				medium.com</span
+			>
+		</footer>
 
-<!-- PRICING -->
-<section id="pricing">
-  <div class="container">
-    <div class="section-label">08 · Pricing</div>
-    <h2>TIERS <span class="dim">&amp; ACCÈS</span></h2>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="plan">Free</div>
-        <div class="amount" style="color:var(--text)">$0</div>
-        <div class="billing">pour toujours</div>
-        <ul>
-          <li>~150 crédits génération / semaine</li>
-          <li>Video Studio (canvas, storyboard)</li>
-          <li>Seedance 2.0 (marchés éligibles)</li>
-          <li>Seedream 5.0 AI Design</li>
-          <li>Auto captions, AutoCut, TTS</li>
-          <li>Export jusqu'à 1080p</li>
-          <li>Watermark sur certains exports</li>
-        </ul>
-      </div>
-      <div class="price-card featured" style="border-top:2px solid var(--accent)">
-        <div class="plan">Pro</div>
-        <div class="amount" style="color:var(--accent)">~$10</div>
-        <div class="billing">/ mois (estimation)</div>
-        <ul>
-          <li>Crédits génératio étendus</li>
-          <li>Export 4K</li>
-          <li>Sans watermark</li>
-          <li>Accès prioritaire nouveaux modèles</li>
-          <li>AI Lab features avancées</li>
-          <li>Storage cloud étendu</li>
-        </ul>
-      </div>
-      <div class="price-card" style="border-top:2px solid var(--accent3)">
-        <div class="plan">Commerce Pro</div>
-        <div class="amount" style="color:var(--accent3)">$26–30</div>
-        <div class="billing">/ mois</div>
-        <ul>
-          <li>URL-to-Video (Shopify etc.)</li>
-          <li>AI Model Try-On</li>
-          <li>Commercial music licensing</li>
-          <li>Batch product visuals</li>
-          <li>Avatars commerciaux</li>
-          <li>Cible : dropshippers, e-commerce</li>
-        </ul>
-      </div>
-    </div>
-    <p style="font-size:12px;color:var(--text-muted);font-family:var(--mono)">* Pricing Pro estimatif — varie selon marché et historique. Commerce Pro ~26-30$/mois confirmé.</p>
-  </div>
-</section>
-
-<!-- RISKS -->
-<section id="risks">
-  <div class="container">
-    <div class="section-label">09 · Risques &amp; Limites</div>
-    <h2>RISQUES <span class="dim">&amp; WATCH POINTS</span></h2>
-    <div class="risk-grid">
-      <div class="risk-card high">
-        <div class="r-level">🔴 Élevé</div>
-        <h3>Restriction géographique Seedance 2.0</h3>
-        <p>Pas EU/US pour l'instant (IP enforcement). Bloque l'accès à la feature principale pour les marchés principaux. Délai d'expansion inconnu.</p>
-      </div>
-      <div class="risk-card high">
-        <div class="r-level">🔴 Élevé</div>
-        <h3>Contexte réglementaire ByteDance US</h3>
-        <p>JV Oracle en cours. Loi Foreign Adversary App toujours active. Risque de nouvelles restrictions sur le marché US influençant l'adoption globale.</p>
-      </div>
-      <div class="risk-card med">
-        <div class="r-level">🟡 Modéré</div>
-        <h3>Limite 15s / clip</h3>
-        <p>Content long-form impossible sans assemblage manuel de clips courts. Frein pour usage film/narrative sérieux. Runway et Sora vont au-delà.</p>
-      </div>
-      <div class="risk-card med">
-        <div class="r-level">🟡 Modéré</div>
-        <h3>Propriété intellectuelle générée</h3>
-        <p>C2PA watermark embarqué dans tous les outputs. Statut légal du contenu AI-généré en évolution rapide dans toutes les juridictions.</p>
-      </div>
-      <div class="risk-card med">
-        <div class="r-level">🟡 Modéré</div>
-        <h3>Dépendance Volcano Engine</h3>
-        <p>Toute l'IA repose sur l'infra ByteDance. Pas d'alternative si restriction ou changement de policy. API publique mitige partiellement.</p>
-      </div>
-      <div class="risk-card low">
-        <div class="r-level">🟢 Faible</div>
-        <h3>Free tier credits conversion</h3>
-        <p>150 crédits/semaine suffisants pour tester mais limite la production à scale. Conversion free→Pro non encore prouvée à grande échelle.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <span>CAPCUT AI STUDIO — Dossier de référence · Avril 2026</span>
-  <span>Sources : capcut.com · nofilmschool.com · mindstudio.ai · mlq.ai · aibase.com · medium.com</span>
-</footer>
-
-<script>
-  // Fade-in on scroll
-  const faders = document.querySelectorAll('section, .feature-card, .ref-card, .tl-item, .price-card, .risk-card');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.08 });
-  faders.forEach(el => { el.classList.add('fade-in'); io.observe(el); });
-</script>
-</body>
+		<script>
+			// Fade-in on scroll
+			const faders = document.querySelectorAll(
+				'section, .feature-card, .ref-card, .tl-item, .price-card, .risk-card'
+			);
+			const io = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((e) => {
+						if (e.isIntersecting) {
+							e.target.classList.add('visible');
+							io.unobserve(e.target);
+						}
+					});
+				},
+				{ threshold: 0.08 }
+			);
+			faders.forEach((el) => {
+				el.classList.add('fade-in');
+				io.observe(el);
+			});
+		</script>
+	</body>
 </html>
