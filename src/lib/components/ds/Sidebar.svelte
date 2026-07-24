@@ -37,10 +37,7 @@
 		onadd
 	}: Props = $props();
 
-	let expanded = $state(new SvelteSet<string>());
-	$effect(() => {
-		expanded = new SvelteSet(sections.map((s) => s.id));
-	});
+	let expanded = $derived(new SvelteSet(sections.map((s) => s.id)));
 
 	function toggleSection(id: string) {
 		if (expanded.has(id)) expanded.delete(id);

@@ -117,7 +117,7 @@ import { modelSchema } from '$lib/model/model-template';
 
 const result = modelSchema.safeParse(modelData);
 if (!result.success) {
-  console.error('Validation error:', result.error.message);
+	console.error('Validation error:', result.error.message);
 }
 ```
 

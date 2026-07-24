@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	import PresentationView from '$lib/components/PresentationView.svelte';
 
@@ -10,7 +11,7 @@
 	let { data }: Props = $props();
 
 	function handleExit() {
-		goto('/app');
+		goto(resolve('/'));
 	}
 </script>
 

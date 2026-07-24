@@ -39,7 +39,7 @@
 	const slug = $derived(model.project.name.replace(/\s+/g, '_').toLowerCase());
 	const date = $derived(todayStr());
 
-	const preview = $derived<string>(() => {
+	const preview = $derived.by<string>(() => {
 		switch (activeFormat) {
 			case 'csv':
 				return exportToCSV(model).slice(0, 1200);
@@ -148,6 +148,17 @@
 		}
 	}
 
+	function applyImportedModel(imported: Model) {
+		const next = structuredClone(imported);
+		model.project = next.project;
+		model.assets = next.assets;
+		model.timeline = [...next.timeline].sort((a, b) => a.time - b.time);
+		model.config = next.config;
+		model.markers = next.markers;
+		showImportModal = false;
+		onclose();
+	}
+
 	const FORMATS: { id: Format; label: string }[] = [
 		{ id: 'pdf', label: 'PDF' },
 		{ id: 'csv', label: 'CSV' },
@@ -205,7 +216,7 @@
 
 			<!-- Preview -->
 			<div class="preview-box">
-				<pre>{preview()}</pre>
+				<pre>{preview}</pre>
 			</div>
 		</div>
 
@@ -231,11 +242,7 @@
 		currentModel={model}
 		on:close={() => (showImportModal = false)}
 		on:import={(e) => {
-			// Handle import - replace or merge model
-			console.log('Import:', e.detail.mode, e.detail.model);
-			// Dispatch to parent or handle in store
-			showImportModal = false;
-			onclose();
+			applyImportedModel(e.detail.model);
 		}}
 	/>
 </div>

@@ -4,12 +4,21 @@
 	 * Accessible tooltip component with delay, positioning, and keyboard support.
 	 */
 
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, type Snippet } from 'svelte';
 
-	export let content = '';
-	export let side: 'top' | 'bottom' | 'left' | 'right' = 'top';
-	export let delay = 300;
-	export let disabled = false;
+	let {
+		content = '',
+		side = 'top',
+		delay = 300,
+		disabled = false,
+		children
+	}: {
+		content?: string;
+		side?: 'top' | 'bottom' | 'left' | 'right';
+		delay?: number;
+		disabled?: boolean;
+		children?: Snippet;
+	} = $props();
 
 	let visible = $state(false);
 	let tooltipRef: HTMLElement;
@@ -47,7 +56,7 @@
 		if (!tooltipRef || !triggerRef) return;
 
 		const triggerRect = triggerRef.getBoundingClientRect();
-		const tooltipRect = tooltipRect.getBoundingClientRect();
+		const tooltipBounds = tooltipRef.getBoundingClientRect();
 		const gap = 8;
 
 		let top = 0;
@@ -55,26 +64,26 @@
 
 		switch (side) {
 			case 'top':
-				top = triggerRect.top - tooltipRect.height - gap;
-				left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
+				top = triggerRect.top - tooltipBounds.height - gap;
+				left = triggerRect.left + (triggerRect.width - tooltipBounds.width) / 2;
 				break;
 			case 'bottom':
 				top = triggerRect.bottom + gap;
-				left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
+				left = triggerRect.left + (triggerRect.width - tooltipBounds.width) / 2;
 				break;
 			case 'left':
-				top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-				left = triggerRect.left - tooltipRect.width - gap;
+				top = triggerRect.top + (triggerRect.height - tooltipBounds.height) / 2;
+				left = triggerRect.left - tooltipBounds.width - gap;
 				break;
 			case 'right':
-				top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
+				top = triggerRect.top + (triggerRect.height - tooltipBounds.height) / 2;
 				left = triggerRect.right + gap;
 				break;
 		}
 
 		// Keep within viewport
-		left = Math.max(4, Math.min(left, window.innerWidth - tooltipRect.width - 4));
-		top = Math.max(4, Math.min(top, window.innerHeight - tooltipRect.height - 4));
+		left = Math.max(4, Math.min(left, window.innerWidth - tooltipBounds.width - 4));
+		top = Math.max(4, Math.min(top, window.innerHeight - tooltipBounds.height - 4));
 
 		tooltipRef.style.top = `${top}px`;
 		tooltipRef.style.left = `${left}px`;
@@ -100,7 +109,7 @@
 	role="button"
 	aria-describedby={visible ? 'tooltip-content' : undefined}
 >
-	<slot />
+	{@render children?.()}
 </span>
 
 {#if visible && content}

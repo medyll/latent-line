@@ -26,19 +26,19 @@ jobs:
           pnpm install --frozen-lockfile
 
       - name: Lint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: i18n key parity check
-        run: npm run check:i18n
+        run: pnpm run check:i18n
 
       - name: Type check
-        run: npm run check
+        run: pnpm run check
 
       - name: Unit tests
-        run: npm run test:unit -- --run
+        run: pnpm run test:unit -- --run
 
       - name: Unit test coverage
-        run: npm run test:unit:coverage
+        run: pnpm run test:unit:coverage
 
       - name: Upload coverage report
         if: always()
@@ -48,10 +48,10 @@ jobs:
           path: coverage/
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: E2E tests
-        run: npm run test:e2e
+        run: pnpm run test:e2e
 
       - name: Upload accessibility report
         if: always()

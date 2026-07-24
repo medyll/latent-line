@@ -19,7 +19,8 @@
 	let state = $state({
 		currentIndex: initialIndex,
 		isPlaying: false,
-		progress: 0 // 0-1
+		progress: 0, // 0-1
+		duration: 0
 	});
 
 	let container: HTMLElement | undefined;

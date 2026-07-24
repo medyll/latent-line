@@ -7,6 +7,7 @@
 
 import { modelSchema } from '$lib/model/model-template';
 import type { Model } from '$lib/model/model-types';
+import { parseYAML } from './export-yaml';
 
 export type ParseResult =
 	| { success: true; model: Model }
@@ -28,8 +29,6 @@ export function parseImportFile(content: string, fileType: 'json' | 'yaml'): Par
 		if (fileType === 'json') {
 			raw = JSON.parse(content);
 		} else {
-			// YAML parsing - use existing parseYAML function (stub for now)
-			const { parseYAML } = require('./export-yaml');
 			raw = parseYAML(content);
 		}
 

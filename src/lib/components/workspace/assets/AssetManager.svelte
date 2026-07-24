@@ -243,208 +243,210 @@
   AssetManager Component
   Characters / Environments / Audio with inline editing and orphan badges.
 -->
-<!-- <div
+<div
 	class="flex flex-col gap-1 p-1 text-xs"
 	aria-label="Asset Manager"
 	style="background:var(--color-popover); color:var(--color-popover-foreground)"
 >
-</div> -->
-<!-- E2E debug: visible store counts and last action -->
-<div
-	data-testid="am-debug-visible"
-	aria-hidden="true"
-	style="font-size:10px;line-height:1;opacity:0.9;color:var(--color-popover-foreground);"
->
-	{JSON.stringify({
-		chars: assetStore.characters?.length ?? 0,
-		envs: Object.keys(assetStore.environments ?? {}).length,
-		audio: assetStore.audio?.length ?? 0,
-		last: debugLastAction
-	})}
-</div>
-<!-- ── Search ── -->
-<div class="sidebar-group" style="padding-bottom:0">
-	<input
-		type="search"
-		placeholder="Search assets…"
-		aria-label="Search assets"
-		data-testid="asset-search"
-		bind:value={searchQuery}
-		class="w-full"
-		style="font-size:0.8rem"
-	/>
-</div>
-
-<!-- ── Characters ── -->
-<section class="sidebar-group">
-	<div class="group-header">
-		<h2 class="header-title">Characters</h2>
-		<div class="header-control">
-			<button
-				type="button"
-				class="rounded p-1 text-gray-600 hover:text-blue-600"
-				onclick={addCharacter}
-				onpointerdown={() => (debugLastAction = 'pointerdown:add-char')}
-				onpointerup={() => (debugLastAction = 'pointerup:add-char')}
-				data-testid="add-character"
-				title="Add character"
-				aria-label="Add character"
-			>
-				<Plus class="h-3 w-3" />
-			</button>
-		</div>
+	<!-- E2E debug: visible store counts and last action -->
+	<div
+		data-testid="am-debug-visible"
+		aria-hidden="true"
+		style="font-size:10px;line-height:1;opacity:0.9;color:var(--color-popover-foreground);"
+	>
+		{JSON.stringify({
+			chars: assetStore.characters?.length ?? 0,
+			envs: Object.keys(assetStore.environments ?? {}).length,
+			audio: assetStore.audio?.length ?? 0,
+			last: debugLastAction
+		})}
 	</div>
-	<div class="group-actions">
-		{#if !assetStore.characters.length}
-			<div class="empty-state">
-				<p>No characters</p>
-				<small>Add your first character to get started.</small>
-			</div>
-		{:else}
-			<ul
-				role="listbox"
-				aria-label="Characters"
-				class="menu-list"
-				onkeydown={(e) => handleListKeyNav(e, e.currentTarget as HTMLElement)}
-			>
-				{#each filteredCharacters as char (char.id)}
-					{@const isOrphan = !usedCharIds.has(char.id)}
-					{@const refCount = charRefCounts[char.id] ?? 0}
-					{@const isEditing = editingId === `char:${char.id}`}
-					<li
-						role="option"
-						class={`menu-item ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
-						data-testid={`asset-char-${char.id}`}
-						onclick={() => selectAsset('char', char.id)}
-						onkeydown={(e) => {
-							if (e.key === 'Enter') selectAsset('char', char.id);
-							else if (e.key === 'Delete') removeCharacter(e as unknown as MouseEvent, char.id);
-						}}
-						tabindex="0"
-						aria-label={`Character ${char.name}`}
-						aria-selected={selectedAssetId === `char:${char.id}`}
-					>
-						<span class="avatar-fallback">{char.name?.[0] ?? '?'}</span>
-						<div class="item-info">
-							<div class="info-light">{char.id}</div>
-							<div class="info-main">{char.name}</div>
-						</div>
-						<div class="item-chip">
-							{#if isOrphan}
-								<span
-									class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
-									title="Orphan — not used in timeline">○</span
-								>
-							{:else}
-								<span
-									class="rounded bg-green-100 px-1 py-0.5 text-green-700"
-									title={`Used in ${refCount} frame(s)`}>{refCount}</span
-								>
-							{/if}
-						</div>
-						<button
-							onclick={(e) => toggleEdit(e, `char:${char.id}`)}
-							title="Edit character"
-							aria-label={`Edit ${char.name}`}
-							class="btn-icon"
-						>
-							{#if isEditing}<X />{:else}<Pencil />{/if}
-						</button>
-						<button
-							onclick={(e) => removeCharacter(e, char.id)}
-							title={`Delete ${char.name}`}
-							class="btn-icon"
-							data-testid={`delete-char-${char.id}`}><Trash2 /></button
-						>
+	<!-- ── Search ── -->
+	<div class="sidebar-group" style="padding-bottom:0">
+		<input
+			type="search"
+			placeholder="Search assets…"
+			aria-label="Search assets"
+			data-testid="asset-search"
+			bind:value={searchQuery}
+			class="w-full"
+			style="font-size:0.8rem"
+		/>
+	</div>
 
-						<!-- Inline edit form -->
-						{#if isEditing}
-							{@const idx = assetStore.characters.findIndex((c) => c.id === char.id)}
-							<div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
-								<!-- Name -->
-								<div class="flex flex-col gap-0.5">
-									<label for={`char-name-${char.id}`}>Name</label>
-									<input
-										id={`char-name-${char.id}`}
-										type="text"
-										value={assetStore.characters[idx].name}
-										oninput={(e) =>
-											(assetStore.characters[idx].name = (e.target as HTMLInputElement).value)}
-										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
-										aria-label="Character name"
-									/>
-								</div>
-								<!-- Voice ID -->
-								<div class="flex flex-col gap-0.5">
-									<label for={`voice-id-${char.id}`}>Voice ID</label>
-									<input
-										id={`voice-id-${char.id}`}
-										type="text"
-										value={assetStore.characters[idx].voice_id ?? ''}
-										oninput={(e) =>
-											(assetStore.characters[idx].voice_id =
-												(e.target as HTMLInputElement).value || undefined)}
-										placeholder="e.g. v_male_deep_01"
-										class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
-										aria-label="Voice ID"
-									/>
-								</div>
-								<!-- Outfits -->
-								<div>
-									<div class="mb-1">Outfits</div>
-									{#if assetStore.characters[idx].outfits && Object.keys(assetStore.characters[idx].outfits!).length}
-										<ul class="mb-1 flex flex-col gap-0.5">
-											{#each Object.entries(assetStore.characters[idx].outfits!) as [key, outfit]}
-												<li
-													class="flex items-center justify-between gap-1 rounded bg-white px-1.5 py-0.5"
-												>
-													<span class="font-mono text-blue-600">{key}</span>
-													<span class="min-w-0 flex-1 truncate text-gray-500">{outfit.prompt}</span>
-													<button
-														onclick={() => removeOutfit(char.id, key)}
-														title={`Remove outfit ${key}`}
-														class="text-red-400 hover:text-red-600"
+	<!-- ── Characters ── -->
+	<section class="sidebar-group">
+		<div class="group-header">
+			<h2 class="header-title">Characters</h2>
+			<div class="header-control">
+				<button
+					type="button"
+					class="rounded p-1 text-gray-600 hover:text-blue-600"
+					onclick={addCharacter}
+					onpointerdown={() => (debugLastAction = 'pointerdown:add-char')}
+					onpointerup={() => (debugLastAction = 'pointerup:add-char')}
+					data-testid="add-character"
+					title="Add character"
+					aria-label="Add character"
+				>
+					<Plus class="h-3 w-3" />
+				</button>
+			</div>
+		</div>
+		<div class="group-actions">
+			{#if !assetStore.characters.length}
+				<div class="empty-state">
+					<p>No characters</p>
+					<small>Add your first character to get started.</small>
+				</div>
+			{:else}
+				<ul
+					role="listbox"
+					aria-label="Characters"
+					class="menu-list"
+					onkeydown={(e) => handleListKeyNav(e, e.currentTarget as HTMLElement)}
+				>
+					{#each filteredCharacters as char (char.id)}
+						{@const isOrphan = !usedCharIds.has(char.id)}
+						{@const refCount = charRefCounts[char.id] ?? 0}
+						{@const isEditing = editingId === `char:${char.id}`}
+						<li
+							role="option"
+							class={`menu-item ${selectedAssetId === `char:${char.id}` ? 'bg-blue-100 ring-1 ring-blue-400' : 'hover:bg-gray-100'}`}
+							data-testid={`asset-char-${char.id}`}
+							onclick={() => selectAsset('char', char.id)}
+							onkeydown={(e) => {
+								if (e.key === 'Enter') selectAsset('char', char.id);
+								else if (e.key === 'Delete') removeCharacter(e as unknown as MouseEvent, char.id);
+							}}
+							tabindex="0"
+							aria-label={`Character ${char.name}`}
+							aria-selected={selectedAssetId === `char:${char.id}`}
+						>
+							<span class="avatar-fallback">{char.name?.[0] ?? '?'}</span>
+							<div class="item-info">
+								<div class="info-light">{char.id}</div>
+								<div class="info-main">{char.name}</div>
+							</div>
+							<div class="item-chip">
+								{#if isOrphan}
+									<span
+										class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
+										title="Orphan — not used in timeline">○</span
+									>
+								{:else}
+									<span
+										class="rounded bg-green-100 px-1 py-0.5 text-green-700"
+										title={`Used in ${refCount} frame(s)`}>{refCount}</span
+									>
+								{/if}
+							</div>
+							<button
+								onclick={(e) => toggleEdit(e, `char:${char.id}`)}
+								title="Edit character"
+								aria-label={`Edit ${char.name}`}
+								class="btn-icon"
+							>
+								{#if isEditing}<X />{:else}<Pencil />{/if}
+							</button>
+							<button
+								onclick={(e) => removeCharacter(e, char.id)}
+								title={`Delete ${char.name}`}
+								class="btn-icon"
+								data-testid={`delete-char-${char.id}`}><Trash2 /></button
+							>
+
+							<!-- Inline edit form -->
+							{#if isEditing}
+								{@const idx = assetStore.characters.findIndex((c) => c.id === char.id)}
+								<div class="col-span-full mt-1 flex flex-col gap-1.5 rounded bg-gray-50 p-2">
+									<!-- Name -->
+									<div class="flex flex-col gap-0.5">
+										<label for={`char-name-${char.id}`}>Name</label>
+										<input
+											id={`char-name-${char.id}`}
+											type="text"
+											value={assetStore.characters[idx].name}
+											oninput={(e) =>
+												(assetStore.characters[idx].name = (e.target as HTMLInputElement).value)}
+											class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
+											aria-label="Character name"
+										/>
+									</div>
+									<!-- Voice ID -->
+									<div class="flex flex-col gap-0.5">
+										<label for={`voice-id-${char.id}`}>Voice ID</label>
+										<input
+											id={`voice-id-${char.id}`}
+											type="text"
+											value={assetStore.characters[idx].voice_id ?? ''}
+											oninput={(e) =>
+												(assetStore.characters[idx].voice_id =
+													(e.target as HTMLInputElement).value || undefined)}
+											placeholder="e.g. v_male_deep_01"
+											class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
+											aria-label="Voice ID"
+										/>
+									</div>
+									<!-- Outfits -->
+									<div>
+										<div class="mb-1">Outfits</div>
+										{#if assetStore.characters[idx].outfits && Object.keys(assetStore.characters[idx].outfits!).length}
+											<ul class="mb-1 flex flex-col gap-0.5">
+												{#each Object.entries(assetStore.characters[idx].outfits!) as [key, outfit]}
+													<li
+														class="flex items-center justify-between gap-1 rounded bg-white px-1.5 py-0.5"
 													>
-														<X class="h-3 w-3" />
-													</button>
-												</li>
-											{/each}
-										</ul>
-									{/if}
-									<!-- Add outfit -->
-									<div class="flex gap-1">
-										<input
-											type="text"
-											bind:value={newOutfitKey}
-											placeholder="name"
-											class="w-20 rounded border border-gray-200 px-1 py-0.5 text-xs"
-											aria-label="New outfit name"
-										/>
-										<input
-											type="text"
-											bind:value={newOutfitPrompt}
-											placeholder="prompt"
-											class="flex-1 rounded border border-gray-200 px-1 py-0.5 text-xs"
-											aria-label="New outfit prompt"
-										/>
-										<button
-											onclick={() => addOutfit(char.id)}
-											title="Add outfit"
-											class="rounded bg-blue-50 px-1 text-blue-600 hover:bg-blue-100"
-											data-testid={`add-outfit-${char.id}`}
-										>
-											<Plus class="h-3 w-3" />
-										</button>
+														<span class="font-mono text-blue-600">{key}</span>
+														<span class="min-w-0 flex-1 truncate text-gray-500"
+															>{outfit.prompt}</span
+														>
+														<button
+															onclick={() => removeOutfit(char.id, key)}
+															title={`Remove outfit ${key}`}
+															class="text-red-400 hover:text-red-600"
+														>
+															<X class="h-3 w-3" />
+														</button>
+													</li>
+												{/each}
+											</ul>
+										{/if}
+										<!-- Add outfit -->
+										<div class="flex gap-1">
+											<input
+												type="text"
+												bind:value={newOutfitKey}
+												placeholder="name"
+												class="w-20 rounded border border-gray-200 px-1 py-0.5 text-xs"
+												aria-label="New outfit name"
+											/>
+											<input
+												type="text"
+												bind:value={newOutfitPrompt}
+												placeholder="prompt"
+												class="flex-1 rounded border border-gray-200 px-1 py-0.5 text-xs"
+												aria-label="New outfit prompt"
+											/>
+											<button
+												onclick={() => addOutfit(char.id)}
+												title="Add outfit"
+												class="rounded bg-blue-50 px-1 text-blue-600 hover:bg-blue-100"
+												data-testid={`add-outfit-${char.id}`}
+											>
+												<Plus class="h-3 w-3" />
+											</button>
+										</div>
 									</div>
 								</div>
-							</div>
-						{/if}
-					</li>
-				{/each}
-			</ul>
-		{/if}
-	</div>
-</section>
+							{/if}
+						</li>
+					{/each}
+				</ul>
+			{/if}
+		</div>
+	</section>
+</div>
 
 <!-- ── Environments ── -->
 <section class="sidebar-group">

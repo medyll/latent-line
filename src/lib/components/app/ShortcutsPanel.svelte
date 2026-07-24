@@ -26,7 +26,7 @@
 
 	// State
 	let shortcuts = $state<ShortcutConfig>({ ...DEFAULT_SHORTCUTS });
-	let conflicts = $state<Array<{ action1: string; action2: string; shortcut: string }>>([]);
+	let conflicts = $derived(detectConflicts(shortcuts));
 	let selectedPreset = $state('Default');
 	let editingAction: string | null = null;
 	let editingValue = $state('');
@@ -41,11 +41,6 @@
 		Navigation: Object.entries(shortcuts).filter(([k]) => k.startsWith('nav.')),
 		View: Object.entries(shortcuts).filter(([k]) => k.startsWith('view.')),
 		Timeline: Object.entries(shortcuts).filter(([k]) => k.startsWith('timeline.'))
-	});
-
-	// Update conflicts when shortcuts change
-	$effect(() => {
-		conflicts = detectConflicts(shortcuts);
 	});
 
 	// Load shortcuts on open
@@ -162,7 +157,10 @@
 
 			<!-- Presets -->
 			<div class="presets-bar">
-				<select value={selectedPreset} onchange={(e) => handlePresetChange(e.target.value)}>
+				<select
+					value={selectedPreset}
+					onchange={(e) => handlePresetChange((e.currentTarget as HTMLSelectElement).value)}
+				>
 					{#each SHORTCUT_PRESETS as preset}
 						<option value={preset.name}>{preset.name}</option>
 					{/each}
@@ -183,7 +181,7 @@
 					<textarea
 						placeholder="Paste shortcuts JSON here..."
 						value={importText}
-						oninput={(e) => (importText = e.target.value)}
+						oninput={(e) => (importText = (e.currentTarget as HTMLTextAreaElement).value)}
 					/>
 					<div class="import-actions">
 						<button class="btn" onclick={handleImport}>Import</button>

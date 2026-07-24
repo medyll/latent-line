@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { TimelineEvent } from '$lib/model/model-types';
-	import TimelineEventCard from './TimelineEvent.svelte';
-	import { SELECTION_STORE_KEY } from '$lib/context/keys';
+	import TimelineEventCard from './orchestrator/TimelineEvent.svelte';
 
 	interface Props {
 		events: TimelineEvent[];
@@ -12,18 +11,15 @@
 
 	let { events = [], estimateHeight = 80, overscan = 5 }: Props = $props();
 
-	const selectionStore = getContext<Set<number> | null>(SELECTION_STORE_KEY);
-
 	let scrollContainer: HTMLDivElement;
 	let scrollOffset = $state(0);
-	let scrollHeight = $state(0);
 	let containerHeight = $state(0);
 
 	// Calculate total size
 	const totalSize = $derived(events.length * estimateHeight);
 
 	// Calculate visible range
-	const visibleRange = $derived(() => {
+	const visibleRange = $derived.by(() => {
 		const startIndex = Math.max(0, Math.floor(scrollOffset / estimateHeight) - overscan);
 		const visibleCount = Math.ceil(containerHeight / estimateHeight);
 		const endIndex = Math.min(events.length, startIndex + visibleCount + overscan * 2);
@@ -32,7 +28,7 @@
 	});
 
 	// Virtual items to render
-	const virtualItems = $derived(() => {
+	const virtualItems = $derived.by(() => {
 		const { startIndex, endIndex } = visibleRange;
 		return events.slice(startIndex, endIndex).map((event, idx) => ({
 			event,
@@ -49,25 +45,38 @@
 
 	onMount(() => {
 		if (scrollContainer) {
-			scrollHeight = scrollContainer.clientHeight;
 			containerHeight = scrollContainer.clientHeight;
 		}
 	});
 
-	function isSelected(time: number): boolean {
-		return selectionStore?.has(time) ?? false;
+	function toTimelineItem(event: TimelineEvent, index: number) {
+		const actor = event.frame.actors?.[0];
+		return {
+			id: String(event.time),
+			label: event.notes || `Event ${index + 1}`,
+			start: event.time,
+			end: event.time + (event.duration ?? 1),
+			speech: actor?.speech?.text,
+			mood: actor?.speech?.mood,
+			action: actor?.action,
+			character: actor?.id,
+			zoom: event.frame.camera?.zoom,
+			fx: event.frame.fx,
+			audio: event.frame.audio_tracks,
+			timelineFrame: event.frame
+		};
 	}
 </script>
 
-<div bind:this={scrollContainer} class="virtual-timeline" on:scroll={handleScroll}>
+<div bind:this={scrollContainer} class="virtual-timeline" onscroll={handleScroll}>
 	<!-- Spacer to maintain scroll height -->
-	<div class="virtual-spacer" style="height: {totalSize}px" />
+	<div class="virtual-spacer" style="height: {totalSize}px"></div>
 
 	<!-- Virtual items -->
 	<div class="virtual-items" style="transform: translateY(0)">
 		{#each virtualItems as { event, index, top } (event.time)}
 			<div class="virtual-item" style="transform: translateY({top}px)">
-				<TimelineEventCard {event} selected={isSelected(event.time)} compact />
+				<TimelineEventCard item={toTimelineItem(event, index)} isSelected={false} compact />
 			</div>
 		{/each}
 	</div>

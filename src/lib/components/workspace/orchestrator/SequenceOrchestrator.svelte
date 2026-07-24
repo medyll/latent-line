@@ -823,7 +823,7 @@
 		onduplicate={duplicateSelected}
 		onshift={shiftSelected}
 		onclear={() => {
-			multiSelectedTimes = new Set();
+			multiSelectedTimes = new SvelteSet();
 		}}
 	/>
 {/if}

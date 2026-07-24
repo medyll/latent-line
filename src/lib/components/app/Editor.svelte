@@ -5,7 +5,7 @@
 	import { MODEL_STORE_KEY, PLAYBACK_CONTEXT_KEY } from '$lib/context/keys';
 	import type { PlaybackStore } from '$lib/context/playback-context.svelte';
 
-	import Sidebar from '$lib/components/ds/Sidebar.svelte';
+	import AssetManager from '$lib/components/workspace/assets/AssetManager.svelte';
 	import Card from '$lib/components/ds/Card.svelte';
 	import Timeline from '$lib/components/ds/Timeline.svelte';
 	import Waveform from '$lib/components/ds/Waveform.svelte';
@@ -14,19 +14,15 @@
 
 	let {
 		selectedTime = $bindable<number | null>(null),
-		onadd,
 		onboardingActive = false
 	}: {
 		selectedTime?: number | null;
-		onadd?: (sectionId: string) => void;
 		onboardingActive?: boolean;
 	} = $props();
 
 	const model = getContext<Model>(MODEL_STORE_KEY);
 	const playback = getContext<PlaybackStore>(PLAYBACK_CONTEXT_KEY);
 
-	let sidebarCollapsed = $state(false);
-	let search = $state('');
 	let zoom = $state(1);
 	let playheadTime = $state(0);
 
@@ -81,42 +77,22 @@
 		return ev.frame.actors?.[0]?.action;
 	}
 
-	// Sidebar sections derived from model assets
-	const sidebarSections = $derived([
-		{
-			id: 'characters',
-			label: 'Characters',
-			items: model.assets.characters.map((c) => ({
-				id: c.id,
-				label: c.name,
-				badge: c.name
-					.split(' ')
-					.map((w) => w[0])
-					.join('')
-					.slice(0, 2)
-					.toUpperCase(),
-				badgeColor: charColor(c.id)
-			}))
-		},
-		{
-			id: 'environments',
-			label: 'Environments',
-			items: Object.entries(model.assets.environments).map(([id, env]) => ({
-				id,
-				label: id.replace(/_/g, ' '),
-				subLabel: env.prompt.slice(0, 40) + '…'
-			}))
-		},
-		{
-			id: 'audio',
-			label: 'Audio',
-			items: model.assets.audio.map((a) => ({
-				id: a.id,
-				label: a.label || a.id,
-				subLabel: a.url
-			}))
-		}
-	]);
+	function addShot() {
+		const time = timeline.length
+			? Math.max(...timeline.map((event) => event.time + (event.duration ?? 48)))
+			: 0;
+		const nextEvent: TimelineEvent = {
+			time,
+			duration: 48,
+			frame: { actors: [] },
+			notes: `Shot ${timeline.length + 1}`
+		};
+		model.timeline = [...model.timeline, structuredClone(nextEvent)].sort(
+			(a, b) => a.time - b.time
+		);
+		selectedTime = time;
+		openEditor(nextEvent);
+	}
 
 	// Timeline events for the track
 	const trackEvents = $derived(
@@ -247,11 +223,16 @@
 </script>
 
 <div class="editor">
-	<Sidebar sections={sidebarSections} bind:search bind:collapsed={sidebarCollapsed} />
+	<aside class="editor-assets">
+		<AssetManager />
+	</aside>
 
 	<div class="editor-main">
 		<!-- Storyboard grid -->
 		<div class="storyboard">
+			<div class="storyboard-toolbar">
+				<Button variant="primary" label="Add shot" icon="plus" onclick={addShot} />
+			</div>
 			{#if timeline.length === 0 && !onboardingActive}
 				<div class="empty-state" role="status" aria-live="polite">
 					<div class="empty-icon">
@@ -259,12 +240,7 @@
 					</div>
 					<h3>No shots yet</h3>
 					<p>Drag characters from the sidebar or click below to create your first shot.</p>
-					<Button
-						variant="primary"
-						label="Add first shot"
-						icon="plus"
-						onclick={() => onadd?.('characters')}
-					/>
+					<Button variant="primary" label="Add first shot" icon="plus" onclick={addShot} />
 				</div>
 			{:else if timeline.length > 0}
 				<div class="shot-grid">
@@ -322,6 +298,7 @@
 
 <!-- Shot Editor Slide-in Panel -->
 {#if editorOpen && editingShot}
+	{@const editorActor = editingShot.frame.actors![0]}
 	<div class="editor-overlay" onclick={closeEditor} role="presentation"></div>
 	<aside class="shot-editor" class:open={editorOpen}>
 		<div class="se-header">
@@ -355,23 +332,18 @@
 					id="se-dialogue"
 					class="se-textarea"
 					rows="3"
-					bind:value={editingShot.frame.actors[0].speech.text}
+					bind:value={editorActor.speech!.text}
 				></textarea>
 			</div>
 
 			<div class="se-field">
 				<label for="se-action">Action</label>
-				<input
-					id="se-action"
-					type="text"
-					class="se-input"
-					bind:value={editingShot.frame.actors[0].action}
-				/>
+				<input id="se-action" type="text" class="se-input" bind:value={editorActor.action} />
 			</div>
 
 			<div class="se-field">
 				<label for="se-mood">Mood</label>
-				<select id="se-mood" class="se-select" bind:value={editingShot.frame.actors[0].speech.mood}>
+				<select id="se-mood" class="se-select" bind:value={editorActor.speech!.mood}>
 					<option value="joyful">joyful</option>
 					<option value="melancholic">melancholic</option>
 					<option value="anxious">anxious</option>
@@ -393,7 +365,7 @@
 				size="sm"
 				icon="trash"
 				label="Delete"
-				onclick={() => deleteShot(editingShot.time)}
+				onclick={() => deleteShot(editingShot!.time)}
 			/>
 			<div class="se-actions">
 				<Button variant="ghost" size="sm" label="Cancel" onclick={closeEditor} />
@@ -418,6 +390,19 @@
 		flex: 1;
 		min-width: 0;
 		overflow: hidden;
+	}
+
+	.editor-assets {
+		flex: 0 0 var(--sidebar-width, 18rem);
+		overflow-y: auto;
+		border-right: var(--border-width) solid var(--color-border);
+		background: var(--color-surface-alt);
+	}
+
+	.storyboard-toolbar {
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: var(--marg-sm);
 	}
 
 	.storyboard {
