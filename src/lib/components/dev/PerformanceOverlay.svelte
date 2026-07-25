@@ -10,14 +10,14 @@
 	let { open = false, onClose }: Props = $props();
 
 	// Metrics
-	const fps = $state(60);
-	const frameTime = $state(0);
-	const renderCount = $state(0);
-	const memoryUsage = $state(0);
+	let fps = $state(60);
+	let frameTime = $state(0);
+	let renderCount = $state(0);
+	let memoryUsage = $state(0);
 
 	// History for graphs
-	const fpsHistory = $state<number[]>([]);
-	const memoryHistory = $state<number[]>([]);
+	let fpsHistory = $state<number[]>([]);
+	let memoryHistory = $state<number[]>([]);
 
 	let animationFrame: number;
 	let lastTime = performance.now();

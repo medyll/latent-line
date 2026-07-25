@@ -1,5 +1,8 @@
 # Latent-line Project Overview
 
+> [!WARNING]
+> **Statut actuel : prototype expérimental / alpha technique.** Les anciens numéros de sprint, pourcentages v1 et mentions « COMPLETE » conservés plus bas sont des archives et non une preuve de fonctionnement. La source de vérité est [docs/FEATURE_STATUS.md](docs/FEATURE_STATUS.md), complétée par [l'audit du 24 juillet 2026](docs/AUDIT-REALITE-2026-07-24.md). Aucune date de sortie v1 n'est annoncée.
+
 [![CI](https://github.com/medyll/latent-line/actions/workflows/ci.yml/badge.svg)](https://github.com/medyll/latent-line/actions/workflows/ci.yml)
 
 **Latent-line** is a SvelteKit 5 + Vite SPA for orchestrating **AI-driven story/scene production** with interactive timeline editing, asset management, and real-time model inspection.

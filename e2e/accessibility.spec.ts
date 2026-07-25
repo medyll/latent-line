@@ -52,11 +52,13 @@ test.describe('Accessibility — WCAG 2.1 AA', () => {
 		expect(critical).toHaveLength(0);
 	});
 
-	test('/app — AssetManager listboxes are keyboard-navigable', async ({ page }) => {
+	test('/app — AssetManager asset controls are keyboard-navigable', async ({ page }) => {
 		await page.goto('/app');
 		await page.waitForLoadState('networkidle');
-		const listbox = page.getByRole('listbox', { name: 'Characters' });
-		await expect(listbox).toBeVisible();
+		const character = page.getByRole('button', { name: 'Character Lea Marchand' });
+		await expect(character).toBeVisible();
+		await character.focus();
+		await expect(character).toBeFocused();
 	});
 
 	test('/app — all dialogs trap focus correctly', async ({ page }) => {

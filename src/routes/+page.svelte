@@ -23,6 +23,7 @@
 	import Editor from '$lib/components/app/Editor.svelte';
 	import Button from '$lib/components/ds/Button.svelte';
 	import Icon from '$lib/components/ds/Icon.svelte';
+	import { resolve } from '$app/paths';
 
 	const { model, history, undo, redo, saveStatus } = createModelStore();
 	const playback = createPlaybackStore();
@@ -53,6 +54,7 @@
 	let showComfyUISettings = $state(false);
 
 	const selectedEventId = $derived(selectedTime !== null ? String(selectedTime) : null);
+	const screeningModel = $derived(encodeURIComponent(btoa(JSON.stringify($state.snapshot(model)))));
 
 	const onKeydown = createKeybindingHandler({
 		undo,
@@ -118,9 +120,7 @@
 			onclick={() => (showSnapshots = true)}
 		/>
 		<a
-			href="/present?model={encodeURIComponent(
-				btoa(JSON.stringify($state.snapshot(model)))
-			)}&index=0"
+			href={resolve(`/present?model=${screeningModel}&index=0`)}
 			target="_blank"
 			rel="noopener"
 			class="toolbar-link"

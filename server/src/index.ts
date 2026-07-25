@@ -15,7 +15,6 @@ import {
 	serializeMessage,
 	parseMessage,
 	type WSMessage,
-	type JoinPayload,
 	type UserInfo
 } from './protocol';
 
@@ -120,12 +119,12 @@ wss.on('close', () => {
 function handleMessage(ws: WebSocket, message: WSMessage, userId: string, roomId: string): void {
 	switch (message.type) {
 		case 'join': {
-			const payload = message.payload as JoinPayload;
+			const payload = message.payload;
 			const userInfo: UserInfo = {
 				id: userId,
-				name: payload.userName || `User ${userId.slice(-4)}`,
-				color: payload.userColor || '#3b82f6',
-				avatar: payload.avatar,
+				name: typeof payload?.userName === 'string' ? payload.userName : `User ${userId.slice(-4)}`,
+				color: typeof payload?.userColor === 'string' ? payload.userColor : '#3b82f6',
+				avatar: typeof payload?.avatar === 'string' ? payload.avatar : undefined,
 				lastSeen: Date.now()
 			};
 

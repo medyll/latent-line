@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { setContext, onMount } from 'svelte';
 	import favicon from '$lib/assets/favicon.svg';
-	import '@medyll/css-base';
 	import '$lib/styles/app.css';
 	import '$lib/styles/workspace.css';
 	import { createPreferencesStore, PREFS_CONTEXT_KEY } from '$lib/stores/preferences.svelte';
@@ -11,6 +10,7 @@
 	import { locale, t } from '$lib/i18n';
 	import { validateStorageVersion } from '$lib/utils/storage-cleanup';
 	import { generationStats } from '$lib/stores/generation.svelte';
+	import { resolve } from '$app/paths';
 
 	let { children } = $props();
 
@@ -73,8 +73,8 @@
 		</div>
 
 		<nav class="header-nav" aria-label="Main">
-			<a href="/" class="nav-link" aria-current={undefined}>{t('timeline.title')}</a>
-			<a href="/present" class="nav-link">Screening</a>
+			<a href={resolve('/')} class="nav-link" aria-current={undefined}>{t('timeline.title')}</a>
+			<a href={resolve('/present')} class="nav-link">Screening</a>
 		</nav>
 
 		<div class="header-tools">

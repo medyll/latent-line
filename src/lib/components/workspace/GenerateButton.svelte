@@ -13,32 +13,32 @@
 
 	let { eventId, prompt, prefs }: Props = $props();
 
-	let currentState = $state<EventGenerationState>({ event_id: eventId, status: 'idle' });
+	let currentGenerationState: EventGenerationState = $state({
+		event_id: eventId,
+		status: 'idle'
+	});
 
 	$effect(() => {
 		const unsubscribe = generation.subscribe((map) => {
-			currentState = map.get(eventId) ?? { event_id: eventId, status: 'idle' };
+			currentGenerationState = map.get(eventId) ?? { event_id: eventId, status: 'idle' };
 		});
 		return unsubscribe;
 	});
 
-	let state = $derived(currentState);
+	let generationState = $derived(currentGenerationState);
 
 	let generatedImage = $state<string | undefined>();
 
-	$effect(async () => {
-		if (state.image_base64) {
-			generatedImage = `data:image/png;base64,${state.image_base64}`;
-			try {
-				await generatedImages.save({
+	$effect(() => {
+		if (generationState.image_base64) {
+			generatedImage = `data:image/png;base64,${generationState.image_base64}`;
+			void generatedImages
+				.save({
 					event_id: eventId,
-					image_base64: state.image_base64,
-					generated_at: Date.now(),
-					metadata: state as any
-				});
-			} catch (err) {
-				console.error('Failed to save image to IndexedDB:', err);
-			}
+					image_base64: generationState.image_base64,
+					generated_at: Date.now()
+				})
+				.catch((err) => console.error('Failed to save image to IndexedDB:', err));
 		}
 	});
 
@@ -107,22 +107,22 @@
 </script>
 
 <div class="generate-panel">
-	{#if state.status === 'idle'}
+	{#if generationState.status === 'idle'}
 		<button onclick={handleGenerate} class="btn-generate" title="Generate image from prompt">
 			🎨 Generate
 		</button>
-	{:else if state.status === 'queued' || state.status === 'generating'}
+	{:else if generationState.status === 'queued' || generationState.status === 'generating'}
 		<div class="generating">
 			<div class="spinner"></div>
-			<span>{state.status === 'queued' ? 'Queued...' : 'Generating...'}</span>
-			{#if state.progress !== undefined}
+			<span>{generationState.status === 'queued' ? 'Queued...' : 'Generating...'}</span>
+			{#if generationState.progress !== undefined}
 				<div class="progress-bar">
-					<div class="progress-fill" style={`width: ${state.progress}%`}></div>
+					<div class="progress-fill" style={`width: ${generationState.progress}%`}></div>
 				</div>
-				<span class="progress-text">{Math.round(state.progress)}%</span>
+				<span class="progress-text">{Math.round(generationState.progress)}%</span>
 			{/if}
 		</div>
-	{:else if state.status === 'done'}
+	{:else if generationState.status === 'done'}
 		<div class="generated">
 			{#if generatedImage}
 				<img src={generatedImage} alt="Generated" class="generated-thumbnail" />
@@ -134,10 +134,10 @@
 				</button>
 			</div>
 		</div>
-	{:else if state.status === 'error'}
+	{:else if generationState.status === 'error'}
 		<div class="error-panel">
 			<span class="status-badge error">✗ Error</span>
-			<p class="error-message">{state.error}</p>
+			<p class="error-message">{generationState.error}</p>
 			<button onclick={handleGenerate} class="btn-retry" title="Retry generation">
 				🔄 Retry
 			</button>

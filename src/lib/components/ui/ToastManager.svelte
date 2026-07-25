@@ -3,7 +3,7 @@
 	import { fly, fade } from 'svelte/transition';
 </script>
 
-<div class="toast-container" aria-live="polite" aria-label="Notifications">
+<div class="toast-container" role="region" aria-live="polite" aria-label="Notifications">
 	{#each toast.items as item (item.id)}
 		<div
 			class="toast toast-{item.type}"

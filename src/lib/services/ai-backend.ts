@@ -51,7 +51,6 @@ export interface GenerationProgress {
  */
 class ComfyUIBackend {
 	private config: AIBackendConfig;
-	private pollInterval = 1000; // ms
 
 	constructor(config: AIBackendConfig) {
 		this.config = config;
@@ -65,19 +64,41 @@ class ComfyUIBackend {
 
 	async checkProgress(job_id: string): Promise<GenerationProgress> {
 		try {
-			const response = await fetch(`${this.config.url}/api/progress`, {
+			const historyResponse = await fetch(`${this.config.url}/history/${job_id}`, {
 				headers: this.config.api_key ? { Authorization: `Bearer ${this.config.api_key}` } : {}
 			});
 
-			if (!response.ok) {
-				return { status: 'error', error: `HTTP ${response.status}` };
+			if (!historyResponse.ok) {
+				return { status: 'error', error: `HTTP ${historyResponse.status}` };
 			}
 
-			const data = await response.json();
-			return {
-				status: data.queue_remaining > 0 ? 'queued' : data.value?.max === 0 ? 'done' : 'generating',
-				progress: data.value?.value ? (data.value.value / data.value.max) * 100 : undefined
+			const history = (await historyResponse.json()) as Record<
+				string,
+				{ outputs?: Record<string, unknown>; status?: { status_str?: string; completed?: boolean } }
+			>;
+			const job = history[job_id];
+			if (job?.status?.status_str === 'error') {
+				return { status: 'error', error: 'ComfyUI workflow failed' };
+			}
+			if (job?.status?.completed || job?.outputs) {
+				return { status: 'done', progress: 100 };
+			}
+
+			const queueResponse = await fetch(`${this.config.url}/queue`, {
+				headers: this.config.api_key ? { Authorization: `Bearer ${this.config.api_key}` } : {}
+			});
+			if (!queueResponse.ok) return { status: 'generating' };
+
+			const queue = (await queueResponse.json()) as {
+				queue_running?: unknown[][];
+				queue_pending?: unknown[][];
 			};
+			const containsJob = (items: unknown[][] | undefined) =>
+				items?.some((item) => item.includes(job_id)) ?? false;
+
+			if (containsJob(queue.queue_running)) return { status: 'generating' };
+			if (containsJob(queue.queue_pending)) return { status: 'queued' };
+			return { status: 'idle' };
 		} catch (err) {
 			return { status: 'error', error: `${err}` };
 		}
@@ -176,7 +197,8 @@ export class AIBackend {
 	/** Test connection to AI backend */
 	async testConnection(): Promise<{ ok: boolean; error?: string }> {
 		try {
-			const response = await fetch(`${this.config.url}`, {
+			const healthPath = this.config.backend === 'comfyui' ? '/system_stats' : '';
+			const response = await fetch(`${this.config.url}${healthPath}`, {
 				signal: AbortSignal.timeout(5000)
 			});
 			return { ok: response.ok, error: response.ok ? undefined : `HTTP ${response.status}` };

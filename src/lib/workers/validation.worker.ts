@@ -36,7 +36,7 @@ function validateModel(task: ValidationTask): ValidationResult {
 
 		if (!result.success) {
 			// Format Zod errors
-			result.error.errors.forEach((err) => {
+			result.error.issues.forEach((err) => {
 				errors.push({
 					path: err.path.join('.'),
 					message: err.message,
@@ -162,7 +162,7 @@ self.onmessage = function (e: MessageEvent) {
 					valid: quickResult.success,
 					errors: quickResult.success
 						? []
-						: quickResult.error.errors.map((err: any) => ({
+						: quickResult.error.issues.map((err) => ({
 								path: err.path.join('.'),
 								message: err.message
 							})),

@@ -48,7 +48,12 @@
 	<div class="modal-content">
 		<h2 id="marker-editor-title">{marker ? 'Edit' : 'Add'} Marker</h2>
 
-		<form onsubmit={(e) => e.preventDefault() || handleSubmit()}>
+		<form
+			onsubmit={(e) => {
+				e.preventDefault();
+				handleSubmit();
+			}}
+		>
 			<div class="form-group">
 				<label for="marker-time">Time (ms)</label>
 				<input

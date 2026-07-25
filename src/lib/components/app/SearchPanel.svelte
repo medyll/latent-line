@@ -44,23 +44,19 @@
 		}
 	});
 
+	function handleKeyDown(e: KeyboardEvent) {
+		if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+			e.preventDefault();
+		}
+		if (e.key === 'Escape' && open) {
+			handleClose();
+		}
+	}
+
 	onMount(() => {
 		filterPresets = loadFilterPresets();
-
-		// Keyboard shortcut
-		function handleKeyDown(e: KeyboardEvent) {
-			if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-				e.preventDefault();
-				if (!open) {
-					// Open search panel
-				}
-			}
-			if (e.key === 'Escape' && open) {
-				handleClose();
-			}
-		}
-
 		window.addEventListener('keydown', handleKeyDown);
+		return () => window.removeEventListener('keydown', handleKeyDown);
 	});
 
 	onDestroy(() => {
@@ -196,7 +192,10 @@
 								<input
 									type="checkbox"
 									checked={filters.hasPrompt ?? false}
-									onchange={(e) => (filters.hasPrompt = e.target.checked ? true : undefined)}
+									onchange={(e) =>
+										(filters.hasPrompt = (e.currentTarget as HTMLInputElement).checked
+											? true
+											: undefined)}
 								/>
 								Has Prompt
 							</label>
@@ -204,7 +203,10 @@
 								<input
 									type="checkbox"
 									checked={filters.hasCharacter ?? false}
-									onchange={(e) => (filters.hasCharacter = e.target.checked ? true : undefined)}
+									onchange={(e) =>
+										(filters.hasCharacter = (e.currentTarget as HTMLInputElement).checked
+											? true
+											: undefined)}
 								/>
 								Has Character
 							</label>
@@ -212,7 +214,10 @@
 								<input
 									type="checkbox"
 									checked={filters.hasCamera ?? false}
-									onchange={(e) => (filters.hasCamera = e.target.checked ? true : undefined)}
+									onchange={(e) =>
+										(filters.hasCamera = (e.currentTarget as HTMLInputElement).checked
+											? true
+											: undefined)}
 								/>
 								Has Camera
 							</label>
@@ -220,7 +225,10 @@
 								<input
 									type="checkbox"
 									checked={filters.hasLighting ?? false}
-									onchange={(e) => (filters.hasLighting = e.target.checked ? true : undefined)}
+									onchange={(e) =>
+										(filters.hasLighting = (e.currentTarget as HTMLInputElement).checked
+											? true
+											: undefined)}
 								/>
 								Has Lighting
 							</label>
@@ -228,7 +236,10 @@
 								<input
 									type="checkbox"
 									checked={filters.hasFX ?? false}
-									onchange={(e) => (filters.hasFX = e.target.checked ? true : undefined)}
+									onchange={(e) =>
+										(filters.hasFX = (e.currentTarget as HTMLInputElement).checked
+											? true
+											: undefined)}
 								/>
 								Has FX
 							</label>
@@ -236,7 +247,10 @@
 								<input
 									type="checkbox"
 									checked={filters.hasAudio ?? false}
-									onchange={(e) => (filters.hasAudio = e.target.checked ? true : undefined)}
+									onchange={(e) =>
+										(filters.hasAudio = (e.currentTarget as HTMLInputElement).checked
+											? true
+											: undefined)}
 								/>
 								Has Audio
 							</label>

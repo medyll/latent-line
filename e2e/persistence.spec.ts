@@ -11,12 +11,15 @@ test('model persists to localStorage after adding a character (S12-01)', async (
 
 	// Add a character to mutate the model
 	await page.locator('[data-testid="add-character"]').click();
-	await page.locator('ul[aria-label="Characters"] [role="option"]').waitFor({ timeout: 10000 });
-
-	// Wait for auto-save ($effect runs after state change)
-	await page.waitForTimeout(300);
+	const newCharacter = page.getByRole('button', { name: 'Character New Character' });
+	await newCharacter.waitFor({ timeout: 10000 });
 
 	// Verify localStorage was written with a valid model
+	await expect
+		.poll(() => page.evaluate(() => localStorage.getItem('latent-line:model')), {
+			timeout: 3000
+		})
+		.not.toBeNull();
 	const saved = await page.evaluate(() => localStorage.getItem('latent-line:model'));
 	expect(saved).not.toBeNull();
 	const parsed = JSON.parse(saved as string);

@@ -15,7 +15,7 @@
 	const DEFAULT_DURATION = 24;
 
 	/** Event whose time window contains the playhead */
-	const activeEvent = $derived<TimelineEvent | null>(() => {
+	const activeEvent = $derived.by<TimelineEvent | null>(() => {
 		const t = playback.playheadTime;
 		// find event that spans playhead
 		const active = model.timeline.find(

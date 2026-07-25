@@ -20,10 +20,7 @@
 		return out;
 	}
 
-	let heights = $state<number[]>([]);
-	$effect(() => {
-		heights = generateHeights(bars);
-	});
+	let heights = $derived(generateHeights(bars));
 
 	$effect(() => {
 		if (!animated) return;

@@ -3,6 +3,7 @@
  */
 
 import { createWorkerPool, type WorkerType } from './worker-pool';
+import { SvelteURL } from 'svelte/reactivity';
 
 /**
  * Hook for search indexing in a worker
@@ -18,7 +19,7 @@ export function useSearchWorker() {
 	function init() {
 		if (!workerPool) {
 			workerPool = createWorkerPool(
-				new URL('../workers/search-index.worker.ts', import.meta.url),
+				new SvelteURL('../workers/search-index.worker.ts', import.meta.url).toString(),
 				2,
 				'search'
 			);
@@ -109,7 +110,7 @@ export function useValidationWorker() {
 	function init() {
 		if (!workerPool) {
 			workerPool = createWorkerPool(
-				new URL('../workers/validation.worker.ts', import.meta.url),
+				new SvelteURL('../workers/validation.worker.ts', import.meta.url).toString(),
 				1,
 				'validation'
 			);
@@ -195,7 +196,7 @@ export function useExportWorker() {
 	function init() {
 		if (!workerPool) {
 			workerPool = createWorkerPool(
-				new URL('../workers/export.worker.ts', import.meta.url),
+				new SvelteURL('../workers/export.worker.ts', import.meta.url).toString(),
 				1,
 				'export'
 			);

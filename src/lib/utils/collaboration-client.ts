@@ -56,7 +56,7 @@ export class CollaborationClient {
 					type: 'join',
 					roomId,
 					userId: this.options.userId,
-					payload: joinPayload,
+					payload: { ...joinPayload },
 					timestamp: Date.now(),
 					id: `${this.options.userId}_${Date.now()}`
 				});
