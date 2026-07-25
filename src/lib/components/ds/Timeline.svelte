@@ -224,7 +224,7 @@
 	>
 		<div class="track-inner" style="width:{totalWidth}px;">
 			<!-- Playhead -->
-			<div class="playhead" style="left:{playheadTime * pixelsPerFrame}px" aria-label="Playhead">
+			<div class="playhead" style="left:{playheadTime * pixelsPerFrame}px" aria-hidden="true">
 				<div class="playhead-cap"></div>
 			</div>
 
@@ -263,18 +263,8 @@
 						onDragEnd();
 						onResizeEnd();
 					}}
-					onclick={(e) => {
-						e.stopPropagation();
-						if (!dragging && !resizing) oneventclick?.(ev.time);
-					}}
-					onkeydown={(e) => {
-						if (e.key === 'Enter' || e.key === ' ') {
-							e.preventDefault();
-							oneventclick?.(ev.time);
-						}
-					}}
-					role="button"
-					tabindex="0"
+					role="group"
+					aria-label={`${ev.label}, ${ev.duration} frames`}
 				>
 					<!-- Resize handles -->
 					<!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -299,10 +289,19 @@
 						aria-valuenow={ev.time + ev.duration}
 						tabindex="0"
 					></div>
-					<span class="ev-label">{ev.label}</span>
-					{#if ev.actors}
-						<span class="ev-actors">{ev.actors}A</span>
-					{/if}
+					<button
+						type="button"
+						class="event-select"
+						aria-label={`Select ${ev.label}`}
+						aria-pressed={selectedTime === ev.time || ev.selected}
+						onpointerdown={(e) => e.stopPropagation()}
+						onclick={() => oneventclick?.(ev.time)}
+					>
+						<span class="ev-label">{ev.label}</span>
+						{#if ev.actors}
+							<span class="ev-actors">{ev.actors}A</span>
+						{/if}
+					</button>
 				</div>
 			{/each}
 		</div>
@@ -448,6 +447,19 @@
 		height: 7px;
 		border-radius: 50%;
 		background: var(--accent);
+	}
+
+	.event-select {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		width: 100%;
+		height: 100%;
+		padding: 0 0.375rem;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		cursor: pointer;
 	}
 
 	.marker-line {

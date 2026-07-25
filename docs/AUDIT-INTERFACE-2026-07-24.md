@@ -2,6 +2,13 @@
 
 Date : 24 juillet 2026
 
+Mise à jour du 25 juillet : les 23 scénarios retenus ont été réalignés sur
+l’interface actuelle. **23 sur 23 réussissent désormais** dans Chromium. Les
+défauts produit découverts pendant cette reprise — ouverture de l’éditeur,
+structure interactive imbriquée, progression ComfyUI et exposition des exports
+vidéo — ont été corrigés. Les résultats bruts ci-dessous sont conservés comme
+trace du point de départ.
+
 ## Méthode
 
 L’interface rendue sur le serveur local a été confrontée au README, au guide
@@ -26,8 +33,8 @@ Les échecs ne représentent pas tous une régression du produit :
 | --- | --- | --- |
 | Éditeur principal | Interface riche chargée avec assets, plans, timeline et propriétés | Présent |
 | CRUD personnages | Création, renommage, suppression, sélection et persistance vérifiées | Fonctionnel |
-| Environnements | Création visible ; ancien test d’assertion instable | Expérimental |
-| Audio | Création visible ; ancien test d’assertion instable | Expérimental |
+| Environnements | Création couverte par le scénario E2E réhabilité | Fonctionnel |
+| Audio | Création couverte par le scénario E2E réhabilité | Fonctionnel |
 | Création et édition de plans | Nouveau parcours « Add shot » vérifié | Fonctionnel |
 | Ancien éditeur de propriétés détaillées | Tests basés sur d’anciens composants/sélecteurs | Dérive d’interface |
 | Timeline, lecture et zoom | Contrôles visibles ; interactions avancées non revalidées | Expérimental |
@@ -39,7 +46,7 @@ Les échecs ne représentent pas tous une régression du produit :
 | Génération ComfyUI | Le backend principal lève `not yet implemented` | Non fonctionnel |
 | Génération vidéo directe | Aucun moteur vidéo exécuté par l’application | Non implémenté |
 | Collaboration temps réel | Serveur testé séparément, aucune interface utilisateur reliée | Fondation isolée |
-| Accessibilité WCAG AA | 3 familles de violations sérieuses/critiques détectées | Non conforme |
+| Accessibilité WCAG AA | Aucune violation critique/sérieuse sur `/` et `/app` dans la suite actuelle | Baseline vérifiée |
 
 ## Écarts documentaires confirmés
 
@@ -47,8 +54,8 @@ Les échecs ne représentent pas tous une régression du produit :
   et `/demo-model`.
 - « ComfyUI Integration complete » signifie en réalité une interface et une
   fondation technique ; le backend ComfyUI de génération reste un stub.
-- Les exports FramePack et CogVideoX existent comme utilitaires testés, mais ne
-  sont pas proposés dans la modale actuelle.
+- Les exports FramePack et CogVideoX étaient déconnectés de la modale ; ils sont
+  maintenant proposés et couverts avec Deforum.
 - L’application génère ou prépare surtout des **images et des instructions de
   rendu**. Elle ne produit pas elle-même un fichier vidéo final.
 
@@ -62,9 +69,7 @@ Le projet ne s’appuyait pas sur un LLM vidéo unique :
 3. **FramePack** ou **CogVideoX** comme formats/cibles expérimentaux de génération
    vidéo.
 
-Dans l’interface actuelle, seul **Deforum** est exposé dans les exports. FramePack
-et CogVideoX sont présents dans le code mais déconnectés de la modale. La piste la
-plus explicitement nommée comme « modèle de génération vidéo » dans l’ancien
-projet est donc **CogVideoX** ; Deforum est plutôt un pipeline d’animation Stable
-Diffusion, et ComfyUI un orchestrateur.
-
+Les trois préparations **Deforum**, **FramePack** et **CogVideoX** sont désormais
+exposées dans la modale. Elles ne rendent pas encore la vidéo finale. La cible
+retenue pour la suite est ComfyUI avec un workflow Wan versionné ; CogVideoX
+reste pris en charge comme export historique.

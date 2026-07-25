@@ -183,7 +183,7 @@
 	let editorOpen = $state(false);
 
 	function openEditor(ev: TimelineEvent) {
-		const shot = structuredClone(ev) as TimelineEvent;
+		const shot = structuredClone($state.snapshot(ev)) as TimelineEvent;
 		if (!shot.duration) shot.duration = 48;
 		if (!shot.frame.actors) shot.frame.actors = [];
 		if (!shot.frame.actors[0]) shot.frame.actors[0] = { id: '' };
@@ -243,7 +243,7 @@
 					<Button variant="primary" label="Add first shot" icon="plus" onclick={addShot} />
 				</div>
 			{:else if timeline.length > 0}
-				<div class="shot-grid">
+				<div class="shot-grid" role="list" aria-label="Shots">
 					{#each timeline as ev, i (ev.time)}
 						{@const isDragOver = dragOverIndex === i}
 						<div
@@ -300,7 +300,13 @@
 {#if editorOpen && editingShot}
 	{@const editorActor = editingShot.frame.actors![0]}
 	<div class="editor-overlay" onclick={closeEditor} role="presentation"></div>
-	<aside class="shot-editor" class:open={editorOpen}>
+	<div
+		class="shot-editor"
+		class:open={editorOpen}
+		role="dialog"
+		aria-modal="true"
+		aria-label="Edit shot"
+	>
 		<div class="se-header">
 			<h3>Edit Shot</h3>
 			<button class="se-close" onclick={closeEditor} aria-label="Close">
@@ -372,7 +378,7 @@
 				<Button variant="primary" size="sm" icon="check" label="Save" onclick={saveEditor} />
 			</div>
 		</div>
-	</aside>
+	</div>
 {/if}
 
 <style>

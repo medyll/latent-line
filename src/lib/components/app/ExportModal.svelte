@@ -10,6 +10,8 @@
 	} from '$lib/utils/export-prompts';
 	import { exportAsYAML } from '$lib/utils/export-yaml';
 	import { exportAsJSONLD } from '$lib/utils/export-jsonld';
+	import { exportToFramePack } from '$lib/utils/export-framepack';
+	import { exportToCogVideoX } from '$lib/utils/export-cogvideo';
 	import { generateStoryboardPDF } from '$lib/utils/export-pdf';
 	import { buildZip } from '$lib/utils/export-zip';
 	import { serializeModel } from '$lib/utils/export-import';
@@ -28,6 +30,8 @@
 		| 'prompts-txt'
 		| 'prompts-json'
 		| 'deforum'
+		| 'framepack'
+		| 'cogvideox'
 		| 'zip'
 		| 'yaml'
 		| 'jsonld';
@@ -49,6 +53,10 @@
 				return JSON.stringify(exportToPromptsJson(model, includeNegative), null, 2).slice(0, 1200);
 			case 'deforum':
 				return exportToDeforumFormat(model);
+			case 'framepack':
+				return exportToFramePack(model).slice(0, 1200);
+			case 'cogvideox':
+				return exportToCogVideoX(model).slice(0, 1200);
 			case 'yaml':
 				return exportAsYAML(model).slice(0, 1200);
 			case 'jsonld': {
@@ -87,6 +95,20 @@
 					exportToDeforumFormat(model),
 					`${slug}-deforum-${date}.json`,
 					'application/json'
+				);
+				break;
+			case 'framepack':
+				downloadText(
+					exportToFramePack(model),
+					`${slug}-framepack-${date}.jsonl`,
+					'application/x-ndjson'
+				);
+				break;
+			case 'cogvideox':
+				downloadText(
+					exportToCogVideoX(model),
+					`${slug}-cogvideox-${date}.txt`,
+					'text/plain;charset=utf-8'
 				);
 				break;
 			case 'yaml':
@@ -165,6 +187,8 @@
 		{ id: 'prompts-txt', label: 'Prompts TXT' },
 		{ id: 'prompts-json', label: 'Prompts JSON' },
 		{ id: 'deforum', label: 'Deforum' },
+		{ id: 'framepack', label: 'FramePack' },
+		{ id: 'cogvideox', label: 'CogVideoX' },
 		{ id: 'yaml', label: 'YAML' },
 		{ id: 'jsonld', label: 'JSON-LD' },
 		{ id: 'zip', label: 'ZIP' }
@@ -212,6 +236,12 @@
 					<input type="checkbox" bind:checked={includeNegative} />
 					Inclure negative_prompt
 				</label>
+			{/if}
+			{#if activeFormat === 'deforum' || activeFormat === 'framepack' || activeFormat === 'cogvideox'}
+				<p class="pipeline-note">
+					Export de pipeline expérimental : ce fichier prépare le rendu, il ne contient pas la vidéo
+					finale.
+				</p>
 			{/if}
 
 			<!-- Preview -->
@@ -337,6 +367,11 @@
 		font-size: var(--text-xs);
 		color: var(--text-muted);
 		cursor: pointer;
+	}
+	.pipeline-note {
+		margin: 0;
+		font-size: var(--text-xs);
+		color: var(--text-muted);
 	}
 	.preview-box {
 		flex: 1;

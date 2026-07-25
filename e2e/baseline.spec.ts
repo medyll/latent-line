@@ -7,7 +7,7 @@ test.describe('verified experimental baseline', () => {
 	});
 
 	test('character CRUD persists after reload', async ({ page }) => {
-		const characters = page.locator('ul[aria-label="Characters"] [role="option"]');
+		const characters = page.locator('[data-testid^="asset-char-"]');
 		const initialCount = await characters.count();
 
 		await page.getByTestId('add-character').click();
@@ -32,7 +32,7 @@ test.describe('verified experimental baseline', () => {
 		await expect(page.getByLabel('Asset Manager').getByText('Baseline Hero')).toBeVisible();
 
 		const reloaded = page
-			.locator('ul[aria-label="Characters"] [role="option"]')
+			.locator('[data-testid^="asset-char-"]')
 			.filter({ hasText: 'Baseline Hero' });
 		await reloaded.getByTitle(/^Delete/).click();
 		await expect(reloaded).toHaveCount(0);

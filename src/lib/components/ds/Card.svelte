@@ -44,6 +44,9 @@
 	ondblclick={onedit}
 	role="button"
 	tabindex="0"
+	data-testid={`shot-${frame}`}
+	aria-label={`Frame ${frame}`}
+	aria-pressed={selected}
 >
 	<!-- AI glow strip -->
 	{#if aiGenerated}

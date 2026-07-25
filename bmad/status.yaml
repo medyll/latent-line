@@ -1,5 +1,5 @@
 project: latent-line
-updated_at: 2026-07-24
+updated_at: 2026-07-25
 version: 0.4.0
 phase: experimental
 status: technical-baseline-recovery
@@ -14,10 +14,11 @@ source_of_truth:
 
 quality:
   type_errors: 0
-  type_warnings: 70
-  unit_tests_last_verified: 693
+  type_warnings: 68
+  unit_tests_last_verified: 697
   collaboration_server_tests_last_verified: 22
-  e2e_scope: focused-experimental-baseline
+  e2e_tests_last_verified: 23
+  e2e_scope: supported-experimental-suite
   coverage: not_revalidated
 
 classification:
@@ -28,8 +29,8 @@ classification:
 next_actions:
   - keep static checks green
   - reduce Svelte warnings
-  - expand the focused E2E baseline one proven workflow at a time
-  - integrate or remove isolated AI and collaboration foundations
+  - deploy the private ComfyUI gateway and register a versioned Wan workflow
+  - integrate or remove the isolated collaboration foundation
 
 legacy:
   note: Previous sprint completion claims and v1 progress percentages are archived and are not a source of truth.
