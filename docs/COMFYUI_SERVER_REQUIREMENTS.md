@@ -2,6 +2,10 @@
 
 Date : 25 juillet 2026
 
+État : **passerelle serveur implémentée** dans `server/src/`. Il reste à
+installer une instance ComfyUI réelle, exporter le workflow Wan propre à cette
+instance et raccorder le bouton de génération de l’interface.
+
 ## Architecture recommandée
 
 ```text
@@ -48,28 +52,33 @@ progression par WebSocket et expose l’état final dans l’historique.
 
 ```json
 {
-  "eventTime": 144,
-  "workflowId": "wan21-t2v-dev-v1",
-  "mode": "text-to-video",
-  "positivePrompt": "cinematic lighthouse interior",
-  "negativePrompt": "artifacts, flicker",
-  "seed": 7391,
-  "width": 832,
-  "height": 480,
-  "frameCount": 81,
-  "fps": 16
+  "workflowId": "wan21-t2v-1.3b",
+  "inputs": {
+    "positive_prompt": "cinematic lighthouse interior",
+    "negative_prompt": "artifacts, flicker",
+    "seed": 7391,
+    "width": 832,
+    "height": 480,
+    "frame_count": 81,
+    "fps": 16
+  }
 }
 ```
 
-Réponse : identifiant Latent-line, `prompt_id` ComfyUI, état `queued` et date
-d’expiration.
+Réponse : identifiant Latent-line, `promptId` ComfyUI, version du workflow,
+état `queued`, dates et entrées non sensibles.
 
 ### Suivre et contrôler
 
 - `GET /api/render/jobs/{id}` : état, progression, erreur et artefacts ;
-- `GET /api/render/jobs/{id}/events` : SSE, ou WebSocket équivalent ;
 - `DELETE /api/render/jobs/{id}` : annulation ;
-- `GET /api/render/jobs/{id}/artifacts/{artifactId}` : téléchargement contrôlé.
+- `GET /api/render/jobs/{id}/artifacts/{index}` : téléchargement contrôlé ;
+- `POST /api/render/uploads` : image PNG/JPEG/WebP pour un workflow I2V ;
+- `GET /api/render/workflows` : manifestes installés sans le chemin du JSON ;
+- `GET /api/render/health` : état de ComfyUI.
+
+La première version utilise un polling de `GET /jobs/{id}`. La progression
+fine par WebSocket ComfyUI pourra être ajoutée sans changer le contrat des jobs.
 
 ## Registre de workflows
 
@@ -77,27 +86,34 @@ Chaque workflow doit avoir deux fichiers :
 
 ```text
 workflows/
-  wan21-t2v-dev-v1/
-    workflow.api.json
-    manifest.json
+  wan21-t2v.workflow.json
+  wan21-t2v.manifest.json
 ```
 
 Le manifeste relie les noms métier aux nœuds et champs ComfyUI :
 
 ```json
 {
-  "id": "wan21-t2v-dev-v1",
-  "kind": "text-to-video",
-  "workflowVersion": 1,
+  "id": "wan21-t2v-1.3b",
+  "version": "1.0.0",
+  "label": "Wan 2.1 T2V 1.3B",
+  "mode": "text-to-video",
+  "workflowFile": "wan21-t2v.workflow.json",
   "inputs": {
-    "positivePrompt": { "node": "6", "field": "text" },
-    "negativePrompt": { "node": "7", "field": "text" },
-    "seed": { "node": "3", "field": "seed" },
-    "width": { "node": "9", "field": "width" },
-    "height": { "node": "9", "field": "height" },
-    "frameCount": { "node": "9", "field": "length" }
+    "positive_prompt": {
+      "nodeId": "6",
+      "input": "text",
+      "type": "string",
+      "required": true
+    },
+    "seed": {
+      "nodeId": "3",
+      "input": "seed",
+      "type": "integer",
+      "min": 0
+    }
   },
-  "outputNode": "save_video"
+  "outputNodeIds": ["save_video"]
 }
 ```
 
@@ -170,4 +186,3 @@ retenu, pas inscrites comme promesse générique.
 - https://github.com/Comfy-Org/ComfyUI/blob/master/script_examples/websockets_api_example.py
 - https://docs.comfy.org/tutorials/video/wan/wan-video
 - https://docs.comfy.org/installation/system_requirements
-

@@ -16,7 +16,7 @@ quality:
   type_errors: 0
   type_warnings: 68
   unit_tests_last_verified: 697
-  collaboration_server_tests_last_verified: 22
+  collaboration_server_tests_last_verified: 32
   e2e_tests_last_verified: 23
   e2e_scope: supported-experimental-suite
   coverage: not_revalidated
@@ -29,7 +29,7 @@ classification:
 next_actions:
   - keep static checks green
   - reduce Svelte warnings
-  - deploy the private ComfyUI gateway and register a versioned Wan workflow
+  - deploy ComfyUI and register a real versioned Wan workflow in the implemented gateway
   - integrate or remove the isolated collaboration foundation
 
 legacy:

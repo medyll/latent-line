@@ -1,5 +1,5 @@
 /**
- * WebSocket Collaboration Server for Latent-line
+ * HTTP render gateway and WebSocket collaboration server for Latent-line.
  *
  * Handles real-time multi-user editing with:
  * - Room-based connections
@@ -8,7 +8,13 @@
  * - Heartbeat/ping-pong
  */
 
+import { createServer } from 'node:http';
+import path from 'node:path';
 import { WebSocketServer, WebSocket } from 'ws';
+import { ComfyClient } from './comfy-client';
+import { JobStore } from './job-store';
+import { RenderGateway } from './render-gateway';
+import { WorkflowRegistry } from './workflow-registry';
 import { RoomManager } from './room-manager';
 import {
 	createMessage,
@@ -20,11 +26,74 @@ import {
 
 const PORT = parseInt(process.env.PORT || '8080', 10);
 const HEARTBEAT_INTERVAL = 30000; // 30 seconds
+if (process.env.NODE_ENV === 'production' && !process.env.RENDER_API_TOKEN) {
+	throw new Error('RENDER_API_TOKEN is required in production');
+}
+const workflowDirectory = path.resolve(
+	process.env.RENDER_WORKFLOW_DIR || path.join(process.cwd(), 'workflows')
+);
+const jobStoreFile = path.resolve(
+	process.env.RENDER_JOB_STORE || path.join(process.cwd(), 'data', 'render-jobs.json')
+);
+const workflowRegistry = new WorkflowRegistry(workflowDirectory);
+const jobStore = new JobStore(jobStoreFile);
+await Promise.all([workflowRegistry.load(), jobStore.load()]);
 
-const wss = new WebSocketServer({ port: PORT });
+const renderGateway = new RenderGateway({
+	client: new ComfyClient({
+		baseUrl: process.env.COMFYUI_URL || 'http://127.0.0.1:8188',
+		timeoutMs: parsePositiveInteger(process.env.COMFYUI_TIMEOUT_MS, 15_000)
+	}),
+	registry: workflowRegistry,
+	store: jobStore,
+	apiToken: process.env.RENDER_API_TOKEN,
+	allowedOrigins: (process.env.ALLOWED_ORIGINS || 'http://localhost:5167')
+		.split(',')
+		.map((origin) => origin.trim())
+		.filter(Boolean),
+	maxActiveJobs: parsePositiveInteger(process.env.RENDER_MAX_ACTIVE_JOBS, 2),
+	maxBodyBytes: parsePositiveInteger(process.env.RENDER_MAX_BODY_BYTES, 20_000_000)
+});
+
+const server = createServer(async (request, response) => {
+	try {
+		if (await renderGateway.handle(request, response)) return;
+		if (request.url === '/health') {
+			response.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
+			response.end(JSON.stringify({ status: 'ok' }));
+			return;
+		}
+		response.writeHead(404, { 'content-type': 'application/json; charset=utf-8' });
+		response.end(JSON.stringify({ error: 'Not found' }));
+	} catch (error) {
+		console.error('HTTP request failed:', error);
+		if (!response.headersSent) {
+			response.writeHead(500, { 'content-type': 'application/json; charset=utf-8' });
+		}
+		response.end(JSON.stringify({ error: 'Internal server error' }));
+	}
+});
+const wss = new WebSocketServer({ noServer: true });
 const roomManager = new RoomManager();
 
-console.log(`Collaboration server listening on port ${PORT}`);
+server.on('upgrade', (request, socket, head) => {
+	const pathname = new URL(request.url || '/', `http://localhost:${PORT}`).pathname;
+	if (pathname !== '/' && pathname !== '/collaboration') {
+		socket.destroy();
+		return;
+	}
+	wss.handleUpgrade(request, socket, head, (ws) => {
+		wss.emit('connection', ws, request);
+	});
+});
+
+server.listen(PORT, () => {
+	console.log(`Latent-line server listening on http://127.0.0.1:${PORT}`);
+	console.log(`Loaded ${workflowRegistry.list().length} render workflow(s)`);
+	if (!process.env.RENDER_API_TOKEN) {
+		console.warn('RENDER_API_TOKEN is unset; render API authentication is disabled');
+	}
+});
 
 // Heartbeat tracking
 const heartbeats = new WeakMap<WebSocket, boolean>();
@@ -74,7 +143,6 @@ wss.on('connection', (ws, req) => {
 	// Handle disconnect
 	ws.on('close', () => {
 		console.log(`User ${userId} disconnected from room ${roomId}`);
-		const users = roomManager.getRoomUsers(roomId);
 		roomManager.removeMember(roomId, userId);
 
 		// Broadcast leave to room
@@ -200,17 +268,26 @@ function handleMessage(ws: WebSocket, message: WSMessage, userId: string, roomId
 process.on('SIGTERM', () => {
 	console.log('SIGTERM received, shutting down...');
 	wss.close(() => {
-		console.log('Server closed');
-		process.exit(0);
+		server.close(() => {
+			console.log('Server closed');
+			process.exit(0);
+		});
 	});
 });
 
 process.on('SIGINT', () => {
 	console.log('SIGINT received, shutting down...');
 	wss.close(() => {
-		console.log('Server closed');
-		process.exit(0);
+		server.close(() => {
+			console.log('Server closed');
+			process.exit(0);
+		});
 	});
 });
 
-export { wss, roomManager };
+function parsePositiveInteger(value: string | undefined, fallback: number): number {
+	const parsed = Number(value);
+	return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+export { server, wss, roomManager, renderGateway, workflowRegistry, jobStore };
