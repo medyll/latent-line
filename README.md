@@ -63,7 +63,18 @@ src/
 docs/                           # User documentation
 ├── USER_GUIDE.md               # End-user guide
 ├── API.md                      # REST API reference
-└── MODEL_SCHEMA.md             # Data model reference
+├── MODEL_SCHEMA.md             # Data model reference
+├── COMFYUI_SERVER_REQUIREMENTS.md # ComfyUI render gateway setup
+└── VIDEO_PIPELINE.md           # Video export/render pipeline decisions
+
+server/                        # Private ComfyUI render gateway + collaboration WS server
+├── src/
+│   ├── render-gateway.ts       # Job submission, status, artifact proxy
+│   ├── workflow-registry.ts    # Versioned ComfyUI workflow manifests
+│   ├── comfy-client.ts         # HTTP client for the private ComfyUI instance
+│   ├── job-store.ts            # Persistent render job metadata
+│   └── room-manager.ts         # WebSocket collaboration rooms
+└── workflows/                   # Installed workflow manifests (e.g. Wan 2.1 T2V)
 
 e2e/                           # Playwright end-to-end tests
 bmad/                          # Project metadata & docs
@@ -297,15 +308,32 @@ Live model inspection overlay. Click the `⌥` button (bottom-right) to open. Sh
 
 ---
 
+## 🎬 ComfyUI Render Gateway (server/)
+
+A private Node server (`server/`) sits in front of a locally-hosted ComfyUI instance and exposes an authenticated render API, so the browser never talks to ComfyUI directly:
+
+- **Versioned workflows** — only server-installed workflow manifests (e.g. Wan 2.1 T2V) can be submitted
+- **Persistent jobs** — job state survives browser/server restarts (`render-jobs.json`)
+- **Auth, cancellation, artifact proxy** — bearer-token auth, job cancellation, and controlled artifact download
+- **I2V uploads** — validated PNG/JPEG/WebP source image uploads
+- Shares its WebSocket collaboration port (8080) with the existing room-based collaboration server
+
+Not yet wired into the editor UI — see [docs/VIDEO_PIPELINE.md](docs/VIDEO_PIPELINE.md) for what is connected versus still pending, and [server/README.md](server/README.md) / [docs/COMFYUI_SERVER_REQUIREMENTS.md](docs/COMFYUI_SERVER_REQUIREMENTS.md) for setup and API reference.
+
+---
+
 ## 📚 Documentation
 
 ### User Documentation
 
-| Document                                   | Description                         |
-| ------------------------------------------ | ----------------------------------- |
-| [**User Guide**](./docs/USER_GUIDE.md)     | Complete user manual with tutorials |
-| [**API Reference**](./docs/API.md)         | REST API documentation              |
-| [**Model Schema**](./docs/MODEL_SCHEMA.md) | Data model reference                |
+| Document                                                             | Description                          |
+| --------------------------------------------------------------------- | ------------------------------------- |
+| [**User Guide**](./docs/USER_GUIDE.md)                                 | Complete user manual with tutorials   |
+| [**API Reference**](./docs/API.md)                                     | REST API documentation                |
+| [**Model Schema**](./docs/MODEL_SCHEMA.md)                             | Data model reference                  |
+| [**Feature Status**](./docs/FEATURE_STATUS.md)                         | Source of truth for what actually works |
+| [**Video Pipeline**](./docs/VIDEO_PIPELINE.md)                         | Video export/render decisions & gaps  |
+| [**ComfyUI Server Requirements**](./docs/COMFYUI_SERVER_REQUIREMENTS.md) | Render gateway setup & API            |
 
 ### Quick Reference
 
@@ -333,13 +361,14 @@ Live model inspection overlay. Click the `⌥` button (bottom-right) to open. Sh
 
 ## 🧪 Testing
 
-- **Unit tests**: 218 tests across model validation, components, and input validation
-  - Run: `npm run test:unit`
-  - Coverage report: `npm run test:unit:coverage`
+- **Unit tests**: ~693 tests across model validation, components, and input validation (see [docs/FEATURE_STATUS.md](docs/FEATURE_STATUS.md) for the current verified/experimental breakdown), plus a separate suite for the `server/` render gateway and collaboration server
+  - Run: `pnpm run test:unit`
+  - Coverage report: `pnpm run test:unit:coverage`
+  - Server: `pnpm run server:test`
 
-- **E2E tests**: `e2e/` (Playwright) — 12+ scenarios
-  - Run: `npm run test:e2e`
-  - Covers: app boot, timeline load, asset CRUD, event selection, PropertiesPanel editing
+- **E2E tests**: `e2e/` (Playwright)
+  - Run: `pnpm run test:e2e`
+  - Covers: app boot, timeline/event creation and editing, asset CRUD, persistence, accessibility
 
 - **Visual regression**: Playwright snapshot tests
   - Run: `npx playwright test e2e/visual-capture.spec.ts`
@@ -388,22 +417,21 @@ pnpm run format       # Auto-format with Prettier
 
 ### Key Runtime
 
-- **Svelte 5.53** – Reactive UI framework (runes: `$state`, `$props`)
-- **SvelteKit 2.53** – Full-stack framework
+- **Svelte 5.55** – Reactive UI framework (runes: `$state`, `$props`)
+- **SvelteKit 2.55** – Full-stack framework
 - **Zod 4.3** – Runtime type validation
 - **@lucide/svelte** – Icon library
 
-### CSS Stack (no framework dependency)
+### CSS Stack
 
-- `theme.css` — CSS custom properties, `light-dark()` tokens, `color-scheme`
-- `base.css` — resets, `font-size: 11px` root
+- **@medyll/css-base** – design token foundation (colors, spacing, typography, `light-dark()` dark mode), imported in `app.css`
+- `app.css` — css-base overrides, brand OKLch tokens
 - `workspace.css` — app-shell layout, card/section/form primitives
-- `utilities.css` — ~200 utility classes replacing Tailwind
 
 ### Dev Tools
 
-- **TypeScript 5.9** – Static type checking
-- **Vitest 4** – Unit testing (218 tests)
+- **TypeScript 6.0** – Static type checking
+- **Vitest 4** – Unit testing (~693 tests)
 - **Playwright 1.58** – E2E testing
 - **ESLint + Prettier** – Code quality & formatting
 
@@ -493,6 +521,6 @@ pnpm run format       # Auto-format with Prettier
 
 ---
 
-**Last Updated**: 2026-03-20
-**Version**: 0.2.0
-**Status**: In Development — Sprint 12 (persistence + stability)
+**Last Updated**: 2026-07-25
+**Version**: 0.4.0 (package.json)
+**Status**: Experimental / alpha — see [docs/FEATURE_STATUS.md](docs/FEATURE_STATUS.md) for what is actually verified
