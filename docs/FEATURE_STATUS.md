@@ -19,10 +19,11 @@ Règle : toute fonction qui n'est pas prouvée par un contrôle automatisé exé
 | Screening | Vérifié partiellement | Route ouverte avec modèle encodé, comportement avancé expérimental |
 | i18n EN/FR | Vérifié | 118 clés de chaque côté |
 | Génération A1111 | Expérimental | Client présent, backend réel non validé |
-| Génération ComfyUI | Non implémenté | Le backend principal lève explicitement une exception |
-| Génération vidéo directe | Non implémenté | Contrat serveur et pipeline définis ; aucun workflow réel encore raccordé |
+| Passerelle serveur ComfyUI | Expérimental vérifié | Registre, jobs persistants, auth, annulation, uploads et artefacts couverts par tests |
+| Génération ComfyUI dans l'interface | Non raccordé | Aucun workflow Wan réel installé et bouton client encore désactivé |
+| Génération vidéo directe | Non raccordé | Serveur prêt ; rendu réel GPU et intégration UI encore requis |
 | Workers | Expérimental | Validation/search présents ; formats d'export partiels |
-| Collaboration WebSocket | Fondation expérimentale | 22 tests serveur réussis, mais client séparé et aucune UI intégrée |
+| Serveur collaboration + rendu | Fondation expérimentale | 32 tests serveur ; collaboration et passerelle partagent désormais le port 8080 |
 | Performance à grande échelle | Non prouvé | Anciennes affirmations chiffrées retirées |
 | Accessibilité | Vérifié partiellement | Aucun défaut axe critique/sérieux sur `/` et `/app` ; avertissements Svelte restants |
 | Prêt production | Non | Baseline alpha, dette d'accessibilité et intégrations incomplètes |

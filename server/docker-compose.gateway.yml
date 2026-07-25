@@ -1,0 +1,23 @@
+services:
+  latent-line-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:8080:8080'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    environment:
+      PORT: '8080'
+      COMFYUI_URL: '${COMFYUI_URL:-http://host.docker.internal:8188}'
+      RENDER_API_TOKEN: '${RENDER_API_TOKEN:?set RENDER_API_TOKEN}'
+      ALLOWED_ORIGINS: '${ALLOWED_ORIGINS:-http://localhost:5167}'
+      RENDER_MAX_ACTIVE_JOBS: '${RENDER_MAX_ACTIVE_JOBS:-2}'
+      RENDER_MAX_BODY_BYTES: '${RENDER_MAX_BODY_BYTES:-20000000}'
+    volumes:
+      - './workflows:/app/workflows:ro'
+      - 'render-jobs:/app/data'
+
+volumes:
+  render-jobs:

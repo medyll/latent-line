@@ -1,7 +1,7 @@
 {
 	"name": "latent-line-collab-server",
 	"version": "0.1.0",
-	"description": "WebSocket collaboration server for Latent-line real-time editing",
+	"description": "Private ComfyUI render gateway and collaboration server for Latent-line",
 	"main": "dist/index.js",
 	"type": "module",
 	"scripts": {

@@ -4,7 +4,7 @@
 
 import { WebSocket } from 'ws';
 import type { UserInfo } from './protocol';
-import { createMessage, serializeMessage } from './protocol';
+import { serializeMessage } from './protocol';
 
 export interface RoomMember {
 	ws: WebSocket;

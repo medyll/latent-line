@@ -26,19 +26,20 @@ ils transmettent le projet à un moteur de rendu externe.
 - **CogVideoX** reste une cible historique ; il ne doit plus être le contrat
   interne principal.
 
-## Actions restantes
+## État des actions
 
-1. Installer et valider un serveur ComfyUI séparé.
-2. Exporter un workflow ComfyUI en **API format**, sans dépendre des identifiants
+1. **À faire sur l'infrastructure** : installer et valider un serveur ComfyUI séparé.
+2. **À faire avec le serveur réel** : exporter un workflow ComfyUI en **API format**, sans dépendre des identifiants
    visuels de l’éditeur.
-3. Créer un manifeste de workflow qui nomme les entrées logiques :
+3. **Gabarit livré** : compléter le manifeste qui nomme les entrées logiques :
    `positive_prompt`, `negative_prompt`, `seed`, `width`, `height`,
    `frame_count`, `fps`, `start_image` et `output`.
-4. Ajouter une passerelle serveur Latent-line qui injecte ces paramètres, soumet
-   le workflow et suit sa progression.
-5. Récupérer l’artefact final depuis ComfyUI, puis l’associer au plan concerné.
-6. Ajouter les limites : taille, durée, concurrence, annulation et expiration.
-7. Tester un rendu réel court avant d’activer le bouton « Generate video ».
+4. **Livré** : passerelle serveur qui injecte les paramètres, soumet et suit les jobs.
+5. **Livré côté serveur** : récupération contrôlée des artefacts et persistance ;
+   association au plan encore à raccorder dans l’interface.
+6. **Livré côté serveur** : taille, concurrence, authentification, annulation et
+   contrôle des origines ; politique d’expiration encore à définir.
+7. **À faire** : tester un rendu réel court avant d’activer « Generate video ».
 
 ## Critères pour déclarer la vidéo fonctionnelle
 
@@ -49,4 +50,3 @@ ils transmettent le projet à un moteur de rendu externe.
 - le test utilise une vraie instance ComfyUI, pas un mock ;
 - le modèle, les dimensions, le nombre de frames et le coût estimé sont affichés
   avant la soumission.
-

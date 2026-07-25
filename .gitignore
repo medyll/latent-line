@@ -28,3 +28,9 @@ playwright-report
 
 # Coverage
 coverage
+
+# Runtime render state
+server/data/
+
+# Runtime render state
+server/data/
