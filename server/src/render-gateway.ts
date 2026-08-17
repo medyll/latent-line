@@ -3,14 +3,14 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import { Readable } from 'node:stream';
 import type { ReadableStream } from 'node:stream/web';
 import { randomUUID } from 'node:crypto';
-import { ComfyClient, extractArtifacts, queueContains } from './comfy-client';
+import { ModelRegistry, RenderValidationError } from './model-registry';
 import { JobStore } from './job-store';
 import type { RenderJob } from './render-types';
-import { RenderValidationError, WorkflowRegistry } from './workflow-registry';
+import { RenderWorkerClient } from './render-worker-client';
 
 export interface RenderGatewayOptions {
-	client: ComfyClient;
-	registry: WorkflowRegistry;
+	client: RenderWorkerClient;
+	registry: ModelRegistry;
 	store: JobStore;
 	apiToken?: string;
 	allowedOrigins: string[];
@@ -41,16 +41,12 @@ export class RenderGateway {
 
 		try {
 			if (request.method === 'GET' && url.pathname === '/api/render/health') {
-				const comfy = await this.options.client.health();
-				this.send(response, 200, { status: 'ok', comfy });
+				const worker = await this.options.client.health();
+				this.send(response, 200, { status: 'ok', worker });
 				return true;
 			}
-			if (request.method === 'GET' && url.pathname === '/api/render/workflows') {
-				this.send(
-					response,
-					200,
-					this.options.registry.list().map((manifest) => ({ ...manifest, workflowFile: undefined }))
-				);
+			if (request.method === 'GET' && url.pathname === '/api/render/models') {
+				this.send(response, 200, this.options.registry.list());
 				return true;
 			}
 			if (request.method === 'GET' && url.pathname === '/api/render/jobs') {
@@ -95,7 +91,7 @@ export class RenderGateway {
 				error:
 					status === 400 && error instanceof Error
 						? error.message
-						: 'Upstream render service unavailable'
+						: 'Upstream render worker unavailable'
 			});
 		}
 		return true;
@@ -115,28 +111,27 @@ export class RenderGateway {
 		}
 
 		const body = (await readJsonBody(request, this.options.maxBodyBytes)) as {
-			workflowId?: unknown;
+			modelId?: unknown;
 			inputs?: unknown;
 		};
-		if (typeof body.workflowId !== 'string') {
-			throw new RenderValidationError('workflowId is required');
+		if (typeof body.modelId !== 'string') {
+			throw new RenderValidationError('modelId is required');
 		}
 		if (!body.inputs || typeof body.inputs !== 'object' || Array.isArray(body.inputs)) {
 			throw new RenderValidationError('inputs must be an object');
 		}
 
-		const registered = this.options.registry.get(body.workflowId);
-		if (!registered) throw new RenderValidationError(`Unknown workflow: ${body.workflowId}`);
+		const manifest = this.options.registry.get(body.modelId);
+		if (!manifest) throw new RenderValidationError(`Unknown model: ${body.modelId}`);
 		const inputs = body.inputs as Record<string, unknown>;
-		const prompt = this.options.registry.prepare(body.workflowId, inputs);
+		const prepared = this.options.registry.prepare(body.modelId, inputs);
 		const id = randomUUID();
-		const promptId = await this.options.client.submit(prompt, id);
+		await this.options.client.submit(manifest.entrypoint, id, prepared);
 		const now = new Date().toISOString();
 		const job: RenderJob = {
 			id,
-			promptId,
-			workflowId: registered.manifest.id,
-			workflowVersion: registered.manifest.version,
+			modelId: manifest.id,
+			modelVersion: manifest.version,
 			status: 'queued',
 			progress: 0,
 			createdAt: now,
@@ -189,26 +184,14 @@ export class RenderGateway {
 	}
 
 	private async refreshJob(job: RenderJob): Promise<void> {
-		const entry = await this.options.client.history(job.promptId);
-		if (entry) {
-			const registered = this.options.registry.get(job.workflowId);
-			job.artifacts = extractArtifacts(entry, registered?.manifest.outputNodeIds);
-			const failed =
-				findExecutionError(entry.status?.messages) ??
-				(entry.status?.status_str === 'error' ? 'ComfyUI execution failed' : undefined);
-			job.status = failed ? 'failed' : entry.status?.completed ? 'completed' : 'running';
-			job.progress = job.status === 'completed' ? 100 : 0;
-			job.error = failed;
-			job.updatedAt = new Date().toISOString();
-			await this.options.store.set(job);
-			return;
-		}
-		const queue = (await this.options.client.queue()) as { queue_running?: unknown[] };
-		if (queueContains(queue.queue_running, job.promptId)) {
-			job.status = 'running';
-			job.updatedAt = new Date().toISOString();
-			await this.options.store.set(job);
-		}
+		const status = await this.options.client.status(job.id);
+		if (!status) return;
+		job.status = status.state;
+		job.progress = status.progress;
+		job.artifacts = status.artifacts;
+		job.error = status.error;
+		job.updatedAt = new Date().toISOString();
+		await this.options.store.set(job);
 	}
 
 	private async cancelJob(id: string, response: ServerResponse): Promise<void> {
@@ -221,7 +204,7 @@ export class RenderGateway {
 			this.send(response, 409, { error: `Cannot cancel a ${job.status} job` });
 			return;
 		}
-		await this.options.client.cancel(job.promptId);
+		await this.options.client.cancel(job.id);
 		job.status = 'cancelled';
 		job.updatedAt = new Date().toISOString();
 		await this.options.store.set(job);
@@ -241,7 +224,7 @@ export class RenderGateway {
 		}
 		const upstream = await this.options.client.fetchArtifact(artifact);
 		if (!upstream.ok || !upstream.body) {
-			throw new Error(`ComfyUI artifact request failed: ${upstream.status}`);
+			throw new Error(`Render worker artifact request failed: ${upstream.status}`);
 		}
 		response.statusCode = upstream.status;
 		for (const header of ['content-type', 'content-length', 'content-disposition']) {
@@ -321,19 +304,4 @@ function redactInputs(inputs: Record<string, unknown>): Record<string, unknown> 
 			/image|file|base64/i.test(key) ? '[redacted]' : value
 		])
 	);
-}
-
-function findExecutionError(messages: unknown[] | undefined): string | undefined {
-	for (const message of messages ?? []) {
-		if (!Array.isArray(message) || message[0] !== 'execution_error') continue;
-		const detail = message[1];
-		if (detail && typeof detail === 'object') {
-			const record = detail as Record<string, unknown>;
-			return String(
-				record.exception_message ?? record.exception_type ?? 'ComfyUI execution failed'
-			);
-		}
-		return 'ComfyUI execution failed';
-	}
-	return undefined;
 }

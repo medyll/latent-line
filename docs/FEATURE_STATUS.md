@@ -19,9 +19,10 @@ Règle : toute fonction qui n'est pas prouvée par un contrôle automatisé exé
 | Screening | Vérifié partiellement | Route ouverte avec modèle encodé, comportement avancé expérimental |
 | i18n EN/FR | Vérifié | 118 clés de chaque côté |
 | Génération A1111 | Expérimental | Client présent, backend réel non validé |
-| Passerelle serveur ComfyUI | Expérimental vérifié | Registre, jobs persistants, auth, annulation, uploads et artefacts couverts par tests |
-| Génération ComfyUI dans l'interface | Non raccordé | Aucun workflow Wan réel installé et bouton client encore désactivé |
-| Génération vidéo directe | Non raccordé | Serveur prêt ; rendu réel GPU et intégration UI encore requis |
+| Passerelle serveur de rendu | Expérimental vérifié | Registre de modèles, jobs persistants, auth, annulation, uploads et artefacts couverts par tests ; cible ComfyUI abandonnée le 17/08/2026 au profit d'un worker local (voir [RENDER_BACKEND_OPTIONS_2026.md](RENDER_BACKEND_OPTIONS_2026.md)) |
+| Render worker local (Wan 2.2 TI2V-5B) | Expérimental, non exécuté | Code écrit contre l'API Diffusers documentée ([server/render-worker/](../server/render-worker/)) ; aucun run GPU réel effectué dans ce repo |
+| Génération dans l'interface | Non raccordé | Aucun modèle local réellement testé et bouton client encore désactivé |
+| Génération vidéo directe | Non raccordé | Serveur + worker écrits ; rendu réel GPU et intégration UI encore requis |
 | Workers | Expérimental | Validation/search présents ; formats d'export partiels |
 | Serveur collaboration + rendu | Fondation expérimentale | 32 tests serveur ; collaboration et passerelle partagent désormais le port 8080 |
 | Performance à grande échelle | Non prouvé | Anciennes affirmations chiffrées retirées |

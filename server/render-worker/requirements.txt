@@ -1,0 +1,9 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+torch>=2.4
+diffusers>=0.31
+transformers>=4.45
+accelerate>=0.34
+imageio[ffmpeg]>=2.35
+pillow>=10.4

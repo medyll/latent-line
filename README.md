@@ -64,17 +64,19 @@ docs/                           # User documentation
 ├── USER_GUIDE.md               # End-user guide
 ├── API.md                      # REST API reference
 ├── MODEL_SCHEMA.md             # Data model reference
-├── COMFYUI_SERVER_REQUIREMENTS.md # ComfyUI render gateway setup
+├── RENDER_BACKEND_OPTIONS_2026.md # Render backend decision: local-first, free-first, no ComfyUI
+├── COMFYUI_SERVER_REQUIREMENTS.md # Archived — superseded by the local render worker
 └── VIDEO_PIPELINE.md           # Video export/render pipeline decisions
 
-server/                        # Private ComfyUI render gateway + collaboration WS server
+server/                        # Render gateway (local worker) + collaboration WS server
 ├── src/
 │   ├── render-gateway.ts       # Job submission, status, artifact proxy
-│   ├── workflow-registry.ts    # Versioned ComfyUI workflow manifests
-│   ├── comfy-client.ts         # HTTP client for the private ComfyUI instance
+│   ├── model-registry.ts       # Versioned local model manifests
+│   ├── render-worker-client.ts # HTTP client for the local render worker
 │   ├── job-store.ts            # Persistent render job metadata
 │   └── room-manager.ts         # WebSocket collaboration rooms
-└── workflows/                   # Installed workflow manifests (e.g. Wan 2.1 T2V)
+├── render-worker/               # Local Diffusers-based render worker (Python, Wan 2.2 by default)
+└── models/                      # Installed model manifests (e.g. Wan 2.2 TI2V-5B)
 
 e2e/                           # Playwright end-to-end tests
 bmad/                          # Project metadata & docs
@@ -308,17 +310,29 @@ Live model inspection overlay. Click the `⌥` button (bottom-right) to open. Sh
 
 ---
 
-## 🎬 ComfyUI Render Gateway (server/)
+## 🎬 Render Gateway + local worker (server/)
 
-A private Node server (`server/`) sits in front of a locally-hosted ComfyUI instance and exposes an authenticated render API, so the browser never talks to ComfyUI directly:
+A private Node server (`server/`) sits in front of a **local render worker**
+(`server/render-worker/`, a small Python process running an open-weight
+Diffusers model — Wan 2.2 TI2V-5B by default) and exposes an authenticated
+render API, so the browser never talks to the worker directly. ComfyUI was
+dropped as the render target on 2026-08-17 — see
+[docs/RENDER_BACKEND_OPTIONS_2026.md](docs/RENDER_BACKEND_OPTIONS_2026.md)
+for why: it now ships its own production UI, and a local-first / free-first
+Diffusers worker needs no GPU-hosting middleman to maintain.
 
-- **Versioned workflows** — only server-installed workflow manifests (e.g. Wan 2.1 T2V) can be submitted
+- **Versioned models** — only server-installed model manifests (e.g. Wan 2.2 TI2V-5B) can be submitted
 - **Persistent jobs** — job state survives browser/server restarts (`render-jobs.json`)
 - **Auth, cancellation, artifact proxy** — bearer-token auth, job cancellation, and controlled artifact download
 - **I2V uploads** — validated PNG/JPEG/WebP source image uploads
 - Shares its WebSocket collaboration port (8080) with the existing room-based collaboration server
 
-Not yet wired into the editor UI — see [docs/VIDEO_PIPELINE.md](docs/VIDEO_PIPELINE.md) for what is connected versus still pending, and [server/README.md](server/README.md) / [docs/COMFYUI_SERVER_REQUIREMENTS.md](docs/COMFYUI_SERVER_REQUIREMENTS.md) for setup and API reference.
+Not yet wired into the editor UI, and the worker itself hasn't run against a
+real GPU yet — see [docs/VIDEO_PIPELINE.md](docs/VIDEO_PIPELINE.md) and
+[docs/FEATURE_STATUS.md](docs/FEATURE_STATUS.md) for what is connected versus
+still pending, and [server/README.md](server/README.md) /
+[server/render-worker/README.md](server/render-worker/README.md) for setup
+and API reference.
 
 ---
 
@@ -333,7 +347,8 @@ Not yet wired into the editor UI — see [docs/VIDEO_PIPELINE.md](docs/VIDEO_PIP
 | [**Model Schema**](./docs/MODEL_SCHEMA.md)                             | Data model reference                  |
 | [**Feature Status**](./docs/FEATURE_STATUS.md)                         | Source of truth for what actually works |
 | [**Video Pipeline**](./docs/VIDEO_PIPELINE.md)                         | Video export/render decisions & gaps  |
-| [**ComfyUI Server Requirements**](./docs/COMFYUI_SERVER_REQUIREMENTS.md) | Render gateway setup & API            |
+| [**Render Backend Options**](./docs/RENDER_BACKEND_OPTIONS_2026.md)    | Why ComfyUI was dropped, local-first worker decision |
+| [**ComfyUI Server Requirements**](./docs/COMFYUI_SERVER_REQUIREMENTS.md) | Archived — superseded by the local render worker |
 
 ### Quick Reference
 

@@ -1,4 +1,11 @@
-# Besoins du serveur ComfyUI
+> [!WARNING]
+> **Archivé (17 août 2026).** ComfyUI n'est plus la cible de rendu retenue —
+> voir [docs/RENDER_BACKEND_OPTIONS_2026.md](RENDER_BACKEND_OPTIONS_2026.md)
+> pour la décision et [server/render-worker/README.md](../server/render-worker/README.md)
+> pour le nouveau worker local (Wan 2.2, sans ComfyUI). Ce document reste
+> comme référence historique de l'architecture passerelle → ComfyUI.
+
+# Besoins du serveur ComfyUI (archivé)
 
 Date : 25 juillet 2026
 

@@ -1,6 +1,6 @@
 # Latent-line Server
 
-Private ComfyUI render gateway and WebSocket collaboration server.
+Render gateway (local worker) and WebSocket collaboration server.
 
 ## Features
 
@@ -9,9 +9,9 @@ Private ComfyUI render gateway and WebSocket collaboration server.
 - **Presence tracking** — Know who's editing with you
 - **Heartbeat/ping-pong** — Automatic stale connection cleanup
 - **Simple auth** — User info via query parameters
-- **Versioned workflows** — Only server-installed ComfyUI graphs can run
+- **Versioned models** — Only server-installed model manifests can run
 - **Persistent render jobs** — Jobs survive browser and server restarts
-- **Safe artefact proxy** — ComfyUI stays private
+- **Safe artefact proxy** — the render worker never faces the browser directly
 - **I2V uploads** — Validated PNG, JPEG and WebP source images
 
 ## Quick Start
@@ -30,6 +30,10 @@ pnpm run build
 pnpm start
 ```
 
+The gateway needs a running render worker to actually produce video — see
+[`render-worker/README.md`](render-worker/README.md) for the local, free
+Diffusers-based worker (Wan 2.2 by default, no ComfyUI involved).
+
 Containerised gateway:
 
 ```bash
@@ -43,30 +47,30 @@ TLS-authenticating reverse proxy in front of it for remote access.
 ## Configuration
 
 - `PORT=8080`: HTTP and WebSocket port.
-- `COMFYUI_URL=http://127.0.0.1:8188`: private ComfyUI origin.
+- `RENDER_WORKER_URL=http://127.0.0.1:8288`: local render worker origin.
 - `RENDER_API_TOKEN`: bearer token, mandatory in production.
 - `ALLOWED_ORIGINS=http://localhost:5167`: comma-separated browser origins.
-- `RENDER_WORKFLOW_DIR=./workflows`: versioned manifests and API graphs.
+- `RENDER_MODEL_DIR=./models`: versioned model manifests.
 - `RENDER_JOB_STORE=./data/render-jobs.json`: persistent job metadata.
-- `RENDER_MAX_ACTIVE_JOBS=2`: queued/running job limit.
+- `RENDER_MAX_ACTIVE_JOBS=1`: queued/running job limit (a single local GPU renders one clip at a time).
 - `RENDER_MAX_BODY_BYTES=20000000`: request and image upload limit.
-- `COMFYUI_TIMEOUT_MS=15000`: upstream request timeout.
+- `RENDER_WORKER_TIMEOUT_MS=15000`: upstream request timeout.
 
-Never expose ComfyUI itself publicly. Bind it to a private interface and expose
-only this gateway behind TLS. Set `RENDER_API_TOKEN` in every shared or
-production environment.
+Never expose the render worker itself publicly. Bind it to a private
+interface and expose only this gateway behind TLS. Set `RENDER_API_TOKEN` in
+every shared or production environment.
 
 ## Render API
 
 All routes require `Authorization: Bearer <RENDER_API_TOKEN>` when a token is
 configured.
 
-- `GET /api/render/health`: gateway and ComfyUI health.
-- `GET /api/render/workflows`: safe workflow manifests.
+- `GET /api/render/health`: gateway and render worker health.
+- `GET /api/render/models`: safe model manifests.
 - `GET /api/render/jobs`: persisted jobs.
-- `POST /api/render/jobs`: submit inputs to a registered workflow.
-- `GET /api/render/jobs/:id`: refresh status and outputs from ComfyUI.
-- `DELETE /api/render/jobs/:id`: cancel a queued or running prompt.
+- `POST /api/render/jobs`: submit inputs to a registered model.
+- `GET /api/render/jobs/:id`: refresh status and outputs from the worker.
+- `DELETE /api/render/jobs/:id`: cancel a queued or running job.
 - `GET /api/render/jobs/:id/artifacts/:index`: stream a declared output.
 - `POST /api/render/uploads`: upload an I2V source as base64 JSON.
 
@@ -74,20 +78,22 @@ Example submission:
 
 ```json
 {
-	"workflowId": "wan21-t2v-1.3b",
+	"modelId": "wan2.2-ti2v-5b",
 	"inputs": {
 		"positive_prompt": "A quiet harbour at blue hour",
 		"negative_prompt": "text, watermark",
 		"seed": 42,
-		"width": 832,
-		"height": 480,
-		"frame_count": 81,
-		"fps": 16
+		"width": 1280,
+		"height": 704,
+		"frame_count": 121,
+		"fps": 24
 	}
 }
 ```
 
-See [`workflows/README.md`](workflows/README.md) for workflow installation.
+See [`models/`](models/) for installed model manifests and
+[`render-worker/README.md`](render-worker/README.md) for running the worker
+that actually executes them.
 
 ## Connection
 
@@ -135,15 +141,16 @@ pnpm test
 ```
 server/
 ├── src/
-│   ├── index.ts           # WebSocket server entry point
-│   ├── render-gateway.ts  # Authenticated HTTP render API
-│   ├── comfy-client.ts    # Private ComfyUI client
-│   ├── workflow-registry.ts
+│   ├── index.ts               # WebSocket server entry point
+│   ├── render-gateway.ts      # Authenticated HTTP render API
+│   ├── render-worker-client.ts # Client for the local render worker
+│   ├── model-registry.ts
 │   ├── job-store.ts
-│   ├── room-manager.ts    # Room lifecycle management
-│   ├── protocol.ts        # Message types and serialization
-│   └── *.test.ts          # Unit tests
+│   ├── room-manager.ts        # Room lifecycle management
+│   ├── protocol.ts            # Message types and serialization
+│   └── *.test.ts              # Unit tests
+├── render-worker/             # Local Diffusers-based render worker (Python)
+├── models/                    # Versioned model manifests
 ├── package.json
-├── workflows/             # Versioned manifests and API graphs
 └── tsconfig.json
 ```

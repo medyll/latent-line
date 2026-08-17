@@ -1,3 +1,9 @@
+> [!WARNING]
+> **Décision de rendu mise à jour (17 août 2026).** La section « Cible de
+> rendu direct : ComfyUI » ci-dessous est dépassée — voir
+> [docs/RENDER_BACKEND_OPTIONS_2026.md](RENDER_BACKEND_OPTIONS_2026.md) pour
+> le choix actuel (worker local Wan 2.2, sans ComfyUI, gratuit d'abord).
+
 # Pipeline vidéo
 
 Date : 25 juillet 2026

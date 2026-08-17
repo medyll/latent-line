@@ -3,10 +3,10 @@ import { createServer, type Server } from 'node:http';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
-import { ComfyClient } from './comfy-client';
 import { JobStore } from './job-store';
+import { ModelRegistry } from './model-registry';
 import { RenderGateway } from './render-gateway';
-import { WorkflowRegistry } from './workflow-registry';
+import { RenderWorkerClient } from './render-worker-client';
 
 describe('RenderGateway', () => {
 	let directory: string;
@@ -16,46 +16,43 @@ describe('RenderGateway', () => {
 
 	beforeEach(async () => {
 		directory = await mkdtemp(path.join(tmpdir(), 'latent-line-gateway-'));
-		await installWorkflow(directory);
-		const registry = new WorkflowRegistry(path.join(directory, 'workflows'));
+		await installModel(directory);
+		const registry = new ModelRegistry(path.join(directory, 'models'));
 		await registry.load();
 		const store = new JobStore(path.join(directory, 'data', 'jobs.json'));
 		await store.load();
 
+		let jobId = '';
 		fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
 			const url = String(input);
-			if (url.endsWith('/system_stats')) return Response.json({ devices: [{ name: 'test-gpu' }] });
-			if (url.endsWith('/prompt')) {
+			if (url.endsWith('/health')) return Response.json({ gpu: 'test-gpu' });
+			if (url.endsWith('/jobs') && init?.method === 'POST') {
 				const body = JSON.parse(String(init?.body));
-				expect(body.prompt['1'].inputs.text).toBe('Ocean at dusk');
-				return Response.json({ prompt_id: 'prompt-1' });
+				expect(body.model).toBe('wan2.2-ti2v-5b-test');
+				expect(body.inputs.positive_prompt).toBe('Ocean at dusk');
+				jobId = body.jobId;
+				return Response.json({ jobId });
 			}
-			if (url.endsWith('/history/prompt-1')) {
+			if (url.endsWith(`/jobs/${jobId}`)) {
 				return Response.json({
-					'prompt-1': {
-						status: { completed: true, status_str: 'success' },
-						outputs: {
-							'9': {
-								gifs: [{ filename: 'clip.mp4', subfolder: 'video', type: 'output' }]
-							}
-						}
-					}
+					state: 'completed',
+					progress: 100,
+					artifacts: [{ filename: `${jobId}.mp4`, kind: 'video' }]
 				});
 			}
-			if (url.includes('/view?')) {
+			if (url.includes('/artifacts/')) {
 				return new Response('video-bytes', { headers: { 'content-type': 'video/mp4' } });
 			}
-			if (url.endsWith('/upload/image')) {
+			if (url.endsWith('/uploads')) {
 				expect(init?.body).toBeInstanceOf(FormData);
-				return Response.json({ name: 'start.png', subfolder: 'latent-line' });
+				return Response.json({ name: 'start.png' });
 			}
-			if (url.endsWith('/queue') && init?.method === 'POST') return Response.json({});
-			throw new Error(`Unexpected ComfyUI request: ${url}`);
+			throw new Error(`Unexpected render worker request: ${url}`);
 		});
 
 		const gateway = new RenderGateway({
-			client: new ComfyClient({
-				baseUrl: 'http://comfy.test',
+			client: new RenderWorkerClient({
+				baseUrl: 'http://worker.test',
 				fetchImpl: fetchMock as unknown as typeof fetch
 			}),
 			registry,
@@ -81,21 +78,20 @@ describe('RenderGateway', () => {
 		await rm(directory, { recursive: true, force: true });
 	});
 
-	it('requires authentication and lists safe workflow metadata', async () => {
-		expect((await fetch(`${baseUrl}/api/render/workflows`)).status).toBe(401);
+	it('requires authentication and lists safe model metadata', async () => {
+		expect((await fetch(`${baseUrl}/api/render/models`)).status).toBe(401);
 
-		const response = await api('/api/render/workflows');
+		const response = await api('/api/render/models');
 		expect(response.status).toBe(200);
-		const workflows = (await response.json()) as Record<string, unknown>[];
-		expect(workflows[0]).toMatchObject({ id: 'wan-test', version: '1.0.0' });
-		expect(workflows[0]).not.toHaveProperty('workflowFile');
+		const models = (await response.json()) as Record<string, unknown>[];
+		expect(models[0]).toMatchObject({ id: 'wan2.2-ti2v-5b-test', version: '1.0.0' });
 	});
 
-	it('submits, persists and resolves a completed video job', async () => {
+	it('submits, persists and resolves a completed local render job', async () => {
 		const submitted = await api('/api/render/jobs', {
 			method: 'POST',
 			body: JSON.stringify({
-				workflowId: 'wan-test',
+				modelId: 'wan2.2-ti2v-5b-test',
 				inputs: { positive_prompt: 'Ocean at dusk', seed: 42 }
 			})
 		});
@@ -107,7 +103,7 @@ describe('RenderGateway', () => {
 		expect(await completed.json()).toMatchObject({
 			status: 'completed',
 			progress: 100,
-			artifacts: [{ filename: 'clip.mp4', kind: 'video' }]
+			artifacts: [{ filename: `${queued.id}.mp4`, kind: 'video' }]
 		});
 
 		const artifact = await api(`/api/render/jobs/${queued.id}/artifacts/0`);
@@ -119,11 +115,11 @@ describe('RenderGateway', () => {
 		expect(reloadedStore.get(queued.id)?.status).toBe('completed');
 	});
 
-	it('rejects raw or unknown workflow parameters', async () => {
+	it('rejects raw or unknown model parameters', async () => {
 		const response = await api('/api/render/jobs', {
 			method: 'POST',
 			body: JSON.stringify({
-				workflowId: 'wan-test',
+				modelId: 'wan2.2-ti2v-5b-test',
 				inputs: { positive_prompt: 'Ocean at dusk', seed: 42, workflow: {} }
 			})
 		});
@@ -133,7 +129,7 @@ describe('RenderGateway', () => {
 		});
 	});
 
-	it('uploads a validated I2V source image without exposing ComfyUI', async () => {
+	it('uploads a validated I2V source image without exposing the render worker', async () => {
 		const response = await api('/api/render/uploads', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -143,7 +139,7 @@ describe('RenderGateway', () => {
 			})
 		});
 		expect(response.status).toBe(201);
-		expect(await response.json()).toEqual({ name: 'latent-line/start.png' });
+		expect(await response.json()).toEqual({ name: 'start.png' });
 	});
 
 	function api(pathname: string, init: RequestInit = {}): Promise<Response> {
@@ -158,29 +154,21 @@ describe('RenderGateway', () => {
 	}
 });
 
-async function installWorkflow(directory: string): Promise<void> {
-	const workflows = path.join(directory, 'workflows');
-	await import('node:fs/promises').then(({ mkdir }) => mkdir(workflows));
+async function installModel(directory: string): Promise<void> {
+	const models = path.join(directory, 'models');
+	await import('node:fs/promises').then(({ mkdir }) => mkdir(models));
 	await writeFile(
-		path.join(workflows, 'wan-test.manifest.json'),
+		path.join(models, 'wan2.2-ti2v-5b-test.manifest.json'),
 		JSON.stringify({
-			id: 'wan-test',
+			id: 'wan2.2-ti2v-5b-test',
 			version: '1.0.0',
-			label: 'Wan test',
+			label: 'Wan 2.2 TI2V-5B (test)',
 			mode: 'text-to-video',
-			workflowFile: 'wan-test.workflow.json',
-			outputNodeIds: ['9'],
+			entrypoint: 'wan2.2-ti2v-5b-test',
 			inputs: {
-				positive_prompt: { nodeId: '1', input: 'text', type: 'string', required: true },
-				seed: { nodeId: '2', input: 'seed', type: 'integer', required: true, min: 0 }
+				positive_prompt: { type: 'string', required: true },
+				seed: { type: 'integer', required: false, min: 0 }
 			}
-		})
-	);
-	await writeFile(
-		path.join(workflows, 'wan-test.workflow.json'),
-		JSON.stringify({
-			'1': { class_type: 'CLIPTextEncode', inputs: { text: '' } },
-			'2': { class_type: 'KSampler', inputs: { seed: 0 } }
 		})
 	);
 }

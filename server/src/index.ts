@@ -11,10 +11,10 @@
 import { createServer } from 'node:http';
 import path from 'node:path';
 import { WebSocketServer, WebSocket } from 'ws';
-import { ComfyClient } from './comfy-client';
+import { RenderWorkerClient } from './render-worker-client';
 import { JobStore } from './job-store';
 import { RenderGateway } from './render-gateway';
-import { WorkflowRegistry } from './workflow-registry';
+import { ModelRegistry } from './model-registry';
 import { RoomManager } from './room-manager';
 import {
 	createMessage,
@@ -29,29 +29,30 @@ const HEARTBEAT_INTERVAL = 30000; // 30 seconds
 if (process.env.NODE_ENV === 'production' && !process.env.RENDER_API_TOKEN) {
 	throw new Error('RENDER_API_TOKEN is required in production');
 }
-const workflowDirectory = path.resolve(
-	process.env.RENDER_WORKFLOW_DIR || path.join(process.cwd(), 'workflows')
+const modelDirectory = path.resolve(
+	process.env.RENDER_MODEL_DIR || path.join(process.cwd(), 'models')
 );
 const jobStoreFile = path.resolve(
 	process.env.RENDER_JOB_STORE || path.join(process.cwd(), 'data', 'render-jobs.json')
 );
-const workflowRegistry = new WorkflowRegistry(workflowDirectory);
+const modelRegistry = new ModelRegistry(modelDirectory);
 const jobStore = new JobStore(jobStoreFile);
-await Promise.all([workflowRegistry.load(), jobStore.load()]);
+await Promise.all([modelRegistry.load(), jobStore.load()]);
 
 const renderGateway = new RenderGateway({
-	client: new ComfyClient({
-		baseUrl: process.env.COMFYUI_URL || 'http://127.0.0.1:8188',
-		timeoutMs: parsePositiveInteger(process.env.COMFYUI_TIMEOUT_MS, 15_000)
+	client: new RenderWorkerClient({
+		baseUrl: process.env.RENDER_WORKER_URL || 'http://127.0.0.1:8288',
+		timeoutMs: parsePositiveInteger(process.env.RENDER_WORKER_TIMEOUT_MS, 15_000)
 	}),
-	registry: workflowRegistry,
+	registry: modelRegistry,
 	store: jobStore,
 	apiToken: process.env.RENDER_API_TOKEN,
 	allowedOrigins: (process.env.ALLOWED_ORIGINS || 'http://localhost:5167')
 		.split(',')
 		.map((origin) => origin.trim())
 		.filter(Boolean),
-	maxActiveJobs: parsePositiveInteger(process.env.RENDER_MAX_ACTIVE_JOBS, 2),
+	// A single local GPU renders one clip at a time; keep the default queue tight.
+	maxActiveJobs: parsePositiveInteger(process.env.RENDER_MAX_ACTIVE_JOBS, 1),
 	maxBodyBytes: parsePositiveInteger(process.env.RENDER_MAX_BODY_BYTES, 20_000_000)
 });
 
@@ -89,7 +90,7 @@ server.on('upgrade', (request, socket, head) => {
 
 server.listen(PORT, () => {
 	console.log(`Latent-line server listening on http://127.0.0.1:${PORT}`);
-	console.log(`Loaded ${workflowRegistry.list().length} render workflow(s)`);
+	console.log(`Loaded ${modelRegistry.list().length} render model(s)`);
 	if (!process.env.RENDER_API_TOKEN) {
 		console.warn('RENDER_API_TOKEN is unset; render API authentication is disabled');
 	}
@@ -290,4 +291,4 @@ function parsePositiveInteger(value: string | undefined, fallback: number): numb
 	return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
-export { server, wss, roomManager, renderGateway, workflowRegistry, jobStore };
+export { server, wss, roomManager, renderGateway, modelRegistry, jobStore };
