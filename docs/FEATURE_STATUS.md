@@ -21,7 +21,8 @@ Règle : toute fonction qui n'est pas prouvée par un contrôle automatisé exé
 | Génération A1111 | Expérimental | Client présent, backend réel non validé |
 | Passerelle serveur de rendu | Expérimental vérifié | Registre de modèles, jobs persistants, auth, annulation, uploads et artefacts couverts par tests ; cible ComfyUI abandonnée le 17/08/2026 au profit d'un worker local (voir [RENDER_BACKEND_OPTIONS_2026.md](RENDER_BACKEND_OPTIONS_2026.md)) |
 | Render worker local (Wan 2.2 TI2V-5B) | Expérimental, non exécuté | Code écrit contre l'API Diffusers documentée ([server/render-worker/](../server/render-worker/)) ; aucun run GPU réel effectué dans ce repo |
-| Génération dans l'interface | Non raccordé | Aucun modèle local réellement testé et bouton client encore désactivé |
+| Client navigateur du gateway | Expérimental vérifié | [`render-client.ts`](../src/lib/services/render-client.ts) : liste des modèles, soumission, polling, annulation, upload et erreurs couverts par 9 tests contre un `fetch` simulé ; jamais confronté à un vrai gateway |
+| Génération dans l'interface | Non raccordé | Client écrit mais aucun composant ne l'appelle ; aucun modèle local réellement testé |
 | Génération vidéo directe | Non raccordé | Serveur + worker écrits ; rendu réel GPU et intégration UI encore requis |
 | Workers | Expérimental | Validation/search présents ; formats d'export partiels |
 | Serveur collaboration + rendu | Fondation expérimentale | 32 tests serveur ; collaboration et passerelle partagent désormais le port 8080 |
