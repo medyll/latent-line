@@ -5,6 +5,7 @@
  * Lightweight alternative to @tanstack/virtual for Svelte.
  */
 
+/** One item to render, with its offset and measured size. */
 export interface VirtualItem {
 	index: number;
 	start: number;
@@ -12,12 +13,15 @@ export interface VirtualItem {
 	size: number;
 }
 
+/** How many items there are, how tall each is, and how many to render past the
+ *  visible range (`overscan`, default 5). */
 export interface UseVirtualOptions {
 	count: number;
 	estimateSize: (index: number) => number;
 	overscan?: number;
 }
 
+/** Virtual scrolling: returns the items intersecting the viewport, plus the overscan. */
 export function useVirtual(options: UseVirtualOptions) {
 	const { count, estimateSize, overscan = 5 } = options;
 

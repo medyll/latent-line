@@ -5,6 +5,7 @@
  * Stores base64-encoded images indexed by event_id for quick retrieval.
  */
 
+/** A generated image, keyed by the event it belongs to, with the settings it came from. */
 export interface GeneratedImage {
 	event_id: string;
 	image_base64: string;
@@ -44,6 +45,7 @@ async function initDB(): Promise<IDBDatabase> {
 	});
 }
 
+/** Read and write generated images in IndexedDB. The database is opened on first use. */
 export const generatedImages = {
 	async save(image: GeneratedImage): Promise<void> {
 		const database = await initDB();

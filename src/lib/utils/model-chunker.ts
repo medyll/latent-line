@@ -28,6 +28,7 @@ if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'unde
 	};
 }
 
+/** A model whose timeline has been split into chunks for progressive loading. */
 export interface ChunkedModel {
 	project: any;
 	assets: any;
@@ -37,6 +38,7 @@ export interface ChunkedModel {
 	chunkSize: number;
 }
 
+/** How far a progressive load has got, by chunk and by event. */
 export interface LoadProgress {
 	chunkIndex: number;
 	totalChunks: number;

@@ -7,10 +7,13 @@
 const FOCUSABLE =
 	'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+/** `onEscape` is called when Escape is pressed inside the trap; the trap itself
+ *  does not close anything. */
 export interface FocusTrapOptions {
 	onEscape?: () => void;
 }
 
+/** Svelte action: see the module note above. */
 export function focusTrap(node: HTMLElement, options: FocusTrapOptions = {}) {
 	const getFocusable = () => Array.from(node.querySelectorAll<HTMLElement>(FOCUSABLE));
 

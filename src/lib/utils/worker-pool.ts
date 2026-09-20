@@ -7,8 +7,10 @@
  * @module worker-pool
  */
 
+/** Which worker script a pool runs. */
 export type WorkerType = 'search' | 'validation' | 'export';
 
+/** A queued task and the promise callbacks waiting on it. */
 export interface WorkerTask {
 	type: WorkerType;
 	data: any;
@@ -16,6 +18,7 @@ export interface WorkerTask {
 	reject: (error: Error) => void;
 }
 
+/** A frame from a worker: a result, a progress update, or an error. */
 export interface WorkerMessage {
 	type: string;
 	data?: any;

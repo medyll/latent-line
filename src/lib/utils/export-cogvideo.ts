@@ -16,6 +16,8 @@ import { buildPrompt } from './export-prompts';
 
 const FORMAT_VERSION = '1.0';
 
+/** One keyframe of the CogVideoX script: where it starts, what it shows, how long
+ *  it runs, and how the camera moves through it. */
 export interface CogVideoKeyframe {
 	frame: number;
 	prompt: string;

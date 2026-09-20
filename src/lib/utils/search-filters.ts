@@ -7,6 +7,7 @@
 
 import type { TimelineEvent, Mood, LightingType } from '$lib/model/model-types';
 
+/** Search criteria. Every set field must match — the criteria combine with AND. */
 export interface FilterConfig {
 	// Time range filter
 	timeStart?: number;
@@ -30,6 +31,7 @@ export interface FilterConfig {
 	hasPrompt?: boolean;
 }
 
+/** Returns the events matching every set criterion. */
 export function applyFilters(events: TimelineEvent[], filters: FilterConfig): TimelineEvent[] {
 	return events.filter((event) => matchesFilters(event, filters));
 }
@@ -102,6 +104,7 @@ function matchesFilters(event: TimelineEvent, filters: FilterConfig): boolean {
 	return true;
 }
 
+/** The built-in presets, one per mood, lighting type and asset kind. */
 export function getFilterPresets(): Record<string, FilterConfig> {
 	return {
 		all: {},
@@ -124,6 +127,7 @@ export function getFilterPresets(): Record<string, FilterConfig> {
 	};
 }
 
+/** Stores a user preset in local storage. Storage failures are swallowed. */
 export function saveFilterPreset(name: string, filter: FilterConfig): void {
 	try {
 		const presets = JSON.parse(localStorage.getItem('latent-line:filter-presets') ?? '{}');
@@ -134,6 +138,7 @@ export function saveFilterPreset(name: string, filter: FilterConfig): void {
 	}
 }
 
+/** Returns the built-in presets merged with the user's, the user's winning on a name clash. */
 export function loadFilterPresets(): Record<string, FilterConfig> {
 	try {
 		const stored = JSON.parse(localStorage.getItem('latent-line:filter-presets') ?? '{}');
@@ -143,6 +148,7 @@ export function loadFilterPresets(): Record<string, FilterConfig> {
 	}
 }
 
+/** Removes a user preset. Built-in presets are unaffected, since they are not stored. */
 export function deleteFilterPreset(name: string): void {
 	try {
 		const presets = JSON.parse(localStorage.getItem('latent-line:filter-presets') ?? '{}');

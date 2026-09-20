@@ -8,6 +8,7 @@
 
 import type { Model, TimelineEvent } from '$lib/model/model-types';
 
+/** One hit: what was found, a snippet around it, and which field matched. */
 export interface SearchResult {
 	type: 'event' | 'character' | 'environment' | 'audio';
 	id: string;

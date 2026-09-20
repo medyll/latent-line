@@ -4,6 +4,7 @@
  * Handles conversion between milliseconds and SMPTE timecode (HH:MM:SS:FF).
  */
 
+/** SMPTE timecode, split into its four fields. */
 export interface Timecode {
 	hours: number;
 	minutes: number;
@@ -11,6 +12,7 @@ export interface Timecode {
 	frames: number;
 }
 
+/** The frame rates the timecode conversions support. */
 export type FrameRate = 24 | 25 | 29.97 | 30 | 50 | 60;
 
 /**

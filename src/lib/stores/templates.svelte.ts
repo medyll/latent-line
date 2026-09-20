@@ -3,6 +3,7 @@ import type { TimelineFrame } from '$lib/model/model-types';
 
 const TEMPLATES_KEY = 'latent-line:templates';
 
+/** A saved frame the user can stamp onto the timeline. */
 export interface EventTemplate {
 	id: string;
 	name: string;
@@ -10,6 +11,8 @@ export interface EventTemplate {
 	createdAt: number;
 }
 
+/** Templates store, persisted in local storage. Saved frames are deep-copied, so
+ *  editing the source event does not alter the template. */
 export function createTemplatesStore() {
 	let templates = $state<EventTemplate[]>([]);
 
@@ -45,4 +48,5 @@ export function createTemplatesStore() {
 	return { templates, saveTemplate, deleteTemplate };
 }
 
+/** The shape {@link createTemplatesStore} returns. */
 export type TemplatesStore = ReturnType<typeof createTemplatesStore>;

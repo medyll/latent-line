@@ -6,6 +6,7 @@
 
 import type { ModelPatch, PatchOperation } from '$lib/types/collaboration';
 
+/** How far local and remote have diverged, and whether a sync is in flight. */
 export interface SyncState {
 	localVersion: number;
 	remoteVersion: number;
@@ -13,6 +14,10 @@ export interface SyncState {
 	isConnected: boolean;
 }
 
+/**
+ * Applies and forwards patches, queueing them while offline and replaying the queue
+ * on reconnect. Patches awaiting an ack are tracked so they are not replayed twice.
+ */
 export class SyncEngine {
 	private localVersion = 0;
 	private remoteVersion = 0;

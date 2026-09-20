@@ -155,6 +155,8 @@ const markerSchema = z.object({
 	updatedAt: z.number().default(() => Date.now())
 });
 
+/** Runtime validation for a whole model. Text fields are sanitized and missing
+ *  optional sections are defaulted, so parsing normalizes as well as validates. */
 export const modelSchema = z.object({
 	project: projectSchema,
 	assets: assetsSchema,
@@ -254,6 +256,8 @@ export function buildDefaultModel(): Model {
 	};
 }
 
+/** A shared default model. Use {@link createModelTemplate} to get a copy you can
+ *  mutate — this one is shared by every caller. */
 export const modelTemplate: Model = buildDefaultModel();
 
 /** Return a deep-cloned template so callers can mutate safely. */
@@ -478,6 +482,7 @@ const speechStyle = {
 	}
 } as const;
 
+/** The enum tables behind the model's string unions, for building pickers. */
 export const modelTypes = {
 	// original: 'LatentLine_MVP'
 	mood: mood,

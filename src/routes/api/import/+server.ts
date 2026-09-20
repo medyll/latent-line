@@ -2,11 +2,13 @@ import { json, type RequestHandler } from '@sveltejs/kit';
 import { modelSchema, type Model } from '$lib/model/model-template';
 import { parseYAML } from '$lib/utils/export-yaml';
 
+/** Body of `POST /api/import`: the document text, and its format if known. */
 export type ImportRequest = {
 	content: string;
 	format?: 'yaml' | 'jsonld' | 'json';
 };
 
+/** A successful import: the validated model, plus anything worth flagging about it. */
 export type ImportResponse = {
 	success: boolean;
 	model?: Model;
@@ -14,6 +16,7 @@ export type ImportResponse = {
 	message: string;
 };
 
+/** A failed import. `code` is the machine-readable reason. */
 export type ErrorResponse = {
 	error: string;
 	details?: unknown;

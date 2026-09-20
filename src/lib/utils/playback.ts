@@ -3,8 +3,10 @@
  * SequenceOrchestrator uses these internally for tick calculation and seeking.
  */
 
+/** Frame rate assumed when a project does not set one. */
 export const DEFAULT_FPS = 24;
 
+/** Transport state: where the playhead is, whether it is moving, and how far it can go. */
 export interface PlaybackState {
 	currentFrame: number;
 	isPlaying: boolean;

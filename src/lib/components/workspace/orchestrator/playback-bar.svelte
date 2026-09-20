@@ -2,8 +2,11 @@
 	import { createEventDispatcher } from 'svelte';
 	import { formatFramesToTime } from '$lib/utils/time-format';
 
-	export let playheadTime: number = 0; // frames
-	export let totalDuration: number = 0; // frames
+	/** Playhead position, in frames. Bound: scrubbing writes back to it. */
+	export let playheadTime: number = 0;
+	/** Length of the timeline, in frames — the right end of the scrub range. */
+	export let totalDuration: number = 0;
+	/** Frame rate used to render the frame counts as `m:ss` labels. */
 	export let fps: number = 24;
 
 	const dispatch = createEventDispatcher();

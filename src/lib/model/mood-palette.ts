@@ -1,3 +1,4 @@
+/** Background, border and text color per mood, used to tint timeline events. */
 export const MOOD_COLORS: Record<string, { bg: string; border: string; text: string }> = {
 	joyful: { bg: '#f0fdf4', border: '#22c55e', text: '#15803d' },
 	melancholic: { bg: '#eff6ff', border: '#3b82f6', text: '#1d4ed8' },
@@ -6,6 +7,7 @@ export const MOOD_COLORS: Record<string, { bg: string; border: string; text: str
 	curious: { bg: '#faf5ff', border: '#a855f7', text: '#7e22ce' }
 };
 
+/** The palette for a mood, or `null` when the mood is unset or unknown. */
 export function getMoodColor(mood?: string) {
 	if (!mood) return null;
 	return MOOD_COLORS[mood] ?? null;

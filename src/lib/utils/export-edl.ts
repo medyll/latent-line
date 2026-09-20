@@ -15,6 +15,7 @@
 
 import type { Model, TimelineEvent } from '$lib/model/model-types';
 
+/** One CMX 3600 record. `duration` is in frames; the times are SMPTE timecodes. */
 export interface EDLEvent {
 	event_num: number;
 	reel: string;

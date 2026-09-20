@@ -20,6 +20,8 @@ function b64ToUtf8(b64: string) {
 	return Buffer.from(b64, 'base64').toString('utf-8');
 }
 
+/** Serializes a model into the base64 `model` query parameter used by share links.
+ *  Fails when the model does not validate. */
 export function createModelParam(
 	model: unknown
 ): { success: true; param: string } | { success: false; errors: string[] } {
@@ -30,6 +32,7 @@ export function createModelParam(
 	return { success: true, param: b64 };
 }
 
+/** Decodes and validates a share link's `model` parameter. */
 export function parseModelParam(param: string): ImportResult {
 	try {
 		const json = b64ToUtf8(param);

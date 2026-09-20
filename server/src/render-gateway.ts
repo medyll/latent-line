@@ -8,6 +8,8 @@ import { JobStore } from './job-store';
 import type { RenderJob } from './render-types';
 import { RenderValidationError, WorkflowRegistry } from './workflow-registry';
 
+/** What the gateway needs: the ComfyUI client, the workflow registry, the job store,
+ *  and the limits it enforces per request. */
 export interface RenderGatewayOptions {
 	client: ComfyClient;
 	registry: WorkflowRegistry;
@@ -18,6 +20,13 @@ export interface RenderGatewayOptions {
 	maxBodyBytes: number;
 }
 
+/**
+ * The `/api/render` HTTP surface: submit a render, poll it, fetch its artifacts.
+ *
+ * `handle` returns false for any path it does not own, so it can sit in front of
+ * the rest of the server. Requests are checked against the allowed origins and,
+ * when a token is configured, against it in constant time.
+ */
 export class RenderGateway {
 	constructor(private readonly options: RenderGatewayOptions) {}
 

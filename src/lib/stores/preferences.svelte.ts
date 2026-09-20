@@ -3,8 +3,10 @@ import { onMount } from 'svelte';
 const PREFS_KEY = 'latent-line:prefs';
 const THEME_KEY = 'latent-line-theme';
 
+/** Theme setting. `system` follows the OS `prefers-color-scheme`. */
 export type ThemeMode = 'light' | 'dark' | 'system';
 
+/** The image backend to generate against, and how to reach it. */
 export interface ComfyUIConfig {
 	enabled: boolean;
 	backend: 'comfyui' | 'a1111';
@@ -12,6 +14,7 @@ export interface ComfyUIConfig {
 	api_key?: string;
 }
 
+/** User preferences, persisted in local storage. */
 export interface Preferences {
 	theme: ThemeMode;
 	defaultZoom: number;
@@ -45,6 +48,8 @@ function applyThemeToDom(theme: 'light' | 'dark') {
 	}
 }
 
+/** Preferences store: loads from local storage, writes back on change, and applies
+ *  the resolved theme to the document. */
 export function createPreferencesStore() {
 	const prefs = $state<Preferences>({ ...DEFAULTS });
 
@@ -81,4 +86,5 @@ export function createPreferencesStore() {
 	return { prefs, reset };
 }
 
+/** Context key under which the preferences store is provided. */
 export const PREFS_CONTEXT_KEY = 'preferences';

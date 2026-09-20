@@ -55,6 +55,8 @@ export function getStorageUsage() {
 const STORAGE_VERSION_KEY = 'latent-line:storage-version';
 const CURRENT_STORAGE_VERSION = 1;
 
+/** Checks the stored schema version against the current one, migrating if it is
+ *  behind. Returns false when local storage is unavailable. */
 export function validateStorageVersion() {
 	if (typeof localStorage === 'undefined') return false;
 

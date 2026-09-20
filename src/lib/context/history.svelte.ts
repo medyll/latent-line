@@ -55,4 +55,5 @@ export function createModelHistory() {
 	};
 }
 
+/** The shape {@link createModelHistory} returns. */
 export type ModelHistory = ReturnType<typeof createModelHistory>;

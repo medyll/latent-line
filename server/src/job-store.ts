@@ -2,6 +2,13 @@ import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { RenderJob } from './render-types';
 
+/**
+ * Render jobs held in memory and mirrored to a JSON file.
+ *
+ * Reads and writes are deep-copied, so a caller cannot mutate stored state by
+ * holding on to a returned job. Writes are serialized through one chain and land
+ * via a rename, so the file is never left half-written.
+ */
 export class JobStore {
 	private readonly jobs = new Map<string, RenderJob>();
 	private writeChain = Promise.resolve();

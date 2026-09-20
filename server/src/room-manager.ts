@@ -6,18 +6,21 @@ import { WebSocket } from 'ws';
 import type { UserInfo } from './protocol';
 import { serializeMessage } from './protocol';
 
+/** One connected participant: their socket, who they are, and since when. */
 export interface RoomMember {
 	ws: WebSocket;
 	userInfo: UserInfo;
 	connectedAt: number;
 }
 
+/** A collaboration room and its members, keyed by user id. */
 export interface Room {
 	id: string;
 	members: Map<string, RoomMember>;
 	createdAt: number;
 }
 
+/** Owns the rooms and their sockets, and broadcasts to them. */
 export class RoomManager {
 	private rooms = new Map<string, Room>();
 

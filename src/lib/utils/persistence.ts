@@ -49,6 +49,8 @@ export function createDebouncedSave(
 	return { schedule, flush };
 }
 
+/** Reads the saved model. Returns null when there is none, when it does not
+ *  validate, or when local storage is unavailable. */
 export function loadModelFromLocalStorage(key = DEFAULT_KEY) {
 	try {
 		if (typeof localStorage === 'undefined') return null;
@@ -62,6 +64,8 @@ export function loadModelFromLocalStorage(key = DEFAULT_KEY) {
 	}
 }
 
+/** Validates the model and saves it. Returns false without writing when it does
+ *  not validate. */
 export function saveModelToLocalStorage(model: unknown, key = DEFAULT_KEY) {
 	// Clone model to plain JSON object before validating to avoid proxy/non-enumerable issues
 	const candidate = JSON.parse(JSON.stringify(model));

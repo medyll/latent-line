@@ -6,11 +6,13 @@
 
 import type { RenderProgress } from '$lib/types/comfy-workflow';
 
+/** A graph submitted to ComfyUI, tagged with the client id its progress is reported under. */
 export interface ComfyPrompt {
 	prompt: Record<string, unknown>;
 	client_id: string;
 }
 
+/** The images one render produced, as ComfyUI names them. */
 export interface ComfyOutput {
 	images: Array<{
 		filename: string;
@@ -19,6 +21,7 @@ export interface ComfyOutput {
 	}>;
 }
 
+/** Submits renders to ComfyUI over HTTP and follows their progress over its socket. */
 export class ComfyApiClient {
 	private ws: WebSocket | null = null;
 	private baseUrl: string;

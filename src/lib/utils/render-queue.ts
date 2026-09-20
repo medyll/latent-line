@@ -4,6 +4,8 @@
 
 import type { RenderJob, RenderQueue, RenderStatus } from '$lib/types/comfy-workflow';
 
+/** Runs ComfyUI render jobs in order, reporting progress, completion and failure
+ *  through the callbacks registered on it. */
 export class RenderQueueManager {
 	private queue: RenderQueue = {
 		items: [],

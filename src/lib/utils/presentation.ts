@@ -5,6 +5,8 @@ import type { TimelineEvent } from '$lib/model/model-types';
  * Handles keyboard navigation, playback timing, and fullscreen
  */
 
+/** Presentation state: which event is showing, whether it is advancing, and how
+ *  far through it is (`progress`, 0–1, over `duration` ms). */
 export interface PresentationState {
 	currentIndex: number;
 	isPlaying: boolean;

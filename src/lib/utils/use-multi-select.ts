@@ -5,11 +5,20 @@
  * Supports Ctrl+Click, Shift+Click, and marquee selection.
  */
 
+/** Callbacks fired as the selection changes, with the event times affected. */
 export interface UseMultiSelectOptions {
 	onSelect?: (times: number[]) => void;
 	onDeselect?: (times: number[]) => void;
 }
 
+/**
+ * Multi-selection over timeline events.
+ *
+ * Ctrl/Cmd+click toggles one event, Shift+click extends the range from the last
+ * one clicked, and a plain click replaces the selection — except on an event that
+ * is already selected, which is left alone so a click can start a drag of the
+ * whole selection.
+ */
 export function useMultiSelect(options: UseMultiSelectOptions = {}) {
 	const { onSelect, onDeselect } = options;
 

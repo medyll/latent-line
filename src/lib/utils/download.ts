@@ -10,6 +10,7 @@ export function downloadBlob(blob: Blob, filename: string): void {
 	URL.revokeObjectURL(url);
 }
 
+/** Downloads a string as a file. Defaults to UTF-8 plain text. */
 export function downloadText(
 	content: string,
 	filename: string,
@@ -18,6 +19,7 @@ export function downloadText(
 	downloadBlob(new Blob([content], { type: mimeType }), filename);
 }
 
+/** Downloads raw bytes as a file. Defaults to `application/octet-stream`. */
 export function downloadBytes(
 	bytes: Uint8Array,
 	filename: string,

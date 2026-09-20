@@ -44,6 +44,7 @@ function createLocaleState() {
 	};
 }
 
+/** The active locale. Assigning an unsupported value is ignored. */
 export const locale = /* @__PURE__ */ createLocaleState();
 
 /**
@@ -64,5 +65,7 @@ export function t(key: string, vars?: Record<string, string | number>): string {
 	return msg;
 }
 
+/** The locales with message tables. English is the fallback for a missing key. */
 export const SUPPORTED_LOCALES = ['en', 'fr'] as const;
+/** One of {@link SUPPORTED_LOCALES}. */
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];

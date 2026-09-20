@@ -7,8 +7,10 @@
 
 import type { WSMessage, UserInfo, JoinPayload, ModelPatch } from '$lib/types/collaboration';
 
+/** Callback registered for one message type. */
 export type MessageHandler = (message: WSMessage) => void;
 
+/** Which server to join, and how this user appears to the room. */
 export interface CollaborationClientOptions {
 	serverUrl?: string;
 	userId: string;
@@ -16,6 +18,8 @@ export interface CollaborationClientOptions {
 	userColor: string;
 }
 
+/** Socket client for one collaboration room. Reconnects with a backing-off delay,
+ *  up to a fixed number of attempts, then gives up. */
 export class CollaborationClient {
 	private ws: WebSocket | null = null;
 	private roomId: string | null = null;

@@ -1,11 +1,14 @@
 import type { ComfyArtifact, ComfyHistoryEntry } from './render-types';
 
+/** Where ComfyUI is, how long to wait on it, and which fetch to use (injectable for tests). */
 export interface ComfyClientOptions {
 	baseUrl: string;
 	timeoutMs?: number;
 	fetchImpl?: typeof fetch;
 }
 
+/** HTTP client for one ComfyUI instance. The constructor rejects a `baseUrl` that
+ *  is not http or https. */
 export class ComfyClient {
 	private readonly baseUrl: string;
 	private readonly timeoutMs: number;
@@ -107,12 +110,19 @@ export class ComfyClient {
 	}
 }
 
+/** Whether ComfyUI's queue listing still holds this prompt id. */
 export function queueContains(entries: unknown[] | undefined, promptId: string): boolean {
 	return Boolean(
 		entries?.some((entry) => Array.isArray(entry) && entry.some((value) => value === promptId))
 	);
 }
 
+/**
+ * Collects the output files out of one ComfyUI history entry.
+ *
+ * Restricted to `outputNodeIds` when given; entries without a filename are
+ * skipped, so a malformed output is dropped rather than throwing.
+ */
 export function extractArtifacts(
 	entry: ComfyHistoryEntry,
 	outputNodeIds?: string[]

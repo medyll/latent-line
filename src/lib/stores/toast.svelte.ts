@@ -3,6 +3,7 @@
  * Usage: toast.success('Saved!') / toast.error('Failed') / toast.info('...')
  */
 
+/** One queued toast. It is removed automatically after `duration` ms. */
 export interface ToastItem {
 	id: string;
 	type: 'success' | 'error' | 'info' | 'warning';
@@ -35,4 +36,5 @@ function createToastStore() {
 	};
 }
 
+/** App-wide toast queue. See the usage note above. */
 export const toast = createToastStore();

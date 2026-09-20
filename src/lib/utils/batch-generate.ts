@@ -9,11 +9,14 @@ import { AIBackend, type GenerationRequest } from '$lib/services/ai-backend';
 import type { Preferences } from '$lib/stores/preferences.svelte';
 import type { TimelineEvent } from '$lib/model/model-types';
 
+/** Pacing for a batch: the gap between requests, and the per-request timeout. */
 export interface BatchGenerationOptions {
 	rateLimit?: number; // Milliseconds between requests (default: 2000)
 	timeout?: number; // Request timeout in ms (default: 300000)
 }
 
+/** Generates an image per event, one at a time, spaced by `rateLimit`. Progress is
+ *  reported through the generation store. Throws when ComfyUI is not configured. */
 export async function batchGenerate(
 	events: TimelineEvent[],
 	prefs: Preferences,

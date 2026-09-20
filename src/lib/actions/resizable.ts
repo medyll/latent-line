@@ -24,6 +24,8 @@ function saveLayout(data: Record<string, number>) {
 	} catch {}
 }
 
+/** `key` is the local-storage slot the width is remembered under, so two panels
+ *  must not share one. Defaults: min 160, max 800, handle on the right. */
 export interface ResizableOptions {
 	key: string;
 	defaultWidth: number;
@@ -32,6 +34,7 @@ export interface ResizableOptions {
 	side?: 'right' | 'left';
 }
 
+/** Svelte action: see the module note above. */
 export function resizable(node: HTMLElement, options: ResizableOptions) {
 	const { key, defaultWidth, min = 160, max = 800, side = 'right' } = options;
 

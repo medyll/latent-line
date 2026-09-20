@@ -7,6 +7,7 @@
 
 import type { Model, TimelineEvent } from '$lib/model/model-types';
 
+/** One hit, with the `score` it ranked at and the text fragments that matched. */
 export interface SearchResult {
 	type: 'event' | 'character' | 'environment';
 	id: string;
@@ -15,12 +16,15 @@ export interface SearchResult {
 	data: TimelineEvent | any;
 }
 
+/** An indexed timeline event: its searchable text, lowercased, and the event itself. */
 export interface IndexedEvent {
 	time: number;
 	text: string;
 	event: TimelineEvent;
 }
 
+/** In-memory index over a model's events, characters and environments.
+ *  Built once from the model; rebuild it when the model changes. */
 export class SearchIndex {
 	private events: Map<number, IndexedEvent> = new Map();
 	private characters: Map<string, any> = new Map();
@@ -219,6 +223,7 @@ export class SearchIndex {
 	}
 }
 
+/** Builds an index over a model. */
 export function createSearchIndex(model: Model): SearchIndex {
 	return new SearchIndex(model);
 }

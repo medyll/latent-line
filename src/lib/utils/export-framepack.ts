@@ -17,6 +17,8 @@ import { buildPrompt } from './export-prompts';
 
 const FORMAT_VERSION = '1.0';
 
+/** One line of the JSONL output: a frame, its prompt, and the camera, lighting and
+ *  effects metadata that goes with it. */
 export interface FramePackFrame {
 	frame: number;
 	prompt: string;

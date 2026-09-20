@@ -3,6 +3,13 @@
  * Each entry maps a chord to an action label and description.
  */
 
+/**
+ * One chord and the action it triggers.
+ *
+ * `ctrl` covers Ctrl and Cmd alike, and must match exactly: unset means the chord
+ * only fires without either. `shift` is only checked when set, so a chord that
+ * leaves it out fires with or without Shift. `meta` is not read separately.
+ */
 export interface Shortcut {
 	key: string;
 	ctrl?: boolean;
@@ -12,6 +19,7 @@ export interface Shortcut {
 	description: string;
 }
 
+/** The application's shortcuts. Several chords may map to the same action. */
 export const SHORTCUTS: Shortcut[] = [
 	{ key: 'z', ctrl: true, shift: false, action: 'undo', description: 'Undo last change' },
 	{ key: 'y', ctrl: true, action: 'redo', description: 'Redo last undone change' },

@@ -6,6 +6,8 @@
 
 import type { TimelineEvent, Model } from '$lib/model/model-types';
 
+/** Outcome of a bulk edit: how many events it touched, and the new model it produced.
+ *  The operations are pure — the model passed in is never mutated. */
 export interface BulkOperationResult {
 	success: boolean;
 	affectedCount: number;

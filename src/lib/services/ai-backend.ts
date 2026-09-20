@@ -11,6 +11,7 @@
  * Future: extend for other backends (Runway, Replicate, etc.)
  */
 
+/** Which backend to generate against, and how to reach it. */
 export interface AIBackendConfig {
 	url: string; // Server URL (e.g. http://localhost:7860)
 	api_key?: string; // Optional API key
@@ -18,6 +19,7 @@ export interface AIBackendConfig {
 	timeout?: number; // Request timeout in ms (default: 60000)
 }
 
+/** One image generation. Everything past `prompt` falls back to the backend's default. */
 export interface GenerationRequest {
 	prompt: string;
 	negative_prompt?: string;
@@ -29,6 +31,7 @@ export interface GenerationRequest {
 	sampler?: string;
 }
 
+/** A finished image, plus the settings it was actually generated with. */
 export interface GenerationResult {
 	image_url: string;
 	image_base64?: string;
@@ -39,6 +42,7 @@ export interface GenerationResult {
 	};
 }
 
+/** Progress of a running generation, as reported while polling. */
 export interface GenerationProgress {
 	status: 'idle' | 'queued' | 'generating' | 'done' | 'error';
 	progress?: number; // 0-100

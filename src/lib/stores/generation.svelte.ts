@@ -9,8 +9,10 @@
 
 import { writable, derived } from 'svelte/store';
 
+/** Where one event's generation has got to. */
 export type GenerationStatus = 'idle' | 'queued' | 'generating' | 'done' | 'error';
 
+/** Generation state for one event: its status, progress (0–100) and result. */
 export interface EventGenerationState {
 	event_id: string;
 	status: GenerationStatus;
@@ -88,6 +90,7 @@ const createGenerationStore = () => {
 	};
 };
 
+/** App-wide generation state, tracked per event id. */
 export const generation = createGenerationStore();
 
 /**

@@ -23,4 +23,5 @@ export function createPlaybackStore() {
 	};
 }
 
+/** The shape {@link createPlaybackStore} returns. */
 export type PlaybackStore = ReturnType<typeof createPlaybackStore>;

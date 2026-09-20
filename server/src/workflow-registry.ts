@@ -4,6 +4,7 @@ import type { WorkflowInputBinding, WorkflowManifest } from './render-types';
 
 type WorkflowGraph = Record<string, { inputs?: Record<string, unknown>; class_type?: string }>;
 
+/** A loaded workflow: its manifest, and the ComfyUI graph the manifest points at. */
 export interface RegisteredWorkflow {
 	manifest: WorkflowManifest;
 	workflow: WorkflowGraph;
@@ -11,6 +12,12 @@ export interface RegisteredWorkflow {
 
 const ID_PATTERN = /^[a-z0-9][a-z0-9._-]{1,63}$/;
 
+/**
+ * Loads the `*.manifest.json` workflows from a directory and validates render
+ * inputs against the bindings they declare.
+ *
+ * A missing directory yields an empty registry rather than an error.
+ */
 export class WorkflowRegistry {
 	private readonly workflows = new Map<string, RegisteredWorkflow>();
 
@@ -133,4 +140,5 @@ function validateInput(name: string, value: unknown, binding: WorkflowInputBindi
 	return value;
 }
 
+/** Thrown when render inputs do not satisfy the workflow's declared bindings. */
 export class RenderValidationError extends Error {}

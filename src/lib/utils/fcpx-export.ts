@@ -8,6 +8,8 @@ import type { Model } from '$lib/model/model-types';
 import type { FrameRate } from '$lib/utils/timecode-utils';
 import { msToTimecode, formatTimecode, msToFrames } from '$lib/utils/timecode-utils';
 
+/** Export settings: the frame rate and raster to declare, and which tracks to include.
+ *  `customWidth`/`customHeight` only apply when `resolution` is `'custom'`. */
 export interface FcpxExportOptions {
 	frameRate: FrameRate;
 	resolution: '1080p' | '4K' | 'custom';

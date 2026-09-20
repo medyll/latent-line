@@ -10,6 +10,7 @@ import type { Model } from '$lib/model/model-types';
 const VERSION_KEY = 'latent-line:version-history';
 const MAX_VERSIONS = 10;
 
+/** One saved version, kept for crash recovery. */
 export interface VersionEntry {
 	timestamp: number;
 	date: string;

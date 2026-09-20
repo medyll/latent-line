@@ -6,10 +6,12 @@
  * Used by PromptAssist component in PropertiesPanel.
  */
 
+/** Suggestion terms grouped by category name. */
 export interface PromptVocabulary {
 	[category: string]: string[];
 }
 
+/** The offline suggestion catalog. */
 export const PROMPT_VOCABULARY: PromptVocabulary = {
 	Movement: [
 		'walking',

@@ -4,6 +4,7 @@ import { exportAsYAML } from '$lib/utils/export-yaml';
 import { exportAsJSONLD } from '$lib/utils/export-jsonld';
 import { exportToCSV } from '$lib/utils/export-csv';
 
+/** Body of `POST /api/export`: the model to export, and the formatting options. */
 export type ExportRequest = {
 	model: unknown;
 	options?: {
@@ -12,6 +13,7 @@ export type ExportRequest = {
 	};
 };
 
+/** A successful export: the rendered content, and how to serve or save it. */
 export type ExportResponse = {
 	format: string;
 	content: string | object;
@@ -19,6 +21,7 @@ export type ExportResponse = {
 	filename: string;
 };
 
+/** A failed export. `code` is the machine-readable reason. */
 export type ErrorResponse = {
 	error: string;
 	details?: unknown;

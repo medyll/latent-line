@@ -5,16 +5,19 @@
  * Supports customization, presets, and conflict detection.
  */
 
+/** Chord per action, keyed by action id (e.g. `'file.save': 'Ctrl+S'`). */
 export interface ShortcutConfig {
 	[action: string]: string;
 }
 
+/** A named, complete set of bindings the user can switch to. */
 export interface ShortcutPreset {
 	name: string;
 	shortcuts: ShortcutConfig;
 }
 
 // Default shortcuts
+/** The bindings shipped as the default. */
 export const DEFAULT_SHORTCUTS: ShortcutConfig = {
 	// File operations
 	'file.save': 'Ctrl+S',
@@ -52,6 +55,7 @@ export const DEFAULT_SHORTCUTS: ShortcutConfig = {
 };
 
 // Preset configurations
+/** The presets offered in settings. */
 export const SHORTCUT_PRESETS: ShortcutPreset[] = [
 	{
 		name: 'Default',

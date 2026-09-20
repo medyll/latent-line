@@ -1,5 +1,6 @@
 import type { Model, TimelineEvent } from '$lib/model/model-types';
 
+/** One prompt in the structured export, with the generation settings for it. */
 export interface PromptEntry {
 	frame: number;
 	prompt: string;
@@ -46,6 +47,7 @@ export function exportToPromptsJson(model: Model, includeNegative = true): Promp
 		}));
 }
 
+/** Settings applied to every prompt in a Deforum export. */
 export interface DeforumOptions {
 	negative_prompt?: string;
 	seed?: number;

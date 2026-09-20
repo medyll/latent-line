@@ -23,6 +23,7 @@ function u32(n: number): number[] {
 	return [n & 0xff, (n >> 8) & 0xff, (n >> 16) & 0xff, (n >> 24) & 0xff];
 }
 
+/** One file in the archive: its path inside the ZIP, and its text content. */
 export interface ZipEntry {
 	name: string;
 	content: string;

@@ -1,5 +1,8 @@
+/** Value kinds a workflow input can take. */
 export type WorkflowInputType = 'string' | 'integer' | 'number' | 'boolean';
 
+/** Binds one named workflow input to a field of a ComfyUI node, with the bounds
+ *  and default to apply before submitting. */
 export interface WorkflowInputBinding {
 	nodeId: string;
 	input: string;
@@ -10,6 +13,8 @@ export interface WorkflowInputBinding {
 	max?: number;
 }
 
+/** A render workflow: the ComfyUI graph file, the inputs it accepts, and the nodes
+ *  whose outputs are collected as artifacts. */
 export interface WorkflowManifest {
 	id: string;
 	version: string;
@@ -21,6 +26,7 @@ export interface WorkflowManifest {
 	outputNodeIds?: string[];
 }
 
+/** One file produced by a render, as ComfyUI reports it. */
 export interface ComfyArtifact {
 	filename: string;
 	subfolder: string;
@@ -29,8 +35,10 @@ export interface ComfyArtifact {
 	kind: 'image' | 'video' | 'audio' | 'file';
 }
 
+/** Lifecycle state of a render job. */
 export type RenderJobStatus = 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
 
+/** A submitted render. `promptId` is ComfyUI's own id for it; `id` is ours. */
 export interface RenderJob {
 	id: string;
 	promptId: string;
@@ -45,6 +53,7 @@ export interface RenderJob {
 	error?: string;
 }
 
+/** The shape of one entry in ComfyUI's `/history` response, narrowed to what is read. */
 export interface ComfyHistoryEntry {
 	status?: {
 		status_str?: string;

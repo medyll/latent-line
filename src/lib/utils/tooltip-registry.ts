@@ -3,6 +3,7 @@
  * Maps actions to tooltip content with shortcut hints.
  */
 
+/** Chord per action, shown as a hint in tooltips. */
 export interface ShortcutMap {
 	[key: string]: string;
 }
