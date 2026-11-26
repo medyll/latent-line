@@ -165,8 +165,10 @@
 								onclick={() =>
 									navigator.clipboard?.writeText(window.location.href + '?snap=' + s.id)}
 								class="action-btn"
-								title="Copier le lien">🔗</button
+								title="Copier le lien"
 							>
+								🔗
+							</button>
 							<button onclick={() => remove(s.id)} class="action-btn action-btn--danger">✕</button>
 						</div>
 					</div>

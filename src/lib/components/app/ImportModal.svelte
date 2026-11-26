@@ -247,9 +247,9 @@
 									<GitMerge size={20} />
 									<div class="mode-info">
 										<span class="mode-name">Merge</span>
-										<span class="mode-desc"
-											>Append events, merge assets (auto-rename duplicates)</span
-										>
+										<span class="mode-desc">
+											Append events, merge assets (auto-rename duplicates)
+										</span>
 									</div>
 								</div>
 							</label>

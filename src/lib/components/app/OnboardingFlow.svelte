@@ -129,8 +129,7 @@
 						class="field-input field-textarea"
 						placeholder="Ex: A woman running through a dark alley at night, cinematic, film grain…"
 						rows="3"
-						bind:value={firstPrompt}
-					></textarea>
+						bind:value={firstPrompt}></textarea>
 				</div>
 			</div>
 		{/if}

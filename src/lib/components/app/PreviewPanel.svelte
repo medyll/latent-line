@@ -88,16 +88,20 @@
 					playback.isPlaying = !playback.isPlaying;
 				}}
 				title={playback.isPlaying ? 'Pause' : 'Play'}
-				class="ctrl-btn">{playback.isPlaying ? '⏸' : '▶'}</button
+				class="ctrl-btn"
 			>
+				{playback.isPlaying ? '⏸' : '▶'}
+			</button>
 			<button
 				onclick={() => {
 					playback.isPlaying = false;
 					playback.playheadTime = 0;
 				}}
 				title="Stop"
-				class="ctrl-btn">■</button
+				class="ctrl-btn"
 			>
+				■
+			</button>
 			<span class="frame-counter">{Math.floor(playback.playheadTime)}f</span>
 			<button onclick={toggleFullscreen} title="Toggle fullscreen (F)" class="ctrl-btn">
 				{isFullscreen ? '⊡' : '⊞'}

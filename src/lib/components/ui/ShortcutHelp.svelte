@@ -24,11 +24,9 @@
 			<ul class="list-none text-sm">
 				{#each SHORTCUTS as s}
 					<li class="py-1">
-						<strong
-							>{s.key}{s.ctrl ? ' + Ctrl' : ''}{s.meta ? ' + Cmd' : ''}{s.shift
-								? ' + Shift'
-								: ''}</strong
-						>
+						<strong>
+							{s.key}{s.ctrl ? ' + Ctrl' : ''}{s.meta ? ' + Cmd' : ''}{s.shift ? ' + Shift' : ''}
+						</strong>
 						— {s.description}
 					</li>
 				{/each}

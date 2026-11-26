@@ -19,7 +19,7 @@
 		prompt?: string;
 		zoom?: number;
 		fx?: { bloom?: number; motion_blur?: number };
-		audio?: Array<{ id: string; volume: number }>;
+		audio?: Array<{ id: string; volume?: number }>;
 		timelineFrame?: unknown;
 	}
 
@@ -144,8 +144,10 @@
 			<span
 				class="char-badge"
 				title={item.character}
-				style={moodColor ? `background:${moodColor.border};color:#fff;` : ''}>{initials}</span
+				style={moodColor ? `background:${moodColor.border};color:#fff;` : ''}
 			>
+				{initials}
+			</span>
 		{/if}
 	</div>
 

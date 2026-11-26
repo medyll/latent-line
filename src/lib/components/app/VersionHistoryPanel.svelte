@@ -99,8 +99,9 @@
 			{#if hasRecovery()}
 				<div class="recovery-notice">
 					<RotateCcw size={16} />
-					<span>{history.length} version{history.length > 1 ? 's' : ''} available for recovery</span
-					>
+					<span>
+						{history.length} version{history.length > 1 ? 's' : ''} available for recovery
+					</span>
 				</div>
 			{/if}
 

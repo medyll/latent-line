@@ -169,8 +169,10 @@
 				onclick={() => themeCtx?.toggle()}
 				title="Toggle theme"
 				aria-label="Toggle light/dark theme"
-				class="text-xs">{themeCtx?.current === 'dark' ? '☀ Light' : '☾ Dark'}</button
+				class="text-xs"
 			>
+				{themeCtx?.current === 'dark' ? '☀ Light' : '☾ Dark'}
+			</button>
 			<!-- Import -->
 			<input
 				bind:this={fileInput}

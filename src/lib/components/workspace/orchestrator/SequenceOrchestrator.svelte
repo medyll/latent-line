@@ -523,11 +523,12 @@
 						onclick={() => (compactMode = !compactMode)}
 						title="Compact mode"
 						style="font-size:var(--text-xs);background:none;border:none;cursor:pointer;color:var(--color-text-muted);"
-						>{compactMode ? '⊞' : '⊟'}</button
 					>
-					<button onclick={addEvent} title="Add event" aria-label="Add timeline event"
-						><Plus class="h-4 w-4" /></button
-					>
+						{compactMode ? '⊞' : '⊟'}
+					</button>
+					<button onclick={addEvent} title="Add event" aria-label="Add timeline event">
+						<Plus class="h-4 w-4" />
+					</button>
 				</div>
 			</h3>
 		</header>
@@ -602,22 +603,25 @@
 										title="Duplicate (Ctrl+D)"
 										aria-label={`Duplicate frame ${event.time}`}
 										class="rounded bg-white p-0.5 text-gray-400 shadow hover:text-blue-600"
-										><Copy class="h-3 w-3" /></button
 									>
+										<Copy class="h-3 w-3" />
+									</button>
 									<button
 										onclick={(e) => openSaveTemplate(e, event.time)}
 										title="Save as template"
 										aria-label={`Save frame ${event.time} as template`}
 										class="rounded bg-white p-0.5 text-gray-400 shadow hover:text-purple-600"
-										>⊕</button
 									>
+										⊕
+									</button>
 									<button
 										onclick={(e) => deleteEvent(e, event.time)}
 										title="Delete"
 										aria-label={`Delete frame ${event.time}`}
 										class="rounded bg-white p-0.5 text-gray-400 shadow hover:text-red-600"
-										><Trash2 class="h-3 w-3" /></button
 									>
+										<Trash2 class="h-3 w-3" />
+									</button>
 								</div>
 							</div>
 						{/each}
@@ -642,14 +646,16 @@
 							onclick={togglePlay}
 							title={playback.isPlaying ? 'Pause (Space)' : 'Play (Space)'}
 							aria-label={playback.isPlaying ? 'Pause' : 'Play'}
-							class="text-xs">{playback.isPlaying ? '⏸' : '▶'}</button
+							class="text-xs"
 						>
-						<button onclick={stopPlayback} title="Stop (Esc)" aria-label="Stop" class="text-xs"
-							>■</button
-						>
-						<span class="tabular-nums text-xs" aria-label="Playhead position"
-							>{Math.floor(playback.playheadTime)}</span
-						>
+							{playback.isPlaying ? '⏸' : '▶'}
+						</button>
+						<button onclick={stopPlayback} title="Stop (Esc)" aria-label="Stop" class="text-xs">
+							■
+						</button>
+						<span class="tabular-nums text-xs" aria-label="Playhead position">
+							{Math.floor(playback.playheadTime)}
+						</span>
 					</div>
 					<PlaybackBar
 						bind:playheadTime={playback.playheadTime}
@@ -726,8 +732,10 @@
 							style="left:{mk.time * pixelsPerFrame}px; background:{mk.color};"
 							oncontextmenu={(e) => openMarkerMenu(e, mk)}
 							title={mk.label}
-							aria-label={`Marker: ${mk.label}`}>{mk.label.slice(0, 6)}</button
+							aria-label={`Marker: ${mk.label}`}
 						>
+							{mk.label.slice(0, 6)}
+						</button>
 					{/each}
 				</div>
 
@@ -880,11 +888,13 @@
 					});
 					markerMenu = null;
 				}}
-				class="marker-menu-btn">Save</button
+				class="marker-menu-btn"
 			>
-			<button onclick={() => deleteMarker(mk.id)} class="marker-menu-btn marker-menu-btn-danger"
-				>Delete</button
-			>
+				Save
+			</button>
+			<button onclick={() => deleteMarker(mk.id)} class="marker-menu-btn marker-menu-btn-danger">
+				Delete
+			</button>
 		{/if}
 	</div>
 {/if}

@@ -101,9 +101,9 @@
 											type="button"
 										>
 											{#if item.badge}
-												<span class="item-badge" style:background-color={item.badgeColor}
-													>{item.badge}</span
-												>
+												<span class="item-badge" style:background-color={item.badgeColor}>
+													{item.badge}
+												</span>
 											{/if}
 											<span class="item-label">{item.label}</span>
 											{#if item.subLabel}

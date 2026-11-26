@@ -8,3 +8,10 @@ bun.lockb
 # Miscellaneous
 /static/
 /docs/
+
+# Generated / agent artifacts
+/server/dist/
+/bmad/
+/.acp-team/
+/coverage/
+/test-results/

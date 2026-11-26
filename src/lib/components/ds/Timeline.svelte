@@ -166,8 +166,10 @@
 			<button
 				class="tc-btn"
 				onclick={() => (zoom = Math.max(0.5, zoom - 0.5))}
-				aria-label="Zoom out">−</button
+				aria-label="Zoom out"
 			>
+				−
+			</button>
 			<input
 				type="range"
 				min="0.5"
@@ -177,9 +179,9 @@
 				class="tc-slider"
 				aria-label="Zoom"
 			/>
-			<button class="tc-btn" onclick={() => (zoom = Math.min(5, zoom + 0.5))} aria-label="Zoom in"
-				>+</button
-			>
+			<button class="tc-btn" onclick={() => (zoom = Math.min(5, zoom + 0.5))} aria-label="Zoom in">
+				+
+			</button>
 			<span class="tc-zoom-label">{zoom.toFixed(1)}×</span>
 		</div>
 	</div>

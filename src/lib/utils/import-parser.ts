@@ -11,8 +11,7 @@ import { parseYAML } from './export-yaml';
 
 /** Parse outcome: the validated model, or the reason it was rejected. */
 export type ParseResult =
-	| { success: true; model: Model }
-	| { success: false; error: string; details?: string[] };
+	{ success: true; model: Model } | { success: false; error: string; details?: string[] };
 
 /** Validation report. `warnings` do not make the model invalid. */
 export interface ValidationResult {

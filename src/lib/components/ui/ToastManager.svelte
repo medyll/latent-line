@@ -15,9 +15,9 @@
 				{#if item.type === 'success'}✓{:else if item.type === 'error'}✕{:else if item.type === 'warning'}⚠{:else}ℹ{/if}
 			</span>
 			<span class="toast-message">{item.message}</span>
-			<button class="toast-close" onclick={() => toast.remove(item.id)} aria-label="Fermer"
-				>✕</button
-			>
+			<button class="toast-close" onclick={() => toast.remove(item.id)} aria-label="Fermer">
+				✕
+			</button>
 		</div>
 	{/each}
 </div>

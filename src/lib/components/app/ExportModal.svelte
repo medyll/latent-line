@@ -225,8 +225,10 @@
 						role="tab"
 						aria-selected={activeFormat === fmt.id}
 						class="fmt-tab {activeFormat === fmt.id ? 'active' : ''}"
-						onclick={() => (activeFormat = fmt.id)}>{fmt.label}</button
+						onclick={() => (activeFormat = fmt.id)}
 					>
+						{fmt.label}
+					</button>
 				{/each}
 			</div>
 

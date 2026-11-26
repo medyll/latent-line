@@ -311,13 +311,17 @@
 									{#if isOrphan}
 										<span
 											class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
-											title="Orphan — not used in timeline">○</span
+											title="Orphan — not used in timeline"
 										>
+											○
+										</span>
 									{:else}
 										<span
 											class="rounded bg-green-100 px-1 py-0.5 text-green-700"
-											title={`Used in ${refCount} frame(s)`}>{refCount}</span
+											title={`Used in ${refCount} frame(s)`}
 										>
+											{refCount}
+										</span>
 									{/if}
 								</span>
 							</button>
@@ -333,8 +337,10 @@
 								onclick={(e) => removeCharacter(e, char.id)}
 								title={`Delete ${char.name}`}
 								class="btn-icon"
-								data-testid={`delete-char-${char.id}`}><Trash2 /></button
+								data-testid={`delete-char-${char.id}`}
 							>
+								<Trash2 />
+							</button>
 
 							<!-- Inline edit form -->
 							{#if isEditing}
@@ -378,9 +384,9 @@
 														class="flex items-center justify-between gap-1 rounded bg-white px-1.5 py-0.5"
 													>
 														<span class="font-mono text-blue-600">{key}</span>
-														<span class="min-w-0 flex-1 truncate text-gray-500"
-															>{outfit.prompt}</span
-														>
+														<span class="min-w-0 flex-1 truncate text-gray-500">
+															{outfit.prompt}
+														</span>
 														<button
 															onclick={() => removeOutfit(char.id, key)}
 															title={`Remove outfit ${key}`}
@@ -483,8 +489,10 @@
 						onclick={(e) => removeEnvironment(e, id)}
 						title="Delete environment"
 						class="btn-icon"
-						data-testid={`delete-env-${id}`}><Trash2 class="h-3 w-3" /></button
+						data-testid={`delete-env-${id}`}
 					>
+						<Trash2 class="h-3 w-3" />
+					</button>
 
 					<!-- Inline edit -->
 					{#if isEditing}
@@ -498,8 +506,7 @@
 										(assetStore.environments[id].prompt = (e.target as HTMLTextAreaElement).value)}
 									rows={2}
 									class="rounded border border-gray-200 px-1.5 py-0.5 text-xs"
-									aria-label="Environment prompt"
-								></textarea>
+									aria-label="Environment prompt"></textarea>
 							</div>
 							<div class="flex flex-col gap-0.5">
 								<label for={`env-ref-${id}`} class="text-gray-400">Reference image</label>
@@ -577,13 +584,17 @@
 							{#if isOrphan}
 								<span
 									class="rounded bg-orange-100 px-1 py-0.5 text-orange-600"
-									title="Orphan — not used in timeline">○</span
+									title="Orphan — not used in timeline"
 								>
+									○
+								</span>
 							{:else}
 								<span
 									class="rounded bg-green-100 px-1 py-0.5 text-green-700"
-									title={`Used in ${refCount} frame(s)`}>{refCount}</span
+									title={`Used in ${refCount} frame(s)`}
 								>
+									{refCount}
+								</span>
 							{/if}
 						</span>
 					</button>
@@ -599,8 +610,10 @@
 						onclick={(e) => removeAudio(e, aud.id)}
 						title="Delete audio"
 						class="btn-icon"
-						data-testid={`delete-audio-${aud.id}`}><Trash2 class="h-3 w-3" /></button
+						data-testid={`delete-audio-${aud.id}`}
 					>
+						<Trash2 class="h-3 w-3" />
+					</button>
 
 					<!-- Inline edit -->
 					{#if isEditing}

@@ -283,8 +283,7 @@
 					oninput={(e) => updateEventNotes((e.target as HTMLTextAreaElement).value)}
 					rows={3}
 					class="w-full rounded border border-gray-200 px-1 py-1 text-xs"
-					aria-label="Event notes"
-				></textarea>
+					aria-label="Event notes"></textarea>
 			</section>
 
 			<!-- Camera -->
@@ -305,9 +304,9 @@
 							class="flex-1"
 							aria-label="Camera zoom"
 						/>
-						<span class="w-8 text-right text-xs tabular-nums"
-							>{(selectedEvent.frame.camera?.zoom ?? 1).toFixed(1)}</span
-						>
+						<span class="w-8 text-right text-xs tabular-nums">
+							{(selectedEvent.frame.camera?.zoom ?? 1).toFixed(1)}
+						</span>
 					</div>
 					<!-- Pan X -->
 					<div class="flex items-center gap-2">
@@ -351,9 +350,9 @@
 							class="flex-1"
 							aria-label="Camera tilt"
 						/>
-						<span class="w-8 text-right text-xs tabular-nums"
-							>{selectedEvent.frame.camera?.tilt ?? 0}°</span
-						>
+						<span class="w-8 text-right text-xs tabular-nums">
+							{selectedEvent.frame.camera?.tilt ?? 0}°
+						</span>
 					</div>
 				</div>
 			</section>
@@ -381,9 +380,9 @@
 					</div>
 					<!-- Intensity -->
 					<div class="flex items-center gap-2">
-						<label for="light-intensity" class="w-16 shrink-0 text-xs text-gray-400"
-							>Intensity</label
-						>
+						<label for="light-intensity" class="w-16 shrink-0 text-xs text-gray-400">
+							Intensity
+						</label>
 						<input
 							id="light-intensity"
 							type="range"
@@ -396,9 +395,9 @@
 							class="flex-1"
 							aria-label="Lighting intensity"
 						/>
-						<span class="w-8 text-right text-xs tabular-nums"
-							>{(selectedEvent.frame.lighting?.intensity ?? 1).toFixed(2)}</span
-						>
+						<span class="w-8 text-right text-xs tabular-nums">
+							{(selectedEvent.frame.lighting?.intensity ?? 1).toFixed(2)}
+						</span>
 					</div>
 				</div>
 			</section>
@@ -421,9 +420,9 @@
 							class="flex-1"
 							aria-label="FX bloom"
 						/>
-						<span class="w-8 text-right text-xs tabular-nums"
-							>{(selectedEvent.frame.fx?.bloom ?? 0).toFixed(2)}</span
-						>
+						<span class="w-8 text-right text-xs tabular-nums">
+							{(selectedEvent.frame.fx?.bloom ?? 0).toFixed(2)}
+						</span>
 					</div>
 					<!-- Motion Blur -->
 					<div class="flex items-center gap-2">
@@ -439,9 +438,9 @@
 							class="flex-1"
 							aria-label="FX motion blur"
 						/>
-						<span class="w-8 text-right text-xs tabular-nums"
-							>{(selectedEvent.frame.fx?.motion_blur ?? 0).toFixed(2)}</span
-						>
+						<span class="w-8 text-right text-xs tabular-nums">
+							{(selectedEvent.frame.fx?.motion_blur ?? 0).toFixed(2)}
+						</span>
 					</div>
 				</div>
 			</section>
@@ -478,9 +477,9 @@
 							class="flex-1"
 							aria-label="ControlNet strength"
 						/>
-						<span class="w-8 text-right text-xs tabular-nums"
-							>{(selectedEvent.frame.controlnet?.strength ?? 1).toFixed(2)}</span
-						>
+						<span class="w-8 text-right text-xs tabular-nums">
+							{(selectedEvent.frame.controlnet?.strength ?? 1).toFixed(2)}
+						</span>
 					</div>
 				</div>
 			</section>
@@ -504,13 +503,12 @@
 										updateActorSpeechText(actorIdx, (e.target as HTMLTextAreaElement).value)}
 									rows={2}
 									class="w-full rounded border border-gray-200 px-1 py-0.5 text-xs"
-									aria-label={`Speech text for ${actor.id}`}
-								></textarea>
+									aria-label={`Speech text for ${actor.id}`}></textarea>
 								<!-- Mood -->
 								<div class="flex items-center gap-2">
-									<label for="mood-{actor.id}" class="w-10 shrink-0 text-xs text-gray-400"
-										>Mood</label
-									>
+									<label for="mood-{actor.id}" class="w-10 shrink-0 text-xs text-gray-400">
+										Mood
+									</label>
 									<select
 										id="mood-{actor.id}"
 										value={actor.speech?.mood ?? ''}
@@ -539,9 +537,9 @@
 								</div>
 								<!-- Volume -->
 								<div class="flex items-center gap-2">
-									<label for="speech-vol-{actor.id}" class="w-10 shrink-0 text-xs text-gray-400"
-										>Vol</label
-									>
+									<label for="speech-vol-{actor.id}" class="w-10 shrink-0 text-xs text-gray-400">
+										Vol
+									</label>
 									<input
 										id="speech-vol-{actor.id}"
 										type="range"
@@ -557,15 +555,15 @@
 										class="flex-1"
 										aria-label={`Volume for ${actor.id}`}
 									/>
-									<span class="w-8 text-right text-xs tabular-nums"
-										>{(actor.speech?.volume ?? 1).toFixed(2)}</span
-									>
+									<span class="w-8 text-right text-xs tabular-nums">
+										{(actor.speech?.volume ?? 1).toFixed(2)}
+									</span>
 								</div>
 								<!-- Pitch -->
 								<div class="flex items-center gap-2">
-									<label for="speech-pitch-{actor.id}" class="w-10 shrink-0 text-xs text-gray-400"
-										>Pitch</label
-									>
+									<label for="speech-pitch-{actor.id}" class="w-10 shrink-0 text-xs text-gray-400">
+										Pitch
+									</label>
 									<input
 										id="speech-pitch-{actor.id}"
 										type="range"
@@ -581,17 +579,17 @@
 										class="flex-1"
 										aria-label={`Pitch shift for ${actor.id}`}
 									/>
-									<span class="w-8 text-right text-xs tabular-nums"
-										>{(actor.speech?.pitch_shift ?? 0).toFixed(1)}</span
-									>
+									<span class="w-8 text-right text-xs tabular-nums">
+										{(actor.speech?.pitch_shift ?? 0).toFixed(1)}
+									</span>
 								</div>
 
 								<!-- S24-01: Action field with Assist button -->
 								<div class="mt-2 flex flex-col gap-1 relative">
 									<div class="flex items-center gap-2">
-										<label for="action-{actor.id}" class="w-16 shrink-0 text-xs text-gray-400"
-											>Action</label
-										>
+										<label for="action-{actor.id}" class="w-16 shrink-0 text-xs text-gray-400">
+											Action
+										</label>
 										<input
 											id="action-{actor.id}"
 											type="text"

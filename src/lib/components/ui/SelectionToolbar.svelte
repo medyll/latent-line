@@ -25,9 +25,9 @@
 			<input type="number" bind:value={shiftInput} min="-999" max="999" step="1" />
 			<button onclick={() => onshift(shiftInput)} class="sel-btn-sm">→</button>
 		</label>
-		<button onclick={ondelete} title="Delete selected" class="sel-btn sel-btn-danger"
-			>🗑 Supprimer</button
-		>
+		<button onclick={ondelete} title="Delete selected" class="sel-btn sel-btn-danger">
+			🗑 Supprimer
+		</button>
 		<button onclick={onclear} title="Clear selection (Escape)" class="sel-btn-icon">✕</button>
 	</div>
 </div>

@@ -173,14 +173,18 @@
 						class="ctrl-btn solo-btn {lane.soloed ? 'soloed' : ''}"
 						title="Solo (S)"
 						aria-label={`Solo ${lane.name}`}
-						aria-pressed={lane.soloed}>S</button
+						aria-pressed={lane.soloed}
 					>
+						S
+					</button>
 					<button
 						onclick={() => removeLane(lane.id)}
 						class="ctrl-btn remove-btn"
 						title="Retirer la piste"
-						aria-label={`Retirer ${lane.name}`}>×</button
+						aria-label={`Retirer ${lane.name}`}
 					>
+						×
+					</button>
 				</div>
 
 				<div class="waveform-container">

@@ -4,14 +4,7 @@
 
 /** The kinds of frame that cross the collaboration socket. */
 export type MessageType =
-	| 'join'
-	| 'leave'
-	| 'update'
-	| 'sync'
-	| 'presence'
-	| 'error'
-	| 'heartbeat'
-	| 'ack';
+	'join' | 'leave' | 'update' | 'sync' | 'presence' | 'error' | 'heartbeat' | 'ack';
 
 /** Envelope every frame is wrapped in. `id` is what an `ack` refers back to. */
 export interface WSMessage {

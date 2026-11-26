@@ -338,8 +338,7 @@
 					id="se-dialogue"
 					class="se-textarea"
 					rows="3"
-					bind:value={editorActor.speech!.text}
-				></textarea>
+					bind:value={editorActor.speech!.text}></textarea>
 			</div>
 
 			<div class="se-field">
