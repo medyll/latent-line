@@ -6,12 +6,14 @@ name: Dependabot auto-merge
 # a dependency bump is released with the next regular push.
 on:
   workflow_run:
-    workflows: ["CI", "Visual Regression Tests"]
+    workflows: ['CI', 'Visual Regression Tests']
     types: [completed]
 
 permissions:
   contents: write
   pull-requests: write
+  checks: read
+  statuses: read
 
 concurrency:
   group: dependabot-automerge-${{ github.event.workflow_run.head_branch }}
